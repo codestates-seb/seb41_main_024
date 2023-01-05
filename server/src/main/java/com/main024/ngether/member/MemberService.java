@@ -30,13 +30,16 @@ public class MemberService {
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
 
+        Member newMember = new Member();
+
         String encryptedPassword = passwordEncoder.encode(member.getPw());  //패스워드 인코딩
-        member.setPw(encryptedPassword);
-
+        newMember.setPw(encryptedPassword);
         List<String> roles = authorityUtils.createRoles(member.getEmail());
-        member.setRoles(roles);
-
-        Member savedMember = memberRepository.save(member);
+        newMember.setRoles(roles);
+        newMember.setNickName(member.getNickName());
+        newMember.setPhoneNumber(member.getPhoneNumber());
+        newMember.setEmail(member.getEmail());
+        Member savedMember = memberRepository.save(newMember);
 
         publisher.publishEvent(new MemberRegistrationApplicationEvent(this,savedMember));
         return savedMember;
