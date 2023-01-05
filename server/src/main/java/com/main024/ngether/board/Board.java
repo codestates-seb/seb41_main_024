@@ -41,10 +41,6 @@ public class Board {
 
 
 
-    @ManyToOne
-    @JoinColumn(name = "BOARD_ID")
-    private Board board;
-
     @JsonIgnore
     @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
     private List<Like> likes = new ArrayList<>();
