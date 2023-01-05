@@ -30,7 +30,7 @@ public class BoardController {
 
     //질문 게시
     @PostMapping
-    public ResponseEntity postBoard(@RequestParam(value = "category") int category,
+    public ResponseEntity postBoard(@RequestParam(value = "category") String category,
                                     @Valid @RequestBody BoardDto.Post boardDto) {
         boardDto.setCategory(category);
         Board board = boardService.createBoard(mapper.boardPostToBoard(memberService, boardDto));
@@ -44,22 +44,22 @@ public class BoardController {
                                      @Valid @RequestBody BoardDto.Patch boardDto) {
 
         boardDto.setBoardId(boardId);
-        Board board = boardService.updateBoard(mapper.boardPatchToBoard(boardDto), boardDto);
+        Board board = boardService.updateBoard(mapper.boardPatchToBoard(boardDto));
 
         return ResponseEntity.ok(mapper.boardToBoardResponse(board));
     }
 
     //해당 게시물 조회
     @GetMapping("/{board-id}")
-    public ResponseEntity getBoard(@PathVariable("board-id") long boardId) {
+    public ResponseEntity getBoard(@PathVariable("board-id") Long boardId) {
         Board board = boardService.findBoard(boardId);
         return new ResponseEntity<>(mapper.boardToBoardResponse(board), HttpStatus.OK);
     }
     //카테로리 별로 조회
-    @GetMapping("/{category-num}")
-    public ResponseEntity getBoard(@PathVariable("category-num") int categoryNum) {
+    @GetMapping("/category/{category}")
+    public ResponseEntity getBoard(@PathVariable("category") String category) {
 
-        return new ResponseEntity<>(mapper.boardsToBoardByCategoryResponses(boardService.findBoardsBycategory(categoryNum)), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.boardsToBoardByCategoryResponses(boardService.findBoardsByCategory(category)), HttpStatus.OK);
     }
 
     //해당 게시물 삭제
@@ -91,6 +91,11 @@ public class BoardController {
         Like like = likeService.createLike(mapper.boardLikeToBoard(boardService, memberService, boardId));
 
         return ResponseEntity.ok(mapper.boardLikeToBoardResponse(like));
+    }
+
+    @GetMapping("/like")
+    public ResponseEntity searchByLike() {
+        return ResponseEntity.ok(mapper.boardsToBoardLikeResponses(boardService.findBoardsByLike()));
     }
 
 }

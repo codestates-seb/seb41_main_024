@@ -37,13 +37,13 @@ public class Member {
     private String phoneNumber;
     @JsonIgnore
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
-    private List<Board> questions = new ArrayList<>();
+    private List<Board> boards = new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
     private List<Like> likes = new ArrayList<>();
 
 
-    public Member(long memberId, String pw, String nickName, String gender, int age, String email, String phoneNumber) {
+    public Member(long memberId, String pw, String nickName, String email, String phoneNumber) {
         this.memberId = memberId;
         this.pw = pw;
         this.nickName = nickName;
@@ -52,7 +52,7 @@ public class Member {
     }
 
     public void addBoard(Board board){
-        questions.add(board);
+        boards.add(board);
         if (board.getMember() != this) {
             board.setMember(this);
         }

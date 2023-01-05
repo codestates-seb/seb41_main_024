@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BoardMapper {
 
@@ -24,6 +24,7 @@ public interface BoardMapper {
         response.setContent(board.getContent());
         response.setLikeCount(board.getLikeCount());
         response.setCategory(board.getCategory());
+        response.setPrice(board.getPrice());
 
         return response;
     }
@@ -44,6 +45,7 @@ public interface BoardMapper {
         board.setTitle(requestBody.getTitle());
         board.setBoardId(requestBody.getBoardId());
         board.setContent(requestBody.getContent());
+        board.setPrice(requestBody.getPrice());
 
 
         return board;
@@ -54,12 +56,7 @@ public interface BoardMapper {
             return null;
         }
         Board board = new Board();
-        if(boardPostDto.getCategory() == 1){
-            board.setCategory("Delivery");
-        }
-        else{
-            board.setCategory("Products");
-        }
+        board.setCategory(boardPostDto.getCategory());
         board.setTitle(boardPostDto.getTitle());
         board.setContent(boardPostDto.getContent());
         board.setPrice(boardPostDto.getPrice());
@@ -71,6 +68,7 @@ public interface BoardMapper {
     }
 
     List<BoardDto.Response> boardsToBoardResponses(List<Board> boards);
+    List<BoardDto.Response> boardsToBoardLikeResponses(List<Board> boards);
 
     List<BoardDto.Response> boardsToBoardByCategoryResponses(List<Board> boards);
 

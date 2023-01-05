@@ -18,17 +18,17 @@ public class BoardDto {
         private String title;
         @NotBlank(message = "내용을 입력해주세요.")
         private String content;
-        private int category;
+        private String category;
         private long price;
     }
 
     @Getter
-    @AllArgsConstructor
     public static class Patch {
         private Long boardId;
         private String title;
         @NotBlank
         private String content;
+        private long price;
 
 
         public void setBoardId(Long boardId) {
@@ -49,6 +49,7 @@ public class BoardDto {
         private LocalDateTime create_date;
         private String category;
         private int likeCount;
+        private long price;
     }
 
     @Getter

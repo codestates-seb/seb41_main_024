@@ -15,7 +15,7 @@ public class MemberDto {
         @NotBlank(message = "패스워드를 입력해주세요.")
         private String pw;
         @NotBlank(message = "별명을 입력해주세요.")
-        private String Nickname;
+        private String nickName;
         @NotBlank(message = "전화번호를 입력해주세요.")
         private String phoneNumber;
         @Email
@@ -29,7 +29,7 @@ public class MemberDto {
 
         private String pw;
 
-        private String Nickname;
+        private String nickName;
 
         @Email
         private String email;
@@ -45,9 +45,11 @@ public class MemberDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response{
-        private String Nickname;
+        private Long memberId;
+        private String nickName;
         private String email;
         private String phoneNumber;
+
 
     }
 }
