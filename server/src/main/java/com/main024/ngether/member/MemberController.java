@@ -2,6 +2,7 @@ package com.main024.ngether.member;
 
 import com.main024.ngether.board.BoardMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -9,6 +10,7 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("api/members")
+@Validated
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
@@ -30,10 +32,8 @@ public class MemberController {
     }
 
     //회원정보 수정
-    @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-                                      @Valid @RequestBody MemberDto.Patch requestBody) {
-        requestBody.setMember_id(memberId);
+    @PatchMapping("/patch")
+    public ResponseEntity patchMember(@Valid @RequestBody MemberDto.Patch requestBody) {
         Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody));
 
         return ResponseEntity.ok(mapper.memberToMemberResponse(member));
@@ -72,9 +72,10 @@ public class MemberController {
     public ResponseEntity search(@RequestParam(value = "keyword") String keyword) {
         return ResponseEntity.ok(mapper.memberToMemberResponse(memberService.findByNiceName(keyword)));
     }
-    //내가 좋아요 한 게시글 검색
+    //내가 좋아요 누른 게시물 검색
     @GetMapping("/like")
-    public ResponseEntity searchByLike() {
+    public ResponseEntity searchMyLike() {
         return ResponseEntity.ok(boardMapper.boardsToBoardResponses(memberService.findMyLike()));
     }
+
 }

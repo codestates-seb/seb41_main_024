@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -62,25 +63,36 @@ public class BoardService {
 
 
     public Board updateBoard(Board board) {
+        if(memberService.getLoginMember() == null){
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        }
+        else if(Objects.equals(findVerifiedBoard(board.getBoardId()).getMember().getMemberId(), memberService.getLoginMember().getMemberId())) {
 
-        Board findBoard = findVerifiedBoard(board.getBoardId());
-        findBoard.setModifiedAt(LocalDateTime.now());
-        Optional.ofNullable(board.getTitle())
-                .ifPresent(findBoard::setTitle);
-        Optional.ofNullable(board.getContent())
-                .ifPresent(findBoard::setContent);
-        Optional.ofNullable(board.getPrice())
-                .ifPresent(findBoard::setPrice);
+            Board findBoard = findVerifiedBoard(board.getBoardId());
+            findBoard.setModifiedAt(LocalDateTime.now());
+            Optional.ofNullable(board.getTitle())
+                    .ifPresent(findBoard::setTitle);
+            Optional.ofNullable(board.getContent())
+                    .ifPresent(findBoard::setContent);
+            Optional.ofNullable(board.getPrice())
+                    .ifPresent(findBoard::setPrice);
+            return boardRepository.save(findBoard);
+        }
+        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
 
 
-        return boardRepository.save(findBoard);
+
+
 
     }
 
     public void deleteBoard(Long boardId) {
+        if(memberService.getLoginMember() == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         Board board = findVerifiedBoard(boardId);
-
-        boardRepository.delete(board);
+        if(board.getMember().getMemberId() == memberService.getLoginMember().getMemberId())
+            boardRepository.delete(board);
+        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
     }
 
 
