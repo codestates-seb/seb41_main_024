@@ -51,14 +51,22 @@ public class MemberService {
         return savedMember;
     }
     public Member updateMember(Member member){
-        String encryptedPassword = passwordEncoder.encode(member.getPw());
-        Member findMember = findVerifiedMember(member.getMemberId());
+        if(getLoginMember() == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+
+        Member findMember = findVerifiedMember(getLoginMember().getMemberId());
+        if(member.getPw() != null){
+            String encryptedPassword = passwordEncoder.encode(member.getPw());
+            Optional.ofNullable(member.getPw())
+                    .ifPresent(pw -> findMember.setPw(encryptedPassword));
+        }
         Optional.ofNullable(member.getNickName())
-                .ifPresent(nickName -> findMember.setNickName(nickName));
+                .ifPresent(findMember::setNickName);
         Optional.ofNullable(member.getPhoneNumber())
-                .ifPresent(phoneNumber -> findMember.setPhoneNumber(phoneNumber));
-        Optional.ofNullable(member.getPw())
-                .ifPresent(pw -> findMember.setPw(encryptedPassword));
+                .ifPresent(findMember::setPhoneNumber);
+        Optional.ofNullable(member.getEmail())
+                .ifPresent(findMember::setEmail);
+
 
         return memberRepository.save(findMember);
     }

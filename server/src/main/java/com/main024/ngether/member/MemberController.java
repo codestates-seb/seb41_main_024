@@ -32,10 +32,8 @@ public class MemberController {
     }
 
     //회원정보 수정
-    @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
-                                      @Valid @RequestBody MemberDto.Patch requestBody) {
-        requestBody.setMember_id(memberId);
+    @PatchMapping("/patch")
+    public ResponseEntity patchMember(@Valid @RequestBody MemberDto.Patch requestBody) {
         Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody));
 
         return ResponseEntity.ok(mapper.memberToMemberResponse(member));
