@@ -26,7 +26,6 @@ public class BoardDto {
     public static class Patch {
         private Long boardId;
         private String title;
-        @NotBlank
         private String content;
         private long price;
 

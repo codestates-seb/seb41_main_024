@@ -64,8 +64,6 @@ public class MemberService {
                 .ifPresent(findMember::setNickName);
         Optional.ofNullable(member.getPhoneNumber())
                 .ifPresent(findMember::setPhoneNumber);
-        Optional.ofNullable(member.getEmail())
-                .ifPresent(findMember::setEmail);
 
 
         return memberRepository.save(findMember);
