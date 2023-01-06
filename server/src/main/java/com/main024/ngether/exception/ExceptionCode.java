@@ -7,7 +7,7 @@ public enum ExceptionCode {
     MEMBER_EXISTS(401, "Member exists"),
     NOT_LOGIN(402,"login, please"),
     BOARD_NOT_FOUND(403,"login, please"),
-    PERMISSION_DENIED(403,"login, please");
+    PERMISSION_DENIED(404,"check, please");
 
     @Getter
     private int status;

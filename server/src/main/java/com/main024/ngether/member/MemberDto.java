@@ -34,9 +34,6 @@ public class MemberDto {
 
         private String nickName;
 
-        @Email
-        private String email;
-
         private String phoneNumber;
 
     }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -65,7 +66,7 @@ public class BoardService {
         if(memberService.getLoginMember() == null){
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
-        if(board.getBoardId() == memberService.getLoginMember().getMemberId()) {
+        else if(Objects.equals(findVerifiedBoard(board.getBoardId()).getMember().getMemberId(), memberService.getLoginMember().getMemberId())) {
 
             Board findBoard = findVerifiedBoard(board.getBoardId());
             findBoard.setModifiedAt(LocalDateTime.now());
