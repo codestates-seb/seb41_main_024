@@ -21,12 +21,12 @@ public class    Like {
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    @JoinColumn(name = "boardId")
+    @JoinColumn(name = "BOARD_ID")
     private Board board;
 
     @Column(nullable = false)

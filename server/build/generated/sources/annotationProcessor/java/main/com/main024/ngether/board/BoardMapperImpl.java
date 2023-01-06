@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-01-05T17:48:22+0900",
+    date = "2023-01-06T09:26:25+0900",
     comments = "version: 1.4.2.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.jar, environment: Java 11.0.17 (Azul Systems, Inc.)"
 )
 @Component
@@ -16,20 +16,6 @@ public class BoardMapperImpl implements BoardMapper {
 
     @Override
     public List<Response> boardsToBoardResponses(List<Board> boards) {
-        if ( boards == null ) {
-            return null;
-        }
-
-        List<Response> list = new ArrayList<Response>( boards.size() );
-        for ( Board board : boards ) {
-            list.add( boardToBoardResponse( board ) );
-        }
-
-        return list;
-    }
-
-    @Override
-    public List<Response> boardsToBoardLikeResponses(List<Board> boards) {
         if ( boards == null ) {
             return null;
         }

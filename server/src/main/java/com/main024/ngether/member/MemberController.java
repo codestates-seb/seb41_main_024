@@ -1,6 +1,8 @@
 package com.main024.ngether.member;
 
+import com.main024.ngether.board.BoardMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -8,13 +10,17 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("api/members")
+@Validated
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
 
-    public MemberController(MemberService memberService, MemberMapper mapper) {
+    private final BoardMapper boardMapper;
+
+    public MemberController(MemberService memberService, MemberMapper mapper, BoardMapper boardMapper) {
         this.memberService = memberService;
         this.mapper = mapper;
+        this.boardMapper = boardMapper;
     }
 
     //회원가입
@@ -68,4 +74,10 @@ public class MemberController {
     public ResponseEntity search(@RequestParam(value = "keyword") String keyword) {
         return ResponseEntity.ok(mapper.memberToMemberResponse(memberService.findByNiceName(keyword)));
     }
+    //내가 좋아요 누른 게시물 검색
+    @GetMapping("/like")
+    public ResponseEntity searchMyLike() {
+        return ResponseEntity.ok(boardMapper.boardsToBoardResponses(memberService.findMyLike()));
+    }
+
 }
