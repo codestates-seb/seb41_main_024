@@ -24,6 +24,7 @@ public class MemberDto {
         private String phoneNumber;
         @Email
         private String email;
+        
     }
     @Getter
     @AllArgsConstructor
