@@ -36,13 +36,12 @@ public class Board {
 
     @JsonIgnore
     @ManyToOne(optional = false)
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
 
-
     @JsonIgnore
-    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Like> likes = new ArrayList<>();
 
     public void addLike(Like like) {

@@ -93,9 +93,6 @@ public class BoardController {
         return ResponseEntity.ok(mapper.boardLikeToBoardResponse(like));
     }
 
-    @GetMapping("/like")
-    public ResponseEntity searchByLike() {
-        return ResponseEntity.ok(mapper.boardsToBoardLikeResponses(boardService.findBoardsByLike()));
-    }
+
 
 }

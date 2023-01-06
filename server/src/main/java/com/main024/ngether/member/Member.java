@@ -33,7 +33,7 @@ public class Member {
 
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String phoneNumber;
     @JsonIgnore
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
@@ -41,6 +41,8 @@ public class Member {
     @JsonIgnore
     @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
     private List<Like> likes = new ArrayList<>();
+
+
 
 
     public Member(long memberId, String pw, String nickName, String email, String phoneNumber) {
@@ -68,4 +70,5 @@ public class Member {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
 }

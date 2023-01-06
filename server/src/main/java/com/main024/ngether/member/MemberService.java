@@ -1,14 +1,17 @@
 package com.main024.ngether.member;
 
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
+import com.main024.ngether.board.Board;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.helper.event.MemberRegistrationApplicationEvent;
+import com.main024.ngether.likes.LikeRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,12 +22,15 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 
+    private final LikeRepository likeRepository;
+
     public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher,
-                         PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
+                         PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, LikeRepository likeRepository) {
         this.memberRepository = memberRepository;
         this.publisher = publisher;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
+        this.likeRepository = likeRepository;
     }
 
     public Member createMember(Member member){
@@ -84,16 +90,28 @@ public class MemberService {
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
-        Member findMember =
-                optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        return findMember;
+        return optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
     private void verifyExistsEmail(String email){
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    public List<Board> findMyLike(){
+        Member member = getLoginMember(); //로그인 한 상태가 아닐 시 에러 메시지 출력
+        if (member == null) {
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        }
+        List<Board> boards = new ArrayList<>();
+        for(int i = 0; i < likeRepository.findLikeByMemberMemberId(member.getMemberId()).get().size(); i++){
+            boards.add(likeRepository.findLikeByMemberMemberId(member.getMemberId()).get().get(i).getBoard());
+        }
+
+        return boards;
+
     }
 
 }

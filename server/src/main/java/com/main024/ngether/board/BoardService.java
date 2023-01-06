@@ -43,7 +43,8 @@ public class BoardService {
             returnBoard.setCreate_date(board.getCreate_date());
             returnBoard.setTitle(board.getTitle());
             member.addBoard(returnBoard);
-            return boardRepository.save(board);
+
+            return  boardRepository.save(returnBoard);
         }
 
 
@@ -107,19 +108,7 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public List<Board> findBoardsByLike(){
-        Member member = memberService.getLoginMember(); //로그인 한 상태가 아닐 시 에러 메시지 출력
-        if (member == null) {
-            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        }
-        List<Board> boards = new ArrayList<>();
-        for(int i = 0; i < likeRepository.findLikeByMemberMemberId(member.getMemberId()).get().size(); i++){
-            boards.add(likeRepository.findLikeByMemberMemberId(member.getMemberId()).get().get(i).getBoard());
-        }
 
-        return boards;
-
-    }
 
     //타입으로 나눠서 질문 검색 기능 구현 1 : 제목, 2 : 내용, 3 : 작성자 이름
     public List<Board> searchBoard(String type, String keyword) {

@@ -49,7 +49,12 @@ public class MemberDto {
         private String nickName;
         private String email;
         private String phoneNumber;
-
-
+    }
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    public static class nGetherResponse{
+        private Long memberId;
+        private String nickName;
     }
 }

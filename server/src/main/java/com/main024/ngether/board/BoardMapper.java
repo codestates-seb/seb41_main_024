@@ -68,7 +68,6 @@ public interface BoardMapper {
     }
 
     List<BoardDto.Response> boardsToBoardResponses(List<Board> boards);
-    List<BoardDto.Response> boardsToBoardLikeResponses(List<Board> boards);
 
     List<BoardDto.Response> boardsToBoardByCategoryResponses(List<Board> boards);
 
