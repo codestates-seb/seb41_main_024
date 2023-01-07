@@ -1,9 +1,9 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { FormControl, FormHelperText, InputAdornment } from "@mui/material";
 import { useState } from "react";
-import Input from "../atoms/input/Input";
-import Label from "../atoms/label/Label";
-import PasswordIcon from "../atoms/passwordIcon/PasswordIcon";
+import Input from "../../atoms/input/Input";
+import Label from "../../atoms/label/Label";
+import PasswordIcon from "../../atoms/passwordIcon/PasswordIcon";
 
 const TextField = (props) => {
   const [showPassword, setShowPassword] = useState(false);
