@@ -21,7 +21,9 @@
     "**/*.tsx",
     "pages/index.jsx",
     "pages/signup/index.jsx",
-    "pages/login/index.jsx"
+    "pages/login/index.jsx",
+    "src/assets/*",
+    "stories/main.js"
   ],
   "exclude": ["node_modules"]
 }
