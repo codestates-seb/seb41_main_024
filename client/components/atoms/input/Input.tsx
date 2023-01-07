@@ -1,13 +1,13 @@
-import { OutlinedInput } from "@mui/material";
+import { OutlinedInput, TextField } from "@mui/material";
 import { inputPropsType } from "./Type_input";
 
 const Input = ({ id, label, type, endAdornment }: inputPropsType) => {
   return (
-    <OutlinedInput
+    <TextField
       id={id}
       label={label}
       type={type}
-      endAdornment={endAdornment}
+      InputProps={{ endAdornment }}
     />
   );
 };

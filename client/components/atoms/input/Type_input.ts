@@ -3,5 +3,7 @@ export interface inputPropsType {
   id: string;
   label: string;
   type: string;
-  endAdornment: React.ReactNode;
+  InputProps: {
+    endAdornment: React.ReactNode;
+  };
 }
