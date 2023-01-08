@@ -10,6 +10,9 @@ const Input = ({
   select,
   defaultValue,
   selectProps,
+  rows,
+  multiline,
+  className
 }: inputPropsType) => {
   return (
     <TextField
@@ -20,6 +23,9 @@ const Input = ({
       {...(select ? { select: true } : null)}
       defaultValue={defaultValue}
       SelectProps={selectProps}
+      rows={rows}
+      {...(multiline ? { multiline: true } : null)}
+      className={className}
     >
       {children}
     </TextField>
