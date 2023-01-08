@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import Navbar from '../../components/organism/navbar/Navbar';
+import Navbar from '../../components/organisms/navbar/Navbar';
 
 //temp
 const NavbarPage = () => {
