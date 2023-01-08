@@ -6,6 +6,8 @@ const nextConfig = {
       test: /\.svg$/,
       use: ["@svgr/webpack", "url-loader"],
     });
-}
- 
-module.exports = nextConfig
+    return config;
+  },
+};
+
+module.exports = nextConfig;
