@@ -1,11 +1,8 @@
-import { Fragment } from 'react';
 import NavbarBtn from '../../molecules/navbarBtn/NavbarBtn';
-import Home from '../../../public/navbar/home.svg';
 
 const Navbar = () => {
   return (
     <div className="flex justify-center items-center w-fit border-solid border-0 border-t border-slate-400">
-      <Home />
       <NavbarBtn
         name="홈"
         path="/"

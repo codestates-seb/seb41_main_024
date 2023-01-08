@@ -6,13 +6,8 @@ import Navbar from './Navbar';
 export default {
   title: 'Navbar/Navbar',
   component: Navbar,
-  argTypes: {},
 } as ComponentMeta<typeof Navbar>;
 
-const Template: ComponentStory<typeof Navbar> = (args) => <Navbar />;
+const Template: ComponentStory<typeof Navbar> = () => <Navbar />;
 
 export const storybookNavbar = Template.bind({});
-// storybookNavbar.args = {
-//   primary: true,
-//   label: 'Button',
-// };

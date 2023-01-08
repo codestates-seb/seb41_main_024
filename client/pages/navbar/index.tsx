@@ -1,8 +1,7 @@
-import { Fragment } from 'react';
 import Navbar from '../../components/organisms/navbar/Navbar';
 
 //temp
-const NavbarPage = () => {
+const TestPage = () => {
   return (
     <div className="m-10">
       <Navbar />
@@ -10,4 +9,4 @@ const NavbarPage = () => {
   );
 };
 
-export default NavbarPage;
+export default TestPage;
