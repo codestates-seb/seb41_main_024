@@ -1,29 +1,35 @@
 import { useRouter } from 'next/router';
-import { AppBar } from "@mui/material";
+import { AppBar, Divider } from "@mui/material";
+import arrowback from '../../../../src/assets/header/arrowback.svg'
+import menu from '../../../../src/assets/header/menu.svg'
+import logo from '../../../../src/assets/logos/logoFooter.svg'
 
 const ChatHeader = () => {
   const router = useRouter();
 
   return (
-    <AppBar 
-      className='px-4 py-4 border-b border-b-inherit' 
-      position="static" 
-      color="inherit" 
-      elevation={0} 
-      sx={{width: '390px', height: '51px'}}
-    >
-      <div className='flex items-center justify-center'>
-        <button className="border-0 bg-inherit" type="button" onClick={() => router.back()}>
-          <img src={"/header/arrowback.svg"} alt="뒤로가기" />
-        </button>
-        <div className='flex flex-1 justify-center'>
-          <img src={"/logos/logoFooter.svg"} alt="로고" />
+    <>
+      <AppBar
+        className='px-4 py-4 border-b border-b-inherit' 
+        position="static" 
+        color="inherit" 
+        elevation={0} 
+        sx={{ height: '50px'}}
+      >
+        <div className='flex items-center justify-center'>
+          <button className="border-0 bg-inherit" type="button" onClick={() => router.back()}>
+            <img src={arrowback} alt="뒤로가기" />
+          </button>
+          <div className='flex flex-1 justify-center'>
+            <img src={logo} alt="로고" />
+          </div>
+          <button className="border-0 bg-inherit" type="button">
+            <img src={menu} alt="메뉴열기" />
+          </button>
         </div>
-        <button className="border-0 bg-inherit" type="button">
-          <img src={"/header/menu.svg"} alt="메뉴열기" />
-        </button>
-      </div>
-    </AppBar>
+      </AppBar>
+      <Divider />
+    </>
   )
 }
 

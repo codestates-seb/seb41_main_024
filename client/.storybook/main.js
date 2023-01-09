@@ -30,4 +30,5 @@ module.exports = {
 
     return config;
   },
+  staticDirs: ['../src/assets'],
 };
