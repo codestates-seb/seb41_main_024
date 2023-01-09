@@ -1,24 +1,191 @@
+@font-face {
+  font-family: 'Noto Sans Korean';
+  font-weight: 100;
+  font-style: normal;
+  src: url('/fonts/NotoSans-Thin.otf') format('opentype'),
+    url('/fonts/NotoSans-Thin.woff') format('woff'),
+    url('/fonts/NotoSans-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Korean';
+  font-weight: 200;
+  font-style: normal;
+  src: url('/fonts/NotoSans-Light.otf') format('opentype'),
+    url('/fonts/NotoSans-Light.woff') format('woff'),
+    url('/fonts/NotoSans-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Korean';
+  font-weight: 300;
+  font-style: normal;
+  src: url('/fonts/NotoSans-DemiLight.otf') format('opentype'),
+    url('/fonts/NotoSans-DemiLight.woff') format('woff'),
+    url('/fonts/NotoSans-DemiLight.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Korean';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/NotoSans-Regular.otf') format('opentype'),
+    url('/fonts/NotoSans-Regular.woff') format('woff'),
+    url('/fonts/NotoSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Korean';
+  font-weight: 500;
+  font-style: normal;
+  src: url('/fonts/NotoSans-Medium.otf') format('opentype'),
+    url('/fonts/NotoSans-Medium.woff') format('woff'),
+    url('/fonts/NotoSans-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Korean';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/NotoSans-Black.otf') format('opentype'),
+    url('/fonts/NotoSans-Black.woff') format('woff'),
+    url('/fonts/NotoSans-Black.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Noto Sans Korean';
+  font-weight: 900;
+  font-style: normal;
+  src: url('/fonts/NotoSans-Bold.otf') format('opentype'),
+    url('/fonts/NotoSans-Bold.woff') format('woff'),
+    url('/fonts/NotoSans-Bold.woff2') format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-* {
-  box-sizing: border-box;
-  padding: 0;
+blockquote,
+body,
+button,
+code,
+dd,
+div,
+dl,
+dt,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+legend,
+li,
+ol,
+p,
+pre,
+select,
+td,
+textarea,
+th,
+ul {
   margin: 0;
+  padding: 0;
 }
-
-html,
+fieldset,
+img {
+  border: 0;
+}
+dl,
+li,
+menu,
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:after,
+blockquote:before,
+q:after,
+q:before {
+  content: '';
+  content: none;
+}
+button,
+input,
+select,
+textarea {
+  vertical-align: middle;
+  font-size: 100%;
+}
+button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  -webkit-text-size-adjust: none;
 }
-
+input:checked[type='checkbox'] {
+  background-color: #666;
+  -webkit-appearance: checkbox;
+}
+html input[type='button'],
+input[type='email'],
+input[type='password'],
+input[type='reset'],
+input[type='search'],
+input[type='submit'],
+input[type='tel'],
+input[type='text'] {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
 body {
-  background-color: white;
+  background: var(--baseBackground);
 }
-
+body,
+button,
+input,
+select,
+td,
+textarea,
+th {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-family: 'Noto Sans Korean', Apple SD Gothic Neo, Malgun Gothic, 맑은 고딕,
+    sans-serif;
+  font-weight: 400;
+  color: #333;
+}
 a {
-  color: inherit;
+  color: #333;
+}
+a,
+a:active,
+a:hover {
   text-decoration: none;
+}
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+var {
+  font-style: normal;
+  font-weight: 400;
 }
