@@ -1,0 +1,21 @@
+addReviewers: true
+addAssignees: false
+
+numberOfReviewers: 1
+
+useReviewGroups: false
+
+# A list of reviewers, split into different groups, to be added to pull requests (GitHub user name)
+reviewGroups:
+  groupA:
+    - koreadinosaur
+    - pikadev1771
+    - shw961016
+    - noah-eunsoo
+  groupB:
+    - yeonzzoo
+    - parkjiyun98
+    - Aru-slave
+
+# Set to true to add assignees from different groups to pull requests
+useAssigneeGroups: false
