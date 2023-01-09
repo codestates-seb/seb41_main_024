@@ -1,8 +1,8 @@
-import NavbarBtn from './NavbarBtn';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import NavbarBtn from "./NavbarBtn";
+import { ComponentStory, ComponentMeta } from "@storybook/react";
 export default {
   //storybook에서 분류할 폴더 Input 폴더 안에 Dropdown 컴포넌트가 만들어진다.
-  title: 'Navbar/Navbar Button',
+  title: "Navbar/Navbar Button",
   //storybook에서 렌더링할 컴포넌트
   component: NavbarBtn,
   //컴포넌트 props (렌더링하고자 하는 컴포넌트가 받는 props를 여기다 적으면 된다.)
@@ -15,7 +15,7 @@ const Template: ComponentStory<typeof NavbarBtn> = (args) => (
   <NavbarBtn {...args} />
 );
 //Template.bind({})메서드는 정해진 문법이다. Template은 그냥 변수라서 다른 이름을 지정해도 된다.
-export const BasicButton = Template.bind({});
+/* export const BasicButton = Template.bind({});
 //이렇게 설정하면 해당 props를 전달받는 컴포넌트를 생성할 수 있다.
 
 BasicButton.args = {
@@ -33,4 +33,4 @@ NewButton.args = {
   path: '/',
   iconSource: '/navbar/home.svg',
   isNewBtn: true,
-};
+}; */

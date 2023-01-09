@@ -1,6 +1,6 @@
 export interface navbarBtnPropsType {
   name: string;
   path: string;
-  iconSource: string;
+  iconSource: any;
   isNewBtn: boolean;
 }

@@ -1,10 +1,10 @@
-import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import React from "react";
+import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import Navbar from './Navbar';
+import Navbar from "./Navbar";
 
 export default {
-  title: 'Navbar/Navbar',
+  title: "Navbar/Navbar",
   component: Navbar,
   argTypes: {},
 } as ComponentMeta<typeof Navbar>;
@@ -12,7 +12,7 @@ export default {
 const Template: ComponentStory<typeof Navbar> = (args) => <Navbar />;
 
 export const storybookNavbar = Template.bind({});
-// storybookNavbar.args = {
-//   primary: true,
-//   label: 'Button',
-// };
+storybookNavbar.args = {
+  primary: true,
+  label: "Button",
+};

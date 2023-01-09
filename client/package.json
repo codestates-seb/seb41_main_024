@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "start-storybook -p 6006 -s ./src/assets",
+    "build-storybook": "build-storybook -s src/assets"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -24,6 +24,7 @@
     "@types/react-dom": "18.0.10",
     "autoprefixer": "^10.4.13",
     "axios": "^1.2.2",
+    "file-loader": "^6.2.0",
     "next": "13.1.1",
     "postcss": "^8.4.20",
     "react": "18.2.0",
@@ -42,7 +43,6 @@
     "@storybook/manager-webpack5": "^6.5.15",
     "@storybook/react": "^6.5.15",
     "@storybook/testing-library": "^0.0.13",
-    "babel-loader": "^8.3.0",
-    "babel-plugin-styled-components": "^2.0.7"
+    "babel-loader": "^8.3.0"
   }
 }

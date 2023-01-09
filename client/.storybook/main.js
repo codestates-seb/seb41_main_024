@@ -1,6 +1,6 @@
 const path = require("path");
 module.exports = {
-  stories: ["../**/**/*.stories.mdx", "../**/**/*.stories.@(js|jsx|ts|tsx)"],
+  stories: ["../**/**/*.stories.mdx", "../**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
@@ -10,6 +10,7 @@ module.exports = {
   core: {
     builder: "@storybook/builder-webpack5",
   },
+  staticDir: ["../src/assets"],
   webpackFinal: async (config) => {
     config.module.rules.unshift({
       test: /\.svg$/,
