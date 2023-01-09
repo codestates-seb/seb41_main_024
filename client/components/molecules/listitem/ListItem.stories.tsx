@@ -1,4 +1,4 @@
-import ListItem from './ListItem';
+import ListItem from "./ListItem";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 export default {
   //storybook에서 분류할 폴더 Input 폴더 안에 Dropdown 컴포넌트가 만들어진다.
@@ -23,7 +23,7 @@ const Template: ComponentStory<typeof ListItem> = (args) => (
 export const sharingListItem = Template.bind({});
 
 sharingListItem.args = {
-    src: '/pepsi.svg';
-    alt: '펩시콜라';
-    title: '제로콜라 100캔 소분하실 분 구합니다';
+  src: "/pepsi.svg",
+  alt: "펩시콜라",
+  title: "제로콜라 100캔 소분하실 분 구합니다",
 };
