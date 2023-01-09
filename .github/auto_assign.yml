@@ -1,6 +1,15 @@
 addReviewers: true
 addAssignees: false
 
+reviewers:
+  - koreadinosaur
+  - pikadev1771
+  - shw961016
+  - noah-eunsoo
+  - yeonzzoo
+  - parkjiyun98
+  - Aru-slave
+
 numberOfReviewers: 1
 
 useReviewGroups: false
