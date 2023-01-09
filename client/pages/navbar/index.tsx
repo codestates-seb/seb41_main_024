@@ -1,11 +1,34 @@
 import Navbar from '../../components/organisms/navbar/Navbar';
+import Badge from '../../components/atoms/badge/Badge';
+import Spot from '../../components/molecules/spot/Spot';
+
+import HomeIcon from '../../src/assets/navbar/HomeIcon';
+import ChatIcon from '../../src/assets/navbar/ChatIcon';
 
 //temp
 const TestPage = () => {
   return (
-    <div className="m-10">
-      <Navbar />
-    </div>
+    <>
+      <div className="mt-10">
+        <Navbar />
+      </div>
+      <div className="m-10">
+        <Badge isOpen={true} />
+      </div>
+      <div className="m-10">
+        <Badge isOpen={false} />
+      </div>
+      <div className="m-10">
+        <Spot spot="서울 서초구" />
+      </div>
+      <div className="m-10"></div>
+      <div className="m-10">
+        <ChatIcon />
+      </div>
+      <div className="m-10"></div>
+      <div className="m-10"></div>
+      <div className="m-10"></div>
+    </>
   );
 };
 

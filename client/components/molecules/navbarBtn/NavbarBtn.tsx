@@ -1,10 +1,29 @@
-import { navbarBtnPropsType } from './Type_navbarBtn';
 import Link from 'next/link';
+
+import HomeIcon from '../../../src/assets/navbar/HomeIcon';
+import MapIcon from '../../../src/assets/navbar/MapIcon';
+import ChatIcon from '../../../src/assets/navbar/ChatIcon';
+import MypageIcon from '../../../src/assets/navbar/MypageIcon';
+import NewIcon from '../../../src/assets/navbar/NewIcon';
+
+interface navbarBtnPropsType {
+  // children: JSX.Element;
+  name: string;
+  path: string;
+  isHomeBtn?: boolean;
+  isMapBtn?: boolean;
+  isChatBtn?: boolean;
+  isMypageBtn?: boolean;
+  isNewBtn?: boolean;
+}
 
 const NavbarBtn = ({
   name,
   path,
-  iconSource,
+  isHomeBtn,
+  isMapBtn,
+  isChatBtn,
+  isMypageBtn,
   isNewBtn,
 }: navbarBtnPropsType) => {
   return (
@@ -13,12 +32,16 @@ const NavbarBtn = ({
         <div
           className={`${
             isNewBtn ? 'bg-sky-500' : 'bg-sky-100'
-          } flex flex-col justify-center items-center p-2.5 w-32`}
+          } flex flex-col justify-center items-center p-2.5 w-60`}
         >
-          <img className="w-8 m-0.5" src={iconSource} />
-          <p className={`${isNewBtn ? 'text-white' : 'text-gray-600'}  m-1`}>
+          {isHomeBtn && <HomeIcon />}
+          {isMapBtn && <MapIcon />}
+          {isChatBtn && <ChatIcon />}
+          {isMypageBtn && <MypageIcon />}
+          {isNewBtn && <NewIcon />}
+          <span className={`${isNewBtn ? 'text-white' : 'text-gray-600'}  m-1`}>
             {name}
-          </p>
+          </span>
         </div>
       </Link>
     </>

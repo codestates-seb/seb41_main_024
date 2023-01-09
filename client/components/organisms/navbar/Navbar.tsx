@@ -2,37 +2,12 @@ import NavbarBtn from '../../molecules/navbarBtn/NavbarBtn';
 
 const Navbar = () => {
   return (
-    <div className="flex justify-center items-center w-fit border-solid border-0 border-t border-slate-400">
-      <NavbarBtn
-        name="홈"
-        path="/"
-        iconSource="/navbar/home.svg"
-        isNewBtn={false}
-      />
-      <NavbarBtn
-        name="내 근처"
-        path="/detail"
-        iconSource="/navbar/map.svg"
-        isNewBtn={false}
-      />
-      <NavbarBtn
-        name="채팅"
-        path="/chat"
-        iconSource="/navbar/chat.svg"
-        isNewBtn={false}
-      />
-      <NavbarBtn
-        name="나의 N게더"
-        path="/mypage"
-        iconSource="/navbar/mypage.svg"
-        isNewBtn={false}
-      />
-      <NavbarBtn
-        name="N게더 모집"
-        path="/new"
-        iconSource="/navbar/new.svg"
-        isNewBtn
-      />
+    <div className="flex justify-between items-center w-screen border-solid border-0 border-t border-slate-400">
+      <NavbarBtn name="홈" path="/" isHomeBtn />
+      <NavbarBtn name="내 근처" path="/detail" isMapBtn />
+      <NavbarBtn name="채팅" path="/chat" isChatBtn />
+      <NavbarBtn name="나의 N게더" path="/mypage" isMypageBtn />
+      <NavbarBtn name="N게더 모집" path="/new" isNewBtn />
     </div>
   );
 };
