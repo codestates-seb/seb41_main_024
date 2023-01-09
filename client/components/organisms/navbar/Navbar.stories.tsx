@@ -1,10 +1,10 @@
-import React from "react";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import React from 'react';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import Navbar from "./Navbar";
+import Navbar from './Navbar';
 
 export default {
-  title: "Navbar/Navbar",
+  title: 'Navbar/Navbar',
   component: Navbar,
 } as ComponentMeta<typeof Navbar>;
 

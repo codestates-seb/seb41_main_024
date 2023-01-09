@@ -1,4 +1,4 @@
-import NavbarBtn from "../../molecules/navbarBtn/NavbarBtn";
+import NavbarBtn from '../../molecules/navbarBtn/NavbarBtn';
 
 const Navbar = () => {
   return (

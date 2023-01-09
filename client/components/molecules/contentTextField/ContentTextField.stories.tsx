@@ -1,11 +1,11 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 import ContentTextField from './ContentTextField';
 export default {
-  title: "Input/Content",
+  title: 'Input/Content',
   component: ContentTextField,
   argTypes: {
-    title: { control: "text" },
-    textColor: { control: "text" },
+    title: { control: 'text' },
+    textColor: { control: 'text' },
   },
 } as ComponentMeta<typeof ContentTextField>;
 
