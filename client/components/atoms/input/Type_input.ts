@@ -10,4 +10,7 @@ export interface inputPropsType {
   selectProps: {
     native: boolean;
   };
+  rows: number;
+  multiline: boolean;
+  className: string;
 }
