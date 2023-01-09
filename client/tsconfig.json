@@ -23,7 +23,8 @@
     "pages/signup/index.jsx",
     "pages/login/index.jsx",
     "src/assets/*",
-    "stories/main.js"
+    "stories/main.js",
+    "public/navbar"
   ],
   "exclude": ["node_modules"]
 }

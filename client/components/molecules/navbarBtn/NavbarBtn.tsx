@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
-import HomeIcon from '../../../src/assets/navbar/HomeIcon';
-import MapIcon from '../../../src/assets/navbar/MapIcon';
-import ChatIcon from '../../../src/assets/navbar/ChatIcon';
-import MypageIcon from '../../../src/assets/navbar/MypageIcon';
-import NewIcon from '../../../src/assets/navbar/NewIcon';
+import HomeIcon from '../../../public/navbar/HomeIcon';
+import MapIcon from '../../../public/navbar/MapIcon';
+import ChatIcon from '../../../public/navbar/ChatIcon';
+import MypageIcon from '../../../public/navbar/MypageIcon';
+import NewIcon from '../../../public/navbar/NewIcon';
 
 interface navbarBtnPropsType {
   // children: JSX.Element;
