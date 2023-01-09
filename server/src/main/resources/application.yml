@@ -1,4 +1,9 @@
 spring:
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  freemarker:
+    cache: false
   jpa:
     properties:
       hibernate:
