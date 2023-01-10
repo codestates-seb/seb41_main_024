@@ -1,14 +1,14 @@
-import axios from "axios";
-import Link from "next/link";
-import { Fragment } from "react";
+import axios from 'axios';
+import Link from 'next/link';
+import { Fragment } from 'react';
 
 export default function Home() {
   const Token = `asdfjklasdf`;
-  const URL = "http://3.34.54.131:8080";
+  const URL = 'http://3.34.54.131:8080';
   async function getRequest() {
     try {
       const res = await axios({
-        method: "get",
+        method: 'get',
         url: `${URL}`,
         headers: { Authorization: `Bearer ${Token}` },
       });
@@ -20,9 +20,9 @@ export default function Home() {
   async function postRequest() {
     try {
       const res = await axios({
-        method: "post",
+        method: 'post',
         url: `${URL}/auth/login`,
-        data: { email: "abc@naver.com", pw: "1234" },
+        data: { email: 'abc@naver.com', pw: '1234' },
       });
       console.log(res);
     } catch (e) {
@@ -32,9 +32,9 @@ export default function Home() {
   async function putRequest() {
     try {
       const res = await axios({
-        method: "put",
+        method: 'put',
         url: `${URL}`,
-        data: { id: "human001", password: "asdfqwer1234" },
+        data: { id: 'human001', password: 'asdfqwer1234' },
         headers: { Authorization: `Bearer ${Token}` },
       });
       console.log(res);
@@ -45,9 +45,9 @@ export default function Home() {
   async function patchRequest() {
     try {
       const res = await axios({
-        method: "patch",
+        method: 'patch',
         url: `${URL}`,
-        data: { id: "human001", password: "asdfqwer1234" },
+        data: { id: 'human001', password: 'asdfqwer1234' },
         headers: { Authorization: `Bearer ${Token}` },
       });
       console.log(res);
@@ -58,9 +58,9 @@ export default function Home() {
   async function deleteRequest() {
     try {
       const res = await axios({
-        method: "delete",
+        method: 'delete',
         url: `${URL}`,
-        data: { id: "human001", password: "asdfqwer1234" },
+        data: { id: 'human001', password: 'asdfqwer1234' },
         headers: { Authorization: `Bearer ${Token}` },
       });
       console.log(res);

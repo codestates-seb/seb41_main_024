@@ -1,0 +1,3 @@
+interface ButtonPropsType {
+  heartButton: boolean;
+}

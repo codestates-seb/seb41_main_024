@@ -1,3 +1,4 @@
 export interface imagePropsType {
-  src: SVGImageElement | string;
+  src: string;
+  alt: string;
 }
