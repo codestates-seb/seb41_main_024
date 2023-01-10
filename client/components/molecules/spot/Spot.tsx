@@ -8,7 +8,7 @@ type spotPropsType = {
 
 const Spot = ({ spot }: spotPropsType) => {
   return (
-    <div className="flex justify-center items-center w-fit">
+    <div className="flex flex-col justify-center items-center w-fit">
       <LocationOnOutlinedIcon color="primary" />
       <span className="text-primary">{spot}</span>
     </div>

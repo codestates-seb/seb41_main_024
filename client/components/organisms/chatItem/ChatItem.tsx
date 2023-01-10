@@ -13,31 +13,26 @@ export interface chatItem {
 }
 
 const ChatItem = ({ thumbnail, isOpen, title, price, spot }: chatItem) => {
-  const chatData = {
-    thumbnail: ProductImg,
-    isOpen: true,
-    title: '아삭아삭 나주배 3kg',
-    price: '9,850',
-    spot: '서울 서초구',
-  };
+  // temp
+  // const chatData = {
+  //   thumbnail: ProductImg,
+  //   isOpen: true,
+  //   title: '아삭아삭 나주배 3kg',
+  //   price: '9,850',
+  //   spot: '서울 서초구',
+  // };
 
   return (
-    <div className="flex items-center w-screen border-solid border-slate-400 h-20 p-4">
-      <img src={chatData.thumbnail} className="w-16" />
+    <div className="flex items-center border-solid border-0 border-b border-slate-400 h-20 p-4">
+      <img src={thumbnail} className="w-16" />
       <div className="flex-1 flex-col items-start px-4">
-        <Badge isOpen={chatData.thumbnail} />
-        <p>{chatData.title}</p>
-        <p className="text-sky-500">인당 {chatData.price}원</p>
+        <Badge isOpen={isOpen} />
+        <p>{title}</p>
+        <p className="text-sky-500">인당 {price}원</p>
       </div>
-      <Spot spot={chatData.spot} />
+      <Spot spot={spot} />
     </div>
   );
 };
 
 export default ChatItem;
-
-// <div className="flex-1">
-//   <Link href="/">
-//     <div className="bg-sky-500 flex flex-col justify-around items-center grow-1 p-2.5"></div>
-//   </Link>
-// </div>;

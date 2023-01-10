@@ -1,10 +1,8 @@
-// import { badgePropsType } from './Type_badge';
-
 type badgeProps = {
   isOpen: boolean;
 };
 
-const Badge = (isOpen: badgeProps) => {
+const Badge = ({ isOpen }: badgeProps) => {
   return (
     <>
       {isOpen ? (

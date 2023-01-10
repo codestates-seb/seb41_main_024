@@ -33,7 +33,7 @@ const NavbarBtn = ({ name, path, icon }: navbarBtnPropsType) => {
       <Link href={path}>
         <div
           className={`${
-            icon === 'new' ? 'bg-sky-500' : 'bg-sky-100'
+            icon === 'new' ? 'bg-sky-500' : ''
           } flex flex-col justify-around items-center grow-1 p-2.5`}
         >
           {/* {icons['home']} */}

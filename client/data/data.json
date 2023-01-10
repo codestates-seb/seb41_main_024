@@ -1,0 +1,84 @@
+{
+  "productList": [
+    {
+      "id": 1,
+      "thumbnail": "",
+      "isOpen": true,
+      "title": "아삭아삭 나주배 3kg",
+      "price": "9,850",
+      "spot": "서울 서초구"
+    },
+    {
+      "id": 2,
+      "thumbnail": "",
+      "isOpen": true,
+      "title": "남해안 디포리 멸치다시팩 15g * 20팩",
+      "price": "9,850",
+      "spot": "경기도 수지구"
+    },
+    {
+      "id": 3,
+      "thumbnail": "",
+      "isOpen": false,
+      "title": "23년 햅쌀 프리미엄 경기미  쌀 10kg",
+      "price": "9,850",
+      "spot": "제주 연동"
+    },
+    {
+      "id": 4,
+      "thumbnail": "",
+      "isOpen": true,
+      "title": "호주산 냉장 소고기 모듬구이 세트 600",
+      "price": "9,850",
+      "spot": "서울 서초구"
+    },
+    {
+      "id": 5,
+      "thumbnail": "",
+      "isOpen": false,
+      "title": "헤이즈 파스텔 확장형 캐리어",
+      "price": "9,850",
+      "spot": "서울 서초구"
+    },
+    {
+      "id": 6,
+      "thumbnail": "",
+      "isOpen": false,
+      "title": "프라우반 독일산 젤락스 Welfare-Relax 베개/베개커버",
+      "price": "15,120",
+      "spot": "서울 서초구"
+    },
+    {
+      "id": 7,
+      "thumbnail": "",
+      "isOpen": true,
+      "title": "송이송송 자연한톨 코인육수/자연톡톡 분말육수",
+      "price": "32,850",
+      "spot": "서울 서초구"
+    },
+    {
+      "id": 8,
+      "thumbnail": "",
+      "isOpen": true,
+      "title": "[명절명작]견과 선물세트 13호",
+      "price": "4,850",
+      "spot": "서울 서초구"
+    },
+    {
+      "id": 9,
+      "thumbnail": "",
+      "isOpen": false,
+      "title": "광동 초임계 알티지 오메가3 맥스",
+      "price": "19,850",
+      "spot": "서울 서초구"
+    },
+    {
+      "id": 10,
+      "thumbnail": "",
+      "isOpen": true,
+      "title": "[산들목장] 1+한우선물세트",
+      "price": "87,850",
+      "spot": "서울 서초구"
+    }
+  ]
+}
