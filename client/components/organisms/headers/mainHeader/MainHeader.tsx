@@ -1,12 +1,21 @@
-import { AppBar, Divider } from '@mui/material';
+import { Fragment, useState } from 'react';
+import { AppBar, Button, Divider } from '@mui/material';
 import Link from 'next/link';
-import search from '../../../../src/assets/header/search.svg';
-import navigator from '../../../../src/assets/header/navigator.svg';
-import logo from '../../../../src/assets/logos/logoRow.svg';
+import search from '../../../../public/header/search.svg';
+import navigator from '../../../../public/header/navigator.svg';
+import logo from '../../../../public/logos/logoRow.svg';
+import DrawerList from '../drawer/DrawerList';
+import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 
 const MainHeader = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <>
+    <Fragment>
       <AppBar
         className="px-4 py-4 border-b border-b-inherit"
         position="static"
@@ -20,16 +29,23 @@ const MainHeader = () => {
               <img src={logo} alt="메인로고" />
             </Link>
           </div>
-          <button className="border-0 bg-inherit mr-4" type="button">
+          <Button className="border-0 mr-2 p-0 bg-inherit" type="button">
             <img src={search} alt="검색하기" />
-          </button>
-          <button className="border-0 bg-inherit ml-4" type="button">
+          </Button>
+          <Button
+            className="border-0 ml-2 p-0 bg-inherit"
+            type="button"
+            onClick={handleDrawerToggle}
+          >
             <img src={navigator} alt="메뉴열기" />
-          </button>
+          </Button>
         </div>
       </AppBar>
       <Divider />
-    </>
+      <DrawerList isOpen={isOpen} onClick={handleDrawerToggle}>
+        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
+      </DrawerList>
+    </Fragment>
   );
 };
 
