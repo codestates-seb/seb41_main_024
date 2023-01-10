@@ -3,6 +3,7 @@ import { inputPropsType } from './Type_input';
 
 const Input = ({
   id,
+  name,
   label,
   type,
   endAdornment,
@@ -13,10 +14,13 @@ const Input = ({
   rows,
   multiline,
   className,
+  value,
+  onChange
 }: inputPropsType) => {
   return (
     <TextField
       id={id}
+      name={name}
       label={label}
       type={type}
       InputProps={{ endAdornment }}
@@ -26,6 +30,8 @@ const Input = ({
       rows={rows}
       {...(multiline ? { multiline: true } : null)}
       className={className}
+      value={value}
+      onChange={onChange}
     >
       {children}
     </TextField>
