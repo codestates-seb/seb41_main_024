@@ -23,7 +23,8 @@
     "pages/signup/index.jsx",
     "pages/login/index.jsx",
     "src/assets/*.svg",
-    "stories/main.js"
+    "stories/main.js",
+    "src/custom.d.ts"
   ],
   "exclude": ["node_modules"]
 }
