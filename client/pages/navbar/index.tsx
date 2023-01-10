@@ -1,6 +1,7 @@
 import Navbar from '../../components/organisms/navbar/Navbar';
 import Badge from '../../components/atoms/badge/Badge';
 import Spot from '../../components/molecules/spot/Spot';
+import ChatItem from '../../components/organisms/chatItem/ChatItem';
 
 import ChatIcon from '../../public/navbar/ChatIcon';
 
@@ -24,7 +25,9 @@ const TestPage = () => {
       <div className="m-10">
         <ChatIcon />
       </div>
-      <div className="m-10"></div>
+      <div className="mt-10">
+        <ChatItem />
+      </div>
       <div className="m-10"></div>
       <div className="m-10"></div>
     </>

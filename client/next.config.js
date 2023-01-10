@@ -12,6 +12,13 @@ const nextConfig = {
         use: 'file-loader',
       }
     );
+
+    config.module.rules.map((rule) => {
+      if (rule.test !== undefined && rule.test.source.includes('|svg|')) {
+        rule.test = new RegExp(rule.test.source.replace('|svg|', '|'));
+      }
+    });
+
     return config;
   },
 };
