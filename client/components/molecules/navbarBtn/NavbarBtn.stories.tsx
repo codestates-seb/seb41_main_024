@@ -1,7 +1,5 @@
 import NavbarBtn from './NavbarBtn';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import HomeIcon from '../../../public/navbar/home.svg';
-import NewIcon from '../../../public/navbar/new.svg';
 
 export default {
   title: 'Navbar/Navbar Button',
@@ -16,12 +14,12 @@ export const BasicButton = Template.bind({});
 BasicButton.args = {
   name: '홈',
   path: '/',
-  icon: HomeIcon,
+  icon: '/navbar/home.svg',
 };
 
 export const NewButton = Template.bind({});
 NewButton.args = {
   name: 'N게더 모집',
   path: '/new',
-  icon: NewIcon,
+  icon: '/navbar/new.svg',
 };

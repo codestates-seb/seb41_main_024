@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import { createTheme } from '@mui/material/styles';
 
 type spotPropsType = {
   spot: string;
@@ -6,9 +8,9 @@ type spotPropsType = {
 
 const Spot = ({ spot }: spotPropsType) => {
   return (
-    <div className="flex justify-center items-center w-fit text-gray-600">
-      <Image src="/navbar/map.svg" width={22} height={22} alt="spot" />
-      <span className="text-gray-600 ml-1">{spot}</span>
+    <div className="flex justify-center items-center w-fit">
+      <LocationOnOutlinedIcon color="primary" />
+      <span className="text-primary">{spot}</span>
     </div>
   );
 };

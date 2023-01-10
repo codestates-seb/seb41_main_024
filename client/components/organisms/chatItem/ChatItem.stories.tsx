@@ -1,6 +1,5 @@
 import ChatItem from './ChatItem';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
-import ProductImg from '../../../public/chatItem/productImg.svg';
 
 export default {
   title: 'ChatList/Chat Item',
@@ -13,7 +12,7 @@ const Template: ComponentStory<typeof ChatItem> = (args) => (
 
 export const chatItem = Template.bind({});
 chatItem.args = {
-  thumbnail: ProductImg,
+  thumbnail: '/chatItem/productImg.svg',
   isOpen: true,
   title: '아삭아삭 나주배 3kg',
   price: '9,850',
@@ -22,7 +21,7 @@ chatItem.args = {
 
 export const chatItemAlert = Template.bind({});
 chatItemAlert.args = {
-  thumbnail: ProductImg,
+  thumbnail: '/chatItem/productImg.svg',
   isOpen: true,
   title: '남해안 디포리 멸치다시팩 15g * 20팩',
   price: '12,750',

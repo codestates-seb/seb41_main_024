@@ -23,11 +23,11 @@ const ChatItem = ({ thumbnail, isOpen, title, price, spot }: chatItem) => {
 
   return (
     <div className="flex items-center w-screen border-solid border-slate-400 h-20 p-4">
-      <img src={ProductImg} className="w-16" />
-      <div className="flex-1 flex-col items-start p-1">
+      <img src={chatData.thumbnail} className="w-16" />
+      <div className="flex-1 flex-col items-start px-4">
         <Badge isOpen={chatData.thumbnail} />
         <p>{chatData.title}</p>
-        <p>인당 {chatData.price}원</p>
+        <p className="text-sky-500">인당 {chatData.price}원</p>
       </div>
       <Spot spot={chatData.spot} />
     </div>
