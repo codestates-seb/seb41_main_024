@@ -1,4 +1,5 @@
 const path = require('path');
+
 module.exports = {
   stories: ['../**/**/*.stories.mdx', '../**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
@@ -29,14 +30,13 @@ module.exports = {
       'node_modules',
       'styles',
     ];
-
     config.resolve.alias = {
       ...config.resolve.alias,
       '@components': path.resolve(__dirname, '../src/components'),
-      '@assets': path.resolve(__dirname, '../src/assets'),
+      '@public': path.resolve(__dirname, '../public'),
     };
 
     return config;
   },
-  staticDir: ['../public'],
+  staticDirs: ['../public'],
 };
