@@ -22,7 +22,6 @@
     "pages/index.jsx",
     "pages/signup/index.jsx",
     "pages/login/index.jsx",
-    "src/assets/*.svg",
     "stories/main.js",
     "src/custom.d.ts",
     "public/navbar"

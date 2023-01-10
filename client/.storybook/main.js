@@ -38,5 +38,5 @@ module.exports = {
 
     return config;
   },
-  staticDirs: ['../public'],
+  staticDir: ['../public'],
 };
