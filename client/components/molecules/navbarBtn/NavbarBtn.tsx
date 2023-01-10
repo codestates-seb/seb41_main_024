@@ -31,7 +31,7 @@ const NavbarBtn = ({
       <Link href={path}>
         <div
           className={`${
-            isNewBtn ? 'bg-sky-500' : ''
+            isNewBtn ? 'bg-sky-500' : 'bg-sky-100'
           } flex flex-col justify-around items-center grow-1 p-2.5`}
         >
           {/* {isHomeBtn && (
