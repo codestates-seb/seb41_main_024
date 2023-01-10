@@ -1,8 +1,15 @@
-import React from "react";
-import { imagePropsType } from "./Type_Image";
+import Image from 'next/image';
+import React from 'react';
+import styles from './image.module.css';
 
-const Image = ({ src }: imagePropsType) => {
-  return <img src={src} />;
+import { imagePropsType } from './Type_Image';
+
+const Img = ({ src, alt }: imagePropsType) => {
+  return (
+    <div className={`relative ${styles.imgContainer}`}>
+      <Image src={src} alt={alt} fill />
+    </div>
+  );
 };
 
-export default Image;
+export default Img;

@@ -1,5 +1,5 @@
-import { OutlinedInput, TextField } from "@mui/material";
-import { inputPropsType } from "./Type_input";
+import { OutlinedInput, TextField } from '@mui/material';
+import { inputPropsType } from './Type_input';
 
 const Input = ({
   id,
@@ -12,7 +12,7 @@ const Input = ({
   selectProps,
   rows,
   multiline,
-  className
+  className,
 }: inputPropsType) => {
   return (
     <TextField
