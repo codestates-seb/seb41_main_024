@@ -22,9 +22,8 @@
     "pages/index.jsx",
     "pages/signup/index.jsx",
     "pages/login/index.jsx",
-    "src/custom.d.ts",
-    "src/assets/*",
     "stories/main.js",
+    "src/custom.d.ts",
     "public/navbar"
   ],
   "exclude": ["node_modules"]

@@ -1,14 +1,11 @@
 import React from 'react';
 import Footer from '../../components/molecules/footer/Footer';
-import Slogan from '../../components/molecules/slogan/Slogan';
 
-const Index = () => {
+const index = () => {
   return (
     <>
-      <Slogan />
       <Footer />
     </>
   );
 };
-
-export default Index;
+export default index;
