@@ -5,6 +5,7 @@ import ChatIcon from '../../public/navbar/ChatIcon';
 import ProductImg from '../../public/chatItem/productImg.svg';
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
 import Navbar from '../../components/organisms/navbar/Navbar';
+import BottomNav from '../../components/organisms/bottomNav/bottomNav';
 
 import { useState, useEffect } from 'react';
 import axios, { AxiosResponse } from 'axios';
@@ -26,7 +27,7 @@ const ChatList = () => {
     async function fetchChatList(): Promise<AxiosResponse<ChatListResponse>> {
       return await axios.get('http://localhost:3001/productList');
     }
-    fetchChatList().then((res) => setChatListData(res.data));
+    fetchChatList().then((res: any) => setChatListData(res.data));
   }, []);
 
   console.log(chatListData);
@@ -44,8 +45,29 @@ const ChatList = () => {
         />
         <ChatItem
           thumbnail={ProductImg}
+          isOpen={false}
+          title="남해안 디포리 멸치다시팩 15g * 20팩"
+          price="9,850"
+          spot="서울 서초구"
+        />
+        <ChatItem
+          thumbnail={ProductImg}
           isOpen={true}
-          title="아삭아삭 나주배 3kg"
+          title="23년 햅쌀 프리미엄 경기미  쌀 10kg"
+          price="9,850"
+          spot="서울 서초구"
+        />
+        <ChatItem
+          thumbnail={ProductImg}
+          isOpen={true}
+          title="호주산 냉장 소고기 모듬구이 세트 600"
+          price="9,850"
+          spot="서울 서초구"
+        />
+        <ChatItem
+          thumbnail={ProductImg}
+          isOpen={false}
+          title="헤이즈 파스텔 확장형 캐리어"
           price="9,850"
           spot="서울 서초구"
         />
@@ -58,51 +80,34 @@ const ChatList = () => {
         />
         <ChatItem
           thumbnail={ProductImg}
-          isOpen={true}
-          title="아삭아삭 나주배 3kg"
+          isOpen={false}
+          title="남해안 디포리 멸치다시팩 15g * 20팩"
           price="9,850"
           spot="서울 서초구"
         />
         <ChatItem
           thumbnail={ProductImg}
           isOpen={true}
-          title="아삭아삭 나주배 3kg"
+          title="23년 햅쌀 프리미엄 경기미  쌀 10kg"
+          price="9,850"
+          spot="서울 서초구"
+        />
+        <ChatItem
+          thumbnail={ProductImg}
+          isOpen={true}
+          title="호주산 냉장 소고기 모듬구이 세트 600"
+          price="9,850"
+          spot="서울 서초구"
+        />
+        <ChatItem
+          thumbnail={ProductImg}
+          isOpen={false}
+          title="헤이즈 파스텔 확장형 캐리어"
           price="9,850"
           spot="서울 서초구"
         />
       </div>
-      {/* <ChatItem
-        thumbnail={ProductImg}
-        isOpen={true}
-        title="아삭아삭 나주배 3kg"
-        price="9,850"
-        spot="서울 서초구"
-      />
-      <ChatItem
-        thumbnail={ProductImg}
-        isOpen={true}
-        title="아삭아삭 나주배 3kg"
-        price="9,850"
-        spot="서울 서초구"
-      />
-      <ChatItem
-        thumbnail={ProductImg}
-        isOpen={true}
-        title="아삭아삭 나주배 3kg"
-        price="9,850"
-        spot="서울 서초구"
-      />
-      <ChatItem
-        thumbnail={ProductImg}
-        isOpen={true}
-        title="아삭아삭 나주배 3kg"
-        price="9,850"
-        spot="서울 서초구"
-      /> */}
-
-      <Navbar />
-
-      {/* {chatListData &&
+      {chatListData &&
         chatListData.map((el: any) => {
           <ChatItem
             thumbnail={el.thumbnail}
@@ -111,7 +116,9 @@ const ChatList = () => {
             price={el.price}
             spot={el.spot}
           />;
-        })} */}
+        })}
+      {/* <Navbar /> */}
+      <BottomNav />
     </div>
   );
 };
