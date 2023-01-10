@@ -3,6 +3,7 @@ import Img from '../../atoms/image/Image';
 import styles from './sharingListItem.module.css';
 import { ListItemPropsType } from './Type_ListItem';
 import { ReactComponent as Heart } from '../../../public/sharingList/heart.svg';
+import Button from '../../atoms/button/Button';
 
 const SharingListItem = ({ src, alt, title, isHeart }: ListItemPropsType) => {
   return (
@@ -12,7 +13,7 @@ const SharingListItem = ({ src, alt, title, isHeart }: ListItemPropsType) => {
       {isHeart ? (
         <div className={styles.flex_ListItem}>
           <strong>1/4</strong>
-          <Heart />
+          <Button heartButton={true} />
         </div>
       ) : null}
     </div>
