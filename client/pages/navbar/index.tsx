@@ -2,7 +2,6 @@ import Navbar from '../../components/organisms/navbar/Navbar';
 import Badge from '../../components/atoms/badge/Badge';
 import Spot from '../../components/molecules/spot/Spot';
 
-import HomeIcon from '../../public/navbar/HomeIcon';
 import ChatIcon from '../../public/navbar/ChatIcon';
 
 //temp
