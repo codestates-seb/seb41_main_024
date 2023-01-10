@@ -1,24 +1,23 @@
 import { Divider, List } from "@mui/material";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { drawerProps } from './Type_drawer';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import RigthIcon from '../../../../public/header/arrowbackRight.svg' 
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-start',
-}));
 
 const DrawerList = ({window, isOpen, onClick, children}: drawerProps) => {
   const container = window !== undefined ? () => window().document.body : undefined;
-  const theme = useTheme();
   const drawerWidth = 240;
-
+  
+  const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-start',
+  }));
+  
   return (
     <Drawer
       container={container}
@@ -36,7 +35,7 @@ const DrawerList = ({window, isOpen, onClick, children}: drawerProps) => {
     >
       <DrawerHeader>
         <IconButton onClick={onClick}>
-          {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          <img src={RigthIcon} alt="메뉴 닫기" />
         </IconButton>
       </DrawerHeader>
       <Divider />
