@@ -1,5 +1,5 @@
-import { Button } from "@mui/material";
-import { Fragment } from "react";
+import { Button } from '@mui/material';
+import { Fragment } from 'react';
 
 export default function Home() {
   return (
