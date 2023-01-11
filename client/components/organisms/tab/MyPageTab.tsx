@@ -1,5 +1,5 @@
 import React from 'react';
-import TabPanel from '../../atoms/tab/TabPanel';
+import TabPanel from '../../atoms/tabPanel/TabPanel';
 import SharingListItem from '../../molecules/sharingListItem/SharingListItem';
 import BasicTabs from '../../molecules/tab/BasicTabs';
 
