@@ -4,9 +4,11 @@ export interface BasicTabsPropsType {
     event: React.SyntheticEvent<Element, Event>,
     value: any
   ) => void;
-  value: string;
-  bgcolor: string;
-  color: string;
-  borderBottom: number;
-  borderColor: string;
+  value: number;
+  bgcolor?: string;
+  color?: string;
+  borderBottom?: number;
+  borderColor?: string;
+  tabLabels: { label: string; index: number }[];
+  centered: boolean;
 }
