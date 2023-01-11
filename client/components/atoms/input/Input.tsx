@@ -15,7 +15,7 @@ const Input = ({
   multiline,
   className,
   value,
-  onChange
+  onChange,
 }: inputPropsType) => {
   return (
     <TextField
