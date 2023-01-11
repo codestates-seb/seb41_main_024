@@ -56,9 +56,9 @@ export default function FixedBottomNavigation() {
           <BottomNavigationAction
             sx={{
               bgcolor: (theme) => theme.palette.primary.main,
-              color: (theme) => theme.palette.primary.light,
+              color: (theme) => theme.palette.primary.contrastText,
               '& .Mui-selected, svg': {
-                color: (theme) => theme.palette.primary.light,
+                color: (theme) => theme.palette.primary.contrastText,
               },
             }}
             label="N게더 모집"
