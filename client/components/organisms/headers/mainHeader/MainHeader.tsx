@@ -29,11 +29,13 @@ const MainHeader = () => {
               <img src={logo} alt='메인로고' />
             </Link>
           </div>
-          <Button className='border-0 mr-2 p-0 bg-inherit' type='button'>
-            <img src={search} alt='검색하기' />
-          </Button>
+          <div className='border-0 mr-2 p-0 bg-inherit pt-1'>
+            <Link href='/search' >
+              <img src={search} alt='검색하기' />
+            </Link>
+          </div>
           <Button
-            className='border-0 ml-2 p-0 bg-inherit'
+            className='border-0 ml-2 p-0 bg-inherit min-w-0'
             type='button'
             onClick={handleDrawerToggle}
           >
