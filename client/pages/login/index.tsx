@@ -55,7 +55,7 @@ const LoginPage = () => {
       <div className="mt-24">
         <LoginSlogan />
       </div>
-      <div className="flex justify-center m-7">
+      <div className="flex justify-center m-7 my-12">
         <form className="flex flex-col w-10/12 max-w-lg">
           <Input
             id={'email-input'}
