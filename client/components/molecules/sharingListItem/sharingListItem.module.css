@@ -3,13 +3,13 @@
   border: 1px solid #dddddd;
   padding-bottom: 8px;
 }
-.flex_ListItem {
+.flex_listItem {
   display: flex;
   margin-top: 15px;
   padding: 0 8px;
   justify-content: space-between;
 }
-.title_Ellipsis {
+.title_ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
