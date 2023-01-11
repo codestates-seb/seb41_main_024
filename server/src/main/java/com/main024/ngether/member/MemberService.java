@@ -6,6 +6,7 @@ import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.helper.event.MemberRegistrationApplicationEvent;
 import com.main024.ngether.likes.LikeRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
@@ -24,14 +26,7 @@ public class MemberService {
 
     private final LikeRepository likeRepository;
 
-    public MemberService(MemberRepository memberRepository, ApplicationEventPublisher publisher,
-                         PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, LikeRepository likeRepository) {
-        this.memberRepository = memberRepository;
-        this.publisher = publisher;
-        this.passwordEncoder = passwordEncoder;
-        this.authorityUtils = authorityUtils;
-        this.likeRepository = likeRepository;
-    }
+
 
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
@@ -81,7 +76,7 @@ public class MemberService {
     }
     public Member findByNiceName(String name){
         Optional<Member> optionalMembers =
-                memberRepository.findByNickNameContaining(name);
+                memberRepository.findByNickName(name);
         return optionalMembers.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }

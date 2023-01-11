@@ -1,6 +1,7 @@
 package com.main024.ngether.board;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.main024.ngether.chat.ChatRoom;
 import com.main024.ngether.likes.Like;
 import com.main024.ngether.member.Member;
 import lombok.Getter;
@@ -33,11 +34,14 @@ public class Board {
     private String category;
     @Column(nullable = false)
     private long price;
+    @Column(nullable = false)
+    private int maxNum;
 
     @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
 
 
     @JsonIgnore

@@ -25,6 +25,7 @@ public interface BoardMapper {
         response.setLikeCount(board.getLikeCount());
         response.setCategory(board.getCategory());
         response.setPrice(board.getPrice());
+        response.setMaxNum(board.getMaxNum());
 
         return response;
     }
@@ -61,6 +62,7 @@ public interface BoardMapper {
         board.setContent(boardPostDto.getContent());
         board.setPrice(boardPostDto.getPrice());
         board.setLikeCount(0);
+        board.setMaxNum(boardPostDto.getMaxNum());
         board.setMember(memberService.getLoginMember());
         board.setCreate_date(LocalDateTime.now());
 

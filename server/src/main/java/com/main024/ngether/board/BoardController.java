@@ -3,6 +3,7 @@ package com.main024.ngether.board;
 import com.main024.ngether.likes.Like;
 import com.main024.ngether.likes.LikeService;
 import com.main024.ngether.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Positive;
 
 @RestController
 @RequestMapping("api/boards")
+@RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
     private final BoardMapper mapper;
@@ -19,14 +21,6 @@ public class BoardController {
     private final BoardRepository boardRepository;
     private final LikeService likeService;
 
-    public BoardController(BoardService boardService, BoardMapper mapper, MemberService memberService,
-                           BoardRepository boardRepository, LikeService likeService) {
-        this.boardService = boardService;
-        this.mapper = mapper;
-        this.memberService = memberService;
-        this.boardRepository = boardRepository;
-        this.likeService = likeService;
-    }
 
     //질문 게시
     @PostMapping

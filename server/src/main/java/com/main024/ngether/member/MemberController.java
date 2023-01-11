@@ -1,6 +1,7 @@
 package com.main024.ngether.member;
 
 import com.main024.ngether.board.BoardMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -11,17 +12,14 @@ import javax.validation.constraints.Positive;
 @RestController
 @RequestMapping("api/members")
 @Validated
+@RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
 
     private final BoardMapper boardMapper;
 
-    public MemberController(MemberService memberService, MemberMapper mapper, BoardMapper boardMapper) {
-        this.memberService = memberService;
-        this.mapper = mapper;
-        this.boardMapper = boardMapper;
-    }
+
 
     //회원가입
     @PostMapping

@@ -1,5 +1,6 @@
 package com.main024.ngether.board;
 
+import com.main024.ngether.chat.ChatService;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.likes.Like;
@@ -7,6 +8,7 @@ import com.main024.ngether.likes.LikeRepository;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberRepository;
 import com.main024.ngether.member.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberService memberService;
@@ -23,12 +26,6 @@ public class BoardService {
     private final LikeRepository likeRepository;
 
 
-    public BoardService(BoardRepository boardRepository, MemberService memberService, LikeRepository likeRepository, MemberRepository memberRepository) {
-        this.boardRepository = boardRepository;
-        this.memberService = memberService;
-        this.memberRepository = memberRepository;
-        this.likeRepository = likeRepository;
-    }
 
     public Board createBoard(Board board) {
         Board returnBoard = new Board();
@@ -43,9 +40,9 @@ public class BoardService {
             returnBoard.setContent(board.getContent());
             returnBoard.setCreate_date(board.getCreate_date());
             returnBoard.setTitle(board.getTitle());
+            returnBoard.setMaxNum(board.getMaxNum());
             member.addBoard(returnBoard);
-
-            return  boardRepository.save(returnBoard);
+            return boardRepository.save(returnBoard);
         }
 
 
@@ -76,6 +73,8 @@ public class BoardService {
                     .ifPresent(findBoard::setContent);
             Optional.ofNullable(board.getPrice())
                     .ifPresent(findBoard::setPrice);
+            Optional.ofNullable(board.getMaxNum())
+                    .ifPresent(findBoard::setMaxNum);
             return boardRepository.save(findBoard);
         }
         else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
