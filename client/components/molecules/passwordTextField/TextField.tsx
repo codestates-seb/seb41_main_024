@@ -4,8 +4,9 @@ import { useState } from 'react';
 import Input from '../../atoms/input/Input';
 import Label from '../../atoms/label/Label';
 import PasswordIcon from '../../atoms/passwordIcon/PasswordIcon';
+import { passwordTextFieldPropsType } from './Type_passwordTextField';
 
-const TextField = (props) => {
+const TextField = (props: passwordTextFieldPropsType) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -16,11 +17,11 @@ const TextField = (props) => {
     event.preventDefault();
   };
   return (
-    <FormControl sx={{ m: 1, width: '328px' }} variant="outlined">
+    <FormControl variant="outlined">
       <Input
-        id="outlined-adornment-password"
+        id={props.id}
         type={showPassword ? 'text' : 'password'}
-        label="비밀번호"
+        label={props.label}
         endAdornment={
           <InputAdornment position="end">
             <PasswordIcon
@@ -31,9 +32,6 @@ const TextField = (props) => {
           </InputAdornment>
         }
       />
-      <FormHelperText id="outlined-password-helper-text">
-        비밀번호를 입력하세요
-      </FormHelperText>
     </FormControl>
   );
 };
