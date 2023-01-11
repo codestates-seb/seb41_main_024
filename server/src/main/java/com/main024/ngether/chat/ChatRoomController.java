@@ -1,10 +1,9 @@
 package com.main024.ngether.chat;
 
-import com.main024.ngether.board.BoardService;
-import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,5 +44,11 @@ public class ChatRoomController {
     @ResponseBody
     public ChatRoom roomInfo(@PathVariable("room-Id") Long roomId) {
         return chatService.findById(roomId);
+    }
+
+    //특정 채팅방 안의 메시지 내역 조회
+    @GetMapping("/room/messages/{room-id}")
+    public ResponseEntity callMessagesInChatRoom(@PathVariable(value = "room-id") Long roomId){
+        return new ResponseEntity<>(chatService.findMessagesInChatRoom(roomId), HttpStatus.OK);
     }
 }

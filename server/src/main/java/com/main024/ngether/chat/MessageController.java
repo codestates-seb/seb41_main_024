@@ -1,8 +1,6 @@
 package com.main024.ngether.chat;
 
-import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -35,6 +33,8 @@ public class MessageController {
     @MessageMapping("/chat/message/{room-id}")//메세지가 목적지로 전송되면 talk 메서드 호출
     @SendTo("/receive/chat/message/{room-id}")//결과를 리턴시키는 목적지
     public ChatMessage talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message) {
+
+            //메시지 db에 저장
             message.setCreate_date(LocalDateTime.now());
             message.setNickName(message.getNickName());
             message.setChatRoomId(roomId);

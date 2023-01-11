@@ -27,7 +27,7 @@ public class ChatMessage {
     //채팅방 ID
     private Long chatRoomId;
     //보내는 사람
-      private String nickName;
+    private String nickName;
     //메세지 내용
     @Column(nullable = false)
     private String message;

@@ -62,6 +62,9 @@ public class ChatService {
     //채팅방에 입장할 때
     public ChatRoom enterRoom(Long roomId, String nickName){
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+        if(chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
+            throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
+
         //인원수 + 1
         chatRoom.setMemberCount(chatRoom.getMemberCount()+1);
         ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
@@ -82,5 +85,8 @@ public class ChatService {
     //채팅방 하나 불러오기
     public ChatRoom findById(String roomId) {
         return chatRooms.get(roomId);
+    }
+    public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId){
+        return chatMessageRepository.findByChatRoomId(chatRoomId);
     }
 }

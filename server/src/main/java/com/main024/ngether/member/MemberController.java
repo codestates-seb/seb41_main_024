@@ -1,6 +1,7 @@
 package com.main024.ngether.member;
 
 import com.main024.ngether.board.BoardMapper;
+import com.main024.ngether.chat.ChatRoomMembersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,7 +19,7 @@ public class MemberController {
     private final MemberMapper mapper;
 
     private final BoardMapper boardMapper;
-
+    private final ChatRoomMembersRepository chatRoomMembersRepository;
 
 
     //회원가입
@@ -74,6 +75,12 @@ public class MemberController {
     @GetMapping("/like")
     public ResponseEntity searchMyLike() {
         return ResponseEntity.ok(boardMapper.boardsToBoardResponses(memberService.findMyLike()));
+    }
+
+    //나의 채팅 내역 보기
+    @GetMapping("/myChatting")
+    public ResponseEntity viewMyChattingRoom() {
+        return ResponseEntity.ok(chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()));
     }
 
 }

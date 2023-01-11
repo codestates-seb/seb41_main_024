@@ -7,6 +7,7 @@ import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.helper.event.MemberRegistrationApplicationEvent;
 import com.main024.ngether.likes.LikeRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
@@ -49,7 +51,10 @@ public class MemberService {
         if(getLoginMember() == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
 
+        ;
+
         Member findMember = findVerifiedMember(getLoginMember().getMemberId());
+        String name = findMember.getNickName();
         if(member.getPw() != null){
             String encryptedPassword = passwordEncoder.encode(member.getPw());
             Optional.ofNullable(member.getPw())
@@ -59,6 +64,9 @@ public class MemberService {
                 .ifPresent(findMember::setNickName);
         Optional.ofNullable(member.getPhoneNumber())
                 .ifPresent(findMember::setPhoneNumber);
+        if(!name.equals(findMember.getNickName())){
+            log.info(String.format("NickName : '%s'가 '%s'로 바뀌었습니다.",name,findMember.getNickName()));
+        }
 
 
         return memberRepository.save(findMember);
