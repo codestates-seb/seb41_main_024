@@ -18,7 +18,7 @@ export default function FixedBottomNavigation() {
 
   const router = useRouter();
 
-  const paths: string[] = ['/home', '/map', '/chatlist', 'mypage', '/new'];
+  const paths: string[] = ['/main', '/nearby', '/chatlist', 'mypage', '/new'];
 
   return (
     <Box sx={{ pb: 7 }}>
@@ -32,7 +32,7 @@ export default function FixedBottomNavigation() {
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue);
-            // router.push(paths[newValue]);
+            router.push(paths[newValue]);
           }}
           sx={{
             height: 70,
