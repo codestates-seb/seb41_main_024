@@ -1,4 +1,4 @@
-// Search (돋보기))
+// Search (돋보기)
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 <SearchOutlinedIcon />;
 

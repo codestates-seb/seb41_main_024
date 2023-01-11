@@ -1,6 +1,3 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import ProductImg from '../../../public/chatItem/productImg.svg';
 import Badge from '../../atoms/badge/Badge';
 import Spot from '../../molecules/spot/Spot';
 
@@ -13,15 +10,6 @@ export interface chatItem {
 }
 
 const ChatItem = ({ thumbnail, isOpen, title, price, spot }: chatItem) => {
-  // temp
-  // const chatData = {
-  //   thumbnail: ProductImg,
-  //   isOpen: true,
-  //   title: '아삭아삭 나주배 3kg',
-  //   price: '9,850',
-  //   spot: '서울 서초구',
-  // };
-
   return (
     <div className="flex items-center border-solid border-0 border-b border-slate-400 h-20 p-4">
       <img src={thumbnail} className="w-16" />
