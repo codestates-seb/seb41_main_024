@@ -13,7 +13,7 @@ const QuestionList = ({ onClick }: QuestionFormProps) => {
         <QuestionListItem />
       </List>
       <FormButton 
-        className='w-80 my-6 mx-auto' 
+        className='h-14 w-80 my-6 mx-auto' 
         variant='contained' 
         content='문의 등록하기' 
         onClick={onClick}
