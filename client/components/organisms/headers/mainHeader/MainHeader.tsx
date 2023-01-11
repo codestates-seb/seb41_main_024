@@ -43,7 +43,9 @@ const MainHeader = () => {
       </AppBar>
       <Divider />
       <DrawerList isOpen={isOpen} onClick={handleDrawerToggle}>
-        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
+        <DrawerListItem text={'마이페이지'} path={'/mypage/1'} />
+        {/* <DrawerListItem text={'마이페이지'} path={'/mypage/로그인 한 사람의 멤버 아이디'} /> */}
+        {/* 임의로 1로 지정 */}
       </DrawerList>
     </Fragment>
   );

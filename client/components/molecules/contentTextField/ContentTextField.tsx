@@ -3,7 +3,7 @@ import Input from '../../atoms/input/Input';
 
 const ContentTextField = (props) => {
   return (
-    <FormControl sx={{ m: 1, width: '328px' }} variant="outlined">
+    <FormControl className='mt-4' variant="outlined">
       <Input
         id="outlined-multiline-flexible"
         label="내용"

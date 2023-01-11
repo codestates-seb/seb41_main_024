@@ -1,5 +1,5 @@
 .flex_container {
-  width: 166px;
+  width: 100%;
   border: 1px solid #dddddd;
   padding-bottom: 8px;
 }
@@ -7,10 +7,9 @@
   display: flex;
   margin-top: 15px;
   padding: 0 8px;
-
   justify-content: space-between;
 }
-.list_Title {
+.title_Ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
