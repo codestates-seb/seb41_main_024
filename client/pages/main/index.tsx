@@ -4,26 +4,10 @@ import Footer from '../../components/molecules/footer/Footer';
 import Slogan from '../../components/molecules/slogan/Slogan';
 import Input from '../../components/atoms/input/Input';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
-import { useState, useEffect } from 'react';
-
-const ChatList = () => {
-  const [chatListData, setChatListData] = useState([] as any);
-
-  interface ChatListResponse {
-    id: Number;
-    thumbnail: string;
-    isOpen: false;
-    title: string;
-    price: string;
-    spot: string;
-  }
-
+const MainPage = () => {
   return (
     <div>
       <MainHeader />
@@ -57,4 +41,4 @@ const ChatList = () => {
   );
 };
 
-export default ChatList;
+export default MainPage;
