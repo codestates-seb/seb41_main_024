@@ -17,7 +17,6 @@ export default function FixedBottomNavigation() {
   const [value, setValue] = useState(2); // 버튼 넘버
 
   const router = useRouter();
-  console.log(router);
 
   const paths: string[] = ['/home', '/map', '/chatlist', 'mypage', '/new'];
 
