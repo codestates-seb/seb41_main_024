@@ -3,9 +3,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import Box from '@mui/material/Box';
+
 import SharingListItem from '../sharingListItem/SharingListItem';
-import TabPanel from '../../atoms/tab/TabPanel';
-import { BasicTabsPropsType } from './Type_Tab';
+import TabPanel from '../../atoms/tabPanel/TabPanel';
+import { BasicTabsPropsType } from './Type_BasicTabs';
 
 function a11yProps(index: number) {
   return {
@@ -14,20 +15,33 @@ function a11yProps(index: number) {
   };
 }
 
-export default function BasicTabs({ handleChange, value }: BasicTabsPropsType) {
+export default function BasicTabs({
+  handleChange,
+  value,
+  bgcolor,
+  color,
+}: BasicTabsPropsType) {
   return (
     <Box sx={{ width: '100%' }}>
       <Box
         sx={{
-          bgcolor: '#63A8DA',
-          color: 'white',
+          // bgcolor: '#63A8DA',
+          // color: 'white',
+          bgcolor,
+          color,
+          borderBottom: 1,
+          borderColor: 'divdider',
+          height: 47,
         }}
       >
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
-          TabIndicatorProps={{ style: { background: '#fff' } }}
+          // TabIndicatorProps={{ style: { background: '#fff' } }}
+          TabIndicatorProps={{
+            style: { background: '#63A8DA', height: '3px' },
+          }}
           textColor="inherit"
           centered
           sx={{
