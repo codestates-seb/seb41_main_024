@@ -1,5 +1,5 @@
-import { IconButton } from "@mui/material";
-import { passwrodIconPropsType } from "./Type_passwordIcon";
+import { IconButton } from '@mui/material';
+import { passwrodIconPropsType } from './Type_passwordIcon';
 
 const PasswordIcon = ({
   handleClickShowPassword,

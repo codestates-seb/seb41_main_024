@@ -16,7 +16,7 @@ const Footer = () => {
         Github :
         <Link
           className={styles.color}
-          href='https://github.com/codestates-seb/seb41_main_024'
+          href="https://github.com/codestates-seb/seb41_main_024"
         >
           https://github.com/codestates-seb/seb41_main_024
         </Link>
