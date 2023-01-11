@@ -5,12 +5,17 @@ import { ListItemPropsType } from './Type_ListItem';
 import { ReactComponent as Heart } from '../../../public/sharingList/heart.svg';
 import Button from '../../atoms/button/Button';
 
-const SharingListItem = ({ src, alt, title, isHeart }: ListItemPropsType) => {
+const SharingListItem = ({
+  src,
+  alt,
+  title,
+  isFavorite,
+}: ListItemPropsType) => {
   return (
     <div className={`flex flex-col ${styles.flex_container}`}>
       <Img src={src} alt={alt} />
       <strong className={styles.list_Title}>{title}</strong>
-      {isHeart ? (
+      {isFavorite ? (
         <div className={styles.flex_ListItem}>
           <strong>1/4</strong>
           <Button heartButton={true} />
