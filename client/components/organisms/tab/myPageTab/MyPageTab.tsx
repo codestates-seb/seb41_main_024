@@ -1,4 +1,6 @@
 import React from 'react';
+import UserInfoEdit from '../../tabPanel/myPage/UserInfoEdit';
+import UserInquiry from '../../tabPanel/myPage/UserInquiry';
 import TabPanel from '../../../atoms/tabPanel/TabPanel';
 import SharingListItem from '../../../molecules/sharingListItem/SharingListItem';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
@@ -23,18 +25,13 @@ const MyPageTab = () => {
         centered={true}
       />
       <TabPanel value={value} index={0}>
-        <SharingListItem
-          title="test"
-          src="/sharingList/pepsi.svg"
-          isHeart={true}
-          alt="pepsi"
-        />
+        <UserInfoEdit />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Item Two
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <UserInquiry />
       </TabPanel>{' '}
     </>
   );
