@@ -44,7 +44,7 @@ const dummyData = [
     isFavorite: true,
   },
 ];
-const AroundList = () => {
+const NearByList = () => {
   return (
     <div className="grid grid-cols-2 gap-4 m-5 w-fit">
       {dummyData.map((sharingItem) => (
@@ -59,4 +59,4 @@ const AroundList = () => {
   );
 };
 
-export default AroundList;
+export default NearByList;
