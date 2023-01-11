@@ -2,13 +2,13 @@ import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader
 import BottomNav from '../../components/organisms/bottomNav/bottomNav';
 import Footer from '../../components/molecules/footer/Footer';
 import Input from '../../components/atoms/input/Input';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import EmailInput from '../../components/molecules/passwordTextField/TextField';
-
+import FormButton from '../../components/atoms/formbutton/FormButton';
+import Label from '../../components/atoms/label/Label';
+import TextField from '../../components/molecules/passwordTextField/TextField';
+import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 
-const Slogan = () => {
+const LoginSlogan = () => {
   return (
     <div className="flex flex-col items-center">
       <Logo />
@@ -24,33 +24,71 @@ const Slogan = () => {
 };
 
 const LoginPage = () => {
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
+
+  const { email, password } = form;
+
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
+  let emailRegexText = '사용가능한 이메일 입니다';
+  let checkedPasswordRegexText = '사용하실 패스워드를 한 번 더 입력해주세요';
+
+  const emailRegex =
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  if (email !== '' && !emailRegex.test(email)) {
+    emailRegexText = '이메일 양식과 맞게 입력해주세요';
+  }
+
   return (
     <div>
       <MainHeader />
       <div className="mt-24">
-        <Slogan />
+        <LoginSlogan />
       </div>
-      <div className="p-12 pb-20">
-        <Stack spacing={2}>
+      <div className="flex justify-center m-7">
+        <form className="flex flex-col w-10/12 max-w-lg">
           <Input
-            id={''}
-            label="우리 동네 N게더를 검색해보세요"
-            selectProps={{
-              native: false,
-            }}
-            rows={0}
-            multiline={false}
-            className="w-full"
+            id={'email-input'}
+            name="email"
+            type={'text'}
+            label="이메일"
+            value={email}
+            onChange={onChange}
           />
-          <EmailInput />
-
-          <Button variant="contained" fullWidth>
-            로그인
-          </Button>
-          <Button variant="outlined" fullWidth>
-            회원가입
-          </Button>
-        </Stack>
+          <Label htmlFor={'email-input'} labelText={emailRegexText} />
+          <TextField
+            id={'password-input'}
+            name="password"
+            type={'text'}
+            label="패스워드"
+            value={password}
+            onChange={onChange}
+          />
+          <Label
+            htmlFor={'password-input'}
+            labelText={'소문자와 특수문자를 포함한 8글자'}
+          />
+          <FormButton
+            className="h-14 mt-4"
+            variant="contained"
+            content="로그인"
+          />
+          <FormButton
+            className="h-14 mt-4"
+            variant="outlined"
+            content="회원가입"
+          />
+        </form>
       </div>
       <Footer />
       <BottomNav />
@@ -59,16 +97,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-// const Login = () => {
-//   return (
-//     <div>
-//       <label htmlFor="email">email </label>
-//       <input id="email"></input>
-//       <label htmlFor="password">password </label>
-//       <input id="password"></input>
-//     </div>
-//   );
-// };
-
-// export default Login;
