@@ -55,13 +55,13 @@ const ChatHeader = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem className='text-[#63A8DA]' onClick={handleClose}>
+            <MenuItem sx={{color: theme => theme.palette.primary.main}} onClick={handleClose}>
               채팅방 나가기
             </MenuItem>
-            <MenuItem className='text-[#63A8DA]' onClick={handleClose}>
+            <MenuItem sx={{color: theme => theme.palette.primary.main}} onClick={handleClose}>
               신고
             </MenuItem>
-            <MenuItem className='text-[#63A8DA]' onClick={handleClose}>
+            <MenuItem sx={{color: theme => theme.palette.primary.main}} onClick={handleClose}>
               닫기
             </MenuItem>
           </Menu>
