@@ -14,10 +14,14 @@ const SharingListItem = ({
   return (
     <div className={`flex flex-col ${styles.flex_container}`}>
       <Img src={src} alt={alt} />
-      <strong className={styles.list_Title}>{title}</strong>
+      <div className="px-2 mt-2.5">
+        <strong className={`${styles.title_Ellipsis} font-normal`}>
+          {title}
+        </strong>
+      </div>
       {isFavorite ? (
         <div className={styles.flex_ListItem}>
-          <strong>1/4</strong>
+          <strong className="font-normal">1/4</strong>
           <Button heartButton={true} />
         </div>
       ) : null}
