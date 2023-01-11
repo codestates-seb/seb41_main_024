@@ -8,10 +8,10 @@ import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 
 const MainHeader = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleDrawerToggle = () => {
-    setIsOpen(!isOpen);
+    setIsDrawerOpen(!isDrawerOpen);
   };
 
   return (
@@ -44,7 +44,7 @@ const MainHeader = () => {
         </div>
       </AppBar>
       <Divider />
-      <DrawerList isOpen={isOpen} onClick={handleDrawerToggle}>
+      <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
         <DrawerListItem text={'마이페이지'} path={'/mypage/1'} />
         {/* <DrawerListItem text={'마이페이지'} path={'/mypage/로그인 한 사람의 멤버 아이디'} /> */}
         {/* 임의로 1로 지정 */}

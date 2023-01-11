@@ -6,8 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import RigthIcon from '../../../../public/header/arrowbackRight.svg' 
 
 
-const DrawerList = ({window, isOpen, onClick, children}: drawerProps) => {
-  const container = window !== undefined ? () => window().document.body : undefined;
+const DrawerList = ({ isOpen, onClick, children}: drawerProps) => {
   const drawerWidth = 240;
   
   const DrawerHeader = styled('div')(({ theme }) => ({
@@ -20,7 +19,6 @@ const DrawerList = ({window, isOpen, onClick, children}: drawerProps) => {
   
   return (
     <Drawer
-      container={container}
       variant="temporary"
       open={isOpen}
       onClick={onClick}
