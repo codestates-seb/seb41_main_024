@@ -1,8 +1,6 @@
 import { ReactComponent as Heart } from '../../../public/sharingList/heart.svg';
-
+import { ButtonPropsType } from './Type_Button';
 const Button = ({ heartButton }: ButtonPropsType) => {
-  console.log(Heart);
-
   return <button>{heartButton ? <Heart /> : null}</button>;
 };
 
