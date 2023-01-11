@@ -25,6 +25,7 @@ const basicTheme = createTheme({
   palette: {
     primary: {
       main: '#63A8DA',
+      light: '#FFFFFF',
     },
   },
   typography: {

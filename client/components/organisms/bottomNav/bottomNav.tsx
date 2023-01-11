@@ -55,13 +55,11 @@ export default function FixedBottomNavigation() {
 
           <BottomNavigationAction
             sx={{
-              bgcolor: '#63A8DA',
-              color: '#FFFFFF',
-              // '& .Mui-selected': {
-              //   '& .MuiSvgIcon-root, & .MuiBottomNavigationAction-label': {
-              //     color: (theme) => theme.palette.primary.main,
-              //   },
-              // },
+              bgcolor: (theme) => theme.palette.primary.main,
+              color: (theme) => theme.palette.primary.light,
+              '& .Mui-selected, svg': {
+                color: (theme) => theme.palette.primary.light,
+              },
             }}
             label="N게더 모집"
             icon={<AddOutlinedIcon />}

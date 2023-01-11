@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import { createTheme } from '@mui/material/styles';
 
 type spotPropsType = {
   spot: string;

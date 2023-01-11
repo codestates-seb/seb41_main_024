@@ -41,6 +41,7 @@ const ChatList = () => {
   return (
     <div>
       <MainHeader />
+
       <div>
         <ChatItem
           thumbnail={ProductImg}
