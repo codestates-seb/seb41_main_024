@@ -4,7 +4,7 @@ import ProductImg from '../../../public/chatItem/productImg.svg';
 import Badge from '../../atoms/badge/Badge';
 
 import SmallSpot from '../../molecules/spot/SmallSpot';
-import Alert from '../../atoms/alert/alert';
+import Alert from '../../atoms/alert/Alert';
 
 export interface chatItem {
   thumbnail: string | undefined;

@@ -17,9 +17,8 @@ export default function FixedBottomNavigation() {
   const [value, setValue] = useState(2); // 버튼 넘버
 
   const router = useRouter();
-  console.log(router);
 
-  const paths: string[] = ['/home', '/map', '/chatlist', 'mypage', '/new'];
+  const paths: string[] = ['/main', '/nearby', '/chatlist', 'mypage', '/new'];
 
   return (
     <Box sx={{ pb: 7 }}>
@@ -33,7 +32,7 @@ export default function FixedBottomNavigation() {
           value={value}
           onChange={(event, newValue) => {
             setValue(newValue);
-            // router.push(paths[newValue]);
+            router.push(paths[newValue]);
           }}
           sx={{
             height: 70,
