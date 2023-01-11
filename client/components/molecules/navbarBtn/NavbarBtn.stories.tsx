@@ -14,12 +14,12 @@ export const BasicButton = Template.bind({});
 BasicButton.args = {
   name: '홈',
   path: '/',
-  isNewBtn: false,
+  icon: '/navbar/home.svg',
 };
 
 export const NewButton = Template.bind({});
 NewButton.args = {
   name: 'N게더 모집',
   path: '/new',
-  isNewBtn: true,
+  icon: '/navbar/new.svg',
 };

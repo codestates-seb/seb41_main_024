@@ -1,3 +1,3 @@
-interface ButtonPropsType {
+export interface ButtonPropsType {
   heartButton: boolean;
 }
