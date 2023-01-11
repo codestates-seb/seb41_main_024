@@ -17,27 +17,27 @@ const MainHeader = () => {
   return (
     <Fragment>
       <AppBar
-        className="px-4 py-4 border-b border-b-inherit"
-        position="static"
-        color="inherit"
+        className='px-4 py-4 border-b border-b-inherit'
+        position='static'
+        color='inherit'
         elevation={0}
         sx={{ height: '50px' }}
       >
-        <div className="flex">
-          <div className="flex-1">
-            <Link href="/">
-              <img src={logo} alt="메인로고" />
+        <div className='flex'>
+          <div className='flex-1'>
+            <Link href='/'>
+              <img src={logo} alt='메인로고' />
             </Link>
           </div>
-          <Button className="border-0 mr-2 p-0 bg-inherit" type="button">
-            <img src={search} alt="검색하기" />
+          <Button className='border-0 mr-2 p-0 bg-inherit' type='button'>
+            <img src={search} alt='검색하기' />
           </Button>
           <Button
-            className="border-0 ml-2 p-0 bg-inherit"
-            type="button"
+            className='border-0 ml-2 p-0 bg-inherit'
+            type='button'
             onClick={handleDrawerToggle}
           >
-            <img src={navigator} alt="메뉴열기" />
+            <img src={navigator} alt='메뉴열기' />
           </Button>
         </div>
       </AppBar>
