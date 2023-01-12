@@ -52,7 +52,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <MainHeader />
       <div className="mt-24">
         <LoginSlogan />
