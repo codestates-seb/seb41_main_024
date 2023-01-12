@@ -14,7 +14,7 @@ const QuestionListItem = () => {
             primary="N게더 너무 좋은데요?"
             secondary={
               <Typography
-                className='text-xs mt-2'
+                className="text-xs mt-2"
                 sx={{ 
                   display: 'inline-block',
                   color: (theme) => theme.palette.primary.main

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { AppBar, Button, Divider, Menu, MenuItem } from '@mui/material';
-import arrowback from '../../../../public/header/arrowback.svg';
-import menu from '../../../../public/header/menu.svg';
-import logo from '../../../../public/logos/logoFooter.svg';
+import {ReactComponent as ArrowbackIcon} from '../../../../public/header/arrowback.svg';
+import {ReactComponent as MenuIcon} from '../../../../public/header/menu.svg';
+import {ReactComponent as Logo} from '../../../../public/logos/logoFooter.svg';
 
 const ChatHeader = () => {
   const router = useRouter();
@@ -20,32 +20,32 @@ const ChatHeader = () => {
   return (
     <>
       <AppBar
-        className='px-4 py-4 border-b border-b-inherit'
-        position='static'
-        color='inherit'
+        className="px-4 py-4 border-b border-b-inherit"
+        position="static"
+        color="inherit"
         elevation={0}
         sx={{ height: '50px' }}
       >
-        <div className='flex items-center justify-center'>
+        <div className="flex items-center justify-center">
           <Button
-            className='border-0 m-0 p-0 bg-inherit'
-            type='button'
+            className="border-0 m-0 p-0 bg-inherit"
+            type="button"
             onClick={() => router.back()}
           >
-            <img src={arrowback} alt='뒤로가기' />
+            <ArrowbackIcon />
           </Button>
-          <div className='flex flex-1 justify-center'>
-            <img src={logo} alt='로고' />
+          <div className="flex flex-1 justify-center">
+            <Logo />
           </div>
           <Button
-            className='border-0 m-0 p-0 bg-inherit'
+            className="border-0 m-0 p-0 bg-inherit"
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup='true'
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-            type='button'
+            type="button"
           >
-            <img src={menu} alt='메뉴열기' />
+            <MenuIcon />
           </Button>
           <Menu
             anchorEl={anchorEl}
