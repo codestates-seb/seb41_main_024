@@ -3,18 +3,18 @@ import { styled } from "@mui/material/styles";
 import { drawerProps } from './Type_drawer';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import RigthIcon from '../../../../public/header/arrowbackRight.svg' 
+import {ReactComponent as RigthIcon} from '../../../../public/header/arrowbackRight.svg' 
 
 
 const DrawerList = ({ isOpen, onClick, children}: drawerProps) => {
   const drawerWidth = 240;
   
   const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
   }));
   
   return (
@@ -33,7 +33,7 @@ const DrawerList = ({ isOpen, onClick, children}: drawerProps) => {
     >
       <DrawerHeader>
         <IconButton onClick={onClick}>
-          <img src={RigthIcon} alt="메뉴 닫기" />
+          <RigthIcon />
         </IconButton>
       </DrawerHeader>
       <Divider />

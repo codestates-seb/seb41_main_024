@@ -1,9 +1,9 @@
 import { Fragment, useState } from 'react';
 import { AppBar, Button, Divider } from '@mui/material';
 import Link from 'next/link';
-import search from '../../../../public/header/search.svg';
-import navigator from '../../../../public/header/navigator.svg';
-import logo from '../../../../public/logos/logoRow.svg';
+import {ReactComponent as SearchIcon} from '../../../../public/header/search.svg';
+import {ReactComponent as NavigatorIcon} from '../../../../public/header/navigator.svg';
+import {ReactComponent as Logo} from '../../../../public/logos/logoRow.svg';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 
@@ -17,29 +17,29 @@ const MainHeader = () => {
   return (
     <Fragment>
       <AppBar
-        className='px-4 py-4 border-b border-b-inherit'
-        position='static'
-        color='inherit'
+        className="px-4 py-4 border-b border-b-inherit"
+        position="static"
+        color="inherit"
         elevation={0}
         sx={{ height: '50px' }}
       >
-        <div className='flex'>
-          <div className='flex-1'>
-            <Link href='/'>
-              <img src={logo} alt='메인로고' />
+        <div className="flex">
+          <div className="flex-1">
+            <Link href="/">
+              <Logo />
             </Link>
           </div>
-          <div className='border-0 mr-2 p-0 bg-inherit pt-1'>
-            <Link href='/search' >
-              <img src={search} alt='검색하기' />
+          <div className="border-0 mr-2 p-0 bg-inherit pt-1">
+            <Link href="/search" >
+              <SearchIcon />
             </Link>
           </div>
           <Button
-            className='border-0 ml-2 p-0 bg-inherit min-w-0'
-            type='button'
+            className="border-0 ml-2 p-0 bg-inherit min-w-0"
+            type="button"
             onClick={handleDrawerToggle}
           >
-            <img src={navigator} alt='메뉴열기' />
+            <NavigatorIcon />
           </Button>
         </div>
       </AppBar>
