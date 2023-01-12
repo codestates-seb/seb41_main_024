@@ -1,23 +1,17 @@
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import BottomNav from '../../components/organisms/bottomNav/bottomNav';
 import Footer from '../../components/molecules/footer/Footer';
+import BottomNav from '../../components/organisms/bottomNav/bottomNav';
 import Input from '../../components/atoms/input/Input';
 import FormButton from '../../components/atoms/formbutton/FormButton';
 import Label from '../../components/atoms/label/Label';
-import TextField from '../../components/molecules/passwordTextField/TextField';
-import { useState } from 'react';
-import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
-import Box from '@mui/material /Box';
 import Stack from '@mui/material/Stack';
-import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
-import Image from 'next/image';
-import Container from '@mui/material/Container';
 import base from '../../public/imageBox/base-box.svg';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-
+import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { FormControl, FormHelperText } from '@mui/material';
+
+import { useState } from 'react';
 
 const AddNewPage = () => {
   const [form, setForm] = useState({
@@ -25,7 +19,7 @@ const AddNewPage = () => {
     price: '',
     url: '',
     category: '상품 쉐어링',
-    quantity: 1,
+    quantity: '1',
     spot: '',
     detail: '',
   });
@@ -41,6 +35,13 @@ const AddNewPage = () => {
       [name]: value,
     });
   };
+
+  const handleSubmit = () => {
+    // HTTP 요청
+    // console.log('submited!');
+  };
+
+  // console.log(form);
 
   return (
     <div>
@@ -84,7 +85,7 @@ const AddNewPage = () => {
               <InputLabel id="category">카테고리</InputLabel>
               <Select
                 labelId="category"
-                id="category-select"
+                name="category"
                 value={category}
                 label="category"
                 onChange={onChange}
@@ -97,7 +98,7 @@ const AddNewPage = () => {
               <InputLabel id="quantity">상품 개수</InputLabel>
               <Select
                 labelId="quantity"
-                id="quantity-select"
+                name="quantity"
                 value={quantity}
                 label="quantity"
                 onChange={onChange}
@@ -116,8 +117,11 @@ const AddNewPage = () => {
             />
             <Label htmlFor={'spot'} labelText={''} />
             <Input
-              id="outlined-multiline-flexible"
+              id="detail"
+              name="detail"
               label="내용"
+              value={detail}
+              onChange={onChange}
               rows={10}
               multiline
               className="h-15.75"
@@ -126,6 +130,7 @@ const AddNewPage = () => {
               className="h-14 mt-4"
               variant="contained"
               content="쉐어링 등록"
+              onClick={handleSubmit}
             />
           </Stack>
         </FormControl>
