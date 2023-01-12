@@ -1,39 +1,63 @@
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
 import BottomNav from '../../components/organisms/bottomNav/bottomNav';
 import Footer from '../../components/molecules/footer/Footer';
-import Slogan from '../../components/molecules/slogan/Slogan';
 import Input from '../../components/atoms/input/Input';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
+import FormButton from '../../components/atoms/formbutton/FormButton';
+import Label from '../../components/atoms/label/Label';
+import TextField from '../../components/molecules/passwordTextField/TextField';
+import { useState } from 'react';
+import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import Button from '@mui/material/Button';
+
+const MainSlogan = () => {
+  return (
+    <div className="flex flex-col items-center">
+      <Logo />
+      <p className="pt-px mt-4 text-lg">
+        <strong className="text-primary font-bold">필요</strong>한 만큼만,
+        <strong className="text-primary font-bold">구매</strong>의 새로운 방법
+      </p>
+      <p className="pb-px text-lg">
+        Find your
+        <strong className="text-primary font-bold"></strong>shopping mate
+      </p>
+    </div>
+  );
+};
 
 const MainPage = () => {
+  const [nearBy, setNearBy] = useState('');
+
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setNearBy(value);
+  };
+
   return (
     <div>
       <MainHeader />
-      <div className="mt-28">
-        <Slogan />
+      <div className="mt-24">
+        <MainSlogan />
       </div>
-      <div className="p-12 pb-20">
-        <Stack spacing={2}>
+      <div className="login flex justify-center m-7 my-12">
+        <form className="flex flex-col w-10/12 max-w-lg">
           <Input
-            id={''}
-            label="우리 동네 N게더를 검색해보세요"
-            selectProps={{
-              native: false,
-            }}
-            rows={0}
-            multiline={false}
-            className="w-full"
+            id="search"
+            type="text"
+            label="우리동네 N게더를 검색해보세요"
+            value={nearBy}
+            onChange={onChange}
           />
-          <Button variant="contained" fullWidth>
+          <Label htmlFor="search" labelText="" />
+          <Button variant="contained" fullWidth className="h-14 mt-4">
             <SearchOutlinedIcon />
             위치 검색
           </Button>
-          <Button variant="outlined" fullWidth>
+          <Button variant="outlined" fullWidth className="h-14 mt-4">
             <SearchOutlinedIcon />내 위치로 검색
           </Button>
-        </Stack>
+        </form>
       </div>
       <Footer />
       <BottomNav />
