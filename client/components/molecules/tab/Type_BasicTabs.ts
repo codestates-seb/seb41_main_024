@@ -11,4 +11,5 @@ export interface BasicTabsPropsType {
   borderColor?: string;
   tabLabels: { label: string; index: number }[];
   centered: boolean;
+  handleClick?: React.MouseEventHandler<HTMLDivElement> | undefined;
 }
