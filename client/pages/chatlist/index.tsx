@@ -17,7 +17,7 @@ import { useState, useEffect } from 'react';
 import axios, { AxiosResponse } from 'axios';
 
 const ChatList = () => {
-  const [chatListData, setChatListData] = useState([] as any);
+  const [chatListData, setChatListData] = useState([]);
 
   interface ChatListResponse {
     id: Number;
@@ -26,6 +26,7 @@ const ChatList = () => {
     title: string;
     price: string;
     spot: string;
+    alertNum?: string;
   }
 
   // React-Query로 교체
@@ -36,7 +37,7 @@ const ChatList = () => {
   //   fetchChatList().then((res: any) => setChatListData(res.data));
   // }, []);
 
-  // console.log(chatListData);
+  console.log(chatListData);
 
   return (
     <div>
@@ -70,6 +71,7 @@ const ChatList = () => {
           title="호주산 냉장 소고기 모듬구이 세트 600"
           price="9,850"
           spot="서울 중구"
+          alertNum="1"
         />
         <ChatItem
           thumbnail={ProductImg05}
@@ -116,13 +118,15 @@ const ChatList = () => {
       </div>
       {chatListData &&
         chatListData.map((el: any) => {
-          <ChatItem
-            thumbnail={el.thumbnail}
-            isOpen={el.isOpen}
-            title={el.title}
-            price={el.price}
-            spot={el.spot}
-          />;
+          return (
+            <ChatItem
+              thumbnail={ProductImg}
+              isOpen={el.isOpen}
+              title={el.title}
+              price={el.price}
+              spot={el.spot}
+            />
+          );
         })}
       {/* <Navbar /> */}
       <BottomNav />

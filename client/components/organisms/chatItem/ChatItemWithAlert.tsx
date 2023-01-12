@@ -12,6 +12,7 @@ export interface chatItem {
   title: string;
   price: string;
   spot: string;
+  alertNum: string;
 }
 
 const ChatItemWithAlert = ({
@@ -20,19 +21,20 @@ const ChatItemWithAlert = ({
   title,
   price,
   spot,
+  alertNum,
 }: chatItem) => {
   return (
-    <div className="flex items-center border-solid border-0 border-b border-slate-400 h-20 p-4">
+    <div className="flex items-center border-solid border-0 border-b border-slate-400 h-24 p-4">
       <img src={thumbnail} className="w-16" />
       <div className="flex-1 flex-col items-start px-4">
-        <div className="flex">
-          <Badge isOpen={isOpen} />
-          <SmallSpot spot={spot} />
-        </div>
+        <Badge isOpen={isOpen} />
         <p className="text-s font-medium">{title}</p>
         <p className="text-xs text-primary font-medium">인당 {price}원</p>
       </div>
-      <Alert alertNum="1" />
+      <div className="flex flex-col justify-between items-end">
+        <SmallSpot spot={spot} />
+        <Alert alertNum={alertNum} />
+      </div>
     </div>
   );
 };
