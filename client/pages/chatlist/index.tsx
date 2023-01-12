@@ -51,12 +51,13 @@ const ChatList = () => {
           price="9,850"
           spot="서울 서초구"
         />
-        <ChatItem
+        <ChatItemWithAlert
           thumbnail={ProductImg02}
           isOpen={false}
           title="남해안 디포리 멸치다시팩 15g * 20팩"
           price="9,850"
           spot="경기도 수지구"
+          alertNum="0"
         />
         <ChatItem
           thumbnail={ProductImg03}

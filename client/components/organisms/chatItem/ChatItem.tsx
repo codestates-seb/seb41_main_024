@@ -11,7 +11,7 @@ export interface chatItem {
 
 const ChatItem = ({ thumbnail, isOpen, title, price, spot }: chatItem) => {
   return (
-    <div className="flex items-center border-solid border-0 border-b border-slate-400 h-20 p-4">
+    <div className="flex items-center border-solid border-0 border-b border-slate-400 h-22 p-4">
       <img src={thumbnail} className="w-16" />
       <div className="flex-1 flex-col items-start px-4">
         <Badge isOpen={isOpen} />
