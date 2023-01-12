@@ -2,7 +2,7 @@ import Badge from '../../atoms/badge/Badge';
 import Spot from '../../molecules/spot/Spot';
 
 export interface chatItem {
-  thumbnail: string | undefined;
+  thumbnail?: string;
   isOpen: boolean;
   title: string;
   price: string;
