@@ -7,6 +7,7 @@ import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
 import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
+import Navbar from '../../components/organisms/navbar/Navbar';
 
 const LoginSlogan = () => {
   return (
@@ -51,6 +52,7 @@ const LoginPage = () => {
 
   return (
     <div>
+      <Navbar />
       <MainHeader />
       <div className="mt-24">
         <LoginSlogan />
