@@ -1,4 +1,4 @@
-export interface TabPanelPropsType {
+export interface tabPanelPropsType {
   children?: React.ReactNode;
   boxPadding?: number | string;
   index: number;

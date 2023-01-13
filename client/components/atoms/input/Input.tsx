@@ -1,5 +1,6 @@
-import { OutlinedInput, TextField } from '@mui/material';
-import { inputPropsType } from './Type_input';
+import React from 'react';
+import { TextField } from '@mui/material';
+import { inputPropsType } from './input';
 
 const Input = ({
   id,
