@@ -26,6 +26,7 @@ const ChatList = () => {
     title: string;
     price: string;
     spot: string;
+    alertNum?: string;
   }
 
   // React-Query로 교체
@@ -50,12 +51,13 @@ const ChatList = () => {
           price="9,850"
           spot="서울 서초구"
         />
-        <ChatItem
+        <ChatItemWithAlert
           thumbnail={ProductImg02}
           isOpen={false}
           title="남해안 디포리 멸치다시팩 15g * 20팩"
           price="9,850"
           spot="경기도 수지구"
+          alertNum="0"
         />
         <ChatItem
           thumbnail={ProductImg03}
@@ -70,6 +72,7 @@ const ChatList = () => {
           title="호주산 냉장 소고기 모듬구이 세트 600"
           price="9,850"
           spot="서울 중구"
+          alertNum="1"
         />
         <ChatItem
           thumbnail={ProductImg05}
