@@ -1,11 +1,6 @@
-import Image from 'next/image';
 import { ButtonPropsType } from './Type_Button';
-const Button = ({ src, width, height, alt }: ButtonPropsType) => {
-  return (
-    <button>
-      <Image src={src} width={width} height={height} alt={alt} />
-    </button>
-  );
+const Button = ({ children, ...props }: ButtonPropsType) => {
+  return <button {...props}>{children}</button>;
 };
 
 export default Button;
