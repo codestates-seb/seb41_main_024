@@ -14,6 +14,7 @@ import java.util.List;
 public class ChatRoomController {
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomMembersRepository chatRoomMembersRepository;
 
     @GetMapping("/room")
     public String rooms() {
@@ -34,10 +35,9 @@ public class ChatRoomController {
         return chatService.createRoom(boardId);
     }
     // 채팅방 입장 화면
-    @GetMapping("/room/enter/{roomId}")
-    public String roomDetail( @PathVariable Long roomId) {
-        //chatService.enterRoom(roomId);
-        return "/chat/roomdetail";
+    @GetMapping("/room/enter/{room-Id}")
+    public void roomDetail( @PathVariable("room-Id") Long roomId, String nickName) {
+        chatService.enterRoom(roomId, nickName);
     }
     // 특정 채팅방 조회
     @GetMapping("/room/search/{room-Id}")
@@ -50,5 +50,10 @@ public class ChatRoomController {
     @GetMapping("/room/messages/{room-id}")
     public ResponseEntity callMessagesInChatRoom(@PathVariable(value = "room-id") Long roomId){
         return new ResponseEntity<>(chatService.findMessagesInChatRoom(roomId), HttpStatus.OK);
+    }
+    //채팅방에 참여중인 멤버리스트 조회
+    @GetMapping("/room/{room-id}/memberList")
+    public ResponseEntity MemberList(@PathVariable(value = "room-id") Long roomId){
+        return new ResponseEntity<>(chatService.findMembersInChatRoom(roomId),HttpStatus.OK);
     }
 }

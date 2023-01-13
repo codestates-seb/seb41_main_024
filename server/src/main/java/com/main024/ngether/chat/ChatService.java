@@ -5,6 +5,7 @@ import com.main024.ngether.board.BoardService;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
+import com.main024.ngether.member.MemberDto;
 import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +18,7 @@ import java.util.*;
 @Slf4j
 @RequiredArgsConstructor
 public class ChatService {
-    private Map<String, ChatRoom> chatRooms;
 
-    @PostConstruct
-    //의존관게 주입완료되면 실행되는 코드
-    private void init() {
-        chatRooms = new LinkedHashMap<>();
-    }
     private final ChatRoomMembersRepository chatRoomMembersRepository;
     private final MemberService memberService;
     private final ChatMessageRepository chatMessageRepository;
@@ -62,6 +57,7 @@ public class ChatService {
     //채팅방에 입장할 때
     public ChatRoom enterRoom(Long roomId, String nickName){
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+        //이미 채팅방 인원수가 가득 찼을 경우
         if(chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
             throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
 
@@ -74,19 +70,19 @@ public class ChatService {
         chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
         return chatRoomRepository.save(chatRoom);
     }
-    //채팅방 불러오기
-    public List<ChatRoom> findAllRoom() {
-        //채팅방 최근 생성 순으로 반환
-        List<ChatRoom> result = new ArrayList<>(chatRooms.values());
-        Collections.reverse(result);
 
-        return result;
-    }
-    //채팅방 하나 불러오기
-    public ChatRoom findById(String roomId) {
-        return chatRooms.get(roomId);
-    }
     public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId){
         return chatMessageRepository.findByChatRoomId(chatRoomId);
+    }
+    public List<MemberDto.ResponseChat> findMembersInChatRoom(Long roomId){
+        List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
+        List<MemberDto.ResponseChat> memberList = new ArrayList<>();
+        for(int i = 0; i < chatRoomMembers.size(); i++){
+            MemberDto.ResponseChat responseChat = new MemberDto.ResponseChat();
+            responseChat.setMemberId(chatRoomMembers.get(i).getMember().getMemberId());
+            responseChat.setNickName(chatRoomMembers.get(i).getMember().getNickName());
+            memberList.add(responseChat);
+        }
+        return memberList;
     }
 }
