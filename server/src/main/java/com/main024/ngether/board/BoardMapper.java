@@ -26,6 +26,12 @@ public interface BoardMapper {
         response.setCategory(board.getCategory());
         response.setPrice(board.getPrice());
         response.setMaxNum(board.getMaxNum());
+        response.setCurNum(board.getCurNum());
+        response.setAddress(board.getAddress());
+        response.setLatitude(board.getLatitude());
+        response.setLongitude(board.getLongitude());
+        response.setDeadLine(board.getDeadLine());
+        response.setProductsLink(board.getProductsLink());
 
         return response;
     }
@@ -48,7 +54,12 @@ public interface BoardMapper {
         board.setBoardId(requestBody.getBoardId());
         board.setContent(requestBody.getContent());
         board.setPrice(requestBody.getPrice());
-
+        board.setMaxNum(requestBody.getMaxNum());
+        board.setAddress(requestBody.getAddress());
+        board.setLatitude(requestBody.getLatitude());
+        board.setLongitude(requestBody.getLongitude());
+        board.setDeadLine(requestBody.getDeadLine());
+        board.setProductsLink(requestBody.getProductsLink());
 
         return board;
     }
@@ -66,6 +77,11 @@ public interface BoardMapper {
         board.setMaxNum(boardPostDto.getMaxNum());
         board.setMember(memberService.getLoginMember());
         board.setCreate_date(LocalDateTime.now());
+        board.setAddress(boardPostDto.getAddress());
+        board.setLatitude(boardPostDto.getLatitude());
+        board.setLongitude(boardPostDto.getLongitude());
+        board.setDeadLine(boardPostDto.getDeadLine());
+        board.setProductsLink(boardPostDto.getProductsLink());
 
         return board;
     }
