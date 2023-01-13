@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { TabPanelPropsType } from './Type_TabPanel';
 function TabPanel({
   children,
-  value,
+  currentTab,
   index,
   boxPadding = 2,
   ...other
@@ -12,12 +12,12 @@ function TabPanel({
   return (
     <div
       role="tabpanel"
-      hidden={value !== index}
+      hidden={currentTab !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
+      {currentTab === index && (
         <Box sx={{ p: boxPadding }}>
           <Typography component="div">{children}</Typography>
         </Box>

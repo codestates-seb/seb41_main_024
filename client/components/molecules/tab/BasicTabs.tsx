@@ -13,7 +13,7 @@ function a11yProps(index: number) {
 
 export default function BasicTabs({
   handleChange,
-  value,
+  currentTab,
   bgcolor,
   color,
   tabLabels,
@@ -34,7 +34,7 @@ export default function BasicTabs({
         }}
       >
         <Tabs
-          value={value}
+          value={currentTab}
           onChange={handleChange}
           aria-label="basic tabs example"
           // TabIndicatorProps={{ style: { background: '#fff' } }}
