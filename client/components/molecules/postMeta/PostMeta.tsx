@@ -1,6 +1,4 @@
-import React from 'react';
-
-const PostMeta = (props) => {
+const PostMeta = () => {
   return (
     <div className="ml-4 mt-6">
       <div className="mb-2.5">
