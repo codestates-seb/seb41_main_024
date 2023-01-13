@@ -29,6 +29,7 @@ public interface BoardMapper {
 
         return response;
     }
+
     default BoardDto.LikeResponse boardLikeToBoardResponse(Like like) {
         BoardDto.LikeResponse response = new BoardDto.LikeResponse();
 

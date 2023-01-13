@@ -1,7 +1,6 @@
 package com.main024.ngether.board;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.main024.ngether.chat.ChatRoom;
 import com.main024.ngether.likes.Like;
 import com.main024.ngether.member.Member;
 import lombok.Getter;
@@ -36,7 +35,22 @@ public class Board {
     private long price;
     @Column(nullable = false)
     private int maxNum;
+    @Column(nullable = false)
+    private int curNum;
+    @Enumerated(value = EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private BoardStatus boardStatus = BoardStatus.BOARD_NOT_COMPLETE;
+    public enum BoardStatus {
+        BOARD_NOT_COMPLETE("모집 중"),
+        BOARD_COMPLETE("모집 완료");
 
+        @Getter
+        private String status;
+
+        BoardStatus(String status) {
+            this.status = status;
+        }
+    }
     @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "MEMBER_ID")

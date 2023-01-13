@@ -49,6 +49,7 @@ public class BoardController {
         Board board = boardService.findBoard(boardId);
         return new ResponseEntity<>(mapper.boardToBoardResponse(board), HttpStatus.OK);
     }
+
     //카테로리 별로 조회
     @GetMapping("/category/{category}")
     public ResponseEntity getBoard(@PathVariable("category") String category) {
@@ -87,6 +88,11 @@ public class BoardController {
         return ResponseEntity.ok(mapper.boardLikeToBoardResponse(like));
     }
 
+    //내가 개설한 쉐어링 중 모집 완료된 쉐어링 게시물
+    @GetMapping("/completeMySharing")
+    public ResponseEntity viewMyCompleteMySharing() {
+        return ResponseEntity.ok(boardRepository.findByBoardStatusAndMemberMemberId(Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId()));
+    }
 
 
 }
