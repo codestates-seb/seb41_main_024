@@ -9,28 +9,28 @@ const dummyLabel = [
 ];
 
 const MySharingTab = () => {
-  const [value, setValue] = React.useState(0);
+  const [currentTab, seCurrentTab] = React.useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
+    seCurrentTab(newCurrentTab);
   };
   return (
     <section>
       <BasicTabs
-        value={value}
+        currentTab={currentTab}
         handleChange={handleChange}
         tabLabels={dummyLabel}
         centered={true}
         bgcolor="#FAF9F9"
         color="#999999"
       />
-      <TabPanel value={value} index={0} boxPadding={2}>
+      <TabPanel currentTab={currentTab} index={0} boxPadding={2}>
         <NearByList />
       </TabPanel>
-      <TabPanel value={value} index={1} boxPadding={2}>
+      <TabPanel currentTab={currentTab} index={1} boxPadding={2}>
         <NearByList />
       </TabPanel>
-      <TabPanel value={value} index={2} boxPadding={2}>
+      <TabPanel currentTab={currentTab} index={2} boxPadding={2}>
         <NearByList />
       </TabPanel>{' '}
     </section>

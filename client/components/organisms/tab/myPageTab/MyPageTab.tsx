@@ -11,26 +11,26 @@ const dummyLabel = [
 ];
 
 const MyPageTab = () => {
-  const [value, setValue] = React.useState(0);
+  const [currentTab, setCurrentTab] = React.useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
+    setCurrentTab(newCurrentTab);
   };
   return (
     <>
       <BasicTabs
-        value={value}
+        currentTab={currentTab}
         handleChange={handleChange}
         tabLabels={dummyLabel}
         centered={true}
       />
-      <TabPanel value={value} index={0}>
+      <TabPanel currentTab={currentTab} index={0}>
         <UserInfoEdit />
       </TabPanel>
-      <TabPanel value={value} index={1} boxPadding={'0'}>
+      <TabPanel currentTab={currentTab} index={1} boxPadding={'0'}>
         <MySharingTab />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      <TabPanel currentTab={currentTab} index={2}>
         <UserInquiry />
       </TabPanel>{' '}
     </>
