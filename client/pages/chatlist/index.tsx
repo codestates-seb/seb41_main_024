@@ -17,7 +17,7 @@ import { useState, useEffect } from 'react';
 import axios, { AxiosResponse } from 'axios';
 
 const ChatList = () => {
-  const [chatListData, setChatListData] = useState([] as any);
+  const [chatListData, setChatListData] = useState([]);
 
   interface ChatListResponse {
     id: Number;
@@ -36,7 +36,7 @@ const ChatList = () => {
   //   fetchChatList().then((res: any) => setChatListData(res.data));
   // }, []);
 
-  // console.log(chatListData);
+  console.log(chatListData);
 
   return (
     <div>
@@ -116,13 +116,15 @@ const ChatList = () => {
       </div>
       {chatListData &&
         chatListData.map((el: any) => {
-          <ChatItem
-            thumbnail={el.thumbnail}
-            isOpen={el.isOpen}
-            title={el.title}
-            price={el.price}
-            spot={el.spot}
-          />;
+          return (
+            <ChatItem
+              thumbnail={ProductImg}
+              isOpen={el.isOpen}
+              title={el.title}
+              price={el.price}
+              spot={el.spot}
+            />
+          );
         })}
       {/* <Navbar /> */}
       <BottomNav />

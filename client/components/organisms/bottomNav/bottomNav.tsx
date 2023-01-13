@@ -14,11 +14,17 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
 export default function FixedBottomNavigation() {
-  const [value, setValue] = useState(2); // 버튼 넘버
+  const [value, setValue] = useState(0); // 버튼 넘버
 
   const router = useRouter();
 
-  const paths: string[] = ['/main', '/nearby', '/chatlist', 'mypage', '/new'];
+  const paths: string[] = [
+    '/main',
+    '/nearby',
+    '/chatlist',
+    'mypage',
+    '/addnew',
+  ];
 
   return (
     <Box sx={{ pb: 7 }}>
