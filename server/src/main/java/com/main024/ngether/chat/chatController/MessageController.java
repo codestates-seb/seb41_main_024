@@ -21,31 +21,31 @@ public class MessageController {
     public void enter(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message) {
         message.setMessage(message.getNickName()+"님이 입장하였습니다.");
         //메시지 db에 저장
-        message.setCreate_date(LocalDateTime.now());
-        message.setNickName(message.getNickName());
+        message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
-        sendingOperations.convertAndSend("/receive/chat/"+roomId,message);
         chatMessageRepository.save(message);
+        sendingOperations.convertAndSend("/receive/chat/"+roomId,message);
+
     }
     @MessageMapping("/chat/{room-id}/LEAVE")
     public void leave(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message) {
         message.setMessage(message.getNickName()+"님이 퇴장하였습니다.");
         //메시지 db에 저장
-        message.setCreate_date(LocalDateTime.now());
-        message.setNickName(message.getNickName());
+        message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
-        sendingOperations.convertAndSend("/receive/chat/"+roomId,message);
         chatMessageRepository.save(message);
+        sendingOperations.convertAndSend("/receive/chat/"+roomId,message);
+
     }
     @MessageMapping("/chat/{room-id}")//메세지를 발행하는 경로
     public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message) {
 
             //메시지 db에 저장
-            message.setCreate_date(LocalDateTime.now());
-            message.setNickName(message.getNickName());
+            message.setCreateDate(LocalDateTime.now());
             message.setChatRoomId(roomId);
+            chatMessageRepository.save(message);
             //메시지 전송
             sendingOperations.convertAndSend("/receive/chat/" + roomId,message);
-            chatMessageRepository.save(message);
+
     }
 }

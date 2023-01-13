@@ -32,5 +32,5 @@ public class ChatMessage {
     @Column(nullable = false)
     private String message;
     //메세지 작성 날짜
-    private LocalDateTime create_date = LocalDateTime.now();
+    private LocalDateTime createDate = LocalDateTime.now();
 }
