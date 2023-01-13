@@ -3,6 +3,7 @@ import Img from '../../atoms/image/Image';
 import styles from './sharingListItem.module.css';
 import { ListItemPropsType } from './Type_ListItem';
 import Button from '../../atoms/button/Button';
+import Link from 'next/link';
 
 const SharingListItem = ({
   src,
@@ -15,7 +16,7 @@ const SharingListItem = ({
       <Img src={src} alt={alt} />
       <div className="px-2 mt-2.5">
         <strong className={`${styles.title_ellipsis} font-normal`}>
-          {title}
+          <Link href="/nearbydetail">{title}</Link>
         </strong>
       </div>
       {isFavorite && (
