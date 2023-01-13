@@ -4,7 +4,7 @@ export interface BasicTabsPropsType {
     event: React.SyntheticEvent<Element, Event>,
     value: any
   ) => void;
-  value: number;
+  currentTab: number;
   bgcolor?: string;
   color?: string;
   borderBottom?: number;
@@ -12,4 +12,5 @@ export interface BasicTabsPropsType {
   tabLabels: { label: string; index: number }[];
   centered: boolean;
   handleClick?: React.MouseEventHandler<HTMLDivElement>;
+  currentTab: number;
 }
