@@ -41,7 +41,7 @@ public class Board {
     private int curNum;
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private BoardStatus boardStatus = BoardStatus.BOARD_NOT_COMPLETE;
+    private BoardStatus boardStatus;
     @Column(nullable = false)
     private String address;
     @Column(nullable = false)

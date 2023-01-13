@@ -51,6 +51,7 @@ public class BoardService {
         returnBoard.setLatitude(board.getLatitude());
         returnBoard.setDeadLine(board.getDeadLine());
         returnBoard.setProductsLink(board.getProductsLink());
+        returnBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
         member.addBoard(returnBoard);
         return boardRepository.save(returnBoard);
     }
@@ -64,7 +65,7 @@ public class BoardService {
     public List<Board> findBoardsByCategory(String category) {
         List<Board> boardList = boardRepository.findByCategory(category).get();
         for(int i = 0; i <boardList.size(); i++){
-            if(boardList.get(i).getDeadLine().equals(LocalDate.now())){
+            if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
                 boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
                 boardRepository.save(boardList.get(i));
             }
