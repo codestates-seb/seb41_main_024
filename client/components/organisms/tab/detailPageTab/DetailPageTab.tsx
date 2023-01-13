@@ -3,13 +3,9 @@ import { ReactComponent as Alert } from '../../../../public/detail/alert.svg';
 import Img from '../../../atoms/image/Image';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
 import NearByList from '../../nearByList/NearByList';
-const dummyLabel = [
-  { label: '상세설명', index: 0 },
-  { label: '거래위치', index: 1 },
-  { label: '주변상품', index: 2 },
-];
+const LABEL = ['상세설명', '거래위치', '주변상품'];
 
-const DetailPageTab = ({ content }) => {
+const DetailPageTab = ({ content }: detailPageProps) => {
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleChange = (event: SyntheticEvent, newCurrentTab: number) => {
@@ -26,7 +22,7 @@ const DetailPageTab = ({ content }) => {
       <BasicTabs
         currentTab={currentTab}
         handleChange={handleChange}
-        tabLabels={dummyLabel}
+        tabLabels={LABEL}
         centered={true}
         handleClick={handleClick}
       />

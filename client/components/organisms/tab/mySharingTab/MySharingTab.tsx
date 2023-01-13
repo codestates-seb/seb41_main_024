@@ -2,11 +2,7 @@ import React from 'react';
 import TabPanel from '../../../atoms/tabPanel/TabPanel';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
 import NearByList from '../../nearByList/NearByList';
-const dummyLabel = [
-  { label: '개설한 쉐어링', index: 0 },
-  { label: '참여한 쉐어링', index: 1 },
-  { label: '찜한 쉐어링', index: 2 },
-];
+const LABEL = ['개설한 쉐어링', '참여한 쉐어링', '찜한 쉐어링'];
 
 const MySharingTab = () => {
   const [currentTab, seCurrentTab] = React.useState(0);
@@ -19,7 +15,7 @@ const MySharingTab = () => {
       <BasicTabs
         currentTab={currentTab}
         handleChange={handleChange}
-        tabLabels={dummyLabel}
+        tabLabels={LABEL}
         centered={true}
         bgcolor="#FAF9F9"
         color="#999999"

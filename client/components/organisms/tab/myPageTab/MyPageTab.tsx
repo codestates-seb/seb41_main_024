@@ -4,11 +4,7 @@ import UserInquiry from '../../tabPanel/myPage/UserInquiry';
 import TabPanel from '../../../atoms/tabPanel/TabPanel';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
 import MySharingTab from '../mySharingTab/MySharingTab';
-const dummyLabel = [
-  { label: '내정보', index: 0 },
-  { label: '쉐어링', index: 1 },
-  { label: '1:1 문의', index: 2 },
-];
+const LABEL = ['내정보', '쉐어링', '1:1 문의'];
 
 const MyPageTab = () => {
   const [currentTab, setCurrentTab] = React.useState(0);
@@ -21,7 +17,7 @@ const MyPageTab = () => {
       <BasicTabs
         currentTab={currentTab}
         handleChange={handleChange}
-        tabLabels={dummyLabel}
+        tabLabels={LABEL}
         centered={true}
       />
       <TabPanel currentTab={currentTab} index={0}>

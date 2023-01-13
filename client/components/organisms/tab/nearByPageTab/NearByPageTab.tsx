@@ -1,12 +1,8 @@
 import React from 'react';
 import TabPanel from '../../../atoms/tabPanel/TabPanel';
-import SharingListItem from '../../../molecules/sharingListItem/SharingListItem';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
 import NearByList from '../../nearByList/NearByList';
-const dummyLabel = [
-  { label: '최신순', index: 0 },
-  { label: '거리순', index: 1 },
-];
+const LABEL = ['최신순', '거리순'];
 
 const NearByPageTab = () => {
   const [currentTab, seCurrentTab] = React.useState(0);
@@ -19,7 +15,7 @@ const NearByPageTab = () => {
       <BasicTabs
         currentTab={currentTab}
         handleChange={handleChange}
-        tabLabels={dummyLabel}
+        tabLabels={LABEL}
         centered={false}
       />
       <TabPanel currentTab={currentTab} index={0}>
