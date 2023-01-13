@@ -25,9 +25,11 @@ public interface BoardMapper {
         response.setLikeCount(board.getLikeCount());
         response.setCategory(board.getCategory());
         response.setPrice(board.getPrice());
+        response.setMaxNum(board.getMaxNum());
 
         return response;
     }
+
     default BoardDto.LikeResponse boardLikeToBoardResponse(Like like) {
         BoardDto.LikeResponse response = new BoardDto.LikeResponse();
 
@@ -61,6 +63,7 @@ public interface BoardMapper {
         board.setContent(boardPostDto.getContent());
         board.setPrice(boardPostDto.getPrice());
         board.setLikeCount(0);
+        board.setMaxNum(boardPostDto.getMaxNum());
         board.setMember(memberService.getLoginMember());
         board.setCreate_date(LocalDateTime.now());
 

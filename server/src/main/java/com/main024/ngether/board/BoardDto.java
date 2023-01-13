@@ -20,6 +20,7 @@ public class BoardDto {
         private String content;
         private String category;
         private long price;
+        private int maxNum;
     }
 
     @Getter
@@ -28,6 +29,7 @@ public class BoardDto {
         private String title;
         private String content;
         private long price;
+        private int maxNum;
 
 
         public void setBoardId(Long boardId) {
@@ -49,6 +51,7 @@ public class BoardDto {
         private String category;
         private int likeCount;
         private long price;
+        private int maxNum;
     }
 
     @Getter

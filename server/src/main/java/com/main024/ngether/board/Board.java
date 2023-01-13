@@ -33,11 +33,29 @@ public class Board {
     private String category;
     @Column(nullable = false)
     private long price;
+    @Column(nullable = false)
+    private int maxNum;
+    @Column(nullable = false)
+    private int curNum;
+    @Enumerated(value = EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private BoardStatus boardStatus = BoardStatus.BOARD_NOT_COMPLETE;
+    public enum BoardStatus {
+        BOARD_NOT_COMPLETE("모집 중"),
+        BOARD_COMPLETE("모집 완료");
 
+        @Getter
+        private String status;
+
+        BoardStatus(String status) {
+            this.status = status;
+        }
+    }
     @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
 
 
     @JsonIgnore

@@ -18,6 +18,7 @@ export default function BasicTabs({
   color,
   tabLabels,
   centered,
+  handleClick,
 }: BasicTabsPropsType) {
   return (
     <Box sx={{ width: '100%' }}>
@@ -52,6 +53,7 @@ export default function BasicTabs({
               label={tabLabel.label}
               key={tabLabel.index}
               {...a11yProps(tabLabel.index)}
+              onClick={handleClick}
             />
           ))}
         </Tabs>

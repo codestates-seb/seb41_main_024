@@ -3,6 +3,7 @@ package com.main024.ngether.member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.main024.ngether.board.Board;
+import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.likes.Like;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,8 +40,13 @@ public class Member {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
     @JsonIgnore
-    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Like> likes = new ArrayList<>();
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<ChatRoomMembers> chatRoomMembers = new ArrayList<>();
 
 
 
