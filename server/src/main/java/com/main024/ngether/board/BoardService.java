@@ -1,5 +1,7 @@
 package com.main024.ngether.board;
 
+import com.main024.ngether.chat.chatEntity.ChatRoom;
+import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.likes.LikeRepository;
@@ -21,6 +23,7 @@ public class BoardService {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final LikeRepository likeRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
 
     public Board createBoard(Board board) {
@@ -36,7 +39,10 @@ public class BoardService {
         returnBoard.setContent(board.getContent());
         returnBoard.setCreate_date(board.getCreate_date());
         returnBoard.setTitle(board.getTitle());
-        returnBoard.setMaxNum(board.getMaxNum());
+        if(board.getMaxNum() >= 2) {
+            returnBoard.setMaxNum(board.getMaxNum());
+        }
+        else throw new BusinessLogicException(ExceptionCode.NOT_ALLOW);
         returnBoard.setCurNum(1);
         member.addBoard(returnBoard);
         return boardRepository.save(returnBoard);
@@ -68,8 +74,15 @@ public class BoardService {
                     .ifPresent(findBoard::setContent);
             Optional.ofNullable(board.getPrice())
                     .ifPresent(findBoard::setPrice);
-            Optional.ofNullable(board.getMaxNum())
-                    .ifPresent(findBoard::setMaxNum);
+            if(board.getMaxNum() >= 2) {
+                Optional.ofNullable(board.getMaxNum())
+                        .ifPresent(findBoard::setMaxNum);
+                ChatRoom chatRoom = chatRoomRepository.findByRoomId(findBoard.getBoardId());
+                chatRoom.setMaxNum(findBoard.getMaxNum());
+                chatRoomRepository.save(chatRoom);
+            }
+            else throw new BusinessLogicException(ExceptionCode.NOT_ALLOW);
+
             return boardRepository.save(findBoard);
         } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
 

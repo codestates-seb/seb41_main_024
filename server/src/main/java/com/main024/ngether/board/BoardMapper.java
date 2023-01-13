@@ -26,6 +26,7 @@ public interface BoardMapper {
         response.setCategory(board.getCategory());
         response.setPrice(board.getPrice());
         response.setMaxNum(board.getMaxNum());
+        response.setCurNum(board.getCurNum());
 
         return response;
     }
@@ -48,6 +49,7 @@ public interface BoardMapper {
         board.setBoardId(requestBody.getBoardId());
         board.setContent(requestBody.getContent());
         board.setPrice(requestBody.getPrice());
+        board.setMaxNum(requestBody.getMaxNum());
 
 
         return board;

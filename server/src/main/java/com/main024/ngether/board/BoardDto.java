@@ -52,6 +52,7 @@ public class BoardDto {
         private int likeCount;
         private long price;
         private int maxNum;
+        private int curNum;
     }
 
     @Getter
