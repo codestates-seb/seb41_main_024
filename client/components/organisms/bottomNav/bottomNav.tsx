@@ -16,7 +16,7 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 export default function Navigation() {
   const router = useRouter();
 
-  const navigationList: any = [
+  const NAVIGATION_LIST: any = [
     {
       label: '홈',
       icon: <HomeOutlinedIcon />,
@@ -58,7 +58,7 @@ export default function Navigation() {
             height: 70,
           }}
         >
-          {navigationList.map(({ label, icon, path }: any) => {
+          {NAVIGATION_LIST.map(({ label, icon, path }: any) => {
             return (
               <BottomNavigationAction
                 label={label}
