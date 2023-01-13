@@ -48,11 +48,11 @@ export default function BasicTabs({
           }}
           {...(centered ? { centered: true } : null)}
         >
-          {tabLabels?.map((tabLabel) => (
+          {tabLabels?.map((tabLabel, index) => (
             <Tab
-              label={tabLabel.label}
-              key={tabLabel.index}
-              {...a11yProps(tabLabel.index)}
+              label={tabLabel}
+              key={index}
+              {...a11yProps(index)}
               onClick={handleClick}
             />
           ))}
