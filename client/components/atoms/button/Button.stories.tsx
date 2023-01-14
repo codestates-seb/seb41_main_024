@@ -13,7 +13,7 @@ export default {
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-export const FavoriteButton = Template.bind({});
-FavoriteButton.args = {
-  heartButton: 'heart',
-};
+// export const FavoriteButton = Template.bind({});
+// FavoriteButton.args = {
+//   heartButton: 'heart',
+// };

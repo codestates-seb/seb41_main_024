@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { ButtonPropsType } from './Type_Button';
-const Button = ({ src, width, height, alt }: ButtonPropsType) => {
+import { buttonPropsType } from './button';
+const Button = ({ src, width, height, alt }: buttonPropsType) => {
   return (
     <button>
       <Image src={src} width={width} height={height} alt={alt} />

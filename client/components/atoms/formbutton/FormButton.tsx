@@ -1,21 +1,19 @@
 import { Button } from '@mui/material';
-import { FormButtonProps } from './Type_formbutton';
+import { formButtonPropsType } from './formButton';
 
 const FormButton = ({
   variant,
   content,
   className,
-  onClick,
-}: FormButtonProps) => {
+}: formButtonPropsType) => {
   return (
     <Button
       className={
         variant === 'contained'
-          ? 'text-white ' + className
+          ? 'text-white ' +  className
           : 'text-[#63A8DA] ' + className
       }
       variant={variant}
-      onClick={onClick}
     >
       {content}
     </Button>

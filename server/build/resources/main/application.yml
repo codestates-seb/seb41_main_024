@@ -1,4 +1,6 @@
 spring:
+  freemarker:
+    cache: false
   jpa:
     properties:
       hibernate:
@@ -13,6 +15,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    #jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    #jdbc:mysql://localhost:3306/main?serverTimezone=Asia/Seoul
     username: admin
     password: qwer1234
 mail:
@@ -32,3 +36,7 @@ logging.level:
             org.hibernate.type.descriptor.sql.BasicBinder: trace
     springframework:
       web.servlet: debug
+server:
+ servlet:
+   encoding:
+     force-response: true

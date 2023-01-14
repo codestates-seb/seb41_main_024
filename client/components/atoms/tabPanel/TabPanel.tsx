@@ -1,8 +1,9 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
-function TabPanel(props: TabPanelPropsType) {
-  const { children, value, index, ...other } = props;
+import { tabPanelPropsType } from './tabPanel';
+function TabPanel(props: tabPanelPropsType) {
+  const { children, value, index, boxPadding, ...other } = props;
 
   return (
     <div
@@ -13,7 +14,7 @@ function TabPanel(props: TabPanelPropsType) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{ p: boxPadding || 2 }}>
           <Typography component="div">{children}</Typography>
         </Box>
       )}

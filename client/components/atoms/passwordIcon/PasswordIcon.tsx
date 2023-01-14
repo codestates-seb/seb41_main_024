@@ -1,5 +1,6 @@
+import React from 'react';
 import { IconButton } from '@mui/material';
-import { passwrodIconPropsType } from './Type_passwordIcon';
+import { passwrodIconPropsType } from './passwordIcon';
 
 const PasswordIcon = ({
   handleClickShowPassword,

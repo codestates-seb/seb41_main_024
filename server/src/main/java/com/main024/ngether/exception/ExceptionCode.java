@@ -7,7 +7,11 @@ public enum ExceptionCode {
     MEMBER_EXISTS(401, "Member exists"),
     NOT_LOGIN(402,"login, please"),
     BOARD_NOT_FOUND(403,"login, please"),
-    PERMISSION_DENIED(404,"check, please");
+    PERMISSION_DENIED(404,"check, please"),
+    FULL_MEMBER(405,"Recruitment complete"),
+
+    NOT_ALLOW(406,"MAX NUM must bigger than 2");
+
 
     @Getter
     private int status;

@@ -15,6 +15,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<List<Board>> findByMemberMemberId(@Param(value = "memberId") Long memberId);
     Optional<List<Board>> findByCategory(String category);
 
+    Optional<List<Board>> findByBoardStatusAndMemberMemberId(Board.BoardStatus boardStatus, Long memberId);
+
 
 
 

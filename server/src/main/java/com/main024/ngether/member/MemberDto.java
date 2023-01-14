@@ -50,4 +50,12 @@ public class MemberDto {
 
 
     }
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ResponseChat{
+        private Long memberId;
+        private String nickName;
+    }
 }
