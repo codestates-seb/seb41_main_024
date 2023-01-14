@@ -3,8 +3,6 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import Link from 'next/link';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Paper from '@mui/material/Paper';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';

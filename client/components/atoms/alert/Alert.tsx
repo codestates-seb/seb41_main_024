@@ -1,6 +1,5 @@
-type alertPropsType = {
-  alertNum: string;
-};
+import React from 'react';
+import { alertPropsType } from './alert';
 
 const Alert = ({ alertNum }: alertPropsType) => {
   return (
