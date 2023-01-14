@@ -20,7 +20,7 @@ export default function Navigation() {
     {
       label: '홈',
       icon: <HomeOutlinedIcon />,
-      path: '/main',
+      path: '/',
     },
     {
       label: '내 주변',
@@ -45,12 +45,9 @@ export default function Navigation() {
   ];
 
   return (
-    <Box sx={{ pb: 7 }}>
+    <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
       <CssBaseline />
-      <Paper
-        sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
-        elevation={4}
-      >
+      <Paper elevation={4}>
         <BottomNavigation
           showLabels
           value={router.pathname}
