@@ -45,9 +45,19 @@ export default function Navigation() {
   ];
 
   return (
-    <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
+    <Box
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        maxWidth: '672px',
+        margin: 'auto',
+        minWidth: '390px',
+      }}
+    >
       <CssBaseline />
-      <Paper elevation={4}>
+      <Paper sx={{}} elevation={4}>
         <BottomNavigation
           showLabels
           value={router.pathname}

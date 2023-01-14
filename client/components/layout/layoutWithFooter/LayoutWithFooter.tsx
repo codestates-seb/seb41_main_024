@@ -12,10 +12,10 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
         <div className="max-w-2xl min-w-[390px] mx-auto h-[100vh] flex flex-col">
           <MainHeader />
           {children}
-          <Navigation />
           <div className="pb-[70px]">
             <Footer />
           </div>
+          <Navigation />
         </div>
       </ThemeProvider>
     </StyledEngineProvider>
