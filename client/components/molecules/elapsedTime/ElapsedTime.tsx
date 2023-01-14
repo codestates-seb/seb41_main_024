@@ -17,11 +17,7 @@ const ElapsedTime = ({ createdAt }: elapsedTimeProps) => {
       ];
       let formattedTimeDiff = '';
       for (let item of times) {
-        if (item.time === '분') {
-          formattedTimeDiff =
-            Math.floor(timeDiff / item.seconds) + `${item.time}전`;
-        }
-        if (timeDiff / item.seconds < 1) {
+        if (timeDiff < item.seconds) {
           continue;
         } else {
           formattedTimeDiff =
@@ -30,7 +26,7 @@ const ElapsedTime = ({ createdAt }: elapsedTimeProps) => {
         }
       }
 
-      return formattedTimeDiff;
+      return formattedTimeDiff || '방금 전';
     }
     setElapsedTime(calculateElapsedTime());
   }, []);
