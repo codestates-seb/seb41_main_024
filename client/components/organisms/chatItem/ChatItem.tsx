@@ -1,15 +1,15 @@
+import React from 'react';
 import Badge from '../../atoms/badge/Badge';
 import Spot from '../../molecules/spot/Spot';
+import { chatItemPropsType } from './chatItem';
 
-export interface chatItem {
-  thumbnail?: string;
-  isOpen: boolean;
-  title: string;
-  price: string;
-  spot: string;
-}
-
-const ChatItem = ({ thumbnail, isOpen, title, price, spot }: chatItem) => {
+const ChatItem = ({
+  thumbnail,
+  isOpen,
+  title,
+  price,
+  spot,
+}: chatItemPropsType) => {
   return (
     <div className="flex items-center border-solid border-0 border-b border-slate-400 h-22 p-4">
       <img src={thumbnail} className="w-16" />
