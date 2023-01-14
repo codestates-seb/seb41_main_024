@@ -1,5 +1,5 @@
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import BottomNav from '../../components/organisms/bottomNav/bottomNav';
+import BottomNav from '../../components/organisms/bottomNav/BottomNav';
 import Footer from '../../components/molecules/footer/Footer';
 import Input from '../../components/atoms/input/Input';
 import FormButton from '../../components/atoms/formbutton/FormButton';

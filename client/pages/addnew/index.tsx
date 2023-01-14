@@ -1,6 +1,6 @@
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
 import Footer from '../../components/molecules/footer/Footer';
-import BottomNav from '../../components/organisms/bottomNav/bottomNav';
+import BottomNav from '../../components/organisms/bottomNav/BottomNav';
 import Input from '../../components/atoms/input/Input';
 import FormButton from '../../components/atoms/formbutton/FormButton';
 import Label from '../../components/atoms/label/Label';

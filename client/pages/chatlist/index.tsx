@@ -1,8 +1,5 @@
-import Badge from '../../components/atoms/badge/Badge';
-import Spot from '../../components/molecules/spot/Spot';
 import ChatItem from '../../components/organisms/chatItem/ChatItem';
 import ChatItemWithAlert from '../../components/organisms/chatItem/ChatItemWithAlert';
-import ChatIcon from '../../public/navbar/ChatIcon';
 import ProductImg from '../../public/chatItem/productImg.svg';
 import ProductImg02 from '../../public/chatItem/productImg02.svg';
 import ProductImg03 from '../../public/chatItem/productImg03.svg';
@@ -10,7 +7,7 @@ import ProductImg04 from '../../public/chatItem/productImg04.svg';
 import ProductImg05 from '../../public/chatItem/productImg05.svg';
 
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import BottomNav from '../../components/organisms/bottomNav/bottomNav';
+import BottomNav from '../../components/organisms/bottomNav/BottomNav';
 
 import { useState, useEffect } from 'react';
 import axios, { AxiosResponse } from 'axios';
@@ -19,7 +16,7 @@ const ChatList = () => {
   const [chatListData, setChatListData] = useState([]);
 
   interface ChatListResponse {
-    id: Number;
+    id: number;
     thumbnail: string;
     isOpen: false;
     title: string;
