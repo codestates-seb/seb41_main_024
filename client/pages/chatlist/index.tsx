@@ -50,7 +50,7 @@ const ChatList = () => {
         <ChatItemWithAlert
           thumbnail={ProductImg02}
           isOpen={false}
-          title="남해안 디포리 멸치다시팩 15g * 20팩"
+          title="남해안 디포리 멸치다시팩 15g * 20팩 맛있게 진한 국물용 다시팩"
           price="9,850"
           spot="경기도 수지구"
           alertNum="0"
@@ -58,14 +58,14 @@ const ChatList = () => {
         <ChatItem
           thumbnail={ProductImg03}
           isOpen={true}
-          title="23년 햅쌀 프리미엄 경기미  쌀 10kg"
+          title="[최상등급 + 당일도정 + 혼합미] 23년 햅쌀 프리미엄 경기미 쌀 10kg"
           price="9,850"
           spot="제주 연동"
         />
         <ChatItemWithAlert
           thumbnail={ProductImg04}
           isOpen={true}
-          title="호주산 냉장 소고기 모듬구이 세트 600"
+          title="[글랜인스] 호주산 블랙앵거스 냉장 150 소고기 모듬구이 세트 600"
           price="9,850"
           spot="서울 중구"
           alertNum="1"

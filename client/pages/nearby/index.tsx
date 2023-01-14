@@ -1,7 +1,7 @@
 import React from 'react';
 import Img from '../../components/atoms/image/Image';
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import Navbar from '../../components/organisms/navbar/Navbar';
+// import Navbar from '../../components/organisms/navbar/Navbar';
 import NearByPageTab from '../../components/organisms/tab/nearByPageTab/NearByPageTab';
 
 const Index = () => {
@@ -12,7 +12,7 @@ const Index = () => {
         <Img src="/sharingList/map.svg" alt="지도" />
       </div>
       <NearByPageTab />
-      <Navbar />
+      {/* <Navbar /> */}
     </div>
   );
 };

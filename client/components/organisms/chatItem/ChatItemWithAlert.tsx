@@ -2,9 +2,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ProductImg from '../../../public/chatItem/productImg.svg';
 import Badge from '../../atoms/badge/Badge';
-
 import SmallSpot from '../../molecules/spot/SmallSpot';
 import Alert from '../../atoms/alert/Alert';
+import styles from './chatItem.module.css';
 
 export interface chatItem {
   thumbnail: string | undefined;
@@ -28,7 +28,7 @@ const ChatItemWithAlert = ({
       <img src={thumbnail} className="w-16" />
       <div className="flex-1 flex-col items-start px-4">
         <Badge isOpen={isOpen} />
-        <p className="text-s font-medium">{title}</p>
+        <p className={`${styles.title_ellipsis} text-s font-medium`}>{title}</p>
         <p className="text-xs text-primary font-medium">인당 {price}원</p>
       </div>
       <div className="flex flex-col justyfy-start items-end h-max">
