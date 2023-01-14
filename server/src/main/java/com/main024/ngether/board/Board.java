@@ -7,8 +7,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -39,10 +41,22 @@ public class Board {
     private int curNum;
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private BoardStatus boardStatus = BoardStatus.BOARD_NOT_COMPLETE;
+    private BoardStatus boardStatus;
+    @Column(nullable = false)
+    private String address;
+    @Column(nullable = false)
+    private String latitude;
+    @Column(nullable = false)
+    private String longitude;
+    @Column(nullable = false)
+    private LocalDate deadLine;
+    @Column(nullable = false)
+    private String productsLink;
     public enum BoardStatus {
         BOARD_NOT_COMPLETE("모집 중"),
-        BOARD_COMPLETE("모집 완료");
+        BOARD_COMPLETE("모집 완료"),
+
+        BOARD_TERM_EXPIRE("모집 기간 만료");
 
         @Getter
         private String status;
