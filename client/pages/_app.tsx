@@ -8,7 +8,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={basicTheme}>
-        <Component {...pageProps} />
+        <div className="max-w-2xl min-w-[390px] mx-auto">
+          <Component {...pageProps} />
+        </div>
       </ThemeProvider>
     </StyledEngineProvider>
   );
