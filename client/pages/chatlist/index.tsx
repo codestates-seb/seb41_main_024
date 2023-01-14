@@ -10,7 +10,6 @@ import ProductImg04 from '../../public/chatItem/productImg04.svg';
 import ProductImg05 from '../../public/chatItem/productImg05.svg';
 
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import Navbar from '../../components/organisms/navbar/Navbar';
 import BottomNav from '../../components/organisms/bottomNav/bottomNav';
 
 import { useState, useEffect } from 'react';
@@ -121,6 +120,7 @@ const ChatList = () => {
         chatListData.map((el: any) => {
           return (
             <ChatItem
+              key={el.id}
               thumbnail={ProductImg}
               isOpen={el.isOpen}
               title={el.title}
@@ -129,7 +129,6 @@ const ChatList = () => {
             />
           );
         })}
-      {/* <Navbar /> */}
       <BottomNav />
     </div>
   );
