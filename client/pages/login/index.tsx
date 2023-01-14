@@ -1,6 +1,3 @@
-import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import BottomNav from '../../components/organisms/bottomNav/bottomNav';
-import Footer from '../../components/molecules/footer/Footer';
 import Input from '../../components/atoms/input/Input';
 import FormButton from '../../components/atoms/formbutton/FormButton';
 import Label from '../../components/atoms/label/Label';
@@ -51,7 +48,6 @@ const LoginPage = () => {
 
   return (
     <div>
-      <MainHeader />
       <div className="mt-24">
         <LoginSlogan />
       </div>
@@ -90,8 +86,6 @@ const LoginPage = () => {
           />
         </form>
       </div>
-      <Footer />
-      <BottomNav />
     </div>
   );
 };

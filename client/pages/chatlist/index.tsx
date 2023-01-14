@@ -8,9 +8,6 @@ import ProductImg02 from '../../public/chatItem/productImg02.svg';
 import ProductImg03 from '../../public/chatItem/productImg03.svg';
 import ProductImg04 from '../../public/chatItem/productImg04.svg';
 import ProductImg05 from '../../public/chatItem/productImg05.svg';
-
-import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import Navbar from '../../components/organisms/navbar/Navbar';
 import BottomNav from '../../components/organisms/bottomNav/bottomNav';
 
 import { useState, useEffect } from 'react';
@@ -41,8 +38,6 @@ const ChatList = () => {
 
   return (
     <div>
-      <MainHeader />
-
       <div>
         <ChatItem
           thumbnail={ProductImg}
