@@ -70,6 +70,7 @@ public class BoardDto {
         private String longitude;
         private LocalDate deadLine;
         private String productsLink;
+        private Board.BoardStatus boardStatus;
     }
 
     @Getter
