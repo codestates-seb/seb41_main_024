@@ -2,6 +2,8 @@ package com.main024.ngether.board;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main024.ngether.likes.Like;
+import com.main024.ngether.location.Distance;
+import com.main024.ngether.location.Location;
 import com.main024.ngether.member.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +43,7 @@ public class Board {
     private int curNum;
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private BoardStatus boardStatus = BoardStatus.BOARD_NOT_COMPLETE;
+    private BoardStatus boardStatus;
     @Column(nullable = false)
     private String address;
     @Column(nullable = false)
@@ -70,6 +72,13 @@ public class Board {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Distance> distances = new ArrayList<>();
+/*
+    @OneToOne(mappedBy = "board", cascade = CascadeType.ALL)
+    private Location location;
+
+ */
 
 
     @JsonIgnore
