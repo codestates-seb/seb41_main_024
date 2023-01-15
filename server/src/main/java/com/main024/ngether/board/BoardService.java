@@ -133,7 +133,7 @@ public class BoardService {
     }
 
 
-    private Board findVerifiedBoardByQuery(Long boardId) {
+    public Board findVerifiedBoardByQuery(Long boardId) {
         Optional<Board> optionalBoard = boardRepository.findByBoardId(boardId);
         Board findBoard =
                 optionalBoard.orElseThrow(() ->

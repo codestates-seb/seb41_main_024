@@ -2,6 +2,7 @@ package com.main024.ngether.board;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main024.ngether.likes.Like;
+import com.main024.ngether.location.Location;
 import com.main024.ngether.member.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -70,6 +71,11 @@ public class Board {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+/*
+    @OneToOne(mappedBy = "board", cascade = CascadeType.ALL)
+    private Location location;
+
+ */
 
 
     @JsonIgnore

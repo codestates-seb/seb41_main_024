@@ -10,7 +10,8 @@ public enum ExceptionCode {
     PERMISSION_DENIED(404,"check, please"),
     FULL_MEMBER(405,"Recruitment complete"),
 
-    NOT_ALLOW(406,"MAX NUM must bigger than 2");
+    NOT_ALLOW(406,"MAX NUM must bigger than 2"),
+    LOCATION_NOT_FOUND(404, "Location not found");
 
 
     @Getter
