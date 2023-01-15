@@ -47,12 +47,10 @@ public class LocationDto {
     @Setter
     @AllArgsConstructor
     public static class DistanceCal{
-        private Long locationId;
-        private Long boardId;
+        private String address;
+        private String latitude;
+        private String longitude;
 
-        public void setLocationId(Long locationId) {
-            this.locationId = locationId;
-        }
     }
 
     @NoArgsConstructor
