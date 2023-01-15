@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+import LayoutWithFooter from '../../components/layout/layoutWithFooter/LayoutWithFooter';
 import MyPageTab from '../../components/organisms/tab/myPageTab/MyPageTab';
 
 const Mypage = () => {
@@ -10,5 +12,7 @@ const Mypage = () => {
     </div>
   );
 };
-
+Mypage.getLayout = function (page: ReactElement) {
+  return <LayoutWithFooter>{page}</LayoutWithFooter>;
+};
 export default Mypage;

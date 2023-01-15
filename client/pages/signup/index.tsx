@@ -1,6 +1,3 @@
-import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import BottomNav from '../../components/organisms/bottomNav/bottomNav';
-import Footer from '../../components/molecules/footer/Footer';
 import Input from '../../components/atoms/input/Input';
 import FormButton from '../../components/atoms/formbutton/FormButton';
 import Label from '../../components/atoms/label/Label';
@@ -53,15 +50,12 @@ const SignupPage = () => {
 
   return (
     <div>
-      <MainHeader />
       <div className="mt-24">
         <SignupSlogan />
       </div>
       <div className="m-7 my-12">
         <UserInfoForm editPage={false} content="회원가입" />
       </div>
-      <Footer />
-      <BottomNav />
     </div>
   );
 };
