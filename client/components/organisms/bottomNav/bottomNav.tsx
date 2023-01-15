@@ -45,13 +45,7 @@ export default function Navigation() {
   return (
     <Box
       sx={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        maxWidth: '672px',
-        margin: 'auto',
-        minWidth: '390px',
+        height: 70,
       }}
     >
       <CssBaseline />
@@ -60,7 +54,13 @@ export default function Navigation() {
           showLabels
           value={router.pathname}
           sx={{
-            height: 70,
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            maxWidth: '672px',
+            margin: 'auto',
+            minWidth: '390px',
           }}
         >
           {NAVIGATION_LIST.map(({ label, icon, path }: any) => {
