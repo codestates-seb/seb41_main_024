@@ -2,32 +2,33 @@ import { useState, useEffect } from 'react';
 
 interface RegexTextProps {
   state: string;
-  regex: RegExp | string;
+  regex?: RegExp;
   text: { default: string; match: string; unMatch: string };
+  checkPassword?: string
 }
 
-const useRegexText = ({ state, regex, text }: RegexTextProps): string => {
+const useRegexText = ({ state, regex, text, checkPassword }: RegexTextProps): string => {
     const [regexText, setRegexText] = useState(text.default);
   
     useEffect(() => {
-      if (regex instanceof RegExp)  {
-        if (state !== '' && !regex.test(state)) {
+      if (regex instanceof RegExp && state !== '')  {
+        if (!regex.test(state)) {
           setRegexText(text.unMatch);
         } 
-        else if (state !== '' && regex.test(state)){
+        else if (regex.test(state)){
           setRegexText(text.match);
         }
       }
 
-      else if (typeof regex === 'string') {
-        if (state !== '' && regex !== '' && state !== regex) {
+      else if (state !== '' && checkPassword !== '') {
+        if (state !== checkPassword) {
           setRegexText(text.unMatch);
         } 
-        else if (state !== '' && regex !== '' && state === regex) {
+        else if (state === checkPassword) {
           setRegexText(text.match);
         }
       }
-    }, [state, regex, text]);
+    }, [state, regex, text, checkPassword]);
   
     return regexText;
 };
