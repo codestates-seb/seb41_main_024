@@ -16,10 +16,6 @@ permissions:
   
 env:
   S3_BUCKET_NAME: mainproject-024
-  
-defaults:
-  run:
-    working-directory: server
 
 jobs:
   build:
@@ -37,6 +33,7 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+        build-root-directory: server
     
     # build한 후 프로젝트를 압축
     - name: Make zip file
