@@ -1,5 +1,5 @@
 import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import BottomNav from '../../components/organisms/bottomNav/bottomNav';
+import BottomNav from '../../components/organisms/bottomNav/BottomNav';
 import Footer from '../../components/molecules/footer/Footer';
 import Input from '../../components/atoms/input/Input';
 import FormButton from '../../components/atoms/formbutton/FormButton';
@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Button from '@mui/material/Button';
+import Slogan from '../../components/molecules/slogan/Slogan';
 
 const MainSlogan = () => {
   return (
@@ -38,6 +39,7 @@ const MainPage = () => {
     <div>
       <MainHeader />
       <div className="mt-24">
+        <Slogan />
         <MainSlogan />
       </div>
       <div className="login flex justify-center m-7 my-12">
@@ -59,6 +61,7 @@ const MainPage = () => {
           </Button>
         </form>
       </div>
+
       <Footer />
       <BottomNav />
     </div>

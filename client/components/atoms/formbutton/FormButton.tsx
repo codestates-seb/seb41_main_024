@@ -1,11 +1,11 @@
 import { Button } from '@mui/material';
-import { formButtonPropsType } from './formButton';
+import { formButtonType } from './formButtonType';
 
 const FormButton = ({
   variant,
   content,
   className,
-}: formButtonPropsType) => {
+}: formButtonType) => {
   return (
     <Button
       className={
