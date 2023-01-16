@@ -1,7 +1,8 @@
 import React from 'react';
 
-export interface formButtonType extends React.ComponentProps<'button'> {
+export interface formButtonType {
   content: string;
   variant: 'outlined' | 'contained';
   className?: string;
+  type?: 'submit'
 }

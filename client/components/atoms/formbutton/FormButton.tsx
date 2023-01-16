@@ -5,6 +5,7 @@ const FormButton = ({
   variant,
   content,
   className,
+  type
 }: formButtonType) => {
   return (
     <Button
@@ -14,6 +15,7 @@ const FormButton = ({
           : 'text-[#63A8DA] ' + className
       }
       variant={variant}
+      type={type}
     >
       {content}
     </Button>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import FormButton from '../../atoms/formbutton/FormButton';
 import Input from '../../atoms/input/Input';
 import Label from '../../atoms/label/Label';
@@ -8,8 +9,8 @@ import useRegexText from '../../../hooks/useRegexText';
 import useForm from '../../../hooks/useForm';
 import axios from 'axios';
 
-const emailRegex =
-/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+const emailRegex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+const passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
 const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
   const {formValue, checkedPw, handleInputChange } = useForm({
@@ -31,6 +32,15 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
     }
   );
   const passwordRegexText = useRegexText(
+    pw, 
+    passwordRegex,
+    {
+      default: '비밀번호는 소문자, 특수문자를 각 하나 포함한 8자리 이상이여야 합니다.',
+      match: '사용 가능한 비밀번호 입니다',
+      unMatch: '소문자, 특수문자를 각 하나 포함한 8자리 이상이여야 합니다.'
+    }
+  );
+  const checkedPasswordRegexText = useRegexText(
     checkedPw,
     pw,
     {
@@ -40,8 +50,9 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
     }
   );
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log('clicked')
     if (content === '회원가입') {
         try {
           await axios.post(
@@ -57,7 +68,6 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
           console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
         }
     };
-
     if (content === '수정하기') {
         try {
           await axios.patch(
@@ -66,11 +76,11 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
             {
               headers: { 
                 'Content-Type': 'application/json'
-                // + JWT
+                // +JWT
               }
             }
           );
-          console.log("성공적으로 수정되었습니다!");
+          console.log("회원으로 가입되셨습니다!");
         } 
         catch (error) {
           console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
@@ -80,10 +90,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
   
   return (
     <div className="flex justify-center mt-7">
-      <form 
-        className="flex flex-col justify-center w-10/12 max-w-lg"
-        onSubmit={onSubmit}
-      >
+      <form className="flex flex-col justify-center w-10/12 max-w-lg" onSubmit={onSubmit}>
         {editPage && (
           <img
             className="h-40 w-40 mb-7 m-auto"
@@ -134,7 +141,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
         />
         <Label
           htmlFor={'pw-input'}
-          labelText={'소문자와 특수문자를 포함한 8글자'}
+          labelText={passwordRegexText}
         />
         <TextField
           id={'checkedPw-input'}
@@ -146,13 +153,13 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
         />
         <Label
           htmlFor={'checkedPw-input'}
-          labelText={passwordRegexText}
+          labelText={checkedPasswordRegexText}
         />
         <FormButton
+          type="submit"
           className="h-14 mt-4"
           variant="contained"
           content={content}
-          onClick={onSubmit}
         />
         {editPage && (
           <FormButton
