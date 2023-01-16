@@ -1,4 +1,4 @@
-export interface ChatRowPropsType {
+export interface chatRowType {
   thumbSrc?: string | null;
   nick: string | null;
   message: string;

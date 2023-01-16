@@ -1,4 +1,4 @@
-import { ChatRowPropsType } from '../../components/organisms/chatRow/ChatRowPropsType';
+import { ChatRowPropsType } from '../../components/organisms/chatRow/chatRowType';
 const chatDummy: ChatRowPropsType[] = [
   {
     thumbSrc: null,
