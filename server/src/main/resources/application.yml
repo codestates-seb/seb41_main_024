@@ -1,4 +1,6 @@
 spring:
+  jwt:
+    secret: govlepel1234254eqwrkl413451514325125
   freemarker:
     cache: false
   jpa:
