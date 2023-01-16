@@ -4,7 +4,7 @@ import Input from '../../atoms/input/Input';
 import Label from '../../atoms/label/Label';
 import TextField from '../../molecules/passwordTextField/TextField';
 import base from '../../../public/imageBox/base-box.svg';
-import { UserInfoFormPropsType } from './Type_UserInfoForm';
+import { UserInfoFormPropsType } from './userInfoFormType';
 
 const UserInfoForm = ({ editPage, content }: UserInfoFormPropsType) => {
   const [form, setForm] = useState({
