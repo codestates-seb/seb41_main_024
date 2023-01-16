@@ -4,7 +4,7 @@ const useRegexText = (state: string, regex: RegExp | string, text: { default: st
     const [regexText, setRegexText] = useState(text.default);
   
     useEffect(() => {
-      if (typeof regex === 'object' && regex instanceof RegExp)  {
+      if (regex instanceof RegExp)  {
         if (state !== '' && !regex.test(state)) {
           setRegexText(text.unMatch);
         } 
