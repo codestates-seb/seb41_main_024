@@ -4,8 +4,42 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
 import chatDummy from './dataChat';
+import { useEffect, useState } from 'react';
+import SockJS from 'sockjs-client';
+import StompJS from 'stompjs';
 
-const Chatroom = () => {
+const Chatroom = () => {  
+  const [messages, setMessages] = useState<string[]>([])
+  const [input, setInput] = useState('')
+  const [stompClient, setStompClient] = useState<StompJS.Client | null>(null)
+
+  useEffect(() => {
+    const sockjs = new SockJS('http://localhost:8080/chat/')
+    const stompClient = StompJS.over(sockjs)
+    setStompClient(stompClient)
+
+    stompClient.connect({}, () => {
+      stompClient.subscribe('/topic/messages', (message) => {
+        setMessages((prev) => [...prev, message.body])
+      })
+    }, (error) => {
+      console.log(error)
+    })
+  }, [])
+
+  const onChangeInput =  (e: React.ChangeEvent<HTMLTextAreaElement>) => { 
+    setInput(e.target.value)
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if(stompClient){
+      stompClient.send('/app/message', {}, input)
+      setInput('')
+    }
+  }
+
+
   return (
     <div className="max-w-2xl my-0 mx-auto">
       <ChatHeader />
@@ -21,7 +55,7 @@ const Chatroom = () => {
       <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
         <form className="flex p-[1rem]">
           <div className="flex-1">
-            <TextField size="medium" autoComplete="off" className="w-full" />
+            <TextField size="medium" autoComplete="off" className="w-full" onChange={onChangeInput}/>
           </div>
           <div className="flex justify-center pl-[1rem]">
             <IconButton
