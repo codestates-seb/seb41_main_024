@@ -2,6 +2,6 @@ export interface userDataType {
   nickName: string;
   address: string;
 }
-export interface userDataProps {
+export interface userDataPropsType {
   userData: userDataType;
 }

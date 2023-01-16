@@ -1,6 +1,6 @@
 import ElapsedTime from '../elapsedTime/ElapsedTime';
-import { postMetaProps } from './postMeta';
-const PostMeta = ({ postData }: postMetaProps) => {
+import { postMetaPropsType } from './postMetaType';
+const PostMeta = ({ postData }: postMetaPropsType) => {
   return (
     <div className="ml-4 mt-6">
       <div className="mb-2.5">

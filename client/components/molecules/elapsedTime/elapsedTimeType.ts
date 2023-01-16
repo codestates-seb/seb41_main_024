@@ -1,4 +1,4 @@
-export interface elapsedTimeProps {
+export interface elapsedTimePropsType {
   createdAt: Date;
 }
 export interface timeType {
