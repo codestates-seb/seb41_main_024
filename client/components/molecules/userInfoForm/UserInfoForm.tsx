@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import FormButton from '../../atoms/formbutton/FormButton';
 import Input from '../../atoms/input/Input';
 import Label from '../../atoms/label/Label';
@@ -7,6 +6,7 @@ import base from '../../../public/imageBox/base-box.svg';
 import { userInfoFormType } from './userInfoFormType';
 import useRegexText from '../../../hooks/useRegexText';
 import useForm from '../../../hooks/useForm';
+import axios from 'axios';
 
 const emailRegex =
 /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -18,6 +18,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
       email: '',
       phoneNumber: ''
   });
+
   const { email, nickName, pw, phoneNumber } = formValue;
 
   const emailRegexText = useRegexText(
@@ -38,10 +39,51 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
       unMatch: '비밀번호와 똑같이 입력해주세요'
     }
   );
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (content === '회원가입') {
+        try {
+          await axios.post(
+            "http://3.34.54.131:8080/api/members", 
+            JSON.stringify(formValue), 
+            {
+              headers: { 'Content-Type': 'application/json' }
+            }
+          );
+          console.log("회원으로 가입되셨습니다!");
+        } 
+        catch (error) {
+          console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
+        }
+    };
+
+    if (content === '수정하기') {
+        try {
+          await axios.patch(
+            "http://3.34.54.131:8080/api/members/patch", 
+            JSON.stringify(formValue), 
+            {
+              headers: { 
+                'Content-Type': 'application/json'
+                // + JWT
+              }
+            }
+          );
+          console.log("성공적으로 수정되었습니다!");
+        } 
+        catch (error) {
+          console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
+        }
+    };
+  }
   
   return (
     <div className="flex justify-center mt-7">
-      <form className="flex flex-col justify-center w-10/12 max-w-lg">
+      <form 
+        className="flex flex-col justify-center w-10/12 max-w-lg"
+        onSubmit={onSubmit}
+      >
         {editPage && (
           <img
             className="h-40 w-40 mb-7 m-auto"
@@ -110,6 +152,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
           className="h-14 mt-4"
           variant="contained"
           content={content}
+          onClick={onSubmit}
         />
         {editPage && (
           <FormButton
