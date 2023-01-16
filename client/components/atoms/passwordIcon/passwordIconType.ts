@@ -1,4 +1,4 @@
-export interface passwrodIconPropsType {
+export interface passwrodIconType {
   handleClickShowPassword:
     | React.MouseEventHandler<HTMLButtonElement>
     | undefined;
