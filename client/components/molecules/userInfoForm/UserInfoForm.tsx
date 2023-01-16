@@ -6,19 +6,18 @@ import TextField from '../../molecules/passwordTextField/TextField';
 import base from '../../../public/imageBox/base-box.svg';
 import { userInfoFormType } from './userInfoFormType';
 import useRegexText from '../../../hooks/useRegexText';
+import useForm from '../../../hooks/useForm';
 
 const emailRegex =
 /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
-  const [formValue, setFormValue] = useState({
-    pw: '',
-    nickName: '',
-    email: '',
-    phoneNumber: ''
+  const {formValue, checkedPw, handleInputChange } = useForm({
+      pw: '',
+      nickName: '',
+      email: '',
+      phoneNumber: ''
   });
-  const [checkedPw, setCheckedPw] = useState('');
-
   const { email, nickName, pw, phoneNumber } = formValue;
 
   const emailRegexText = useRegexText(
@@ -29,7 +28,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
       match: '사용 가능한 이메일 입니다',
       unMatch: '이메일 양식과 맞게 입력해주세요'
     }
-  )
+  );
   const passwordRegexText = useRegexText(
     checkedPw,
     pw,
@@ -38,19 +37,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
       match: '비밀번호와 일치합니다',
       unMatch: '비밀번호와 똑같이 입력해주세요'
     }
-  )
-
-  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-
-    if(name === "checkedPw") setCheckedPw(value);
-
-    setFormValue({
-      ...formValue,
-      [name]: value,
-    });
-    console.log(formValue)
-  };
+  );
   
   return (
     <div className="flex justify-center mt-7">
@@ -68,7 +55,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
           type={'text'}
           label={'새로운 이메일'}
           value={email}
-          onChange={onChange}
+          onChange={handleInputChange}
         />
         <Label htmlFor={'email-input'} labelText={emailRegexText} />
         <Input
@@ -77,7 +64,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
           type={'text'}
           label={'휴대전화'}
           value={phoneNumber}
-          onChange={onChange}
+          onChange={handleInputChange}
         />
         <Label 
           htmlFor={'phoneNumber-input'} 
@@ -89,7 +76,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
           type={'text'}
           label={'새로운 닉네임'}
           value={nickName}
-          onChange={onChange}
+          onChange={handleInputChange}
         />
         <Label
           htmlFor={'nickName-input'}
@@ -101,7 +88,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
           type={'text'}
           label={'새로운 패스워드'}
           value={pw}
-          onChange={onChange}
+          onChange={handleInputChange}
         />
         <Label
           htmlFor={'pw-input'}
@@ -113,7 +100,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
           type={'text'}
           label={'패스워드 확인'}
           value={checkedPw}
-          onChange={onChange}
+          onChange={handleInputChange}
         />
         <Label
           htmlFor={'checkedPw-input'}
