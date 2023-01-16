@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/api/locations")
+@RequestMapping("/api")
 @Validated
 public class LocationController {
     private final LocationService locationService;
@@ -34,7 +34,7 @@ public class LocationController {
         this.distanceRepository = distanceRepository;
     }
 
-    @PostMapping
+    @PostMapping("/location")
     public ResponseEntity postLocation(@Valid @RequestBody LocationDto.Post locationPostDto) {
         Location location = locationService.createLocation(locationMapper.locationPostDtoToLocation(memberService, locationPostDto));
 
@@ -44,13 +44,13 @@ public class LocationController {
     @PostMapping("/distance")
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
                                        @RequestParam(value = "type") long type) {
-        List<Board> boardList = locationService.createDistance2(distanceCal, type);
+        List<Board> boardList = locationService.createCurDistance(distanceCal, type);
 
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
 
-    @PatchMapping("/{location-id}")
+    @PatchMapping("/location/{location-id}")
     public ResponseEntity patchLocation(@PathVariable("location-id") @Positive long locationId,
                                         @Valid @RequestBody LocationDto.Patch locationPatchDto) {
         locationPatchDto.setLocationId(locationId);
@@ -60,7 +60,7 @@ public class LocationController {
     }
 
 
-    @GetMapping("/{location-id}")
+    @GetMapping("/location/{location-id}")
     public ResponseEntity getLocation(@PathVariable("location-id") @Positive long locationId) {
         Location location = locationService.findLocation(locationId);
 
@@ -68,7 +68,7 @@ public class LocationController {
     }
 
 
-    @GetMapping
+    @GetMapping("/locations")
     public ResponseEntity getLocations() {
         List<Location> locations = locationService.findLocations();
 
@@ -99,7 +99,7 @@ public class LocationController {
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{location-id}")
+    @DeleteMapping("/location/{location-id}")
     public ResponseEntity deleteLocation(@PathVariable("location-id") @Positive long locationId) {
         locationService.deleteLocation(locationId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

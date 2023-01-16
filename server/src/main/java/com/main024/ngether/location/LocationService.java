@@ -107,7 +107,7 @@ public class LocationService {
         return null;
     }
 
-    public List<Board> createDistance2(LocationDto.DistanceCal distanceCal, long type) {
+    public List<Board> createCurDistance(LocationDto.DistanceCal distanceCal, long type) {
         List<Board> boardList = boardRepository.findAll();
         String address1 = distanceCal.getAddress();
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
