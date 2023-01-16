@@ -1,7 +1,7 @@
 import React from 'react';
-import { badgePropsType } from './badge';
+import { badgeType } from './badgeType';
 
-const Badge = ({ isOpen }: badgePropsType) => {
+const Badge = ({ isOpen }: badgeType) => {
   return (
     <>
       {isOpen && (
