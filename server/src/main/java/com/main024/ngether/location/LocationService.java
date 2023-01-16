@@ -50,6 +50,8 @@ public class LocationService {
                 .ifPresent(latitude -> findLocation.setLatitude(latitude));
         Optional.ofNullable(location.getLongitude())
                 .ifPresent(longitude -> findLocation.setLongitude(longitude));
+        Optional.ofNullable(location.getLocationName())
+                .ifPresent(locationName -> findLocation.setLocationName(locationName));
 
 
         return locationRepository.save(findLocation);
@@ -105,7 +107,7 @@ public class LocationService {
         return null;
     }
 
-    public List<Board> createDistance2(LocationDto.DistanceCal distanceCal, double type) {
+    public List<Board> createDistance2(LocationDto.DistanceCal distanceCal, long type) {
         List<Board> boardList = boardRepository.findAll();
         String address1 = distanceCal.getAddress();
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
@@ -121,7 +123,6 @@ public class LocationService {
                 double lon2 = Double.parseDouble(boardList.get(i).getLongitude());
                 double result = distance(lat1, lon1, lat2, lon2, "kilometer");
                 if (result < type) {
-
                     boardList1.add(boardList.get(i));
                 }
 

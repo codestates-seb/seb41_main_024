@@ -1,5 +1,6 @@
 package com.main024.ngether.location;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main024.ngether.board.Board;
 import com.main024.ngether.member.Member;
 import lombok.Getter;
@@ -28,6 +29,9 @@ public class Location {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private String locationName;
+
     /*
     @OneToOne
     @JoinColumn(name = "BOARD_ID")
@@ -45,10 +49,12 @@ public class Location {
 
      */
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
     private List<Distance> distances = new ArrayList<>();
 }

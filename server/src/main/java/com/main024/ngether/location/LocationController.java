@@ -43,7 +43,7 @@ public class LocationController {
 
     @PostMapping("/distance")
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
-                                       @RequestParam(value = "type") double type) {
+                                       @RequestParam(value = "type") long type) {
         List<Board> boardList = locationService.createDistance2(distanceCal, type);
 
         return new ResponseEntity<>(boardList, HttpStatus.OK);
@@ -84,9 +84,9 @@ public class LocationController {
     public ResponseEntity getDistances(@RequestParam(value = "type") long type,
                                        @PathVariable("location-id") @Positive long locationId) {
         List<Distance> distanceList = new ArrayList<>();
-        if (type == 1) {
+        if (type == 1)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationId(Distance.DistanceType.DISTANCE_ONE, locationId).get();
-        } else if (type == 2)
+        else if (type == 2)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationId(Distance.DistanceType.DISTANCE_TWO, locationId).get();
         else if (type == 3)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationId(Distance.DistanceType.DISTANCE_THREE, locationId).get();

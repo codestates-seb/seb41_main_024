@@ -1,5 +1,6 @@
 package com.main024.ngether.location;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main024.ngether.board.Board;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,10 +38,12 @@ public class Distance {
             this.type = type;
         }
     }
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "LOCATION_ID")
     private Location location;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "BOARD_ID")
     private Board board;

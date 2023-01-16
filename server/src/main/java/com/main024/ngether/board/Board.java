@@ -72,6 +72,7 @@ public class Board {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Distance> distances = new ArrayList<>();
 /*
