@@ -25,10 +25,8 @@ function useInput(
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     //토큰 일단 하드코딩했습니다.
-    const refreshToken: string =
-      'Refresh: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0MkBnbWFpbC5jb20iLCJpYXQiOjE2NzM1OTI5MzcsImV4cCI6MTY3MzYxODEzN30.dEO0yx9cEKDJv1Z9zljS1FUPCOl6WdfKIudNL_6V7kVB1ZlqyVM8_1QvcH_c7zlNPd_pZBqfg_6ZSe8Ycmm2tg';
-    const accessToken: string =
-      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoidGVzdDJAZ21haWwuY29tIiwic3ViIjoidGVzdDJAZ21haWwuY29tIiwiaWF0IjoxNjczNTkyOTM3LCJleHAiOjE2NzM1OTUzMzd9.ejHVTWzZS5bLrfQiFB7r04c7U-dTQtyK1HpTmaCVEM6qa_Qziet018RaO9oBjMh5c1D3Svo6zaMWqsv2hsXFgQ';
+    const refreshToken = process.env.REFRESH_TOKEN;
+    const accessToken = process.env.ACCESS_TOKEN;
     const requestBody: uploadPostType = {
       ...inputValue,
       //아래 부분은 하드코딩했습니다.
