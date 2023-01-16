@@ -20,12 +20,22 @@ env:
   S3_BUCKET_NAME: mainproject-024
 
 jobs:
+  changes:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'server/**'
   build:
-  
+   needs: changes
+   
    runs-on: ubuntu-latest
-   defaults:
-    run:
-     working-directory: "./server"
+   
+   env:
+      working-directory: ./server
      
    steps:
     - uses: actions/checkout@v3
