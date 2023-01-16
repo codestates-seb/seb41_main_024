@@ -1,8 +1,8 @@
 import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
-import { ImgUploaTypes } from './Type_ImgUpload';
+import { imgUploadType } from './imgUploadType';
 import classnames from 'classnames';
 
-const ImgUpload = ({ onChange, imgSrc }: ImgUploaTypes) => {
+const ImgUpload = ({ onChange, imgSrc }: imgUploadType) => {
   return (
     <div className="relative w-[9.75rem] h-[9.75rem]">
       <input

@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import { ChatRowPropsType } from './ChatRowPropsType';
+import { chatRowType } from './chatRowType';
 
-const ChatRow = ({ thumbSrc, nick, message, time }: ChatRowPropsType) => {
+const ChatRow = ({ thumbSrc, nick, message, time }: chatRowType) => {
   return (
     <div
       className={classnames('mt-[1.625rem] first:mt-0', {

@@ -1,22 +1,21 @@
-import { Divider, List } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { drawerProps } from './Type_drawer';
+import { Divider, List } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { drawerType } from './drawerType';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import {ReactComponent as RigthIcon} from '../../../../public/header/arrowbackRight.svg' 
+import { ReactComponent as RigthIcon } from '../../../../public/header/arrowbackRight.svg';
 
-
-const DrawerList = ({ isOpen, onClick, children}: drawerProps) => {
+const DrawerList = ({ isOpen, onClick, children }: drawerType) => {
   const drawerWidth = 240;
-  
+
   const DrawerHeader = styled('div')(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
-    justifyContent: "flex-start",
+    justifyContent: 'flex-start',
   }));
-  
+
   return (
     <Drawer
       variant="temporary"
@@ -37,11 +36,9 @@ const DrawerList = ({ isOpen, onClick, children}: drawerProps) => {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      <List>
-        {children}
-      </List>
+      <List>{children}</List>
     </Drawer>
-  )
-}
+  );
+};
 
 export default DrawerList;
