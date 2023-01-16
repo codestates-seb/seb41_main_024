@@ -5,38 +5,53 @@ import Label from '../../atoms/label/Label';
 import TextField from '../../molecules/passwordTextField/TextField';
 import base from '../../../public/imageBox/base-box.svg';
 import { userInfoFormType } from './userInfoFormType';
+import useRegexText from '../../../hooks/useRegexText';
+
+const emailRegex =
+/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
-  const [form, setForm] = useState({
-    email: '',
+  const [formValue, setFormValue] = useState({
+    pw: '',
     nickName: '',
-    password: '',
-    checkedPassword: '',
+    email: '',
+    phoneNumber: ''
   });
+  const [checkedPw, setCheckedPw] = useState('');
 
-  const { email, nickName, password, checkedPassword } = form;
+  const { email, nickName, pw, phoneNumber } = formValue;
+
+  const emailRegexText = useRegexText(
+    email, 
+    emailRegex,
+    {
+      default: '사용하실 이메일을 적어주세요',
+      match: '사용 가능한 이메일 입니다',
+      unMatch: '이메일 양식과 맞게 입력해주세요'
+    }
+  )
+  const passwordRegexText = useRegexText(
+    checkedPw,
+    pw,
+    {
+      default: '사용하실 패스워드를 한 번 더 입력해주세요',
+      match: '비밀번호와 일치합니다',
+      unMatch: '비밀번호와 똑같이 입력해주세요'
+    }
+  )
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    setForm({
-      ...form,
+
+    if(name === "checkedPw") setCheckedPw(value);
+
+    setFormValue({
+      ...formValue,
       [name]: value,
     });
+    console.log(formValue)
   };
-
-  let emailRegexText = '사용가능한 이메일 입니다';
-  let checkedPasswordRegexText = '사용하실 패스워드를 한 번 더 입력해주세요';
-
-  const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-  if (email !== '' && !emailRegex.test(email)) {
-    emailRegexText = '이메일 양식과 맞게 입력해주세요';
-  }
-  if (checkedPassword !== '' && checkedPassword !== password) {
-    checkedPasswordRegexText = '비밀번호와 똑같이 입력해주세요';
-  }
-
+  
   return (
     <div className="flex justify-center mt-7">
       <form className="flex flex-col justify-center w-10/12 max-w-lg">
@@ -57,6 +72,18 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
         />
         <Label htmlFor={'email-input'} labelText={emailRegexText} />
         <Input
+          id={'phoneNumber-input'}
+          name="phoneNumber"
+          type={'text'}
+          label={'휴대전화'}
+          value={phoneNumber}
+          onChange={onChange}
+        />
+        <Label 
+          htmlFor={'phoneNumber-input'} 
+          labelText={'전화번호를 입력하세요'} 
+        />
+        <Input
           id={'nickName-input'}
           name="nickName"
           type={'text'}
@@ -66,31 +93,31 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
         />
         <Label
           htmlFor={'nickName-input'}
-          labelText={'사용가능한 닉네임 입니다'}
+          labelText={'사용하실 닉네임을 적어주세요'}
         />
         <TextField
-          id={'password-input'}
-          name="password"
+          id={'pw-input'}
+          name="pw"
           type={'text'}
           label={'새로운 패스워드'}
-          value={password}
+          value={pw}
           onChange={onChange}
         />
         <Label
-          htmlFor={'password-input'}
+          htmlFor={'pw-input'}
           labelText={'소문자와 특수문자를 포함한 8글자'}
         />
         <TextField
-          id={'password-check-input'}
-          name="checkedPassword"
+          id={'checkedPw-input'}
+          name="checkedPw"
           type={'text'}
           label={'패스워드 확인'}
-          value={checkedPassword}
+          value={checkedPw}
           onChange={onChange}
         />
         <Label
-          htmlFor={'password-check-input'}
-          labelText={checkedPasswordRegexText}
+          htmlFor={'checkedPw-input'}
+          labelText={passwordRegexText}
         />
         <FormButton
           className="h-14 mt-4"
