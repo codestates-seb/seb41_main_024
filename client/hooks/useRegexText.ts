@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 
-const useRegexText = (state: string, regex: RegExp | string, text: { default: string, match: string, unMatch: string }): string => {
+interface RegexTextProps {
+  state: string;
+  regex: RegExp | string;
+  text: { default: string; match: string; unMatch: string };
+}
+
+const useRegexText = ({ state, regex, text }: RegexTextProps): string => {
     const [regexText, setRegexText] = useState(text.default);
   
     useEffect(() => {
