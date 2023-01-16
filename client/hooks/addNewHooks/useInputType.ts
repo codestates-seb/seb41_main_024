@@ -1,9 +1,17 @@
 export interface inputType {
-  productName: string;
-  price: number;
-  url: string;
+  title: string;
+  price: number | string;
+  productsLink: string;
   category: string;
-  quantity: string;
-  spot: string;
-  detail: string;
+  maxNum: string;
+  address: string;
+  content: string;
+}
+export interface uploadPostType extends inputType {
+  category: string;
+  latitude: string;
+  longitude: string;
+  deadLine: string;
+  accessToken: string;
+  refreshToken: string;
 }
