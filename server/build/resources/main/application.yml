@@ -1,4 +1,6 @@
 spring:
+  jwt:
+    secret: dfasfkjkldasfonvonoandfoanfonoanfnfdsfdo121321384098758907123
   freemarker:
     cache: false
   jpa:
