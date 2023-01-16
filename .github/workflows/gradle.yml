@@ -11,7 +11,7 @@ on:
   push:
     branches: [ "dev" ]
   paths:
-    "./server/**"
+    "./server/*"
 
 permissions:
   contents: read
