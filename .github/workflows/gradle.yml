@@ -10,6 +10,8 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "dev" ]
+  paths:
+    "./server/**"
 
 permissions:
   contents: read
@@ -21,8 +23,8 @@ jobs:
   build:
     
   defaults:
-	  run:
-		  working-directory: "./server"
+  	run:
+		working-directory: "./server"
 
     runs-on: ubuntu-latest
 
