@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import React from 'react';
 //작성한 useHook 함수를 import 하면 됩니다.
-import useInput from '../../hooks/useInput';
+import useInput from '../../hooks/addNewHooks/useInput';
 
 describe('useInput', () => {
   //아래 부분은 useInput으로 무엇을 테스트하는지 몰라서 찾아봤습니다.
