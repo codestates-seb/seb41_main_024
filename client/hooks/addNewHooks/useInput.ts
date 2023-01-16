@@ -1,11 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, UseMutateFunction } from '@tanstack/react-query';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useState, useCallback, useRef } from 'react';
 import { inputType, uploadPostType } from './useInputType';
 
 function useInput(
   initialValue: inputType,
-  callbackFn: (variables: uploadPostType) => void
+  mutate: UseMutateFunction<any, unknown, any, unknown>
 ) {
   const [inputValue, setInputValue] = useState(initialValue);
 
@@ -37,9 +37,9 @@ function useInput(
       accessToken,
       refreshToken,
     };
-    callbackFn(requestBody);
+    mutate(requestBody);
   };
-  return [inputValue, onChange, handleSubmit] as const;
+  return { inputValue, onChange, handleSubmit } as const;
 }
 
 export default useInput;
