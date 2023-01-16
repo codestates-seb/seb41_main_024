@@ -22,7 +22,7 @@ const AddNewPage = () => {
       console.log(error);
     },
   });
-  const [inputValue, onChange, handleSubmit] = useInput(
+  const { inputValue, onChange, handleSubmit } = useInput(
     {
       title: '',
       price: '',
