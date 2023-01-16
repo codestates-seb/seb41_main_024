@@ -1,4 +1,4 @@
-export interface labelPropsType {
+export interface labelType {
   htmlFor: string;
   labelText: string;
 }

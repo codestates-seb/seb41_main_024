@@ -1,4 +1,4 @@
-export interface postMetaProps {
+export interface postMetaPropsType {
   postData: {
     content: string;
     title: string;

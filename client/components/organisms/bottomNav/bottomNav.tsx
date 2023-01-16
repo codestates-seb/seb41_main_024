@@ -11,10 +11,10 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 
-export default function Navigation() {
+export default function BottomNav(): JSX.Element {
   const router = useRouter();
 
-  const NAVIGATION_LIST = [
+  const NAVIGATION_LIST: Array<object> = [
     {
       label: '홈',
       icon: <HomeOutlinedIcon />,
@@ -45,13 +45,7 @@ export default function Navigation() {
   return (
     <Box
       sx={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        maxWidth: '672px',
-        margin: 'auto',
-        minWidth: '390px',
+        height: 70,
       }}
     >
       <CssBaseline />
@@ -60,12 +54,19 @@ export default function Navigation() {
           showLabels
           value={router.pathname}
           sx={{
-            height: 70,
+            position: 'fixed',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            maxWidth: '672px',
+            margin: 'auto',
+            minWidth: '390px',
           }}
         >
           {NAVIGATION_LIST.map(({ label, icon, path }: any) => {
             return (
               <BottomNavigationAction
+                key={label}
                 label={label}
                 icon={icon}
                 value={path}

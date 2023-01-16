@@ -1,7 +1,7 @@
 import { SetStateAction, useEffect, useState } from 'react';
-import { elapsedTimeProps, timeType } from './elapsedTime';
+import { elapsedTimePropsType, timeType } from './elapsedTimeType';
 
-const ElapsedTime = ({ createdAt }: elapsedTimeProps) => {
+const ElapsedTime = ({ createdAt }: elapsedTimePropsType) => {
   const [elapsedTime, setElapsedTime] = useState('');
   useEffect(() => {
     function calculateElapsedTime() {

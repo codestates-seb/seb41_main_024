@@ -1,5 +1,5 @@
 import React from 'react';
-export interface inputPropsType {
+export interface inputType {
   id: string;
   name?:string;
   label?: string;

@@ -1,11 +1,11 @@
 import React from 'react';
 import { IconButton } from '@mui/material';
-import { passwrodIconPropsType } from './passwordIcon';
+import { passwrodIconType } from './passwordIconType';
 
 const PasswordIcon = ({
   handleClickShowPassword,
   handleMouseDownPassword,
-}: passwrodIconPropsType) => {
+}: passwrodIconType) => {
   return (
     <IconButton
       aria-label="toggle password visibility"

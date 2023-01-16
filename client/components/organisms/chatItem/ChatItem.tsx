@@ -1,6 +1,7 @@
 import React from 'react';
 import Badge from '../../atoms/badge/Badge';
 import Spot from '../../molecules/spot/Spot';
+import styles from './chatItem.module.css';
 import { chatItemPropsType } from './chatItem';
 
 const ChatItem = ({
@@ -15,7 +16,7 @@ const ChatItem = ({
       <img src={thumbnail} className="w-16" />
       <div className="flex-1 flex-col items-start px-4">
         <Badge isOpen={isOpen} />
-        <p className="text-s font-medium">{title}</p>
+        <p className={`${styles.title_ellipsis} text-s font-medium`}>{title}</p>
         <p className="text-xs text-primary font-medium">인당 {price}원</p>
       </div>
       <Spot spot={spot} />

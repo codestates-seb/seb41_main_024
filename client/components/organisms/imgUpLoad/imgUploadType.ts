@@ -1,4 +1,4 @@
-export interface ImgUploaTypes
+export interface imgUploadType
   extends React.InputHTMLAttributes<HTMLInputElement> {
   imgSrc?: string;
 }
