@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface LocationRepository extends JpaRepository<Location, Long> {
     Optional<List<Location>> findByMemberMemberId(long memberId);
+
     Optional<Location> findByLocationId(long locationId);
 }

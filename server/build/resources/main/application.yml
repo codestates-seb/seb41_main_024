@@ -1,10 +1,4 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2
-  datasource:
-    url: jdbc:h2:mem:test
   freemarker:
     cache: false
   jpa:
@@ -18,7 +12,6 @@ spring:
 
 
 
-<<<<<<< HEAD
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -26,15 +19,6 @@ spring:
     #jdbc:mysql://localhost:3306/main?serverTimezone=Asia/Seoul
     username: admin
     password: qwer1234
-=======
-  #datasource:
-    #driver-class-name: com.mysql.cj.jdbc.Driver
-    #url: jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    #jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    #jdbc:mysql://localhost:3306/main?serverTimezone=Asia/Seoul
-    #username: admin
-    #password: qwer1234
->>>>>>> 2dfba89fa2f5dbbcb56218954c351ad8bf0138e4
 mail:
   address:
     admin: admin@gmail.com

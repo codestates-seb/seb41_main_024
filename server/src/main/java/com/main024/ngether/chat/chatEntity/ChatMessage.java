@@ -2,10 +2,7 @@ package com.main024.ngether.chat.chatEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main024.ngether.member.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -33,4 +30,11 @@ public class ChatMessage {
     private String message;
     //메세지 작성 날짜
     private LocalDateTime createDate = LocalDateTime.now();
+    @Builder
+    public ChatMessage(MessageType type, Long chatRoomId, String nickName, String message, long userCount) {
+        this.type = type;
+        this.chatRoomId = chatRoomId;
+        this.nickName = nickName;
+        this.message = message;
+    }
 }

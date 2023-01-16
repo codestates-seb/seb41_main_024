@@ -116,12 +116,11 @@ public class LocationService {
             String[] ArraysStr1 = address1.split(" ");
             String[] ArraysStr2 = address2.split(" ");
 
-            if (ArraysStr1[0].equals(ArraysStr2[0]) && ArraysStr1[1].equals(ArraysStr2[1])){
+            if (ArraysStr1[0].equals(ArraysStr2[0]) && ArraysStr1[1].equals(ArraysStr2[1])) {
                 double lat2 = Double.parseDouble(boardList.get(i).getLatitude());
                 double lon2 = Double.parseDouble(boardList.get(i).getLongitude());
                 double result = distance(lat1, lon1, lat2, lon2, "kilometer");
                 if (result < type) {
-
                     boardList1.add(boardList.get(i));
                 }
 

@@ -63,8 +63,7 @@ public interface LocationMapper {
 
         return location;
     }
-
-     */
+    */
 
     default LocationDto.DistanceResponse locationToLocationDistance(Distance distance){
         return LocationDto.DistanceResponse.builder()

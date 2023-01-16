@@ -51,7 +51,6 @@ public class BoardService {
             returnBoard.setMaxNum(board.getMaxNum());
         }
         else throw new BusinessLogicException(ExceptionCode.NOT_ALLOW);
-        returnBoard.setCurNum(1);
         returnBoard.setAddress(board.getAddress());
         returnBoard.setLongitude(board.getLongitude());
         returnBoard.setLatitude(board.getLatitude());

@@ -33,7 +33,7 @@ public class Location {
     @JoinColumn(name = "BOARD_ID")
     private Board board;
 
-     */
+    */
 
     /*
     public void setBoard(Board board) {

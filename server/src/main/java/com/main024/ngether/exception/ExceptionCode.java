@@ -11,7 +11,7 @@ public enum ExceptionCode {
     FULL_MEMBER(405,"Recruitment complete"),
 
     NOT_ALLOW(406,"MAX NUM must bigger than 2"),
-    LOCATION_NOT_FOUND(404, "Location not found");
+    LOCATION_NOT_FOUND(407, "Location not found");
 
 
     @Getter

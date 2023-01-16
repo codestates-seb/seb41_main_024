@@ -42,8 +42,9 @@ public class ChatRoomController {
 
     // 채팅방 입장 화면
     @GetMapping("/room/enter/{room-Id}")
-    public void roomDetail(@PathVariable("room-Id") Long roomId, String nickName) {
-        chatService.enterRoom(roomId, nickName);
+    public String roomDetail(@PathVariable("room-Id") Long roomId) {
+        chatService.enterRoom(roomId);
+        return "/chat/roomdetail";
     }
 
     // 특정 채팅방 조회

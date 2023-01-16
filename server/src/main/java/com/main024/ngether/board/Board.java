@@ -39,8 +39,6 @@ public class Board {
     private long price;
     @Column(nullable = false)
     private int maxNum;
-    @Column(nullable = false)
-    private int curNum;
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private BoardStatus boardStatus;

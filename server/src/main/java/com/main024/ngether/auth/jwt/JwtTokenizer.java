@@ -1,22 +1,23 @@
 package com.main024.ngether.auth.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.security.SignatureException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class JwtTokenizer {
     @Getter
     @Value("${jwt.key}")
@@ -70,14 +71,25 @@ public class JwtTokenizer {
         return claims;
     }
 
-    public void verifySignature(String jws, String base64EncodedSecretKey) {
+    public String verifySignature(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
-        Jwts.parserBuilder()
+
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(jws);
+                .parseClaimsJws(jws)
+                .getBody()
+                .getSubject();
     }
+
+    public String getEmailFromAccessToken(String token) {
+        return verifySignature(token, encodeBase64SecretKey(secretKey));
+    }
+    public boolean validateToken(String token){
+        return this.getClaims(token,encodeBase64SecretKey(secretKey)) != null;
+    }
+
     public Date getTokenExpiration(int expirationMinutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, expirationMinutes);
