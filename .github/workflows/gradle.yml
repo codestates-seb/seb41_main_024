@@ -23,7 +23,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: server
+        working-directory: "./server"
 
     runs-on: ubuntu-latest
 
