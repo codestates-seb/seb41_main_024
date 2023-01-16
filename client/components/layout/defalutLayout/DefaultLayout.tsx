@@ -1,6 +1,6 @@
 import MainHeader from '../../organisms/headers/mainHeader/MainHeader';
 import { defaultLayoutPropsType } from './defaultLayout';
-import Navigation from '../../organisms/bottomNav/bottomNav';
+import Navigation from '../../organisms/bottomNav/BottomNav';
 import Footer from '../../molecules/footer/Footer';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import basicTheme from '../../../theme/basic';
