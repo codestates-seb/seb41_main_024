@@ -10,23 +10,19 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "dev" ]
-    paths:
-      - 'server/**'
-      - '!client/**'
 
 permissions:
   contents: read
   
 env:
   S3_BUCKET_NAME: mainproject-024
+  
+defaults:
+  run:
+    working-directory: server
 
 jobs:
   build:
-  
-    defaults:
-      run:
-        shell: bash
-        working-directory: "./server"
 
     runs-on: ubuntu-latest
 
