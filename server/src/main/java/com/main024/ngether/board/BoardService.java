@@ -5,6 +5,9 @@ import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.likes.LikeRepository;
+import com.main024.ngether.location.Location;
+import com.main024.ngether.location.LocationRepository;
+import com.main024.ngether.location.LocationService;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberRepository;
 import com.main024.ngether.member.MemberService;
@@ -27,6 +30,9 @@ public class BoardService {
     private final LikeRepository likeRepository;
     private final ChatRoomRepository chatRoomRepository;
 
+    private final LocationRepository locationRepository;
+    private final LocationService locationService;
+
 
     public Board createBoard(Board board) {
         Board returnBoard = new Board();
@@ -45,7 +51,6 @@ public class BoardService {
             returnBoard.setMaxNum(board.getMaxNum());
         }
         else throw new BusinessLogicException(ExceptionCode.NOT_ALLOW);
-        returnBoard.setCurNum(1);
         returnBoard.setAddress(board.getAddress());
         returnBoard.setLongitude(board.getLongitude());
         returnBoard.setLatitude(board.getLatitude());
@@ -53,7 +58,13 @@ public class BoardService {
         returnBoard.setProductsLink(board.getProductsLink());
         returnBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
         member.addBoard(returnBoard);
-        return boardRepository.save(returnBoard);
+        Board board1 = boardRepository.save(returnBoard);
+
+        List<Location> locationList = locationRepository.findAll();
+        for(int i=0; i< locationList.size(); i++){
+            locationService.createDistance(locationList.get(i), board1);
+        }
+        return board1;
     }
 
 
@@ -133,7 +144,7 @@ public class BoardService {
     }
 
 
-    private Board findVerifiedBoardByQuery(Long boardId) {
+    public Board findVerifiedBoardByQuery(Long boardId) {
         Optional<Board> optionalBoard = boardRepository.findByBoardId(boardId);
         Board findBoard =
                 optionalBoard.orElseThrow(() ->
