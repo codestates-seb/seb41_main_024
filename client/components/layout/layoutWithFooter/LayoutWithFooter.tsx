@@ -12,7 +12,7 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
         <div className="max-w-2xl min-w-[390px] mx-auto h-[100vh] flex flex-col">
           <MainHeader />
           {children}
-          <div className="pb-[70px]">
+          <div className="pb-[56px]">
             <Footer />
           </div>
           <Navigation />
