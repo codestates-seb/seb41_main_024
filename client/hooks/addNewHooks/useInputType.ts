@@ -12,6 +12,6 @@ export interface uploadPostType extends inputType {
   latitude: string;
   longitude: string;
   deadLine: string;
-  accessToken: string;
-  refreshToken: string;
+  accessToken: string | undefined;
+  refreshToken: string | undefined;
 }
