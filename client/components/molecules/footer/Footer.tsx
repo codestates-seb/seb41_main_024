@@ -12,8 +12,8 @@ const Footer = () => {
       <p>Team : 나누조, Team Leader : 김형진</p>
       <p>BE developers : 최지현, 박지윤, 김연주</p>
       <p>FE developers : 송현우, 박경현, 김은수, 김형진</p>
-      <p>
-        Github :
+      <p className="whitespace-pre">
+        <span>Github :</span>
         <Link
           className={styles.color}
           href="https://github.com/codestates-seb/seb41_main_024"

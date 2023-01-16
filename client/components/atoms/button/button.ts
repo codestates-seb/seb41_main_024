@@ -1,8 +1,9 @@
-import { StaticImageData } from 'next/image';
+import { ButtonHTMLAttributes, DetailedHTMLProps, ReactNode } from 'react';
 
-export interface buttonPropsType {
-  src: string | StaticImageData;
-  alt: string;
-  width?: number;
-  height?: number;
+export interface buttonPropsType
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
+  children: ReactNode;
 }

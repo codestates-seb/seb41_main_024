@@ -1,19 +1,8 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import ProductImg from '../../../public/chatItem/productImg.svg';
 import Badge from '../../atoms/badge/Badge';
 import SmallSpot from '../../molecules/spot/SmallSpot';
 import Alert from '../../atoms/alert/Alert';
 import styles from './chatItem.module.css';
-
-export interface chatItem {
-  thumbnail: string | undefined;
-  isOpen: boolean;
-  title: string;
-  price: string;
-  spot: string;
-  alertNum: string;
-}
+import { chatItemPropsType } from './chatItem';
 
 const ChatItemWithAlert = ({
   thumbnail,
@@ -22,7 +11,7 @@ const ChatItemWithAlert = ({
   price,
   spot,
   alertNum,
-}: chatItem) => {
+}: chatItemPropsType) => {
   return (
     <div className="flex items-start border-solid border-0 border-b border-slate-400 h-22 p-4">
       <img src={thumbnail} className="w-16" />

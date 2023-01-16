@@ -7,6 +7,7 @@ const dummyData = [
     title:
       '펩시콜라 200캔 소분하실 분 모집합니다 이틀 동안만 모집해요~~ 얼른 와주세요',
     isFavorite: true,
+    id: 1,
   },
   {
     src: '/sharingList/pepsi.svg',
@@ -14,6 +15,7 @@ const dummyData = [
     title:
       '펩시콜라 200캔 소분하실 분 모집합니다 이틀 동안만 모집해요~~ 얼른 와주세요',
     isFavorite: true,
+    id: 2,
   },
   {
     src: '/sharingList/pepsi.svg',
@@ -21,6 +23,7 @@ const dummyData = [
     title:
       '펩시콜라 200캔 소분하실 분 모집합니다 이틀 동안만 모집해요~~ 얼른 와주세요',
     isFavorite: true,
+    id: 3,
   },
   {
     src: '/sharingList/pepsi.svg',
@@ -28,6 +31,7 @@ const dummyData = [
     title:
       '펩시콜라 200캔 소분하실 분 모집합니다 이틀 동안만 모집해요~~ 얼른 와주세요',
     isFavorite: true,
+    id: 4,
   },
   {
     src: '/sharingList/pepsi.svg',
@@ -35,6 +39,7 @@ const dummyData = [
     title:
       '펩시콜라 200캔 소분하실 분 모집합니다 이틀 동안만 모집해요~~ 얼른 와주세요',
     isFavorite: true,
+    id: 5,
   },
   {
     src: '/sharingList/pepsi.svg',
@@ -42,6 +47,7 @@ const dummyData = [
     title:
       '펩시콜라 200캔 소분하실 분 모집합니다 이틀 동안만 모집해요~~ 얼른 와주세요',
     isFavorite: true,
+    id: 6,
   },
 ];
 const NearByList = () => {
@@ -53,6 +59,7 @@ const NearByList = () => {
           alt={sharingItem.alt}
           title={sharingItem.title}
           isFavorite={sharingItem.isFavorite}
+          key={sharingItem.id}
         />
       ))}
     </div>

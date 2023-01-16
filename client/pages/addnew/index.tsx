@@ -45,7 +45,6 @@ const AddNewPage = () => {
 
   return (
     <div>
-      <MainHeader />
       <div className="flex justify-center m-7 my-12">
         <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
           <Stack spacing={4}>
@@ -135,8 +134,6 @@ const AddNewPage = () => {
           </Stack>
         </FormControl>
       </div>
-      <Footer />
-      <BottomNav />
     </div>
   );
 };

@@ -1,10 +1,6 @@
-import Image from 'next/image';
+import React from 'react';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import { createTheme } from '@mui/material/styles';
-
-type spotPropsType = {
-  spot: string;
-};
+import { spotPropsType } from './spot';
 
 const Spot = ({ spot }: spotPropsType) => {
   return (

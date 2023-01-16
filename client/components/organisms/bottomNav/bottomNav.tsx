@@ -3,8 +3,6 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import Link from 'next/link';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Paper from '@mui/material/Paper';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -20,7 +18,7 @@ export default function BottomNav(): JSX.Element {
     {
       label: '홈',
       icon: <HomeOutlinedIcon />,
-      path: '/main',
+      path: '/',
     },
     {
       label: '내 주변',
@@ -45,12 +43,19 @@ export default function BottomNav(): JSX.Element {
   ];
 
   return (
-    <Box sx={{ pb: 7 }}>
+    <Box
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        maxWidth: '672px',
+        margin: 'auto',
+        minWidth: '390px',
+      }}
+    >
       <CssBaseline />
-      <Paper
-        sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
-        elevation={4}
-      >
+      <Paper sx={{}} elevation={4}>
         <BottomNavigation
           showLabels
           value={router.pathname}
