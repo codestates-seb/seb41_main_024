@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { drawerListItemProps } from './Type_drawerListItem';
+import { drawerListItemProps } from './drawerListItemType';
 
-const DrawerListItem = ({ text, path }: drawerListItemProps) => {
+const DrawerListItem = ({ text, path }: drawerListItemPropsType) => {
   return (
     <ListItem key={text} disablePadding>
       <ListItemButton>
