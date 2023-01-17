@@ -5,11 +5,13 @@ import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
 import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
-import React from 'react';
+
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
+
+import React from 'react';
 
 const LoginSlogan = () => {
   return (
@@ -42,14 +44,6 @@ const LoginPage = () => {
   });
 
   const { email, pw } = form;
-
-  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
 
   function request() {
     // return axios.get('http://localhost:3001/productList');
@@ -99,6 +93,14 @@ const LoginPage = () => {
   console.log('cookies >>>', cookies);
   console.log('data >>>', data);
 
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
   return (
     <div>
       <div className="mt-24">
@@ -128,7 +130,7 @@ const LoginPage = () => {
             labelText={'소문자와 특수문자를 포함한 8글자'}
           />
           <Button
-            className="h-14 mt-4 bg-primary text-white rounded"
+            className="h-14 mt-4 bg-primary text-white rounded "
             onClick={refetch}
           >
             로그인
