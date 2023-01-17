@@ -4,6 +4,9 @@ import DetailBottom from '../../components/molecules/detailBottom/DetailBottom';
 import PostMeta from '../../components/molecules/postMeta/PostMeta';
 import UserMetaInfo from '../../components/molecules/userMetaInfo/UserMetaInfo';
 import DetailPageTab from '../../components/organisms/tab/detailPageTab/DetailPageTab';
+import axios from 'axios';
+import { useQuery } from 'react-query';
+import { useCookies } from 'react-cookie';
 
 const POST_DETAIL_DATA = {
   content:
@@ -23,18 +26,43 @@ const USER_DATA = {
   address: '수원시 권선구 권선동',
 };
 
-const Index = () => {
+const ProductDetail = (id: number) => {
+  const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
+
+  function fetchApi() {
+    // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
+    return axios.get(`http://3.34.54.131:8080/api/boards/1`, {
+      headers: {
+        Authorization: cookies.access_token,
+        Refresh: cookies.refresh_token,
+      },
+    });
+  }
+
+  const { data } = useQuery(['productDetail'], fetchApi);
+
+  console.log(data);
+
   return (
     <div>
-      <div>
+      {data && (
+        <div>
+          <Img src="/detail/straw.svg" alt="메인사진" />
+          <UserMetaInfo userData={data.data} />
+          <PostMeta postData={data.data} />
+          <DetailPageTab content={data.data.content} />
+          <DetailBottom />
+        </div>
+      )}
+      {/* <div>
         <Img src="/detail/straw.svg" alt="메인사진" />
         <UserMetaInfo userData={USER_DATA} />
         <PostMeta postData={POST_DETAIL_DATA} />
         <DetailPageTab content={POST_DETAIL_DATA.content} />
         <DetailBottom />
-      </div>
+      </div> */}
     </div>
   );
 };
 
-export default Index;
+export default ProductDetail;
