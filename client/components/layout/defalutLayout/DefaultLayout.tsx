@@ -9,7 +9,7 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={basicTheme}>
-        <div className="max-w-2xl min-w-[390px] mx-auto h-[100vh]">
+        <div className="max-w-2xl mx-auto min-h-[100vh]">
           <MainHeader />
           {children}
           <Navigation />
