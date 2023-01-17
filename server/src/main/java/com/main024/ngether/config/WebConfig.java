@@ -13,7 +13,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods(ALLOWED_METHOD_NAMES.split(","))
                 .allowedHeaders("*")
                 .allowCredentials(true)
-                .allowedOriginPatterns("*");
+                .allowedOriginPatterns("*")
+                .allowedOriginPatterns("http://localhost:3000");
 
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration//해당 클래서가 Bean 설정을 할 것을 나타냄
 @EnableWebSocketMessageBroker//웹소켓 서버를 활성화 할 수 있는 기능
 @RequiredArgsConstructor
-@CrossOrigin
 public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
     //private final StompHandler stompHandler;
