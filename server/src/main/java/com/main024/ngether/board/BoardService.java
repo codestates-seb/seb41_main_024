@@ -176,6 +176,11 @@ public class BoardService {
                 return optionalBoards.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
             }
+            case "4": {
+                Optional<List<Board>> optionalBoards = boardRepository.findByAddressContaining(keyword);
+                return optionalBoards.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
+            }
         }
 
         return null;
