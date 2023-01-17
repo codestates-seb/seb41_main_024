@@ -22,6 +22,7 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.security.Principal;
 import java.util.Objects;
@@ -41,6 +42,7 @@ public class StompHandler implements ChannelInterceptor {
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override
+    @CrossOrigin
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         String jwt = accessor.getFirstNativeHeader("Authorization").substring("Bearer ".length());
