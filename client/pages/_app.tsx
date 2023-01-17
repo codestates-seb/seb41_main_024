@@ -6,7 +6,7 @@ import basicTheme from '../theme/basic';
 import DefaultLayout from '../components/layout/defalutLayout/DefaultLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../components/layout/defalutLayout/defaultLayout';
-
+import { CookiesProvider } from 'react-cookie';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 type AppPropsWithLayout = AppProps & {
@@ -27,8 +27,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     </StyledEngineProvider> */
   }
   return renderWithLayout(
-    <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
-    </QueryClientProvider>
+    <CookiesProvider>
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+      </QueryClientProvider>
+    </CookiesProvider>
   );
 }
