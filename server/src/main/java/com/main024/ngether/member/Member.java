@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.main024.ngether.board.Board;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.likes.Like;
+import com.main024.ngether.location.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,6 +49,9 @@ public class Member {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<ChatRoomMembers> chatRoomMembers = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Location> locations = new ArrayList<>();
 
 
 

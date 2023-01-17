@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import React from 'react';
 import Button from '../../atoms/button/Button';
-import { userDataProps } from './userMetaInfo';
+import { userDataPropsType } from './userMetaInfoType';
 
-const UserMetaInfo = ({ userData }: userDataProps) => {
+const UserMetaInfo = ({ userData }: userDataPropsType) => {
   return (
     <div className="flex items-center border-b-1 border-x-0 border-t-0 border-solid border-[#475569] py-6 px-6">
       <div>

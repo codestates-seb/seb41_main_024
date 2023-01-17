@@ -1,5 +1,4 @@
 import Input from '../../components/atoms/input/Input';
-import FormButton from '../../components/atoms/formbutton/FormButton';
 import Button from '../../components/atoms/button/Button';
 import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';

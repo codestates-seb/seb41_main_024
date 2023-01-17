@@ -18,7 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -31,6 +32,7 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final BoardService boardService;
+
 
 
     //채팅방 하나 불러오기
@@ -57,11 +59,11 @@ public class ChatService {
         chatRoomMembers.setMember(member);
 
         chatRoomMembersRepository.save(chatRoomMembers);
-        return chatRoom;
+        return savedChatRoom;
     }
 
     //채팅방에 입장할 때
-    public ChatRoom enterRoom(Long roomId, String nickName) {
+    public ChatRoom enterRoom(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         Board board = boardService.findBoard(roomId);
         //이미 채팅방 인원수가 가득 찼을 경우
@@ -70,15 +72,14 @@ public class ChatService {
 
         //인원수 + 1
         chatRoom.setMemberCount(chatRoom.getMemberCount() + 1);
-        board.setCurNum(board.getCurNum() + 1);
-        if (board.getMaxNum() == board.getCurNum()) {
+        if (board.getMaxNum() == chatRoom.getMemberCount()) {
             board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
         }
 
         boardRepository.save(board);
 
         ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
-        chatRoomMembers.setMember(memberService.findByNiceName(nickName));
+        chatRoomMembers.setMember(memberService.getLoginMember());
         chatRoomMembers.setChatRoom(chatRoom);
         chatRoomMembersRepository.save(chatRoomMembers);
 
@@ -110,4 +111,8 @@ public class ChatService {
         return boardList;
 
     }
+
+
+
+
 }

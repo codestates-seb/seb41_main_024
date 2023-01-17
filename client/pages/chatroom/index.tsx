@@ -4,11 +4,12 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
 import chatDummy from './dataChat';
+import { ReactElement } from 'react';
+import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
 
 const Chatroom = () => {
   return (
-    <div className="max-w-2xl my-0 mx-auto">
-      <ChatHeader />
+    <div className="mx-0 mx-auto">
       <div className="bg-primary pt-[8.125rem] pb-[7.5rem] min-h-[calc(100vh-121px)]">
         <div className="flex justify-center my-9 mx-0">
           <strong className="inline-block py-[0.5rem] px-[1.25rem] bg-[rgba(217,217,217,0.3)] text-[#fff] font-normal leading-4 rounded">
@@ -40,6 +41,9 @@ const Chatroom = () => {
       </div>
     </div>
   );
+};
+Chatroom.getLayout = function (page: ReactElement) {
+  return <ChatRoomLayout>{page}</ChatRoomLayout>;
 };
 
 export default Chatroom;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from '@mui/material';
-import { inputPropsType } from './input';
+import { inputType } from './inputType';
 
 const Input = ({
   id,
@@ -17,7 +17,7 @@ const Input = ({
   className,
   value,
   onChange,
-}: inputPropsType) => {
+}: inputType) => {
   return (
     <TextField
       id={id}

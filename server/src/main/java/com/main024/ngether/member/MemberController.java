@@ -54,10 +54,9 @@ public class MemberController {
     }
 
     //회원정보 가져오기
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(
-            @PathVariable("member-id") @Positive long memberId) {
-        return ResponseEntity.ok(mapper.memberToMemberResponse(memberService.findMember(memberId)));
+    @GetMapping("/myInformation")
+    public ResponseEntity getMember() {
+        return ResponseEntity.ok(mapper.memberToMemberResponse(memberService.getLoginMember()));
     }
 
     //회원탈퇴

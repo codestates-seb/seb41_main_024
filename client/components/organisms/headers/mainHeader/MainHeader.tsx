@@ -19,7 +19,6 @@ const MainHeader = () => {
   const router = useRouter();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -35,13 +34,13 @@ const MainHeader = () => {
   return (
     <Fragment>
       <AppBar
-        className="px-4 py-4 border-b border-b-inherit"
+        className=""
         position="static"
         color="inherit"
         elevation={0}
         sx={{ height: '50px' }}
       >
-        <div className="flex">
+        <div className="flex fixed items-center w-[100%] h-[50px] px-4 border-b-1 border-x-0 border-t-0 border-solid border-[#0000001f] bg-[white] z-10">
           <div className="flex-1">
             <Link href="/">
               <Logo />
@@ -61,7 +60,7 @@ const MainHeader = () => {
           </Button>
         </div>
       </AppBar>
-      <Divider />
+      {/* <Divider /> */}
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
         {cookies.access_token && (
           <div className="flex flex-col items-center m-4">
