@@ -5,8 +5,11 @@ import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
 import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
-
 import React from 'react';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
 
 const LoginSlogan = () => {
   return (
@@ -24,6 +27,15 @@ const LoginSlogan = () => {
 };
 
 const LoginPage = () => {
+  const [cookies, setCookie] = useCookies([
+    'access_token',
+    'refresh_token',
+    'memberId',
+    'nickName',
+  ]);
+
+  const router = useRouter();
+
   const [form, setForm] = useState({
     email: '',
     pw: '',
@@ -38,6 +50,54 @@ const LoginPage = () => {
       [name]: value,
     });
   };
+
+  function request() {
+    // return axios.get('http://localhost:3001/productList');
+    // return axios.get('http://3.34.54.131:8080/api/members');
+    return axios.post('http://3.34.54.131:8080/auth/login', form);
+  }
+
+  const { data, isLoading, isError, refetch } = useQuery(
+    ['loginData'],
+    request,
+    {
+      enabled: false,
+    }
+  );
+
+  if (data) {
+    setCookie('access_token', data.headers.authorization);
+    setCookie('refresh_token', data.headers.refresh);
+    setCookie('memberId', data.data.memberId);
+    setCookie('nickName', data.data.nickName);
+    router.push('/');
+
+    // setCookie(
+    //   'access_token',
+    //   'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoidHR0dHJlMkBnbWFpbC5jb20iLCJzdWIiOiJ0dHR0cmUyQGdtYWlsLmNvbSIsImlhdCI6MTY3Mzg4MTk2MCwiZXhwIjoxNjczODg0MzYwfQ.EUE5WGZlTVqmnwZ0zkMGQJoFhR3SI8QIW9uqp3TXCP4'
+    // );
+    // setCookie(
+    //   'refresh_token',
+    //   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0dHR0cmUyQGdtYWlsLmNvbSIsImlhdCI6MTY3Mzg4MTk2MCwiZXhwIjoxNjczOTA3MTYwfQ.VsuRLkixdd3GkuVfE3kNZontH-0FtoeLJUBndSVR0xM'
+    // );
+    // setCookie('memberId', 6);
+    // setCookie('nickName', 'tttt');
+  }
+
+  // if (data) {
+  //   setCookie('userInfo', {
+  //     access_token: data.headers.Authorization,
+  //     refresh_token: data.headers.Refresh,
+  //     memberId: data.data.memberId,
+  //     nickName: data.data.nickName,
+  //   });
+
+  //   router.push('/');
+  // }
+
+  console.log('form >>>', form);
+  console.log('cookies >>>', cookies);
+  console.log('data >>>', data);
 
   return (
     <div>
@@ -67,7 +127,10 @@ const LoginPage = () => {
             htmlFor={'password-input'}
             labelText={'소문자와 특수문자를 포함한 8글자'}
           />
-          <Button className="h-14 mt-4 bg-primary text-white rounded ">
+          <Button
+            className="h-14 mt-4 bg-primary text-white rounded"
+            onClick={refetch}
+          >
             로그인
           </Button>
           <Button className="h-14 mt-4 border-solid border-1 border-[#63A8DA] text-primary rounded ">
