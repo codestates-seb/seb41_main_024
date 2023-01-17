@@ -5,7 +5,7 @@ import Link from 'next/link';
 const Footer = () => {
   return (
     <div
-      className={`flex flex-col ${styles.bg} ${styles.color} ${styles.center}`}
+      className={`flex flex-col bg-[#333333] text-[#999999] ${styles.center}`}
     >
       <LogoFooter className={styles.logo} />
       <p>© 2023 · All Rights Reserved</p>
