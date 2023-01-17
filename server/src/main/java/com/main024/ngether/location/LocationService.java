@@ -124,8 +124,8 @@ public class LocationService {
         return null;
     }
 
-    public List<Board> createCurDistance(LocationDto.DistanceCal distanceCal, long type) {
-        List<Board> boardList = boardRepository.findAll();
+    public List<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category) {
+        List<Board> boardList = boardRepository.findByCategory(category).get();
         String address1 = distanceCal.getAddress();
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
         double lon1 = Double.parseDouble(distanceCal.getLongitude());

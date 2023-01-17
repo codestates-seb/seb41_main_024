@@ -34,6 +34,7 @@ public class LocationController {
         this.distanceRepository = distanceRepository;
     }
 
+    //사용자별 지정 위치 등록
     @PostMapping("/location")
     public ResponseEntity postLocation(@Valid @RequestBody LocationDto.Post locationPostDto) {
         Location location = locationService.createLocation(locationMapper.locationPostDtoToLocation(memberService, locationPostDto));
@@ -41,15 +42,17 @@ public class LocationController {
         return new ResponseEntity<>(locationMapper.locationToLocationResponseDto(location), HttpStatus.CREATED);
     }
 
+    //사용자 실시간 위치 등록 후 type 범위 안에 있는 boardlist 조회
     @PostMapping("/distance")
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
-                                       @RequestParam(value = "type") long type) {
-        List<Board> boardList = locationService.createCurDistance(distanceCal, type);
+                                       @RequestParam(value = "type") double type,
+                                       @RequestParam(value = "category") String category) {
+        List<Board> boardList = locationService.createCurDistance(distanceCal, type, category);
 
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
-
+    //사용자별 지정 위치 수정
     @PatchMapping("/location/{location-id}")
     public ResponseEntity patchLocation(@PathVariable("location-id") @Positive long locationId,
                                         @Valid @RequestBody LocationDto.Patch locationPatchDto) {
@@ -60,6 +63,7 @@ public class LocationController {
     }
 
 
+    //지정 위치 조회
     @GetMapping("/location/{location-id}")
     public ResponseEntity getLocation(@PathVariable("location-id") @Positive long locationId) {
         Location location = locationService.findLocation(locationId);
@@ -68,6 +72,7 @@ public class LocationController {
     }
 
 
+    //모든 지정 위치 조회
     @GetMapping("/locations")
     public ResponseEntity getLocations() {
         List<Location> locations = locationService.findLocations();
@@ -80,6 +85,7 @@ public class LocationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    //type, category, locationId별 해당되는 boardlist 조회
     @GetMapping("/distances/{location-id}")
     public ResponseEntity getDistances(@RequestParam(value = "type") double type,
                                        @RequestParam(value = "category") String category,
@@ -108,6 +114,7 @@ public class LocationController {
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
+    //사용자별 지정 위치 삭제
     @DeleteMapping("/location/{location-id}")
     public ResponseEntity deleteLocation(@PathVariable("location-id") @Positive long locationId) {
         locationService.deleteLocation(locationId);
