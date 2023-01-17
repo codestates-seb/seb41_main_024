@@ -3,6 +3,7 @@ import React from 'react';
 import Button from '../../atoms/button/Button';
 import { userDataProps } from './userMetaInfo';
 import { useCookies } from 'react-cookie';
+import Link from 'next/link';
 
 const UserMetaInfo = ({ userData }: userDataProps) => {
   const [cookies, setCookie] = useCookies(['memberId']);
@@ -20,14 +21,16 @@ const UserMetaInfo = ({ userData }: userDataProps) => {
         <p>{userData?.address}</p>
       </div>
       {isWriter && (
-        <Button>
-          <Image
-            src="/detail/edit.svg"
-            width={24}
-            height={24}
-            alt="edit-button"
-          />
-        </Button>
+        <Link href="/">
+          <Button>
+            <Image
+              src="/detail/edit.svg"
+              width={24}
+              height={24}
+              alt="edit-button"
+            />
+          </Button>
+        </Link>
       )}
     </div>
   );
