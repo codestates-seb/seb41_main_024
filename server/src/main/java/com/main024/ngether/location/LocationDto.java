@@ -8,7 +8,9 @@ public class LocationDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Post {
+        private long memberId;
 
         private String address;
         private String latitude;
