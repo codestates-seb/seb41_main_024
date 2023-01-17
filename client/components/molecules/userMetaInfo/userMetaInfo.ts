@@ -1,8 +1,14 @@
-export interface userDataType {
+export interface productDataProps {
   nickname: string;
   address: string;
   memberId: number;
-}
-export interface userDataProps {
-  userData: userDataType;
+  content: string;
+  title: string;
+  category: string;
+  create_date: Date;
+  price: number;
+  maxNum: number;
+  curNum: number;
+  deadLine: string;
+  productsLink: string;
 }

@@ -29,7 +29,8 @@ const USER_DATA = {
 
 export async function getServerSideProps(context: { params: { id: number } }) {
   const { id } = context.params;
-  const { data } = await axios.get(`http://3.34.54.131:8080/api/boards/${id}`);
+  // const { data } = await axios.get(`http://3.34.54.131:8080/api/boards/${id}`);
+  const { data } = await axios.get(`http://localhost:3001/productList/${id}`);
 
   return {
     props: {
@@ -45,7 +46,8 @@ export default function ProductDetail(productData: any, id: number) {
   function getProductDetail() {
     const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
 
-    return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
+    return axios.get(`http://localhost:3001/productList/${id}`, {
+      // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
       headers: {
         Authorization: cookies.access_token,
         Refresh: cookies.refresh_token,
@@ -62,8 +64,8 @@ export default function ProductDetail(productData: any, id: number) {
   return (
     <div>
       <Img src="/detail/straw.svg" alt="메인사진" />
-      <UserMetaInfo userData={data.productData} />
-      <PostMeta postData={data.productData} />
+      <UserMetaInfo productData={data.productData} />
+      <PostMeta productData={data.productData} />
       <DetailPageTab content={data.productData.content} />
       <DetailBottom />
 

@@ -3,17 +3,30 @@
     {
       "id": 1,
       "thumbnail": "",
-      "isOpen": true,
+      "isOpen": false,
       "title": "아삭아삭 나주배 3kg",
-      "price": "9,850",
-      "spot": "서울 서초구"
+      "price": 9850,
+      "spot": "서울 강남구",
+      "content": "아삭아삭 나주배 3kg 냠냠냠냠냠냠냠냠냠냠냠냠",
+      "category": "상품 쉐어링",
+      "create_date": "2023-01-20",
+      "maxNum": 4,
+      "curNum": 1,
+      "deadLine": "2023-01-20",
+      "productsLink": "https://www.coupang.com/vp/products/7048158498?itemId=17446727661",
+      "address": "서울 서초구",
+      "nickname": "호호",
+      "productName": "아삭아삭 나주배 3kg",
+      "url": "https://www.coupang.com/vp/products/7048158498?itemId=17446727661",
+      "quantity": "1",
+      "detail": "아삭아삭 나주배 3kg 냠냠냠냠냠냠냠냠냠냠냠냠"
     },
     {
       "id": 2,
       "thumbnail": "",
       "isOpen": true,
       "title": "남해안 디포리 멸치다시팩 15g * 20팩 맛있게 진한 국물용 다시팩",
-      "price": "9,850",
+      "price": 9850,
       "spot": "경기도 수지구"
     },
     {
@@ -21,7 +34,7 @@
       "thumbnail": "",
       "isOpen": false,
       "title": "[최상등급 + 당일도정 + 혼합미] 23년 햅쌀 프리미엄 경기미  쌀 10kg",
-      "price": "9,850",
+      "price": 9850,
       "spot": "제주 연동"
     },
     {
@@ -29,7 +42,7 @@
       "thumbnail": "",
       "isOpen": true,
       "title": "[글랜인스] 호주산 블랙앵거스 냉장 150 소고기 모듬구이 세트 600",
-      "price": "9,850",
+      "price": 9850,
       "spot": "서울 서초구"
     },
     {
@@ -37,7 +50,7 @@
       "thumbnail": "",
       "isOpen": false,
       "title": "헤이즈 파스텔 확장형 캐리어",
-      "price": "9,850",
+      "price": 9850,
       "spot": "서울 서초구"
     },
     {
