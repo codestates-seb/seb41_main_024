@@ -45,9 +45,9 @@ public class LocationController {
     //사용자 실시간 위치 등록 후 type 범위 안에 있는 boardlist 조회
     @PostMapping("/distance")
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
-                                       @RequestParam(value = "type") double type,
+                                       @RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category) {
-        List<Board> boardList = locationService.createCurDistance(distanceCal, type, category);
+        List<Board> boardList = locationService.createCurDistance(distanceCal, range, category);
 
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
@@ -87,21 +87,21 @@ public class LocationController {
 
     //type, category, locationId별 해당되는 boardlist 조회
     @GetMapping("/distances/{location-id}")
-    public ResponseEntity getDistances(@RequestParam(value = "type") double type,
+    public ResponseEntity getDistances(@RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
                                        @PathVariable("location-id") @Positive long locationId) {
         List<Distance> distanceList = new ArrayList<>();
-        if (type == 0.2)
+        if (range == 0.2)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_200, locationId, category).get();
-        else if (type == 0.4)
+        else if (range == 0.4)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_400, locationId, category).get();
-        else if (type == 0.6)
+        else if (range == 0.6)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_600, locationId, category).get();
-        else if (type == 0.5)
+        else if (range == 0.5)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_500, locationId, category).get();
-        else if (type == 1)
+        else if (range == 1)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_1000, locationId, category).get();
-        else if (type == 1.5)
+        else if (range == 1.5)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_1500, locationId, category).get();
         else
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category).get();
