@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin
 public class MessageController {
 
 
