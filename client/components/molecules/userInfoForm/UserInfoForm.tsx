@@ -11,8 +11,8 @@ import axios from 'axios';
 
 const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
 const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
-const SIGN_UP_URL = 'http://3.34.54.131:8080/api/members'
-const EDIT_USER_INFO_URL = 'http://3.34.54.131:8080/api/members/patch'
+const SIGN_UP_URL = 'http://3.34.54.131:8080/api/members';
+const EDIT_USER_INFO_URL = 'http://3.34.54.131:8080/api/members/patch';
 
 const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
   const { formValue, checkedPw, handleInputChange } = useForm({
@@ -25,48 +25,41 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
   const { email, nickName, pw, phoneNumber } = formValue;
 
   const emailRegexText = useRegexText({
-    state: email, 
-    regex: emailRegex, 
-    text: 
-    {
+    state: email,
+    regex: emailRegex,
+    text: {
       default: '사용하실 이메일을 적어주세요',
       match: '사용 가능한 이메일 입니다',
       unMatch: '이메일 양식과 맞게 입력해주세요',
-    }
+    },
   });
   const passwordRegexText = useRegexText({
-    state: pw, 
-    regex: passwordRegex, 
-    text: 
-    {
+    state: pw,
+    regex: passwordRegex,
+    text: {
       default:
         '비밀번호는 소문자, 특수문자를 각 하나 포함한 8자리 이상이여야 합니다.',
       match: '사용 가능한 비밀번호 입니다',
       unMatch: '소문자, 특수문자를 각 하나 포함한 8자리 이상이여야 합니다.',
-    }
+    },
   });
   const checkedPasswordRegexText = useRegexText({
-    state: checkedPw, 
-    checkPassword: pw, 
-    text: 
-    {
+    state: checkedPw,
+    checkPassword: pw,
+    text: {
       default: '사용하실 패스워드를 한 번 더 입력해주세요',
       match: '비밀번호와 일치합니다',
       unMatch: '비밀번호와 똑같이 입력해주세요',
-    }
+    },
   });
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!editPage) {
       try {
-        await axios.post(
-          SIGN_UP_URL,
-          JSON.stringify(formValue),
-          {
-            headers: { 'Content-Type': 'application/json' },
-          }
-        );
+        await axios.post(SIGN_UP_URL, JSON.stringify(formValue), {
+          headers: { 'Content-Type': 'application/json' },
+        });
         console.log('회원으로 가입되셨습니다!');
       } catch (error) {
         console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
@@ -74,16 +67,12 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
     }
     if (editPage) {
       try {
-        await axios.patch(
-          EDIT_USER_INFO_URL,
-          JSON.stringify(formValue),
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              // +JWT
-            },
-          }
-        );
+        await axios.patch(EDIT_USER_INFO_URL, JSON.stringify(formValue), {
+          headers: {
+            'Content-Type': 'application/json',
+            // +JWT
+          },
+        });
         console.log('회원으로 가입되셨습니다!');
       } catch (error) {
         console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
