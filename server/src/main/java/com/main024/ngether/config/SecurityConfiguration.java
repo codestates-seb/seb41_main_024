@@ -7,6 +7,8 @@ import com.main024.ngether.auth.handler.MemberAuthenticationFailureHandler;
 import com.main024.ngether.auth.handler.MemberAuthenticationSuccessHandler;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
+import com.main024.ngether.location.LocationRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,9 +33,12 @@ public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
 
+    //private final LocationRepository locationRepository;
+
     public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
