@@ -1,5 +1,5 @@
 export interface userDataType {
-  nickName: string;
+  nickname: string;
   address: string;
 }
 export interface userDataProps {

@@ -23,12 +23,11 @@ const POST_DETAIL_DATA = {
     'https://www.figma.com/file/c5ndHFggdYDwI79WPIBJQp/Ngether?node-id=51%3A2548&t=FrQ9Bo12zF84j9B4-0',
 };
 const USER_DATA = {
-  nickName: '팔라당150',
+  nickname: '팔라당150',
   address: '수원시 권선구 권선동',
 };
 
 export async function getServerSideProps(context: { params: { id: number } }) {
-  const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
   const { id } = context.params;
   const { data } = await axios.get(`http://3.34.54.131:8080/api/boards/${id}`);
 

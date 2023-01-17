@@ -11,7 +11,7 @@ const UserMetaInfo = ({ userData }: userDataProps) => {
       </div>
       <div className="grow ml-2">
         <strong className="font-semibold text-base">
-          {userData?.nickName}
+          {userData?.nickname}
         </strong>
         <p>{userData?.address}</p>
       </div>
