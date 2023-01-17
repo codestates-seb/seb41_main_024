@@ -34,6 +34,7 @@ public class LocationController {
         this.distanceRepository = distanceRepository;
     }
 
+    //사용자별 지정 위치 등록
     @PostMapping("/location")
     public ResponseEntity postLocation(@Valid @RequestBody LocationDto.Post locationPostDto) {
         Location location = locationService.createLocation(locationMapper.locationPostDtoToLocation(memberService, locationPostDto));
@@ -41,15 +42,17 @@ public class LocationController {
         return new ResponseEntity<>(locationMapper.locationToLocationResponseDto(location), HttpStatus.CREATED);
     }
 
+    //사용자 실시간 위치 등록 후 type 범위 안에 있는 boardlist 조회
     @PostMapping("/distance")
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
-                                       @RequestParam(value = "type") long type) {
-        List<Board> boardList = locationService.createCurDistance(distanceCal, type);
+                                       @RequestParam(value = "range") double range,
+                                       @RequestParam(value = "category") String category) {
+        List<Board> boardList = locationService.createCurDistance(distanceCal, range, category);
 
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
-
+    //사용자별 지정 위치 수정
     @PatchMapping("/location/{location-id}")
     public ResponseEntity patchLocation(@PathVariable("location-id") @Positive long locationId,
                                         @Valid @RequestBody LocationDto.Patch locationPatchDto) {
@@ -60,6 +63,7 @@ public class LocationController {
     }
 
 
+    //지정 위치 조회
     @GetMapping("/location/{location-id}")
     public ResponseEntity getLocation(@PathVariable("location-id") @Positive long locationId) {
         Location location = locationService.findLocation(locationId);
@@ -68,6 +72,7 @@ public class LocationController {
     }
 
 
+    //모든 지정 위치 조회
     @GetMapping("/locations")
     public ResponseEntity getLocations() {
         List<Location> locations = locationService.findLocations();
@@ -80,22 +85,23 @@ public class LocationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    //type, category, locationId별 해당되는 boardlist 조회
     @GetMapping("/distances/{location-id}")
-    public ResponseEntity getDistances(@RequestParam(value = "type") double type,
+    public ResponseEntity getDistances(@RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
                                        @PathVariable("location-id") @Positive long locationId) {
         List<Distance> distanceList = new ArrayList<>();
-        if (type == 0.2)
+        if (range == 0.2)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_200, locationId, category).get();
-        else if (type == 0.4)
+        else if (range == 0.4)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_400, locationId, category).get();
-        else if (type == 0.6)
+        else if (range == 0.6)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_600, locationId, category).get();
-        else if (type == 0.5)
+        else if (range == 0.5)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_500, locationId, category).get();
-        else if (type == 1)
+        else if (range == 1)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_1000, locationId, category).get();
-        else if (type == 1.5)
+        else if (range == 1.5)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_1500, locationId, category).get();
         else
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category).get();
@@ -108,6 +114,7 @@ public class LocationController {
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
+    //사용자별 지정 위치 삭제
     @DeleteMapping("/location/{location-id}")
     public ResponseEntity deleteLocation(@PathVariable("location-id") @Positive long locationId) {
         locationService.deleteLocation(locationId);

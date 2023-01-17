@@ -9,8 +9,6 @@ public class LocationDto {
     @Setter
     @AllArgsConstructor
     public static class Post {
-        @Positive
-        private long memberId;
 
         private String address;
         private String latitude;
