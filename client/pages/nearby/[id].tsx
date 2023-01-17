@@ -5,7 +5,7 @@ import PostMeta from '../../components/molecules/postMeta/PostMeta';
 import UserMetaInfo from '../../components/molecules/userMetaInfo/UserMetaInfo';
 import DetailPageTab from '../../components/organisms/tab/detailPageTab/DetailPageTab';
 import axios from 'axios';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useCookies } from 'react-cookie';
 
 const POST_DETAIL_DATA = {
@@ -26,34 +26,44 @@ const USER_DATA = {
   address: '수원시 권선구 권선동',
 };
 
-const ProductDetail = (id: number) => {
+export async function getServerSideProps(context: { params: { id: number } }) {
+  const { id } = context.params;
+  const { data } = await axios.get(`http://3.34.54.131:8080/api/boards/${id}`);
+
+  return {
+    props: {
+      data: data,
+      id,
+    },
+  };
+}
+
+const ProductDetail = (data: any, id: number) => {
   const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
 
-  function fetchApi() {
-    // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
-    return axios.get(`http://3.34.54.131:8080/api/boards/1`, {
-      headers: {
-        Authorization: cookies.access_token,
-        Refresh: cookies.refresh_token,
-      },
-    });
-  }
+  // function fetchApi() {
+  //   return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
+  //     headers: {
+  //       Authorization: cookies.access_token,
+  //       Refresh: cookies.refresh_token,
+  //     },
+  //   });
+  // }
 
-  const { data } = useQuery(['productDetail'], fetchApi);
+  // const { data } = useQuery(['productDetail'], fetchApi, {
+  //   initialData: productData,
+  // });
 
   console.log(data);
 
   return (
     <div>
-      {data && (
-        <div>
-          <Img src="/detail/straw.svg" alt="메인사진" />
-          <UserMetaInfo userData={data.data} />
-          <PostMeta postData={data.data} />
-          <DetailPageTab content={data.data.content} />
-          <DetailBottom />
-        </div>
-      )}
+      <Img src="/detail/straw.svg" alt="메인사진" />
+      <UserMetaInfo userData={data.data} />
+      <PostMeta postData={data.data} />
+      <DetailPageTab content={data.data.content} />
+      <DetailBottom />
+
       {/* <div>
         <Img src="/detail/straw.svg" alt="메인사진" />
         <UserMetaInfo userData={USER_DATA} />
