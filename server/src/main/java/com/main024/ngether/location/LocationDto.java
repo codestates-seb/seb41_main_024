@@ -15,6 +15,8 @@ public class LocationDto {
         private String address;
         private String latitude;
         private String longitude;
+
+        private String locationName;
     }
 
     @Getter
@@ -23,6 +25,7 @@ public class LocationDto {
         private String latitude;
         private String longitude;
         private String address;
+        private String locationName;
 
         public void setLocationId(Long locationId) {
             this.locationId = locationId;
@@ -41,6 +44,7 @@ public class LocationDto {
         private String latitude;
         private String longitude;
         private String address;
+        private String locationName;
     }
 
     @Getter

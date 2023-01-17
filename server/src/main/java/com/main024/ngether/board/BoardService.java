@@ -158,7 +158,6 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-
     //타입으로 나눠서 질문 검색 기능 구현 1 : 제목, 2 : 내용, 3 : 작성자 이름
     public List<Board> searchBoard(String type, String keyword) {
         switch (type) {

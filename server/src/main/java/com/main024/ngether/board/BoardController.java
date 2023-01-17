@@ -24,9 +24,7 @@ public class BoardController {
 
     //질문 게시
     @PostMapping
-    public ResponseEntity postBoard(@RequestParam(value = "category") String category,
-                                    @Valid @RequestBody BoardDto.Post boardDto) {
-        boardDto.setCategory(category);
+    public ResponseEntity postBoard(@Valid @RequestBody BoardDto.Post boardDto) {
         Board board = boardService.createBoard(mapper.boardPostToBoard(memberService, boardDto));
 
         return ResponseEntity.ok(mapper.boardToBoardResponse(board));

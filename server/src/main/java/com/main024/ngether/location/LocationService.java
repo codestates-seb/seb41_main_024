@@ -50,6 +50,8 @@ public class LocationService {
                 .ifPresent(latitude -> findLocation.setLatitude(latitude));
         Optional.ofNullable(location.getLongitude())
                 .ifPresent(longitude -> findLocation.setLongitude(longitude));
+        Optional.ofNullable(location.getLocationName())
+                .ifPresent(locationName -> findLocation.setLocationName(locationName));
 
 
         return locationRepository.save(findLocation);
@@ -72,6 +74,7 @@ public class LocationService {
     }
 
     public Distance createDistance(Location location, Board board) {
+        String category = board.getCategory();
         String address1 = location.getAddress();
         String address2 = board.getAddress();
 
@@ -86,13 +89,29 @@ public class LocationService {
 
             double result = distance(lat1, lon1, lat2, lon2, "kilometer");
             Distance distance = new Distance();
-            if (result < 1) {
-                distance.setDistanceType(Distance.DistanceType.DISTANCE_ONE);
-            } else if (result < 2) {
-                distance.setDistanceType(Distance.DistanceType.DISTANCE_TWO);
-            } else if (result < 3) {
-                distance.setDistanceType(Distance.DistanceType.DISTANCE_THREE);
+            if(category.equals("상품 쉐어링")){
+                if (result < 0.5) {
+                    distance.setDistanceType(Distance.DistanceType.DISTANCE_500);
+                } else if (result < 1) {
+                    distance.setDistanceType(Distance.DistanceType.DISTANCE_1000);
+                } else if (result < 1.5) {
+                    distance.setDistanceType(Distance.DistanceType.DISTANCE_1500);
+                }
+                else
+                    distance.setDistanceType(Distance.DistanceType.DISTANCE_EXCESS_RANGE);
             }
+            if(category.equals("배달 쉐어링")){
+                if (result < 0.2) {
+                    distance.setDistanceType(Distance.DistanceType.DISTANCE_200);
+                } else if (result < 0.4) {
+                    distance.setDistanceType(Distance.DistanceType.DISTANCE_400);
+                } else if (result < 0.6) {
+                    distance.setDistanceType(Distance.DistanceType.DISTANCE_600);
+                }
+                else
+                    distance.setDistanceType(Distance.DistanceType.DISTANCE_EXCESS_RANGE);
+            }
+
             String result_str = String.valueOf(result);
             distance.setResult(result_str);
             distance.setLocation(location);
@@ -105,7 +124,7 @@ public class LocationService {
         return null;
     }
 
-    public List<Board> createDistance2(LocationDto.DistanceCal distanceCal, double type) {
+    public List<Board> createCurDistance(LocationDto.DistanceCal distanceCal, long type) {
         List<Board> boardList = boardRepository.findAll();
         String address1 = distanceCal.getAddress();
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
