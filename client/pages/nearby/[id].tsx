@@ -7,6 +7,7 @@ import DetailPageTab from '../../components/organisms/tab/detailPageTab/DetailPa
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
 
 const POST_DETAIL_DATA = {
   content:
@@ -27,41 +28,44 @@ const USER_DATA = {
 };
 
 export async function getServerSideProps(context: { params: { id: number } }) {
+  const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
   const { id } = context.params;
   const { data } = await axios.get(`http://3.34.54.131:8080/api/boards/${id}`);
 
   return {
     props: {
-      data: data,
+      productData: data,
       id,
     },
   };
 }
 
-const ProductDetail = (data: any, id: number) => {
+export default function ProductDetail(productData: any, id: number) {
   const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
 
-  // function fetchApi() {
-  //   return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
-  //     headers: {
-  //       Authorization: cookies.access_token,
-  //       Refresh: cookies.refresh_token,
-  //     },
-  //   });
-  // }
+  function getProductDetail() {
+    const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
 
-  // const { data } = useQuery(['productDetail'], fetchApi, {
-  //   initialData: productData,
-  // });
+    return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
+      headers: {
+        Authorization: cookies.access_token,
+        Refresh: cookies.refresh_token,
+      },
+    });
+  }
 
-  console.log(data);
+  const { data } = useQuery(['productDetail'], getProductDetail, {
+    initialData: productData,
+  });
+
+  console.log(data.productData);
 
   return (
     <div>
       <Img src="/detail/straw.svg" alt="메인사진" />
-      <UserMetaInfo userData={data.data} />
-      <PostMeta postData={data.data} />
-      <DetailPageTab content={data.data.content} />
+      <UserMetaInfo userData={data.productData} />
+      <PostMeta postData={data.productData} />
+      <DetailPageTab content={data.productData.content} />
       <DetailBottom />
 
       {/* <div>
@@ -73,6 +77,4 @@ const ProductDetail = (data: any, id: number) => {
       </div> */}
     </div>
   );
-};
-
-export default ProductDetail;
+}
