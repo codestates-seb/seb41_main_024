@@ -7,11 +7,14 @@ import DefaultLayout from '../components/layout/defalutLayout/DefaultLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../components/layout/defalutLayout/defaultLayout';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  const queryClient = new QueryClient();
   const renderWithLayout =
     Component.getLayout ||
     function (page: ReactElement) {
@@ -23,5 +26,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       </ThemeProvider>
     </StyledEngineProvider> */
   }
-  return renderWithLayout(<Component {...pageProps} />);
+  return renderWithLayout(
+    <QueryClientProvider client={queryClient}>
+      <Component {...pageProps} />
+    </QueryClientProvider>
+  );
 }

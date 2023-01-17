@@ -13,6 +13,7 @@ module.exports = {
         primary: '#63A8DA',
         grey: '#475569',
         red: '#FF0000',
+        white: '#FFFFFF',
       },
     },
     borderWidth: {

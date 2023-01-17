@@ -16,12 +16,14 @@ const TextField = (props: passwordTextFieldPropsType) => {
   ) => {
     event.preventDefault();
   };
+
   return (
     <FormControl variant="outlined">
       <Input
         id={props.id}
         type={showPassword ? 'text' : 'password'}
         label={props.label}
+        name={props.name}
         endAdornment={
           <InputAdornment position="end">
             <PasswordIcon
@@ -31,6 +33,7 @@ const TextField = (props: passwordTextFieldPropsType) => {
             {showPassword ? <VisibilityOff /> : <Visibility />}
           </InputAdornment>
         }
+        onChange={props.onChange}
       />
     </FormControl>
   );

@@ -26,11 +26,13 @@ const USER_DATA = {
 const Index = () => {
   return (
     <div>
-      <Img src="/detail/straw.svg" alt="메인사진" />
-      <UserMetaInfo userData={USER_DATA} />
-      <PostMeta postData={POST_DETAIL_DATA} />
-      <DetailPageTab content={POST_DETAIL_DATA.content} />
-      <DetailBottom />
+      <div>
+        <Img src="/detail/straw.svg" alt="메인사진" />
+        <UserMetaInfo userData={USER_DATA} />
+        <PostMeta postData={POST_DETAIL_DATA} />
+        <DetailPageTab content={POST_DETAIL_DATA.content} />
+        <DetailBottom />
+      </div>
     </div>
   );
 };

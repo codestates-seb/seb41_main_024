@@ -1,9 +1,9 @@
 import { Fragment, useState } from 'react';
 import { AppBar, Button, Divider } from '@mui/material';
 import Link from 'next/link';
-import {ReactComponent as SearchIcon} from '../../../../public/header/search.svg';
-import {ReactComponent as NavigatorIcon} from '../../../../public/header/navigator.svg';
-import {ReactComponent as Logo} from '../../../../public/logos/logoRow.svg';
+import { ReactComponent as SearchIcon } from '../../../../public/header/search.svg';
+import { ReactComponent as NavigatorIcon } from '../../../../public/header/navigator.svg';
+import { ReactComponent as Logo } from '../../../../public/logos/logoRow.svg';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 
@@ -30,7 +30,7 @@ const MainHeader = () => {
             </Link>
           </div>
           <div className="border-0 mr-2 p-0 bg-inherit pt-1">
-            <Link href="/search" >
+            <Link href="/search">
               <SearchIcon />
             </Link>
           </div>
