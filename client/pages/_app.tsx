@@ -7,7 +7,7 @@ import DefaultLayout from '../components/layout/defalutLayout/DefaultLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../components/layout/defalutLayout/defaultLayout';
 import { CookiesProvider } from 'react-cookie';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;

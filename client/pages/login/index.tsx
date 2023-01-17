@@ -9,7 +9,7 @@ import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import React from 'react';
 
@@ -64,7 +64,6 @@ const LoginPage = () => {
     setCookie('refresh_token', data.headers.refresh);
     setCookie('memberId', data.data.memberId);
     setCookie('nickName', data.data.nickName);
-    router.push('/');
 
     // setCookie(
     //   'access_token',
@@ -75,7 +74,9 @@ const LoginPage = () => {
     //   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0dHR0cmUyQGdtYWlsLmNvbSIsImlhdCI6MTY3Mzg4MTk2MCwiZXhwIjoxNjczOTA3MTYwfQ.VsuRLkixdd3GkuVfE3kNZontH-0FtoeLJUBndSVR0xM'
     // );
     // setCookie('memberId', 6);
-    // setCookie('nickName', 'tttt');
+    // setCookie('nickName', '냠냠');
+
+    router.push('/');
   }
 
   // if (data) {
