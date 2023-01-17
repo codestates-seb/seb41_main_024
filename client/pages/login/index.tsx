@@ -5,7 +5,6 @@ import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
 import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
-
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
@@ -35,6 +34,7 @@ const LoginPage = () => {
     'memberId',
     'nickName',
   ]);
+  // const [cookies, setCookie] = useCookies(['userInfo']);
 
   const router = useRouter();
 
@@ -76,23 +76,15 @@ const LoginPage = () => {
     // setCookie('memberId', 6);
     // setCookie('nickName', '냠냠');
 
+    // setCookie('userInfo', {
+    //   access_token: data.headers.Authorization,
+    //   refresh_token: data.headers.Refresh,
+    //   memberId: data.data.memberId,
+    //   nickName: data.data.nickName,
+    // });
+
     router.push('/');
   }
-
-  // if (data) {
-  //   setCookie('userInfo', {
-  //     access_token: data.headers.Authorization,
-  //     refresh_token: data.headers.Refresh,
-  //     memberId: data.data.memberId,
-  //     nickName: data.data.nickName,
-  //   });
-
-  //   router.push('/');
-  // }
-
-  console.log('form >>>', form);
-  console.log('cookies >>>', cookies);
-  console.log('data >>>', data);
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;

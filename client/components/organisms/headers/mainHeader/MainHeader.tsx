@@ -32,8 +32,6 @@ const MainHeader = () => {
     router.push('/');
   };
 
-  console.log('userInfo_In_Header >>>', cookies.nickName);
-
   return (
     <Fragment>
       <AppBar
