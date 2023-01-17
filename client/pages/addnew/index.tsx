@@ -85,7 +85,7 @@ const AddNewPage = () => {
                 onChange={onChange}
               >
                 <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                <MenuItem value="배달">배달</MenuItem>
+                <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>
