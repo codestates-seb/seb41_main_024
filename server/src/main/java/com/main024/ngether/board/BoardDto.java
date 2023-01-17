@@ -64,7 +64,6 @@ public class BoardDto {
         private int likeCount;
         private long price;
         private int maxNum;
-        private int curNum;
         private String address;
         private String latitude;
         private String longitude;

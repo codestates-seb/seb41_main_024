@@ -1,5 +1,5 @@
 import Input from '../../components/atoms/input/Input';
-import FormButton from '../../components/atoms/formbutton/FormButton';
+import FormButton from '../../components/molecules/formbutton/FormButton';
 import Label from '../../components/atoms/label/Label';
 import Stack from '@mui/material/Stack';
 import base from '../../public/imageBox/base-box.svg';
