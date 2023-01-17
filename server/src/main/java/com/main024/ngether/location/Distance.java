@@ -26,9 +26,14 @@ public class Distance {
 
     public enum DistanceType {
 
-        DISTANCE_ONE("1km"),
-        DISTANCE_TWO("2km"),
-        DISTANCE_THREE("3km");
+        DISTANCE_500("500m"),
+        DISTANCE_1000("1km"),
+        DISTANCE_1500("1.5km"),
+        DISTANCE_200("200m"),
+        DISTANCE_400("400m"),
+        DISTANCE_600("600m"),
+        DISTANCE_EXCESS_RANGE("거리 초과 범위");
+
 
 
         @Getter

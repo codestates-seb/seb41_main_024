@@ -81,18 +81,27 @@ public class LocationController {
     }
 
     @GetMapping("/distances/{location-id}")
-    public ResponseEntity getDistances(@RequestParam(value = "type") long type,
+    public ResponseEntity getDistances(@RequestParam(value = "type") double type,
+                                       @RequestParam(value = "category") String category,
                                        @PathVariable("location-id") @Positive long locationId) {
         List<Distance> distanceList = new ArrayList<>();
-        if (type == 1)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationId(Distance.DistanceType.DISTANCE_ONE, locationId).get();
-        else if (type == 2)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationId(Distance.DistanceType.DISTANCE_TWO, locationId).get();
-        else if (type == 3)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationId(Distance.DistanceType.DISTANCE_THREE, locationId).get();
+        if (type == 0.2)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_200, locationId, category).get();
+        else if (type == 0.4)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_400, locationId, category).get();
+        else if (type == 0.6)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_600, locationId, category).get();
+        else if (type == 0.5)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_500, locationId, category).get();
+        else if (type == 1)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_1000, locationId, category).get();
+        else if (type == 1.5)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_1500, locationId, category).get();
+        else
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category).get();
 
         List<Board> boardList = new ArrayList<>();
-        for (int i = 0; i < distanceList.size(); i++){
+        for (int i = 0; i < distanceList.size(); i++) {
             boardList.add(distanceList.get(i).getBoard());
         }
 

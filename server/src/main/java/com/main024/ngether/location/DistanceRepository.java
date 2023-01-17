@@ -6,5 +6,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DistanceRepository  extends JpaRepository<Distance, Long> {
-    Optional<List<Distance>> findByDistanceTypeAndLocationLocationId(Distance.DistanceType distanceType, long locationId);
+    Optional<List<Distance>> findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType distanceType, long locationId, String category);
 }
