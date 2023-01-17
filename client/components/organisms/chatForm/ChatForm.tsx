@@ -3,11 +3,11 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import { chatFormType } from './chatFormType';
 
-const ChatForm = ({onSubmit, onChange}:chatFormType) => {
+const ChatForm = ({onSubmit, onChange, value}:chatFormType) => {
   return (
     <form className="flex p-[1rem]" onSubmit={onSubmit}>
       <div className="flex-1">
-        <TextField size="medium" autoComplete="off" className="w-full" onChange={onChange}/>
+        <TextField value={value} size="medium" autoComplete="off" className="w-full" onChange={onChange}/>
       </div>
       <div className="flex justify-center pl-[1rem]">
         <IconButton
