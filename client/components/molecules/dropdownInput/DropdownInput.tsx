@@ -1,23 +1,26 @@
 import { FormControl, FormHelperText } from '@mui/material';
 import React from 'react';
 import Input from '../../atoms/input/Input';
-const categories = [
-  { label: '상품 쉐어링', value: 'product' },
-  { label: '배달음식 쉐어링', value: 'delivery' },
-];
-const DropdownInput = (props) => {
+import { dropDownInputType } from './dropDownInputType';
+
+const DropdownInput = ({
+  id,
+  label,
+  dropDownOptions,
+  width,
+}: dropDownInputType) => {
   return (
-    <FormControl sx={{ m: 1, width: '328px' }} variant="outlined">
+    <FormControl sx={{ m: 1, width }} variant="outlined">
       <Input
-        id="category"
-        label="카테고리"
+        id={id}
+        label={label}
         select={true}
-        defaultValue="상품 쉐어링"
+        defaultValue={dropDownOptions?.[0]?.label}
         selectProps={{
           native: true,
         }}
       >
-        {categories.map((option) => (
+        {dropDownOptions?.map((option) => (
           <option value={option.value} key={option.value}>
             {option.label}
           </option>
