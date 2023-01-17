@@ -15,11 +15,7 @@ interface uploadPostType {
   refreshToken: string;
 }
 interface getPostType {
-  token: {
-    accessToken: string;
-    refreshToken: string;
-  };
-  locationId: string;
+  locationId: number;
   range: number;
   category: string;
 }
@@ -36,10 +32,13 @@ export const uploadPost = async (data: uploadPostType) => {
   return response.data;
 };
 
-export const getPosts = async ({ token, locationId, range, category }) => {
+export const getPosts = async ({
+  locationId,
+  range,
+  category,
+}: getPostType) => {
   const { data: response } = await axios({
     method: 'get',
-    headers: { Authorization: token.accessToken, Refresh: token.refreshToken },
     url: `${REQUEST_URL}/api/distance/${locationId}range=${range}&&category=${category}`,
   });
   return response.data;
