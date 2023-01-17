@@ -45,7 +45,7 @@ export default function BottomNav(): JSX.Element {
   return (
     <Box
       sx={{
-        height: 70,
+        height: 56,
       }}
     >
       <CssBaseline />
@@ -55,12 +55,11 @@ export default function BottomNav(): JSX.Element {
           value={router.pathname}
           sx={{
             position: 'fixed',
-            bottom: 0,
-            left: 0,
-            right: 0,
+            left: '50%',
+            width: '100%',
             maxWidth: '672px',
-            margin: 'auto',
-            minWidth: '390px',
+            transform: 'translateX(-50%)',
+            bottom: '0',
           }}
         >
           {NAVIGATION_LIST.map(({ label, icon, path }: any) => {
