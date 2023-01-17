@@ -24,9 +24,7 @@ public class BoardController {
 
     //질문 게시
     @PostMapping
-    public ResponseEntity postBoard(@RequestParam(value = "category") String category,
-                                    @Valid @RequestBody BoardDto.Post boardDto) {
-        boardDto.setCategory(category);
+    public ResponseEntity postBoard(@Valid @RequestBody BoardDto.Post boardDto) {
         Board board = boardService.createBoard(mapper.boardPostToBoard(memberService, boardDto));
 
         return ResponseEntity.ok(mapper.boardToBoardResponse(board));
@@ -71,11 +69,10 @@ public class BoardController {
         return ResponseEntity.ok(mapper.boardsToBoardResponses(boardService.findBoards()));
     }
 
-    //게시글 검색 1번 제목, 2번 내용, 3번 작성자닉네임
+    //게시글 검색 1번 제목, 2번 내용, 3번 작성자닉네임, 4번 위치정보
     @GetMapping("/search")
     public ResponseEntity search(@RequestParam(value = "type") String type,
-                                 @RequestParam(value = "keyword") String keyword
-    ) {
+                                 @RequestParam(value = "keyword") String keyword) {
         return ResponseEntity.ok(mapper.boardsToBoardResponses(boardService.searchBoard(type, keyword)));
     }
 

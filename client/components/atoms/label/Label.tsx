@@ -1,8 +1,8 @@
 import React from 'react';
 import InputLabel from '@mui/material/InputLabel';
-import { labelPropsType } from './label';
+import { labelType } from './labelType';
 
-const Label = ({ htmlFor, labelText }: labelPropsType) => {
+const Label = ({ htmlFor, labelText }: labelType) => {
   return (
     <InputLabel className="text-xs mb-3.5" htmlFor={htmlFor}>
       {labelText}

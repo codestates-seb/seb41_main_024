@@ -1,4 +1,4 @@
-import FormButton from '../../atoms/formbutton/FormButton';
+import FormButton from '../formbutton/FormButton';
 import React from 'react';
 import Button from '../../atoms/button/Button';
 import Image from 'next/image';

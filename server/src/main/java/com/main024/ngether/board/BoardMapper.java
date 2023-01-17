@@ -26,7 +26,6 @@ public interface BoardMapper {
         response.setCategory(board.getCategory());
         response.setPrice(board.getPrice());
         response.setMaxNum(board.getMaxNum());
-        response.setCurNum(board.getCurNum());
         response.setAddress(board.getAddress());
         response.setLatitude(board.getLatitude());
         response.setLongitude(board.getLongitude());

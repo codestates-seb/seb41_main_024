@@ -6,9 +6,6 @@ import ProductImg03 from '../../public/chatItem/productImg03.svg';
 import ProductImg04 from '../../public/chatItem/productImg04.svg';
 import ProductImg05 from '../../public/chatItem/productImg05.svg';
 
-import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import BottomNav from '../../components/organisms/bottomNav/BottomNav';
-
 import { useState, useEffect } from 'react';
 import axios, { AxiosResponse } from 'axios';
 
@@ -124,7 +121,6 @@ const ChatList = () => {
             />
           );
         })}
-      <BottomNav />
     </div>
   );
 };

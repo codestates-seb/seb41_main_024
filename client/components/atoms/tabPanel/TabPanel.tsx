@@ -1,14 +1,14 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
-import { TabPanelPropsType } from './Type_TabPanel';
+import { tabPanelType } from './tabPanelType';
 function TabPanel({
   children,
   currentTab,
   index,
   boxPadding = 2,
   ...other
-}: TabPanelPropsType) {
+}: tabPanelType) {
   return (
     <div
       role="tabpanel"

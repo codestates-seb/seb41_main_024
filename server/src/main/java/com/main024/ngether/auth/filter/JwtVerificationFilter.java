@@ -2,6 +2,8 @@ package com.main024.ngether.auth.filter;
 
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
