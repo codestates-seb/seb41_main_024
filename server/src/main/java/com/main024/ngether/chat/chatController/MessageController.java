@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class MessageController {
     private final ChatMessageRepository chatMessageRepository;
     private final SimpMessageSendingOperations sendingOperations;
 
+    @CrossOrigin
     @MessageMapping("/chat/{room-id}")//메세지를 발행하는 경로
     public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message,@Header("Authorization") String Authorization) {
         message.setNickName(memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken((Authorization.substring("Bearer ".length())))).get().getNickName());
