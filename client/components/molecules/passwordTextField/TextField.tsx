@@ -32,7 +32,6 @@ const TextField = ({
         type={showPassword ? 'text' : 'password'}
         label={label}
         onChange={onChange}
-        name={name}
         endAdornment={
           <InputAdornment position="end">
             <PasswordIcon
@@ -42,7 +41,6 @@ const TextField = ({
             {showPassword ? <VisibilityOff /> : <Visibility />}
           </InputAdornment>
         }
-        onChange={props.onChange}
       />
     </FormControl>
   );
