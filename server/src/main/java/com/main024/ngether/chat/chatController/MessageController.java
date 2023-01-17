@@ -1,11 +1,17 @@
 package com.main024.ngether.chat.chatController;
 
+import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatRepository.ChatMessageRepository;
+import com.main024.ngether.chat.chatService.ChatRoomService;
+import com.main024.ngether.chat.chatService.ChatService;
+import com.main024.ngether.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -14,38 +20,29 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class MessageController {
 
-    private final SimpMessageSendingOperations sendingOperations;
+
+
+    private final JwtTokenizer jwtTokenizer;
+    private final MemberRepository memberRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final SimpMessageSendingOperations sendingOperations;
 
-    @MessageMapping("/chat/{room-id}/ENTER")
-    public void enter(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message) {
-        message.setMessage(message.getNickName()+"님이 입장하였습니다.");
-        //메시지 db에 저장
-        message.setCreateDate(LocalDateTime.now());
-        message.setChatRoomId(roomId);
-        chatMessageRepository.save(message);
-        sendingOperations.convertAndSend("/receive/chat/"+roomId,message);
-
-    }
-    @MessageMapping("/chat/{room-id}/LEAVE")
-    public void leave(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message) {
-        message.setMessage(message.getNickName()+"님이 퇴장하였습니다.");
-        //메시지 db에 저장
-        message.setCreateDate(LocalDateTime.now());
-        message.setChatRoomId(roomId);
-        chatMessageRepository.save(message);
-        sendingOperations.convertAndSend("/receive/chat/"+roomId,message);
-
-    }
+    @CrossOrigin
     @MessageMapping("/chat/{room-id}")//메세지를 발행하는 경로
-    public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message) {
+    public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message,@Header("Authorization") String Authorization) {
+        message.setNickName(memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken((Authorization.substring("Bearer ".length())))).get().getNickName());
+        message.setCreateDate(LocalDateTime.now());
+        message.setChatRoomId(roomId);
+        if (message.getType().equals(ChatMessage.MessageType.ENTER)) {
+            message.setMessage(message.getNickName() + "님이 입장하였습니다.");
 
-            //메시지 db에 저장
-            message.setCreateDate(LocalDateTime.now());
-            message.setChatRoomId(roomId);
-            chatMessageRepository.save(message);
-            //메시지 전송
-            sendingOperations.convertAndSend("/receive/chat/" + roomId,message);
-
+        } else if (message.getType().equals(ChatMessage.MessageType.LEAVE)) {
+            message.setMessage(message.getNickName() + "님이 퇴장하였습니다.");
+        }
+        message.setCreateDate(LocalDateTime.now());
+        chatMessageRepository.save(message);
+        //메시지 전송
+        sendingOperations.convertAndSend("/receive/chat/" + message.getChatRoomId(), message);
     }
+
 }
