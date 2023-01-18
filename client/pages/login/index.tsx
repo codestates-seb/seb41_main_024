@@ -58,6 +58,8 @@ const LoginPage = () => {
     }
   );
 
+  console.log('로그인 data >>>', data);
+
   if (data) {
     setCookie('access_token', data.headers.authorization);
     setCookie('refresh_token', data.headers.refresh);

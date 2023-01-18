@@ -1,9 +1,37 @@
 import Image from 'next/image';
 import React from 'react';
 import Button from '../../atoms/button/Button';
-import { userDataPropsType } from './userMetaInfoType';
+import { productDataProps } from './userMetaInfo';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
-const UserMetaInfo = ({ userData }: userDataPropsType) => {
+const UserMetaInfo = ({ productData }: productDataProps) => {
+  const [cookies, setCookie] = useCookies(['memberId']);
+  const isWriter = Number(cookies.memberId) === productData.memberId;
+  const router = useRouter();
+  const { id } = router.query;
+
+  const handleEdit = () => {
+    router.push(`/edit/${id}`);
+  };
+
+  function deleteProductDetail() {
+    // return axios
+    //   .delete(`http://3.34.54.131:8080/api/boards/${id}`, {
+    return axios
+      .delete(`http://localhost:3001/productList/${id}`, {
+        headers: {
+          Authorization: cookies.access_token,
+          Refresh: cookies.refresh_token,
+        },
+      })
+      .then((res) => router.push('/'));
+  }
+
+  const deleteMutation = useMutation(() => deleteProductDetail());
+
   return (
     <div className="flex items-center border-b-1 border-x-0 border-t-0 border-solid border-[#475569] py-6 px-6">
       <div>
@@ -11,18 +39,32 @@ const UserMetaInfo = ({ userData }: userDataPropsType) => {
       </div>
       <div className="grow ml-2">
         <strong className="font-semibold text-base">
-          {userData?.nickName}
+          {productData?.nickname}
         </strong>
-        <p>{userData?.address}</p>
+        <p>{productData?.address}</p>
       </div>
-      <Button>
-        <Image
-          src="/detail/edit.svg"
-          width={24}
-          height={24}
-          alt="edit-button"
-        />
-      </Button>
+      {isWriter && (
+        <div>
+          <Button
+            className="w-14 p-2 m-2 bg-primary text-white rounded"
+            onClick={() => handleEdit()}
+          >
+            {/* <Image
+              src="/detail/edit.svg"
+              width={24}
+              height={24}
+              alt="edit-button"
+            /> */}
+            수정
+          </Button>
+          <Button
+            className="w-14 p-2 m-2 bg-primary text-white rounded"
+            onClick={() => deleteMutation.mutate()}
+          >
+            삭제
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

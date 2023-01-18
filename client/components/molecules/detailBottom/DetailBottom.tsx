@@ -2,6 +2,7 @@ import FormButton from '../formbutton/FormButton';
 import React from 'react';
 import Button from '../../atoms/button/Button';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const DetailBottom = (props) => {
   return (
@@ -20,7 +21,10 @@ const DetailBottom = (props) => {
         content="신고하기"
         className="bg-[#FF0000]"
       />
-      <FormButton variant="contained" content="참여하기" />
+      {/* 🐥 채팅방으로 변경 */}
+      <Link href="/">
+        <FormButton variant="contained" content="참여하기" />
+      </Link>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 export interface inputType {
   id: string;
-  name?:string;
+  name?: string;
   label?: string;
   type?: string;
   endAdornment?: React.ReactNode;
@@ -16,4 +16,5 @@ export interface inputType {
   className?: string;
   value?: string | number;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder?: string;
 }
