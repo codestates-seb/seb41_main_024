@@ -102,8 +102,6 @@ const EditPage = ({ productData }: productDataProps) => {
 
   const editMutation = useMutation(() => editProductDetail());
 
-  console.log('editMutation >>>', editMutation);
-
   return (
     <div>
       <div className="flex justify-center m-7 my-12">
