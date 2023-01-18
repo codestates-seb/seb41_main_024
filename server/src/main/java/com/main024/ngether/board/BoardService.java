@@ -57,6 +57,7 @@ public class BoardService {
         returnBoard.setDeadLine(board.getDeadLine());
         returnBoard.setProductsLink(board.getProductsLink());
         returnBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
+        returnBoard.setCurNum(0);
         member.addBoard(returnBoard);
         Board board1 = boardRepository.save(returnBoard);
 
