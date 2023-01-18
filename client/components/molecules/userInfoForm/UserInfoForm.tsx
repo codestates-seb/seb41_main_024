@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FormButton from '../../atoms/formbutton/FormButton';
 import Input from '../../atoms/input/Input';
 import Label from '../../atoms/label/Label';
 import TextField from '../../molecules/passwordTextField/TextField';
 import base from '../../../public/imageBox/base-box.svg';
-import { UserInfoFormPropsType } from './Type_UserInfoForm';
+import { userInfoFormType } from './userInfoFormType';
 
-const UserInfoForm = ({ editPage, content }: UserInfoFormPropsType) => {
+const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
   const [form, setForm] = useState({
     email: '',
     nickName: '',
@@ -15,6 +15,15 @@ const UserInfoForm = ({ editPage, content }: UserInfoFormPropsType) => {
   });
 
   const { email, nickName, password, checkedPassword } = form;
+
+  useEffect(() => {
+    userInfo &&
+      setForm({
+        ...form,
+        email: userInfo.email,
+        nickName: userInfo.nickName,
+      });
+  }, [userInfo]);
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
