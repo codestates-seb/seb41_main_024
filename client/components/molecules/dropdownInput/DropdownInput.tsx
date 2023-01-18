@@ -8,6 +8,10 @@ const DropdownInput = ({
   label,
   dropDownOptions,
   width,
+  value,
+  onchange,
+  defaultValue,
+  ...props
 }: dropDownInputType) => {
   return (
     <FormControl sx={{ m: 1, width }} variant="outlined">
@@ -15,10 +19,12 @@ const DropdownInput = ({
         id={id}
         label={label}
         select={true}
-        defaultValue={dropDownOptions?.[0]?.label}
+        defaultValue={dropDownOptions[0]?.label || '기본값'}
         selectProps={{
           native: true,
         }}
+        onChange={onchange}
+        {...props}
       >
         {dropDownOptions?.map((option) => (
           <option value={option.value} key={option.value}>
