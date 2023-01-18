@@ -1,6 +1,6 @@
 import { buttonType } from './buttonType';
 
-const Button = ({ children, ...props }: buttonType) => {
+const Button = ({ children, ...props }: any) => {
   return <button {...props}>{children}</button>;
 };
 

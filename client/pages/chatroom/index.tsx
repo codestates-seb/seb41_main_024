@@ -3,9 +3,79 @@ import { TextField } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
-import chatDummy from './dataChat';
+
 import { ReactElement } from 'react';
 import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
+const chatDummy: any = [
+  {
+    thumbSrc: null,
+    nick: null,
+    message: '안녕하세요!',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: '/thumb/@thumb252×310.jpg',
+    nick: 'Longnick',
+    message:
+      '안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요!',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: '/thumb/@thumb252×310.jpg',
+    nick: 'Nick',
+    message:
+      '이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: null,
+    nick: null,
+    message:
+      '안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: '/thumb/@thumb252×310.jpg',
+    nick: 'Longnick',
+    message:
+      '안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: null,
+    nick: null,
+    message: '안녕하세요!',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: '/thumb/@thumb252×310.jpg',
+    nick: 'Longnick',
+    message:
+      '안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요!',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: '/thumb/@thumb252×310.jpg',
+    nick: 'Nick',
+    message:
+      '이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: null,
+    nick: null,
+    message:
+      '안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?',
+    time: '오후 3:20',
+  },
+  {
+    thumbSrc: '/thumb/@thumb252×310.jpg',
+    nick: 'Longnick',
+    message:
+      '안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?안녕하세요! 이 제품 관심있는데 혹시 인원이 다 안 차도 구매하실 예정이신가요?',
+    time: '오후 3:20',
+  },
+];
 
 const Chatroom = () => {
   return (

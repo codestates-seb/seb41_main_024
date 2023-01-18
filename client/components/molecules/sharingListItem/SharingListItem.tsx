@@ -1,9 +1,10 @@
 import React from 'react';
 import Img from '../../atoms/image/Image';
 import styles from './sharingListItem.module.css';
-import { ListItemPropsType } from './Type_ListItem';
+import { ListItemPropsType } from './sharingListItemType';
 import Button from '../../atoms/button/Button';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const SharingListItem = ({
   src,
@@ -22,12 +23,14 @@ const SharingListItem = ({
       {isFavorite && (
         <div className={styles.flex_listItem}>
           <strong className="font-normal">1/4</strong>
-          <Button
-            src="/sharingList/favorite_border.svg"
-            alt="heart"
-            width={24}
-            height={24}
-          />
+          <Button>
+            <Image
+              src="/sharingList/favorite_border.svg"
+              alt="heart"
+              width={24}
+              height={24}
+            ></Image>
+          </Button>
         </div>
       )}
     </div>
