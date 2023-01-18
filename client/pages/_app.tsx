@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import DefaultLayout from '../components/layout/defalutLayout/DefaultLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../components/layout/defalutLayout/defaultLayout';
+import { CookiesProvider } from 'react-cookie';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -17,8 +18,10 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     };
   const queryClient = new QueryClient();
   return renderWithLayout(
-    <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
-    </QueryClientProvider>
+    <CookiesProvider>
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+      </QueryClientProvider>
+    </CookiesProvider>
   );
 }

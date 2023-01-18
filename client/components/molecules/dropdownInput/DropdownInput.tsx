@@ -12,7 +12,7 @@ const DropdownInput = ({
   onchange,
   defaultValue,
   ...props
-}: dropDownInputType) => {
+}: any) => {
   return (
     <FormControl sx={{ m: 1, width }} variant="outlined">
       <Input
@@ -26,7 +26,7 @@ const DropdownInput = ({
         onChange={onchange}
         {...props}
       >
-        {dropDownOptions?.map((option) => (
+        {dropDownOptions?.map((option: any) => (
           <option value={option.value} key={option.value}>
             {option.label}
           </option>

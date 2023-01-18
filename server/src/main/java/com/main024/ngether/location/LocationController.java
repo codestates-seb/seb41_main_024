@@ -1,7 +1,11 @@
 package com.main024.ngether.location;
 
 import com.main024.ngether.board.Board;
+import com.main024.ngether.board.response.MultiResponseDto;
 import com.main024.ngether.member.MemberService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -47,9 +51,13 @@ public class LocationController {
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
                                        @RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category) {
-        List<Board> boardList = locationService.createCurDistance(distanceCal, range, category);
+        int page = 1;
+        Page<Board> pageBoards = locationService.createCurDistance(distanceCal, range, category, page-1);
 
-        return new ResponseEntity<>(boardList, HttpStatus.OK);
+        List<Board> boardList = pageBoards.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
     }
 
     //사용자별 지정 위치 수정
@@ -90,21 +98,28 @@ public class LocationController {
     public ResponseEntity getDistances(@RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
                                        @PathVariable("location-id") @Positive long locationId) {
-        List<Distance> distanceList = new ArrayList<>();
+        List<Distance> distanceList;
         if (range == 0.2)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_200, locationId, category).get();
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_200, locationId, category).get();
         else if (range == 0.4)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_400, locationId, category).get();
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_400, locationId, category).get();
         else if (range == 0.6)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_600, locationId, category).get();
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_600, locationId, category).get();
         else if (range == 0.5)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_500, locationId, category).get();
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_500, locationId, category).get();
         else if (range == 1)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_1000, locationId, category).get();
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_1000, locationId, category).get();
         else if (range == 1.5)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_1500, locationId, category).get();
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_1500, locationId, category).get();
         else
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory(Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category).get();
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category).get();
 
         List<Board> boardList = new ArrayList<>();
         for (int i = 0; i < distanceList.size(); i++) {

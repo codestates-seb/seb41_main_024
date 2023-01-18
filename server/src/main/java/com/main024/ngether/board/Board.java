@@ -28,7 +28,7 @@ public class Board {
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)
-    private LocalDateTime create_date = LocalDateTime.now();
+    private LocalDateTime createDate = LocalDateTime.now();
     @Column(nullable = false, name = "LAST_MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
     @Column(nullable = false)
@@ -52,6 +52,8 @@ public class Board {
     private LocalDate deadLine;
     @Column(nullable = false)
     private String productsLink;
+    @Column(nullable = false)
+    private int curNum;
     public enum BoardStatus {
         BOARD_NOT_COMPLETE("모집 중"),
         BOARD_COMPLETE("모집 완료"),

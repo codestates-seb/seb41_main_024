@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -34,7 +35,6 @@ public class ChatService {
     private final BoardService boardService;
 
 
-
     //채팅방 하나 불러오기
     public ChatRoom findById(Long roomId) {
         return chatRoomRepository.findByRoomId(roomId);
@@ -44,22 +44,26 @@ public class ChatService {
     public ChatRoom createRoom(Long boardId) {
         if (memberService.getLoginMember() == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        ChatRoom chatRoom = new ChatRoom();
-        Board board = boardService.findBoard(boardId);
-        Member member = memberService.getLoginMember();
+        if (chatRoomRepository.findByRoomId(boardId) == null) {
 
-        chatRoom.setRoomName(board.getTitle());
-        chatRoom.setMaxNum(board.getMaxNum());
-        chatRoom.setMemberId(member.getMemberId());
-        chatRoom.setMemberCount(1);
-        ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
-        //연관매핑테이블에 저장
-        ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
-        chatRoomMembers.setChatRoom(savedChatRoom);
-        chatRoomMembers.setMember(member);
+            ChatRoom chatRoom = new ChatRoom();
+            Board board = boardService.findBoard(boardId);
+            Member member = memberService.getLoginMember();
+            chatRoom.setRoomId(boardId);
+            chatRoom.setRoomName(board.getTitle());
+            chatRoom.setMaxNum(board.getMaxNum());
+            chatRoom.setMemberId(member.getMemberId());
+            chatRoom.setMemberCount(0);
+            chatRoom.setDeclareStatus(false);
+            ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
+            //연관매핑테이블에 저장
+            ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
+            chatRoomMembers.setChatRoom(savedChatRoom);
+            chatRoomMembers.setMember(member);
+            chatRoomMembersRepository.save(chatRoomMembers);
 
-        chatRoomMembersRepository.save(chatRoomMembers);
-        return savedChatRoom;
+            return savedChatRoom;
+        } else throw new BusinessLogicException(ExceptionCode.CHATROOM_ID_NOT_MATCH_BOARD_ID);
     }
 
     //채팅방에 입장할 때
@@ -70,12 +74,13 @@ public class ChatService {
         if (chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
             throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
 
-        //인원수 + 1
+        //인원수 + 1 -> 지정된 인원 수가 가득 차면 게시물 상태 변경
         chatRoom.setMemberCount(chatRoom.getMemberCount() + 1);
         if (board.getMaxNum() == chatRoom.getMemberCount()) {
             board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
         }
 
+        board.setCurNum(board.getCurNum() + 1);
         boardRepository.save(board);
 
         ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
@@ -111,8 +116,6 @@ public class ChatService {
         return boardList;
 
     }
-
-
 
 
 }

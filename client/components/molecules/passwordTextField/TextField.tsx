@@ -6,7 +6,14 @@ import Label from '../../atoms/label/Label';
 import PasswordIcon from '../../atoms/passwordIcon/PasswordIcon';
 import { passwordTextFieldPropsType } from './passwordTextFieldType';
 
-const TextField = ({id, name, label, type, value, onChange}: passwordTextFieldPropsType) => {
+const TextField = ({
+  id,
+  name,
+  label,
+  type,
+  value,
+  onChange,
+}: passwordTextFieldPropsType) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -16,6 +23,7 @@ const TextField = ({id, name, label, type, value, onChange}: passwordTextFieldPr
   ) => {
     event.preventDefault();
   };
+
   return (
     <FormControl variant="outlined">
       <Input
