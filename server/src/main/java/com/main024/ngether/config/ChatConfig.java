@@ -10,6 +10,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+
 @Configuration//해당 클래서가 Bean 설정을 할 것을 나타냄
 @EnableWebSocketMessageBroker//웹소켓 서버를 활성화 할 수 있는 기능
 @RequiredArgsConstructor
@@ -34,8 +35,8 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
         //메세지를 보낼 때 = message-handling methods으로 라우팅 되어야 한다는 것을 명시
         registry.setApplicationDestinationPrefixes("/send");
     }
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(stompHandler);
-    }
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        registration.interceptors(stompHandler);
+//    }
 }
