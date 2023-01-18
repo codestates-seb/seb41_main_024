@@ -1,7 +1,7 @@
 import { FormControl, FormHelperText } from '@mui/material';
 import Input from '../../atoms/input/Input';
 
-const ContentTextField = (props) => {
+const ContentTextField = () => {
   return (
     <FormControl className="mt-4" variant="outlined">
       <Input

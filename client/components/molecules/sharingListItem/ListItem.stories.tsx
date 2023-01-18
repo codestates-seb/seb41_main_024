@@ -23,10 +23,4 @@ const Template: ComponentStory<typeof SharingListItem> = (args) => (
 //Template.bind({})메서드는 정해진 문법이다. Template은 그냥 변수라서 다른 이름을 지정해도 된다.
 export const sharingListItem = Template.bind({});
 
-sharingListItem.args = {
-  src: '/sharingList/pepsi.svg',
-  alt: '펩시콜라',
-  isHeart: true,
-  title:
-    '펩시 100캔 소분하실분 구합니다 2일동안만 모집해요 집 앞에서 만나실 분',
-};
+sharingListItem.args = {};
