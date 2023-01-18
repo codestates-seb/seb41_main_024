@@ -4,13 +4,21 @@ import NearByPageTab from '../../components/organisms/tab/nearByPageTab/NearByPa
 import { FormControl, FormHelperText } from '@mui/material';
 import { useState } from 'react';
 import NoContent from '../../components/molecules/noContent/NoContent';
-
+const DROPDOWN_OPTIONS = [
+  { label: '상품 쉐어링', value: 'product' },
+  { label: '배달음식 쉐어링', value: 'delivery' },
+];
 const Search = () => {
   // 이곳의 폼 데이터 관리도 useState, useRef, react-hook-form 등 기호에 맞게 사용하시면 됩니다
   return (
     <div className="flex flex-col items-center">
       <form className="flex flex-col max-w-lg mt-3">
-        <DropdownInput />
+        <DropdownInput
+          dropDownOptions={DROPDOWN_OPTIONS}
+          id="category"
+          label="카테고리"
+          width="328px"
+        />
         <FormControl className="w-[328px] m-2">
           <Input
             id={'title-input'}
