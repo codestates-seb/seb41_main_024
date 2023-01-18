@@ -47,7 +47,7 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtTokenizer jwtTokenizer;
 
     private final BoardRepository boardRepository;
-    
+
 
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
@@ -65,7 +65,7 @@ public class StompHandler implements ChannelInterceptor {
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             chatRoomService.setSessionId(sessionId, chatRoom);
-        } else if (StompCommand.UNSUBSCRIBE == accessor.getCommand()) { // Websocket 연결 종료
+        } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             ChatRoom chatRoom = chatRoomRepository.findBySessionId(sessionId);
