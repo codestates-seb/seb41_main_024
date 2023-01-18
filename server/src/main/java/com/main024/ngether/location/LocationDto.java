@@ -8,8 +8,8 @@ public class LocationDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class Post {
-        @Positive
         private long memberId;
 
         private String address;

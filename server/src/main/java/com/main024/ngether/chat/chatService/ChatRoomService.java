@@ -23,8 +23,7 @@ public class ChatRoomService {
         else
             return null;
     }
-    public void setSessionId(String sessionId,Long roomId){
-        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+    public void setSessionId(String sessionId,ChatRoom chatRoom){
         chatRoom.setSessionId(sessionId);
         chatRoomRepository.save(chatRoom);
     }

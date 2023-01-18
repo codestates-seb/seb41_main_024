@@ -1,50 +1,45 @@
-import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import Footer from '../../components/molecules/footer/Footer';
-import BottomNav from '../../components/organisms/bottomNav/BottomNav';
 import Input from '../../components/atoms/input/Input';
-import FormButton from '../../components/atoms/formbutton/FormButton';
+import FormButton from '../../components/molecules/formbutton/FormButton';
 import Label from '../../components/atoms/label/Label';
 import Stack from '@mui/material/Stack';
 import base from '../../public/imageBox/base-box.svg';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-
-import { useState } from 'react';
+import Select from '@mui/material/Select';
+import { uploadPost } from '../../api/post';
+import { useMutation } from '@tanstack/react-query';
+import useInput from '../../hooks/addNewHooks/useInput';
+import { Box } from '@mui/material';
+import { inputType } from '../../hooks/addNewHooks/useInputType';
 
 const AddNewPage = () => {
-  const [form, setForm] = useState({
-    productName: '',
-    price: '',
-    url: '',
-    category: '상품 쉐어링',
-    quantity: '1',
-    spot: '',
-    detail: '',
+  const { isLoading, error, mutate } = useMutation(uploadPost, {
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
   });
+  const { inputValue, onChange, handleSubmit } = useInput(
+    {
+      title: '',
+      price: '',
+      productsLink: '',
+      category: '상품 쉐어링',
+      maxNum: '1',
+      address: '',
+      content: '',
+    },
+    mutate
+  );
 
-  const { productName, price, url, category, quantity, spot, detail } = form;
-
-  const onChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement> | SelectChangeEvent
-  ) => {
-    const { name, value } = event.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
-
-  const handleSubmit = () => {
-    // HTTP 요청
-    // console.log('submited!');
-  };
-
-  // console.log(form);
+  const { title, price, productsLink, category, maxNum, address, content } =
+    inputValue;
 
   return (
-    <div>
+    <Box component="form" onSubmit={handleSubmit}>
       <div className="flex justify-center m-7 my-12">
         <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
           <Stack spacing={4}>
@@ -54,32 +49,32 @@ const AddNewPage = () => {
               alt={'유저이미지'}
             />
             <Input
-              id="productName"
-              name="productName"
+              id="title"
+              name="title"
               type="text"
               label="상품명"
-              value={productName}
+              value={title}
               onChange={onChange}
             />
-            <Label htmlFor={'productName'} labelText={''} />
+            <Label htmlFor={'title'} labelText={''} />
             <Input
               id="price"
               name="price"
-              type="text"
+              type="number"
               label="가격"
               value={price}
               onChange={onChange}
             />
             <Label htmlFor={'price'} labelText={''} />
             <Input
-              id="url"
-              name="url"
+              id="productsLink"
+              name="productsLink"
               type="text"
               label="상품 링크"
-              value={url}
+              value={productsLink}
               onChange={onChange}
             />
-            <Label htmlFor={'url'} labelText={''} />
+            <Label htmlFor={'productsLink'} labelText={''} />
             <FormControl fullWidth>
               <InputLabel id="category">카테고리</InputLabel>
               <Select
@@ -90,36 +85,33 @@ const AddNewPage = () => {
                 onChange={onChange}
               >
                 <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                <MenuItem value="배달">배달</MenuItem>
+                <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>
-              <InputLabel id="quantity">상품 개수</InputLabel>
-              <Select
-                labelId="quantity"
-                name="quantity"
-                value={quantity}
-                label="quantity"
+              <Input
+                id="maxNum"
+                name="maxNum"
+                value={maxNum}
+                label="모집 인원"
+                type="number"
                 onChange={onChange}
-              >
-                <MenuItem value="1">1</MenuItem>
-                <MenuItem value="2">2</MenuItem>
-              </Select>
+              ></Input>
             </FormControl>
             <Input
-              id="spot"
-              name="spot"
+              id="address"
+              name="address"
               type="text"
               label="쉐어링 위치"
-              value={spot}
+              value={address}
               onChange={onChange}
             />
-            <Label htmlFor={'spot'} labelText={''} />
+            <Label htmlFor={'address'} labelText={''} />
             <Input
-              id="detail"
-              name="detail"
+              id="content"
+              name="content"
               label="내용"
-              value={detail}
+              value={content}
               onChange={onChange}
               rows={10}
               multiline
@@ -129,12 +121,12 @@ const AddNewPage = () => {
               className="h-14 mt-4"
               variant="contained"
               content="쉐어링 등록"
-              onClick={handleSubmit}
+              type="submit"
             />
           </Stack>
         </FormControl>
       </div>
-    </div>
+    </Box>
   );
 };
 
