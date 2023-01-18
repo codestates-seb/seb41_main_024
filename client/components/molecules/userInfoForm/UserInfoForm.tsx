@@ -14,8 +14,8 @@ const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
 const SIGN_UP_URL = 'http://3.34.54.131:8080/api/members';
 const EDIT_USER_INFO_URL = 'http://3.34.54.131:8080/api/members/patch';
 
-const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
-  const { formValue, checkedPw, handleInputChange } = useForm({
+const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
+  const { formValue, checkedPw, handleInputChange, setFormValue } = useForm({
     pw: '',
     nickName: '',
     email: '',
@@ -52,6 +52,15 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
       unMatch: '비밀번호와 똑같이 입력해주세요',
     },
   });
+
+  useEffect(() => {
+    setFormValue({
+      ...formValue,
+      email: userInfo.email,
+      nickName: userInfo.nickName,
+      phoneNumber: userInfo.phoneNumber,
+    });
+  }, []);
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();

@@ -11,7 +11,9 @@ const UserInfoEdit = () => {
 
   return (
     <div>
-      <UserInfoForm editPage={true} content="수정하기" userInfo={data?.data} />
+      {data && (
+        <UserInfoForm editPage={true} content="수정하기" userInfo={data.data} />
+      )}
       {isLoading && (
         <div className="flex fixed inset-0 justify-center items-center z-[100] bg-black bg-opacity-[0.05]">
           <strong>Loading...</strong>
