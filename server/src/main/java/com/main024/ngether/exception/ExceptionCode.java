@@ -14,7 +14,8 @@ public enum ExceptionCode {
     LOCATION_NOT_FOUND(407, "Location not found"),
     DECLARE_STATUS_TRUE(408,"Declare Status"),
 
-    CHATROOM_ID_NOT_MATCH_BOARD_ID(409,"chatRoomId don't match boardId");
+    CHATROOM_ID_NOT_MATCH_BOARD_ID(409,"chatRoomId don't match boardId"),
+    SORTBY_NOT_FOUND(404, "SortBy not found");
 
 
     @Getter

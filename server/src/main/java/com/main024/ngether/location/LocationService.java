@@ -11,10 +11,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class LocationService {
@@ -127,7 +125,7 @@ public class LocationService {
         return null;
     }
 
-    public Page<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category, int page) {
+    public Page<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category, int page,String sortBy) {
         List<Board> boardList = boardRepository.findByCategory(category).get();
         String address1 = distanceCal.getAddress();
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
@@ -152,22 +150,26 @@ public class LocationService {
 
         }
 
-
-        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("boardId").descending());
-        int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), boardList1.size());
-        Page<Board> boardPage = new PageImpl<>(boardList1.subList(start, end), pageRequest, boardList1.size());
-        return boardPage;
-
-
-        /*
-        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("result"));
-        int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), map.size());
-        Page<Board> boardPage = new PageImpl<>(new ArrayList<Board>(map.values()).subList(start, end), pageRequest, map.size());
-        return boardPage;
-
-         */
+        if(sortBy.equals("time")){
+            boardList1 = boardList1.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
+            PageRequest pageRequest = PageRequest.of(page, 10);
+            int start = (int) pageRequest.getOffset();
+            int end = Math.min((start + pageRequest.getPageSize()), boardList1.size());
+            Page<Board> boardPage = new PageImpl<>(boardList1.subList(start, end), pageRequest, boardList1.size());
+            return boardPage;
+        }
+        else if(sortBy.equals("distance")){
+            Map<Double, Board> sortedMap = new TreeMap<>(map);
+            List<Board> boardList2 = new ArrayList<>(sortedMap.values());
+            PageRequest pageRequest = PageRequest.of(page, 10);
+            int start = (int) pageRequest.getOffset();
+            int end = Math.min((start + pageRequest.getPageSize()), boardList2.size());
+            Page<Board> boardPage = new PageImpl<>(boardList2.subList(start, end), pageRequest, boardList2.size());
+            return boardPage;
+        }
+        else
+            new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+        return null;
     }
 
     public Location findVerifiedLocation(long locationId) {
