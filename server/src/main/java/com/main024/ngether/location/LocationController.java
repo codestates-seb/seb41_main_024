@@ -50,8 +50,8 @@ public class LocationController {
     @PostMapping("/distance")
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
                                        @RequestParam(value = "range") double range,
-                                       @RequestParam(value = "category") String category,
-                                       @Positive @RequestParam int page) {
+                                       @RequestParam(value = "category") String category) {
+        int page = 1;
         Page<Board> pageBoards = locationService.createCurDistance(distanceCal, range, category, page-1);
 
         List<Board> boardList = pageBoards.getContent();
@@ -98,7 +98,7 @@ public class LocationController {
     public ResponseEntity getDistances(@RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
                                        @PathVariable("location-id") @Positive long locationId) {
-        List<Distance> distanceList = new ArrayList<>();
+        List<Distance> distanceList;
         if (range == 0.2)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
                     (Distance.DistanceType.DISTANCE_200, locationId, category).get();

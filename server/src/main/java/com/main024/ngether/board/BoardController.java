@@ -68,7 +68,8 @@ public class BoardController {
 
     //게시물 전체 조회
     @GetMapping
-    public ResponseEntity getBoards(@Positive @RequestParam int page) {
+    public ResponseEntity getBoards() {
+        int page = 1;
         Page<Board> pageBoards = boardService.findBoards(page - 1);
         List<Board> boardList = pageBoards.getContent();
 
@@ -79,8 +80,8 @@ public class BoardController {
     //게시글 검색 1번 제목, 2번 내용, 3번 작성자닉네임, 4번 위치정보
     @GetMapping("/search")
     public ResponseEntity search(@RequestParam(value = "type") String type,
-                                 @RequestParam(value = "keyword") String keyword,
-                                 @Positive @RequestParam int page) {
+                                 @RequestParam(value = "keyword") String keyword) {
+        int page = 1;
 
         Page<Board> pageBoards = boardService.searchBoard(type, keyword, page - 1);
         List<Board> boardList = pageBoards.getContent();
