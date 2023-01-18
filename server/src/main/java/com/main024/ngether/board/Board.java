@@ -52,6 +52,8 @@ public class Board {
     private LocalDate deadLine;
     @Column(nullable = false)
     private String productsLink;
+    @Column(nullable = false)
+    private int curNum;
     public enum BoardStatus {
         BOARD_NOT_COMPLETE("모집 중"),
         BOARD_COMPLETE("모집 완료"),

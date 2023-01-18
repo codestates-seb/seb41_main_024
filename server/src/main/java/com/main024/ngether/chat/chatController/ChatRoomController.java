@@ -42,7 +42,7 @@ public class ChatRoomController {
 
     // 채팅방 입장
     @GetMapping("/room/enter/{room-Id}")
-    public void roomDetail(@PathVariable("room-Id") Long roomId) {
+    public void enterRoom(@PathVariable("room-Id") Long roomId) {
         chatService.enterRoom(roomId);
     }
 
