@@ -2,13 +2,17 @@ package com.main024.ngether.location;
 
 import com.main024.ngether.board.Board;
 import com.main024.ngether.board.BoardRepository;
-import com.main024.ngether.board.BoardService;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.MemberService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,6 +77,7 @@ public class LocationService {
         locationRepository.delete(findLocation);
     }
 
+
     public Distance createDistance(Location location, Board board) {
         String category = board.getCategory();
         String address1 = location.getAddress();
@@ -89,26 +94,24 @@ public class LocationService {
 
             double result = distance(lat1, lon1, lat2, lon2, "kilometer");
             Distance distance = new Distance();
-            if(category.equals("상품 쉐어링")){
+            if (category.equals("product")) {
                 if (result < 0.5) {
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_500);
                 } else if (result < 1) {
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_1000);
                 } else if (result < 1.5) {
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_1500);
-                }
-                else
+                } else
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_EXCESS_RANGE);
             }
-            if(category.equals("배달 쉐어링")){
+            if (category.equals("delivery")) {
                 if (result < 0.2) {
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_200);
                 } else if (result < 0.4) {
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_400);
                 } else if (result < 0.6) {
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_600);
-                }
-                else
+                } else
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_EXCESS_RANGE);
             }
 
@@ -124,29 +127,47 @@ public class LocationService {
         return null;
     }
 
-    public List<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category) {
+    public Page<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category, int page) {
         List<Board> boardList = boardRepository.findByCategory(category).get();
         String address1 = distanceCal.getAddress();
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
         double lon1 = Double.parseDouble(distanceCal.getLongitude());
         List<Board> boardList1 = new ArrayList<>();
+        HashMap<Double, Board> map = new HashMap<>();
         for (int i = 0; i < boardList.size(); i++) {
             String address2 = boardList.get(i).getAddress();
             String[] ArraysStr1 = address1.split(" ");
             String[] ArraysStr2 = address2.split(" ");
 
-            if (ArraysStr1[0].equals(ArraysStr2[0]) && ArraysStr1[1].equals(ArraysStr2[1])){
+            if (ArraysStr1[0].equals(ArraysStr2[0]) && ArraysStr1[1].equals(ArraysStr2[1])) {
                 double lat2 = Double.parseDouble(boardList.get(i).getLatitude());
                 double lon2 = Double.parseDouble(boardList.get(i).getLongitude());
                 double result = distance(lat1, lon1, lat2, lon2, "kilometer");
                 if (result < type) {
                     boardList1.add(boardList.get(i));
+                    map.put(result, boardList.get(i));
                 }
 
             }
 
         }
-        return boardList1;
+
+
+        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("boardId").descending());
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), boardList1.size());
+        Page<Board> boardPage = new PageImpl<>(boardList1.subList(start, end), pageRequest, boardList1.size());
+        return boardPage;
+
+
+        /*
+        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("result"));
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), map.size());
+        Page<Board> boardPage = new PageImpl<>(new ArrayList<Board>(map.values()).subList(start, end), pageRequest, map.size());
+        return boardPage;
+
+         */
     }
 
     public Location findVerifiedLocation(long locationId) {

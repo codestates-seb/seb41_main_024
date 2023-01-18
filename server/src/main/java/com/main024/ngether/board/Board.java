@@ -28,7 +28,7 @@ public class Board {
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)
-    private LocalDateTime create_date = LocalDateTime.now();
+    private LocalDateTime createDate = LocalDateTime.now();
     @Column(nullable = false, name = "LAST_MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
     @Column(nullable = false)

@@ -59,7 +59,7 @@ public class BoardDto {
         private String Nickname;
         private String title;
         private String content;
-        private LocalDateTime create_date;
+        private LocalDateTime createDate;
         private String category;
         private int likeCount;
         private long price;
