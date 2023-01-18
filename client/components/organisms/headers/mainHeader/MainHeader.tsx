@@ -22,7 +22,7 @@ const MainHeader = () => {
         elevation={0}
         sx={{ height: '50px' }}
       >
-        <div className="flex fixed items-center w-[100%] h-[50px] px-4 border-b-1 border-x-0 border-t-0 border-solid border-[#0000001f] bg-[white] z-10">
+        <div className="flex fixed items-center w-[100%] max-w-[672px] h-[50px] px-4 border-b-1 border-x-0 border-t-0 border-solid border-[#0000001f] bg-[white] z-10">
           <div className="flex-1">
             <Link href="/">
               <Logo />

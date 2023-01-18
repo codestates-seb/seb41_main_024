@@ -25,7 +25,7 @@ const ChatHeader = () => {
         elevation={0}
         sx={{ height: '50px' }}
       >
-        <div className="flex fixed items-center w-[100%] h-[50px] px-4 border-b-1 border-x-0 border-t-0 border-solid border-[#0000001f] bg-[white] justify-center">
+        <div className="flex fixed items-center max-w-[672px] w-[100%] h-[50px] px-4 border-b-1 border-x-0 border-t-0 border-solid border-[#0000001f] bg-[white] justify-center">
           <Button
             className="border-0 m-0 p-0 bg-inherit"
             type="button"
