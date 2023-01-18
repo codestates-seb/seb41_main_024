@@ -8,10 +8,13 @@ import com.main024.ngether.chat.chatController.MessageController;
 import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
+import com.main024.ngether.chat.chatRepository.ChatMessageRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.chat.chatService.ChatRoomService;
 import com.main024.ngether.chat.chatService.ChatService;
+import com.main024.ngether.exception.BusinessLogicException;
+import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberRepository;
 import com.main024.ngether.member.MemberService;
@@ -35,6 +38,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Component
 public class StompHandler implements ChannelInterceptor {
+    private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -43,6 +47,7 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtTokenizer jwtTokenizer;
 
     private final BoardRepository boardRepository;
+    
 
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
@@ -69,8 +74,14 @@ public class StompHandler implements ChannelInterceptor {
             board.setCurNum(board.getCurNum() - 1);
             boardRepository.save(board);
             Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(jwt)).get();
-////                if(member.getMemberId() == chatRoom.getMemberId())
-//                 chatRoomRepository.delete(chatRoom);
+            //채티방 개설자가 나갈경우 채팅방 삭제, 채팅방 메시지 내역 삭제, 게시물 삭제
+            if (!chatRoom.isDeclareStatus()) {
+                if (Objects.equals(member.getMemberId(), chatRoom.getMemberId())) {
+                    chatMessageRepository.deleteAll(chatMessageRepository.findByChatRoomId(chatRoom.getRoomId()));
+                    chatRoomRepository.delete(chatRoom);
+                    boardRepository.delete(board);
+                }
+            } else throw new BusinessLogicException(ExceptionCode.DECLARE_STATUS_TRUE);
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), chatRoom.getRoomId());
             chatRoomMembersRepository.delete(chatRoomMembers);
 //        }
