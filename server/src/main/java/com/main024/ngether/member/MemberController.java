@@ -1,9 +1,11 @@
 package com.main024.ngether.member;
 
 import com.main024.ngether.board.BoardMapper;
+import com.main024.ngether.board.BoardRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatService.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,7 @@ public class MemberController {
     private final BoardMapper boardMapper;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
     private final ChatService chatService;
+    private final BoardRepository boardRepository;
 
 
     //회원가입
@@ -88,6 +91,12 @@ public class MemberController {
     @GetMapping("/sharingList")
     public ResponseEntity viewMySharingList(){
         return ResponseEntity.ok(chatService.findMySharingList(chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId())));
+    }
+    //내가 개설한 게시물 목록
+    @GetMapping("/myBoard")
+    public ResponseEntity viewMyBoardList(){
+        int page = 1;
+        return ResponseEntity.ok(boardRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page, 10)));
     }
 
 }
