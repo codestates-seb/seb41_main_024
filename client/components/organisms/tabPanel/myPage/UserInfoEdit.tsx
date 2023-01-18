@@ -2,6 +2,7 @@ import React from 'react';
 import UserInfoForm from '../../../molecules/userInfoForm/UserInfoForm';
 import { useQuery } from '@tanstack/react-query';
 import getOneUserData from '../../../../api/getOneUserData';
+import Loading from '../../loading/Loading';
 
 const UserInfoEdit = () => {
   const { isLoading, data } = useQuery({
@@ -14,11 +15,7 @@ const UserInfoEdit = () => {
       {data && (
         <UserInfoForm editPage={true} content="수정하기" userInfo={data.data} />
       )}
-      {isLoading && (
-        <div className="flex fixed inset-0 justify-center items-center z-[100] bg-black bg-opacity-[0.05]">
-          <strong>Loading...</strong>
-        </div>
-      )}
+      {isLoading && <Loading />}
     </div>
   );
 };
