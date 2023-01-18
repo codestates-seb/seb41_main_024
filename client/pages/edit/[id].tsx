@@ -1,8 +1,4 @@
-import MainHeader from '../../components/organisms/headers/mainHeader/MainHeader';
-import Footer from '../../components/molecules/footer/Footer';
-import BottomNav from '../../components/organisms/bottomNav/BottomNav';
 import Input from '../../components/atoms/input/Input';
-import FormButton from '../../components/atoms/formbutton/FormButton';
 import Label from '../../components/atoms/label/Label';
 import Stack from '@mui/material/Stack';
 import base from '../../public/imageBox/base-box.svg';
@@ -19,9 +15,10 @@ import axios from 'axios';
 
 export async function getServerSideProps(context: { params: { id: number } }) {
   const { id } = context.params;
-  console.log(context);
-  const { data } = await axios.get(`http://3.34.54.131:8080/api/boards/${id}`);
-  // const { data } = await axios.get(`http://localhost:3001/productList/${id}`);
+  console.log('context >>>', context);
+  console.log('context.params >>>', context.params);
+  // const { data } = await axios.get(`http://3.34.54.131:8080/api/boards/${id}`);
+  const { data } = await axios.get(`http://localhost:3001/productList/${id}`);
 
   return {
     props: {
@@ -32,35 +29,37 @@ export async function getServerSideProps(context: { params: { id: number } }) {
 
 interface productDataProps {
   productData: {
-    content: string;
     title: string;
-    category: string;
-    create_date: string;
     price: number;
+    productsLink: string;
+    category: string;
+    address: string;
+    content: string;
+    create_date: string;
     maxNum: number;
     curNum: number;
     deadLine: string;
-    productsLink: string;
     nickname: string;
-    address: string;
   };
 }
 
 const EditPage = ({ productData }: productDataProps) => {
   const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
   const router = useRouter();
+  const { id } = router.query;
 
   const [form, setForm] = useState({
-    productName: productData.title,
+    title: productData.title,
     price: productData.price,
-    url: productData.productsLink,
+    productsLink: productData.productsLink,
     category: productData.category,
     quantity: '1',
     address: productData.address,
-    detail: productData.content,
+    content: productData.content,
   });
 
-  const { productName, price, url, category, quantity, address, detail } = form;
+  const { title, price, productsLink, category, quantity, address, content } =
+    form;
 
   const onChange = (
     event: React.ChangeEvent<HTMLTextAreaElement> | SelectChangeEvent
@@ -73,8 +72,8 @@ const EditPage = ({ productData }: productDataProps) => {
   };
 
   function getProductDetail() {
-    // return axios.get(`http://localhost:3001/productList/${productData.id}`, {
-    return axios.get(`http://3.34.54.131:8080/api/boards/${productData.id}`, {
+    return axios.get(`http://localhost:3001/productList/${id}`, {
+      // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
       headers: {
         Authorization: cookies.access_token,
         Refresh: cookies.refresh_token,
@@ -87,23 +86,23 @@ const EditPage = ({ productData }: productDataProps) => {
   });
 
   function editProductDetail() {
+    // return axios
+    //   .patch(`http://3.34.54.131:8080/api/boards/${id}`, form, {
     return axios
-      .patch(`http://3.34.54.131:8080/api/boards/${productData.id}`, form, {
-        // return axios
-        //   .patch(`http://localhost:3001/productList/${productData.id}`, form, {
+      .patch(`http://localhost:3001/productList/${id}`, form, {
         headers: {
           Authorization: cookies.access_token,
           Refresh: cookies.refresh_token,
         },
       })
       .then((res) => {
-        router.push(`/nearby/${productData.id}`);
+        router.push(`/nearby/${id}`);
       });
   }
 
   const editMutation = useMutation(() => editProductDetail());
 
-  console.log(editMutation);
+  console.log('editMutation >>>', editMutation);
 
   return (
     <div>
@@ -116,15 +115,15 @@ const EditPage = ({ productData }: productDataProps) => {
               alt={'유저이미지'}
             />
             <Input
-              id="productName"
-              name="productName"
+              id="title"
+              name="title"
               type="text"
               label="상품명"
-              value={productName}
+              value={title}
               onChange={onChange}
-              placeholder="야호"
+              placeholder={productData.title}
             />
-            <Label htmlFor={'productName'} labelText={''} />
+            <Label htmlFor={'title'} labelText={''} />
             <Input
               id="price"
               name="price"
@@ -135,14 +134,14 @@ const EditPage = ({ productData }: productDataProps) => {
             />
             <Label htmlFor={'price'} labelText={''} />
             <Input
-              id="url"
-              name="url"
+              id="productsLink"
+              name="productsLink"
               type="text"
               label="상품 링크"
-              value={url}
+              value={productsLink}
               onChange={onChange}
             />
-            <Label htmlFor={'url'} labelText={''} />
+            <Label htmlFor={'productsLink'} labelText={''} />
             <FormControl fullWidth>
               <InputLabel id="category">카테고리</InputLabel>
               <Select
@@ -152,8 +151,8 @@ const EditPage = ({ productData }: productDataProps) => {
                 label="category"
                 onChange={onChange}
               >
-                <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                <MenuItem value="배달">배달</MenuItem>
+                <MenuItem value="product">product</MenuItem>
+                <MenuItem value="delivery">delivery</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>
@@ -179,10 +178,10 @@ const EditPage = ({ productData }: productDataProps) => {
             />
             <Label htmlFor={'address'} labelText={''} />
             <Input
-              id="detail"
-              name="detail"
+              id="content"
+              name="content"
               label="내용"
-              value={detail}
+              value={content}
               onChange={onChange}
               rows={10}
               multiline
