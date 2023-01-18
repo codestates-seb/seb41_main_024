@@ -4,5 +4,5 @@ export interface chatItemPropsType {
   title: string;
   price: string;
   spot: string;
-  alertNum?: string;
+  alertNum: string;
 }
