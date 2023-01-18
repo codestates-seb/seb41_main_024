@@ -19,7 +19,7 @@ interface getPostType {
   range: number;
   category: string;
 }
-const REQUEST_URL = 'http://3.34.54.131:8080';
+const REQUEST_URL = ' https://ngether.site';
 
 export const uploadPost = async (data: uploadPostType) => {
   const query = data.category === '배달' ? 'delivery' : 'product';
@@ -42,4 +42,14 @@ export const getPosts = async ({
     method: 'get',
     url,
   }).then((res) => res.data);
+};
+export const getPostsInCurrentLocation = async ({ range, category }: any) => {
+  const data = {
+    latitude: 35.6194352,
+    longitude: 129.3486386,
+    address: '서울시 노원구 공릉1동',
+  };
+  console.log('api::', range, category);
+  const url = `${REQUEST_URL}/api/distance?range=${range}&category=${category}`;
+  return await axios({ method: 'post', url, data }).then((res) => res.data);
 };
