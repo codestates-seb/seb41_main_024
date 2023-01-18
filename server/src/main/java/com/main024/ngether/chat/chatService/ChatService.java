@@ -52,6 +52,7 @@ public class ChatService {
         chatRoom.setMaxNum(board.getMaxNum());
         chatRoom.setMemberId(member.getMemberId());
         chatRoom.setMemberCount(0);
+        chatRoom.setDeclareStatus(false);
         ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
         //연관매핑테이블에 저장
         ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
