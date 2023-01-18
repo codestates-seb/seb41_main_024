@@ -23,6 +23,7 @@ public class ChatRoom {
     private int memberCount;//채팅방에 있는 인원 수
     private int maxNum;//최대 수용 인원수
     private String sessionId;
+    private boolean declareStatus;
 
     @JsonIgnore
     @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)

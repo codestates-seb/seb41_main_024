@@ -1,14 +1,20 @@
 package com.main024.ngether.config.handler;
 
 import com.main024.ngether.auth.jwt.JwtTokenizer;
+import com.main024.ngether.board.Board;
+import com.main024.ngether.board.BoardRepository;
+import com.main024.ngether.board.BoardService;
 import com.main024.ngether.chat.chatController.MessageController;
 import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
+import com.main024.ngether.chat.chatRepository.ChatMessageRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.chat.chatService.ChatRoomService;
 import com.main024.ngether.chat.chatService.ChatService;
+import com.main024.ngether.exception.BusinessLogicException;
+import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberRepository;
 import com.main024.ngether.member.MemberService;
@@ -32,12 +38,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Component
 public class StompHandler implements ChannelInterceptor {
+    private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
 
     private final ChatRoomService chatRoomService;
     private final JwtTokenizer jwtTokenizer;
+
+    private final BoardRepository boardRepository;
+    
 
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
@@ -49,21 +59,31 @@ public class StompHandler implements ChannelInterceptor {
         if (StompCommand.CONNECT == accessor.getCommand()) {
             jwtTokenizer.validateToken(jwt);
         } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) { // 채팅룸 구독요청
-//            // header정보에서 구독 destination정보를 얻고, roomId를 추출한다.
+//            // header 정보에서 구독 destination 정보를 얻고, roomId를 추출한다.
             String roomId = chatRoomService.getRoomId(Optional.ofNullable((String) accessor.getHeader("simpDestination")).orElse("InvalidRoomId"));
+            ChatRoom chatRoom = chatRoomRepository.findByRoomId(Long.valueOf(roomId));
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-           chatRoomService.setSessionId(sessionId, Long.valueOf(roomId));
-      } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
+            chatRoomService.setSessionId(sessionId, chatRoom);
+        } else if (StompCommand.UNSUBSCRIBE == accessor.getCommand()) { // Websocket 연결 종료
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
-                String sessionId = (String) message.getHeaders().get("simpSessionId");
-                ChatRoom chatRoom = chatRoomRepository.findBySessionId(sessionId);
-                chatRoom.setMemberCount(chatRoom.getMemberCount()-1);
-                Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(jwt)).get();
-//                if(member.getMemberId() == chatRoom.getMemberId())
-//                    chatRoomRepository.delete(chatRoom);
-                ChatRoomMembers chatRoomMembers1 = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), chatRoom.getRoomId());
-                chatRoomMembersRepository.delete(chatRoomMembers1);
+            String sessionId = (String) message.getHeaders().get("simpSessionId");
+            ChatRoom chatRoom = chatRoomRepository.findBySessionId(sessionId);
+            chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
+            Board board = boardRepository.findByBoardId(chatRoom.getRoomId()).get();
+            board.setCurNum(board.getCurNum() - 1);
+            boardRepository.save(board);
+            Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(jwt)).get();
+            //채티방 개설자가 나갈경우 채팅방 삭제, 채팅방 메시지 내역 삭제, 게시물 삭제
+            if (!chatRoom.isDeclareStatus()) {
+                if (Objects.equals(member.getMemberId(), chatRoom.getMemberId())) {
+                    chatMessageRepository.deleteAll(chatMessageRepository.findByChatRoomId(chatRoom.getRoomId()));
+                    chatRoomRepository.delete(chatRoom);
+                    boardRepository.delete(board);
+                }
+            } else throw new BusinessLogicException(ExceptionCode.DECLARE_STATUS_TRUE);
+            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), chatRoom.getRoomId());
+            chatRoomMembersRepository.delete(chatRoomMembers);
 //        }
 
         }

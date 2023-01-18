@@ -12,6 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import useInput from '../../hooks/addNewHooks/useInput';
 import { Box } from '@mui/material';
 import { inputType } from '../../hooks/addNewHooks/useInputType';
+
 import { useRouter } from 'next/router';
 
 const AddNewPage = () => {
@@ -87,7 +88,7 @@ const AddNewPage = () => {
                 onChange={onChange}
               >
                 <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                <MenuItem value="배달">배달</MenuItem>
+                <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>
