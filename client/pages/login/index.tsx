@@ -35,6 +35,7 @@ const LoginPage = () => {
   ]);
   // const [cookies, setCookie] = useCookies(['userInfo']);
 
+  console.log('aaa >>>', cookies.access_token);
   const router = useRouter();
 
   const [form, setForm] = useState({

@@ -1,40 +1,52 @@
 import ChatItem from '../../components/organisms/chatItem/ChatItem';
-import ChatItemWithAlert from '../../components/organisms/chatItem/ChatItemWithAlert';
 import ProductImg from '../../public/chatItem/productImg.svg';
 import ProductImg02 from '../../public/chatItem/productImg02.svg';
 import ProductImg03 from '../../public/chatItem/productImg03.svg';
 import ProductImg04 from '../../public/chatItem/productImg04.svg';
 import ProductImg05 from '../../public/chatItem/productImg05.svg';
-
-import { useState, useEffect } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useCookies } from 'react-cookie';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 const ChatList = () => {
-  const [chatListData, setChatListData] = useState([]);
+  const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
+  const router = useRouter();
+  const { id } = router.query;
 
-  interface ChatListResponse {
-    id: number;
-    thumbnail: string;
-    isOpen: false;
-    title: string;
-    price: string;
-    spot: string;
-    alertNum?: string;
+  function getMySharing() {
+    return axios.get(`http://localhost:3001/productList`, {
+      // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
+      headers: {
+        Authorization: cookies.access_token,
+        Refresh: cookies.refresh_token,
+      },
+    });
   }
 
-  // React-Query로 교체
-  // useEffect(() => {
-  //   async function fetchChatList(): Promise<AxiosResponse<ChatListResponse>> {
-  //     return await axios.get('http://localhost:3001/productList');
-  //   }
-  //   fetchChatList().then((res: any) => setChatListData(res.data));
-  // }, []);
-
-  console.log(chatListData);
+  const { data } = useQuery(['mySharing'], getMySharing);
+  const chatListData = data?.data;
 
   return (
     <div>
-      <div>
+      {chatListData &&
+        chatListData.map((chatItem: any) => {
+          return (
+            <Link href={`/chatroom/${chatItem.id}`}>
+              <ChatItem
+                key={chatItem.id}
+                thumbnail={ProductImg}
+                isOpen={chatItem.isOpen}
+                title={chatItem.title}
+                price={chatItem.price}
+                address={chatItem.address}
+                alertNum={chatItem.alertNum}
+              />
+            </Link>
+          );
+        })}
+      {/* <div>
         <ChatItem
           thumbnail={ProductImg}
           isOpen={true}
@@ -107,20 +119,7 @@ const ChatList = () => {
           price="9,850"
           spot="서울 서초구"
         />
-      </div>
-      {chatListData &&
-        chatListData.map((el: any) => {
-          return (
-            <ChatItem
-              key={el.id}
-              thumbnail={ProductImg}
-              isOpen={el.isOpen}
-              title={el.title}
-              price={el.price}
-              spot={el.spot}
-            />
-          );
-        })}
+      </div> */}
     </div>
   );
 };
