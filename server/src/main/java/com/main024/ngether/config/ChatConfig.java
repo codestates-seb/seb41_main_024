@@ -35,8 +35,8 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
         //메세지를 보낼 때 = message-handling methods으로 라우팅 되어야 한다는 것을 명시
         registry.setApplicationDestinationPrefixes("/send");
     }
-//    @Override
-//    public void configureClientInboundChannel(ChannelRegistration registration) {
-//        registration.interceptors(stompHandler);
-//    }
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompHandler);
+    }
 }
