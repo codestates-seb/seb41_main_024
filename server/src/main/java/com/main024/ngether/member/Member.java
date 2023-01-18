@@ -49,6 +49,7 @@ public class Member {
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<ChatRoomMembers> chatRoomMembers = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Location> locations = new ArrayList<>();
 

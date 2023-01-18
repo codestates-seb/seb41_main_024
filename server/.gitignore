@@ -3,6 +3,10 @@ HELP.md
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+build/
+
+# build 라는 이름을 가진 디렉토리내 모든 파일  무시
+build/
 
 ### STS ###
 .apt_generated

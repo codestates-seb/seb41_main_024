@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import UserInfoForm from '../../components/molecules/userInfoForm/UserInfoForm';
 
@@ -18,31 +17,6 @@ const SignupSlogan = () => {
 };
 
 const SignupPage = () => {
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-  });
-
-  const { email, password } = form;
-
-  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
-
-  let emailRegexText = '사용가능한 이메일 입니다';
-  let checkedPasswordRegexText = '사용하실 패스워드를 한 번 더 입력해주세요';
-
-  const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-  if (email !== '' && !emailRegex.test(email)) {
-    emailRegexText = '이메일 양식과 맞게 입력해주세요';
-  }
-
   return (
     <div>
       <div className="mt-24">

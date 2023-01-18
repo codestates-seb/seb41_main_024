@@ -40,11 +40,10 @@ public class ChatRoomController {
         return chatService.createRoom(boardId);
     }
 
-    // 채팅방 입장 화면
+    // 채팅방 입장
     @GetMapping("/room/enter/{room-Id}")
-    public String roomDetail(@PathVariable("room-Id") Long roomId) {
+    public void enterRoom(@PathVariable("room-Id") Long roomId) {
         chatService.enterRoom(roomId);
-        return "/chat/roomdetail";
     }
 
     // 특정 채팅방 조회

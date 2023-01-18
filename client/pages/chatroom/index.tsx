@@ -1,11 +1,12 @@
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
 import chatDummy from './dataChat';
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import StompJS from 'stompjs';
 import axios from 'axios';
 import ChatForm from '../../components/organisms/chatForm/ChatForm';
+import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -88,8 +89,7 @@ const Chatroom = () => {
   }
 
   return (
-    <div className="max-w-2xl my-0 mx-auto">
-      <ChatHeader />
+    <div className="mx-0 mx-auto">
       <div className="bg-primary pt-[8.125rem] pb-[7.5rem] min-h-[calc(100vh-121px)]">
         <div className="flex justify-center my-9 mx-0">
           <strong className="inline-block py-[0.5rem] px-[1.25rem] bg-[rgba(217,217,217,0.3)] text-[#fff] font-normal leading-4 rounded">
@@ -103,6 +103,9 @@ const Chatroom = () => {
       </div>
     </div>
   );
+};
+Chatroom.getLayout = function (page: ReactElement) {
+  return <ChatRoomLayout>{page}</ChatRoomLayout>;
 };
 
 export default Chatroom;

@@ -2,6 +2,7 @@ package com.main024.ngether.config;
 
 import com.main024.ngether.config.handler.StompHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,6 +13,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration//해당 클래서가 Bean 설정을 할 것을 나타냄
 @EnableWebSocketMessageBroker//웹소켓 서버를 활성화 할 수 있는 기능
 @RequiredArgsConstructor
+@Slf4j
 public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
     private final StompHandler stompHandler;
