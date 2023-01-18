@@ -20,7 +20,7 @@ public interface BoardMapper {
         response.setMemberId(board.getMember().getMemberId());
         response.setNickname((board.getMember().getNickName()));
         response.setTitle(board.getTitle());
-        response.setCreate_date(board.getCreate_date());
+        response.setCreateDate(board.getCreateDate());
         response.setContent(board.getContent());
         response.setLikeCount(board.getLikeCount());
         response.setCategory(board.getCategory());
@@ -76,7 +76,7 @@ public interface BoardMapper {
         board.setLikeCount(0);
         board.setMaxNum(boardPostDto.getMaxNum());
         board.setMember(memberService.getLoginMember());
-        board.setCreate_date(LocalDateTime.now());
+        board.setCreateDate(LocalDateTime.now());
         board.setAddress(boardPostDto.getAddress());
         board.setLatitude(boardPostDto.getLatitude());
         board.setLongitude(boardPostDto.getLongitude());

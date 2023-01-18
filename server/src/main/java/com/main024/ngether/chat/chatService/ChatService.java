@@ -51,7 +51,8 @@ public class ChatService {
         chatRoom.setRoomName(board.getTitle());
         chatRoom.setMaxNum(board.getMaxNum());
         chatRoom.setMemberId(member.getMemberId());
-        chatRoom.setMemberCount(1);
+        chatRoom.setMemberCount(0);
+        chatRoom.setDeclareStatus(false);
         ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
         //연관매핑테이블에 저장
         ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
@@ -70,12 +71,13 @@ public class ChatService {
         if (chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
             throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
 
-        //인원수 + 1
+        //인원수 + 1 -> 지정된 인원 수가 가득 차면 게시물 상태 변경
         chatRoom.setMemberCount(chatRoom.getMemberCount() + 1);
         if (board.getMaxNum() == chatRoom.getMemberCount()) {
             board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
         }
 
+        board.setCurNum(board.getCurNum()+1);
         boardRepository.save(board);
 
         ChatRoomMembers chatRoomMembers = new ChatRoomMembers();

@@ -71,19 +71,19 @@ const EditPage = ({ productData }: productDataProps) => {
     });
   };
 
-  function getProductDetail() {
-    return axios.get(`http://localhost:3001/productList/${id}`, {
-      // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
-      headers: {
-        Authorization: cookies.access_token,
-        Refresh: cookies.refresh_token,
-      },
-    });
-  }
+  // function getProductDetail() {
+  //   return axios.get(`http://localhost:3001/productList/${id}`, {
+  //     // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
+  //     headers: {
+  //       Authorization: cookies.access_token,
+  //       Refresh: cookies.refresh_token,
+  //     },
+  //   });
+  // }
 
-  const productDetailQuery = useQuery(['productDetail'], getProductDetail, {
-    initialData: productData,
-  });
+  // const productDetailQuery = useQuery(['productDetail'], getProductDetail, {
+  //   initialData: productData,
+  // });
 
   function editProductDetail() {
     // return axios
