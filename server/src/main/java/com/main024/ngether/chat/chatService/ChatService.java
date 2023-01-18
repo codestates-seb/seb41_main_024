@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -54,12 +55,16 @@ public class ChatService {
         chatRoom.setMemberCount(0);
         chatRoom.setDeclareStatus(false);
         ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
-        //연관매핑테이블에 저장
-        ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
-        chatRoomMembers.setChatRoom(savedChatRoom);
-        chatRoomMembers.setMember(member);
-
-        chatRoomMembersRepository.save(chatRoomMembers);
+        if(Objects.equals(savedChatRoom.getRoomId(), boardId)) {
+            //연관매핑테이블에 저장
+            ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
+            chatRoomMembers.setChatRoom(savedChatRoom);
+            chatRoomMembers.setMember(member);
+            chatRoomMembersRepository.save(chatRoomMembers);
+        }
+        else {chatRoomRepository.delete(savedChatRoom);
+            throw new BusinessLogicException(ExceptionCode.CHATROOM_ID_NOT_MATCH_BOARD_ID);
+        }
         return savedChatRoom;
     }
 
