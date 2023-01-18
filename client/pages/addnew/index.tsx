@@ -27,7 +27,7 @@ const AddNewPage = () => {
       title: '',
       price: '',
       productsLink: '',
-      category: '상품 쉐어링',
+      category: 'product',
       maxNum: '1',
       address: '',
       content: '',
@@ -84,8 +84,8 @@ const AddNewPage = () => {
                 label="category"
                 onChange={onChange}
               >
-                <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
+                <MenuItem value="product">product</MenuItem>
+                <MenuItem value="delivery">delivery</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>
