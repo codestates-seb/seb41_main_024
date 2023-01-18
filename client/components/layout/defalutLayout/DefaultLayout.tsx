@@ -4,6 +4,7 @@ import Navigation from '../../organisms/bottomNav/BottomNav';
 import Footer from '../../molecules/footer/Footer';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import basicTheme from '../../../theme/basic';
+import React from 'react';
 
 const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
   return (

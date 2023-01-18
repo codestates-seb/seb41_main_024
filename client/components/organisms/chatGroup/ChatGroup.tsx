@@ -5,15 +5,15 @@ import ChatRow from '../chatRow/ChatRow';
 const ChatGroup = ({ chatData }: chatGroupType) => {
   return (
     <div className="mx-[1.25rem]">
-      {chatData.map((data: chatRowType, idx: number) => {
+      {chatData.map(({thumbSrc, chatMessageId, nickName, message, createDate, type}: chatRowType) => {
         return (
           <ChatRow
-            key={idx}
-            myChat={data.myChat}
-            thumbSrc={data.thumbSrc}
-            nick={data.nick}
-            message={data.message}
-            time={data.time}
+            key={chatMessageId}
+            type={type}
+            thumbSrc={thumbSrc}
+            nickName={nickName}
+            message={message}
+            createDate={createDate}
           />
         );
       })}

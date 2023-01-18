@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import { chatRowType } from './chatRowType';
 
-const ChatRow = ({ thumbSrc, nick, message, time }: chatRowType) => {
+const ChatRow = ({ thumbSrc, nickName, message, createDate }: chatRowType) => {
   return (
     <div
       className={classnames('mt-[1.625rem] first:mt-0', {
@@ -29,7 +29,7 @@ const ChatRow = ({ thumbSrc, nick, message, time }: chatRowType) => {
           })}
         >
           {thumbSrc && (
-            <span className="block text-[#fefefe] my-[0.375rem]">{nick}</span>
+            <span className="block text-[#fefefe] my-[0.375rem]">{nickName}</span>
           )}
           <span
             className={classnames(
@@ -42,7 +42,7 @@ const ChatRow = ({ thumbSrc, nick, message, time }: chatRowType) => {
           </span>
         </span>
         <span className="min-w-[3.25rem] text-[0.75rem] leading-[0.875rem] text-[#fff] self-end pb-[0.0625rem]">
-          {time}
+          {createDate}
         </span>
       </div>
     </div>

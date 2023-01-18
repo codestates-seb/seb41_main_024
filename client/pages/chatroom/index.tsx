@@ -14,19 +14,22 @@ import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayou
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
 
 const HEADER_TOKEN = {
-  Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiY2hhdHRlc3RAZ21haWwuY29tIiwic3ViIjoiY2hhdHRlc3RAZ21haWwuY29tIiwiaWF0IjoxNjc0MDA4MzE0LCJleHAiOjE2NzQwMTA3MTR9.acrb9pET0YoV07piRHZyhoHHPaEEGmFCTUZ8C9eF6u8'
+  Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiY2hhdHRlc3RAZ21haWwuY29tIiwic3ViIjoiY2hhdHRlc3RAZ21haWwuY29tIiwiaWF0IjoxNjc0MDI1NTkyLCJleHAiOjE2NzQwMjc5OTJ9.HO0CcEI4z49rk4s2Syp5n_7bQircejpTjwheH3cHhYw'
 }
 
 const Chatroom = () => {  
   const [messages, setMessages] = useState<any[]>([])
   const [input, setInput] = useState('')
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null)
-  const [roomId, setRoomId] = useState<string | null>('1')
-
+  const [roomId, setRoomId] = useState<string | null>('5')
+  
   useEffect(() => {
     if (!roomId) {
       return;
     }
+
+    axios.get(`http://ec2-3-34-54-131.ap-northeast-2.compute.amazonaws.com:8080/chat/room/messages/${roomId}`)
+    .then(res => setMessages(res.data))
     
     const sockjs = new SockJS(`http://ec2-3-34-54-131.ap-northeast-2.compute.amazonaws.com:8080/ws`);
     const ws = StompJS.over(sockjs)
@@ -72,15 +75,17 @@ const Chatroom = () => {
       );
       setInput('');
     }
-    // // 퇴장부분
+    // 퇴장부분
     // if(stompClient){
     //   stompClient.send(        
     //     `/send/chat/${roomId}`, 
     //     HEADER_TOKEN ,
     //     JSON.stringify({type:'LEAVE', message:''})
     //   )
-    //   stompClient.subscribe(`/receive/chat/room/${roomId}`, (frame) => {
-    //   }, HEADER_TOKEN).unsubscribe()
+    //   stompClient.disconnect(() => {
+    //     console.log('끊김')},
+    //     HEADER_TOKEN
+    //   )
     // }
   }
 
@@ -91,11 +96,6 @@ const Chatroom = () => {
   return (
     <div className="mx-0 mx-auto">
       <div className="bg-primary pt-[8.125rem] pb-[7.5rem] min-h-[calc(100vh-121px)]">
-        <div className="flex justify-center my-9 mx-0">
-          <strong className="inline-block py-[0.5rem] px-[1.25rem] bg-[rgba(217,217,217,0.3)] text-[#fff] font-normal leading-4 rounded">
-            {/* chattest 님이 입장하셨습니다. */}
-          </strong>
-        </div>
         <ChatGroup chatData={messages} />
       </div>
       <div className="fixed bottom-12 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
