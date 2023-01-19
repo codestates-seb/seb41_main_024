@@ -12,19 +12,31 @@ import { useMutation } from '@tanstack/react-query';
 import useInput from '../../hooks/addNewHooks/useInput';
 import { Box } from '@mui/material';
 import { inputType } from '../../hooks/addNewHooks/useInputType';
+import { Cookies } from 'react-cookie';
 
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import KakaoMap from '../../components/organisms/kakaoMap/KakaoMap';
 
 const AddNewPage = () => {
+  const [token, setToken] = useState({});
   const router = useRouter();
+  const [targetCoord, setTargetCoord] = useState({
+    lat: 0,
+    lng: 0,
+    address: '',
+  });
+  const [searchAddress, setSearchAddress] = useState('');
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
       router.push('/');
     },
     onError: (error) => {
       console.log(error);
+      alert(error);
     },
   });
+  const cookie = new Cookies();
   const { inputValue, onChange, handleSubmit } = useInput(
     {
       title: '',
@@ -32,13 +44,19 @@ const AddNewPage = () => {
       productsLink: '',
       category: '상품 쉐어링',
       maxNum: '1',
-      address: '',
       content: '',
+      deadLine: '',
+      ...targetCoord,
     },
-    mutate
+    mutate,
+    token
   );
-
-  const { title, price, productsLink, category, maxNum, address, content } =
+  useEffect(() => {
+    const authorization = cookie.get('access_token');
+    const refresh = cookie.get('refresh_token');
+    setToken({ authorization, refresh });
+  }, []);
+  const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
 
   return (
@@ -51,7 +69,21 @@ const AddNewPage = () => {
               src={base}
               alt={'유저이미지'}
             />
+            <KakaoMap
+              setTargetCoord={setTargetCoord}
+              searchAddress={searchAddress}
+              setSearchAddress={setSearchAddress}
+            />
             <Input
+              id="address"
+              name="address"
+              type="text"
+              label="쉐어링 위치"
+              value={targetCoord.address}
+              disabled
+            />
+            <Input
+              variant="outlined"
               id="title"
               name="title"
               type="text"
@@ -61,6 +93,7 @@ const AddNewPage = () => {
             />
             <Label htmlFor={'title'} labelText={''} />
             <Input
+              variant="outlined"
               id="price"
               name="price"
               type="number"
@@ -70,6 +103,7 @@ const AddNewPage = () => {
             />
             <Label htmlFor={'price'} labelText={''} />
             <Input
+              variant="outlined"
               id="productsLink"
               name="productsLink"
               type="text"
@@ -93,6 +127,7 @@ const AddNewPage = () => {
             </FormControl>
             <FormControl fullWidth>
               <Input
+                variant="outlined"
                 id="maxNum"
                 name="maxNum"
                 value={maxNum}
@@ -101,16 +136,20 @@ const AddNewPage = () => {
                 onChange={onChange}
               ></Input>
             </FormControl>
+
             <Input
-              id="address"
-              name="address"
-              type="text"
-              label="쉐어링 위치"
-              value={address}
+              variant="outlined"
+              id="deadLine"
+              name="deadLine"
+              type="date"
+              label="모집기간"
               onChange={onChange}
+              value={deadLine}
+              InputLabelProps={{ shrink: true }}
             />
             <Label htmlFor={'address'} labelText={''} />
             <Input
+              variant="outlined"
               id="content"
               name="content"
               label="내용"
