@@ -2,8 +2,11 @@ package com.main024.ngether.location;
 
 import com.main024.ngether.board.Board;
 import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.exception.BusinessLogicException;
+import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.MemberService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,9 +54,10 @@ public class LocationController {
     @PostMapping("/distance")
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
                                        @RequestParam(value = "range") double range,
-                                       @RequestParam(value = "category") String category) {
+                                       @RequestParam(value = "category") String category,
+                                       @RequestParam(value = "sortBy") String sortBy) {
         int page = 1;
-        Page<Board> pageBoards = locationService.createCurDistance(distanceCal, range, category, page-1);
+        Page<Board> pageBoards = locationService.createCurDistance(distanceCal, range, category, page - 1, sortBy);
 
         List<Board> boardList = pageBoards.getContent();
 
@@ -97,34 +102,61 @@ public class LocationController {
     @GetMapping("/distances/{location-id}")
     public ResponseEntity getDistances(@RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
-                                       @PathVariable("location-id") @Positive long locationId) {
+                                       @PathVariable("location-id") @Positive long locationId,
+                                       @RequestParam(value = "sortBy") String sortBy) {
         List<Distance> distanceList;
         if (range == 0.2)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_200, locationId, category).get();
+                    (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
         else if (range == 0.4)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_400, locationId, category).get();
+                    (Distance.DistanceType.DISTANCE_400, locationId, category, Sort.by("result")).get();
         else if (range == 0.6)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_600, locationId, category).get();
+                    (Distance.DistanceType.DISTANCE_600, locationId, category, Sort.by("result")).get();
         else if (range == 0.5)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_500, locationId, category).get();
+                    (Distance.DistanceType.DISTANCE_500, locationId, category, Sort.by("result")).get();
         else if (range == 1)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_1000, locationId, category).get();
+                    (Distance.DistanceType.DISTANCE_1000, locationId, category, Sort.by("result")).get();
         else if (range == 1.5)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_1500, locationId, category).get();
+                    (Distance.DistanceType.DISTANCE_1500, locationId, category, Sort.by("result")).get();
         else
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category).get();
+                    (Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category, Sort.by("result")).get();
 
         List<Board> boardList = new ArrayList<>();
         for (int i = 0; i < distanceList.size(); i++) {
             boardList.add(distanceList.get(i).getBoard());
         }
+
+        int page = 1;
+        if (sortBy.equals("time")) {
+            boardList = boardList.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
+            PageRequest pageRequest = PageRequest.of(page - 1, 10);
+            int start = (int) pageRequest.getOffset();
+            int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
+            Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
+            List<Board> boardList1 = boardPage.getContent();
+
+            return new ResponseEntity<>(
+                    new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
+        }
+
+        else if(sortBy.equals("distance")){
+            PageRequest pageRequest = PageRequest.of(page-1, 10);
+            int start = (int) pageRequest.getOffset();
+            int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
+            Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
+            List<Board> boardList1 = boardPage.getContent();
+
+            return new ResponseEntity<>(
+                    new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
+        }
+        else
+            new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
 
         return new ResponseEntity<>(boardList, HttpStatus.OK);
     }

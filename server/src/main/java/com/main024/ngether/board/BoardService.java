@@ -163,6 +163,14 @@ public class BoardService {
                 Sort.by("createDate").descending()));
     }
 
+    public Page<Board> findCompleteMySharing(){
+        int page = 1;
+        return boardRepository.findByBoardStatusAndMemberMemberId
+                (Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, 10,
+                        Sort.by("createDate").descending()));
+
+    }
+
     //타입으로 나눠서 질문 검색 기능 구현 1 : 제목, 2 : 내용, 3 : 작성자 이름
     public Page<Board> searchBoard(String type, String keyword, int page) {
         switch (type) {
