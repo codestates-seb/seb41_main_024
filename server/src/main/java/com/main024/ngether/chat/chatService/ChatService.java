@@ -130,8 +130,8 @@ public class ChatService {
                     .type(ChatMessage.MessageType.LEAVE)
                     .message("[알림]" + member.getNickName() + "님이 퇴장하셨습니다.")
                     .build();
-            sendingOperations.convertAndSend("/receive/chat/" + roomId, chatMessage.getMessage());
-            chatMessageRepository.save(chatMessage);
+            ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+            sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage.getMessage());
 
         }
         return findMembersInChatRoom(roomId);
