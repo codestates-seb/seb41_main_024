@@ -1,7 +1,14 @@
-export interface userDataType {
-  nickName: string;
+export interface productDataProps {
+  content: string;
+  title: string;
+  category: string;
+  createDate: Date;
+  price: number;
+  maxNum: number;
+  curNum: number;
+  deadLine: string;
+  productsLink: string;
+  nickname: string;
   address: string;
-}
-export interface userDataPropsType {
-  userData: userDataType;
+  memberId: number;
 }

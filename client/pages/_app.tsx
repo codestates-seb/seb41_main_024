@@ -16,7 +16,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     function (page: ReactElement) {
       return <DefaultLayout>{page}</DefaultLayout>;
     };
+
   const queryClient = new QueryClient();
+
   return renderWithLayout(
     <CookiesProvider>
       <QueryClientProvider client={queryClient}>

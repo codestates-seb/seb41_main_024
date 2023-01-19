@@ -1,48 +1,78 @@
 import Input from '../../components/atoms/input/Input';
-import FormButton from '../../components/molecules/formbutton/FormButton';
 import Label from '../../components/atoms/label/Label';
 import Stack from '@mui/material/Stack';
 import base from '../../public/imageBox/base-box.svg';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { uploadPost } from '../../api/post';
-import { useMutation } from '@tanstack/react-query';
-import useInput from '../../hooks/addNewHooks/useInput';
-import { Box } from '@mui/material';
-import { inputType } from '../../hooks/addNewHooks/useInputType';
-
+import Button from '../../components/atoms/button/Button';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { editProductDetail } from '../../api/detail';
 
-const AddNewPage = () => {
-  const router = useRouter();
-  const { isLoading, error, mutate } = useMutation(uploadPost, {
-    onSuccess: (data) => {
-      router.push('/');
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
-  const { inputValue, onChange, handleSubmit } = useInput(
-    {
-      title: '',
-      price: '',
-      productsLink: '',
-      category: 'product',
-      maxNum: '1',
-      address: '',
-      content: '',
-    },
-    mutate
+export async function getServerSideProps(context: { params: { id: number } }) {
+  const { id } = context.params;
+  const { data } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/boards/${id}`
   );
 
-  const { title, price, productsLink, category, maxNum, address, content } =
-    inputValue;
+  return {
+    props: {
+      productData: data,
+    },
+  };
+}
+
+interface productDataProps {
+  productData: {
+    title: string;
+    price: number;
+    productsLink: string;
+    category: string;
+    address: string;
+    content: string;
+    createDate: string;
+    maxNum: number;
+    curNum: number;
+    deadLine: string;
+    nickname: string;
+  };
+}
+
+const EditPage = ({ productData }: productDataProps) => {
+  const router = useRouter();
+  const { id } = router.query;
+
+  const [form, setForm] = useState({
+    title: productData.title,
+    price: productData.price,
+    productsLink: productData.productsLink,
+    category: productData.category,
+    quantity: '1',
+    address: productData.address,
+    content: productData.content,
+  });
+
+  const { title, price, productsLink, category, quantity, address, content } =
+    form;
+
+  const onChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement> | SelectChangeEvent
+  ) => {
+    const { name, value } = event.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
+  const editMutation = useMutation(() => editProductDetail(id));
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
+    <div>
       <div className="flex justify-center m-7 my-12">
         <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
           <Stack spacing={4}>
@@ -58,12 +88,13 @@ const AddNewPage = () => {
               label="상품명"
               value={title}
               onChange={onChange}
+              placeholder={productData.title}
             />
             <Label htmlFor={'title'} labelText={''} />
             <Input
               id="price"
               name="price"
-              type="number"
+              type="text"
               label="가격"
               value={price}
               onChange={onChange}
@@ -92,14 +123,17 @@ const AddNewPage = () => {
               </Select>
             </FormControl>
             <FormControl fullWidth>
-              <Input
-                id="maxNum"
-                name="maxNum"
-                value={maxNum}
-                label="모집 인원"
-                type="number"
+              <InputLabel id="quantity">상품 개수</InputLabel>
+              <Select
+                labelId="quantity"
+                name="quantity"
+                value={quantity}
+                label="quantity"
                 onChange={onChange}
-              ></Input>
+              >
+                <MenuItem value="1">1</MenuItem>
+                <MenuItem value="2">2</MenuItem>
+              </Select>
             </FormControl>
             <Input
               id="address"
@@ -120,17 +154,17 @@ const AddNewPage = () => {
               multiline
               className="h-15.75"
             ></Input>
-            <FormButton
-              className="h-14 mt-4"
-              variant="contained"
-              content="쉐어링 등록"
-              type="submit"
-            />
+            <Button
+              className="h-14 mt-4 bg-primary text-white rounded "
+              onClick={() => editMutation.mutate()}
+            >
+              쉐어링 수정
+            </Button>
           </Stack>
         </FormControl>
       </div>
-    </Box>
+    </div>
   );
 };
 
-export default AddNewPage;
+export default EditPage;

@@ -1,44 +1,64 @@
 {
-  "productList": [
+  "myData": [
     {
       "id": 1,
       "thumbnail": "",
-      "isOpen": true,
+      "isOpen": false,
       "title": "아삭아삭 나주배 3kg",
-      "price": "9,850",
-      "spot": "서울 서초구"
+      "price": 9850,
+      "productsLink": "https://www.coupang.com/vp/products/7048158498?itemId=17446727661",
+      "category": "product",
+      "address": "서울 서초구",
+      "content": "아삭아삭 나주배 3kg so good",
+      "create_date": "2023-01-20",
+      "maxNum": 4,
+      "curNum": 1,
+      "deadLine": "2023-01-20",
+      "nickname": "호호",
+      "quantity": "1",
+      "spot": "서울 강남구",
+      "memberId": 1
     },
     {
       "id": 2,
       "thumbnail": "",
-      "isOpen": true,
+      "isOpen": false,
       "title": "남해안 디포리 멸치다시팩 15g * 20팩 맛있게 진한 국물용 다시팩",
-      "price": "9,850",
-      "spot": "경기도 수지구"
+      "price": 11850,
+      "productsLink": "https://www.coupang.com/vp/products/7048158498?itemId=17446727661",
+      "category": "product",
+      "address": "서울 서초구",
+      "content": "멸치다시팩 굿👍🏽👍🏽👍🏽👍🏽👍🏽",
+      "create_date": "2023-01-20",
+      "maxNum": 2,
+      "curNum": 1,
+      "deadLine": "2023-01-20",
+      "nickname": "멸치광인",
+      "quantity": "1"
     },
     {
       "id": 3,
       "thumbnail": "",
       "isOpen": false,
       "title": "[최상등급 + 당일도정 + 혼합미] 23년 햅쌀 프리미엄 경기미  쌀 10kg",
-      "price": "9,850",
-      "spot": "제주 연동"
+      "price": 9850,
+      "address": "제주 연동"
     },
     {
       "id": 4,
       "thumbnail": "",
       "isOpen": true,
       "title": "[글랜인스] 호주산 블랙앵거스 냉장 150 소고기 모듬구이 세트 600",
-      "price": "9,850",
-      "spot": "서울 서초구"
+      "price": 9850,
+      "address": "서울 서초구"
     },
     {
       "id": 5,
       "thumbnail": "",
       "isOpen": false,
       "title": "헤이즈 파스텔 확장형 캐리어",
-      "price": "9,850",
-      "spot": "서울 서초구"
+      "price": 9850,
+      "address": "서울 서초구"
     },
     {
       "id": 6,
@@ -46,7 +66,7 @@
       "isOpen": false,
       "title": "프라우반 독일산 젤락스 Welfare-Relax 베개/베개커버",
       "price": "15,120",
-      "spot": "서울 서초구"
+      "address": "서울 서초구"
     },
     {
       "id": 7,
@@ -54,7 +74,7 @@
       "isOpen": true,
       "title": "송이송송 자연한톨 코인육수/자연톡톡 분말육수",
       "price": "32,850",
-      "spot": "서울 서초구"
+      "address": "서울 서초구"
     },
     {
       "id": 8,
@@ -62,23 +82,43 @@
       "isOpen": true,
       "title": "[명절명작]견과 선물세트 13호",
       "price": "4,850",
-      "spot": "서울 서초구"
+      "address": "서울 서초구"
     },
     {
       "id": 9,
       "thumbnail": "",
       "isOpen": false,
-      "title": "광동 초임계 알티지 오메가3 맥스",
-      "price": "19,850",
-      "spot": "서울 서초구"
+      "title": "광동 초임계 알티지 오메가3 맥스!!!",
+      "price": 19850,
+      "memberId": 24,
+      "productsLink": "https://www.coupang.com/vp/products/7048158498?itemId=17446727661",
+      "category": "product",
+      "address": "서울 마포구 공덕동",
+      "content": "오메가3 맥스 굿",
+      "create_date": "2023-01-20",
+      "maxNum": 4,
+      "curNum": 1,
+      "deadLine": "2023-01-20",
+      "nickname": "오메가 광인",
+      "quantity": "1"
     },
     {
       "id": 10,
       "thumbnail": "",
       "isOpen": true,
       "title": "[산들목장] 1+한우선물세트",
-      "price": "87,850",
-      "spot": "서울 서초구"
+      "price": 87850,
+      "memberId": 24,
+      "productsLink": "https://www.coupang.com/vp/products/7048158498?itemId=17446727661",
+      "category": "product",
+      "address": "서울 마포구 공덕동",
+      "content": "한우 냠냠",
+      "create_date": "2023-01-20",
+      "maxNum": 4,
+      "curNum": 1,
+      "deadLine": "2023-01-20",
+      "nickname": "한우쨩",
+      "quantity": "1"
     }
   ]
 }

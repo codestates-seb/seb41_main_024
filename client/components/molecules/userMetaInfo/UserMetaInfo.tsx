@@ -1,9 +1,32 @@
 import Image from 'next/image';
 import React from 'react';
 import Button from '../../atoms/button/Button';
-import { userDataPropsType } from './userMetaInfoType';
+import { productDataProps } from './userMetaInfo';
+import { useCookies } from 'react-cookie';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
+import { deleteProductDetail } from '../../../api/detail';
 
-const UserMetaInfo = ({ userData }: userDataPropsType) => {
+const UserMetaInfo = ({ productData }: productDataProps) => {
+  const [cookies, setCookie] = useCookies(['memberId']);
+  const isWriter = Number(cookies.memberId) === productData.memberId;
+  const router = useRouter();
+  const { id } = router.query;
+
+  const handleEdit = () => {
+    router.push(`/edit/${id}`);
+  };
+
+  const deleteMutation = useMutation(() => deleteProductDetail(id));
+
+  console.log(deleteMutation);
+
+  if (deleteMutation.data) {
+    router.push('/');
+  }
+
   return (
     <div className="flex items-center border-b-1 border-x-0 border-t-0 border-solid border-[#475569] py-6 px-6">
       <div>
@@ -11,18 +34,26 @@ const UserMetaInfo = ({ userData }: userDataPropsType) => {
       </div>
       <div className="grow ml-2">
         <strong className="font-semibold text-base">
-          {userData?.nickName}
+          {productData?.nickname}
         </strong>
-        <p>{userData?.address}</p>
+        <p>{productData?.address}</p>
       </div>
-      <Button>
-        <Image
-          src="/detail/edit.svg"
-          width={24}
-          height={24}
-          alt="edit-button"
-        />
-      </Button>
+      {isWriter && (
+        <div>
+          <Button
+            className="w-14 p-2 m-2 bg-primary text-white rounded"
+            onClick={handleEdit}
+          >
+            수정
+          </Button>
+          <Button
+            className="w-14 p-2 m-2 bg-primary text-white rounded"
+            onClick={() => deleteMutation.mutate()}
+          >
+            삭제
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

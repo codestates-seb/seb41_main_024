@@ -1,4 +1,4 @@
-export const getCurrentLocation = (setLocation, setLocationError) => {
+export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
   const geoLocationOptions = { enableHighAccuracy: true };
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(

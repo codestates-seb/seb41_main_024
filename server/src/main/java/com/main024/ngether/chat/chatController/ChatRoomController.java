@@ -20,10 +20,6 @@ public class ChatRoomController {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
 
-    @GetMapping("/room")
-    public String rooms() {
-        return "/chat/room";
-    }
 
     // 모든 채팅방 목록 반환
     @GetMapping("/rooms")
@@ -42,8 +38,14 @@ public class ChatRoomController {
 
     // 채팅방 입장
     @GetMapping("/room/enter/{room-Id}")
-    public void enterRoom(@PathVariable("room-Id") Long roomId) {
-        chatService.enterRoom(roomId);
+    public ResponseEntity enterRoom(@PathVariable("room-Id") Long roomId) {
+
+        return new ResponseEntity<>(chatService.enterRoom(roomId),HttpStatus.OK);
+    }
+    //채팅방 퇴장
+    @GetMapping("/room/leave/{room-Id}")
+    public ResponseEntity leaveRoom(@PathVariable("room-Id") Long roomId) {
+        return new ResponseEntity<>(chatService.leaveRoom(roomId),HttpStatus.OK);
     }
 
     // 특정 채팅방 조회
