@@ -1,6 +1,7 @@
 import { chatRowType } from '../chatRow/chatRowType';
 import { chatGroupType } from './chatGroupType';
 import ChatRow from '../chatRow/ChatRow';
+import ChatNoticeRow from '../../molecules/chatNoticeRow/ChatNoticeRow'
 
 const ChatGroup = ({ chatData }: chatGroupType  ) => {
   return (

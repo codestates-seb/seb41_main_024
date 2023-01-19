@@ -1,60 +1,69 @@
-import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
-import chatDummy from './dataChat';
 import { ReactElement, useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import StompJS from 'stompjs';
 import axios from 'axios';
 import ChatForm from '../../components/organisms/chatForm/ChatForm';
 import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
+import { Cookies } from 'react-cookie';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
 // 따라서 게시물 작성 시 리턴되는 게시물 아이디를 이용해 바로 채팅방 생성 api로 호출해주시면 될 것 같습니다.
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
 
-const HEADER_TOKEN = {
-  Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoiY2hhdHRlc3RAZ21haWwuY29tIiwic3ViIjoiY2hhdHRlc3RAZ21haWwuY29tIiwiaWF0IjoxNjc0MDI1NTkyLCJleHAiOjE2NzQwMjc5OTJ9.HO0CcEI4z49rk4s2Syp5n_7bQircejpTjwheH3cHhYw'
-}
+
+let HEADER_TOKEN = {Authorization : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoic29uZ0BnbWFpbC5jb20iLCJzdWIiOiJzb25nQGdtYWlsLmNvbSIsImlhdCI6MTY3NDA4NzgzNiwiZXhwIjoxNjc0MDkwMjM2fQ.a_i3mgf9Aqi7w5be6giDlTaFJkzdwEtho_vCjQnILQk'}; 
+// let HEADER_TOKEN = '';
 
 const Chatroom = () => {  
   const [messages, setMessages] = useState<any[]>([])
+  const [members, setMembers] = useState<any[]>([])
   const [input, setInput] = useState('')
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null)
-  const [roomId, setRoomId] = useState<string | null>('5')
+  const [roomId, setRoomId] = useState<string | null>('7')
   
-  useEffect(() => {
-    if (!roomId) {
-      return;
-    }
+  // const cookies = new Cookies();
+  // HEADER_TOKEN = cookies.get('access_token');
 
-    axios.get(`http://ec2-3-34-54-131.ap-northeast-2.compute.amazonaws.com:8080/chat/room/messages/${roomId}`)
-    .then(res => setMessages(res.data))
-    
-    const sockjs = new SockJS(`http://ec2-3-34-54-131.ap-northeast-2.compute.amazonaws.com:8080/ws`);
+  // if (HEADER_TOKEN === '') {
+  //   return;
+  // }
+  useEffect(() => {
+    axios.get(`https://ngether.site/chat/room/messages/${roomId}`)
+    .then(res => setMessages(res.data.map((chatMessage: 
+        {
+          chatMessageId: number,
+          chatRoomId: number,
+          createDate: string,
+          message: string,
+          nickName: string,
+          type: string
+        }
+      ) => {
+      const date = new Date(chatMessage.createDate);
+      const formattedDate = `${date.getHours() >= 12 ? '오후' : '오전'} ${date.getHours() % 12 || 12}시 ${date.getMinutes()}분`;
+      return { ...chatMessage, createDate: formattedDate };
+    })));
+
+    axios.get(`https://ngether.site/chat/room/${roomId}/memberList`)
+    .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
+
+    const sockjs = new SockJS(`https://ngether.site/ws`);
     const ws = StompJS.over(sockjs)
     setStompClient(ws)
-
-    // 채팅방 입장 api 호출
-    // 채팅방 입장 화면
-    // @GetMapping("/room/enter/{room-Id}")
-    // public String roomDetail(@PathVariable("room-Id") Long roomId) {
-    //     chatService.enterRoom(roomId);
-    //     return "/chat/roomdetail";
-    // }
 
     ws.connect(
       HEADER_TOKEN,
       () => {
         ws.subscribe(`/receive/chat/${roomId}`, (messages) => {
-            setMessages((prev) => [...prev, JSON.parse(messages.body)])
+          let parsedMessage = JSON.parse(messages.body);
+          const date = new Date(parsedMessage.createDate);
+          const formattedDate = `${date.getHours() >= 12 ? '오후' : '오전'} ${date.getHours() % 12 || 12}시 ${date.getMinutes()}분`;
+          parsedMessage.createDate = formattedDate
+          setMessages((prev) => [...prev, parsedMessage])
         }, HEADER_TOKEN);
-        ws.send(        
-          `/send/chat/${roomId}`, 
-          HEADER_TOKEN ,
-          JSON.stringify({type:'ENTER', message:''})
-        )
-        console.log('연결됨');
+        // axios.get(`https://ngether.site/chat/enter/${roomId}`, headers: {HEADER_TOKEN})
       }, 
       (error) => {
         console.log(error)
@@ -75,22 +84,16 @@ const Chatroom = () => {
       );
       setInput('');
     }
-    // 퇴장부분
-    // if(stompClient){
-    //   stompClient.send(        
-    //     `/send/chat/${roomId}`, 
-    //     HEADER_TOKEN ,
-    //     JSON.stringify({type:'LEAVE', message:''})
-    //   )
-    //   stompClient.disconnect(() => {
-    //     console.log('끊김')},
-    //     HEADER_TOKEN
-    //   )
-    // }
   }
 
-  const joinRoom = (roomId: string) => {
-    setRoomId(roomId);
+  const exitChatRoom = (roomId: string) => {
+    if(stompClient){
+      stompClient.disconnect(() => {
+        console.log('끊김')},
+        HEADER_TOKEN
+      )
+      // axios.get(`https://ngether.site/chat/room/leaves/${roomId}`, headers: {HEADER_TOKEN})
+    }
   }
 
   return (
@@ -98,12 +101,13 @@ const Chatroom = () => {
       <div className="bg-primary pt-[8.125rem] pb-[7.5rem] min-h-[calc(100vh-121px)]">
         <ChatGroup chatData={messages} />
       </div>
-      <div className="fixed bottom-12 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
+      <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
         <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
       </div>
     </div>
   );
 };
+
 Chatroom.getLayout = function (page: ReactElement) {
   return <ChatRoomLayout>{page}</ChatRoomLayout>;
 };

@@ -12,7 +12,6 @@ const ChatRoomLayout = ({ children }: defaultLayoutPropsType) => {
         <div className="max-w-2xl mx-auto min-h-[100vh] flex flex-col">
           <ChatHeader />
           {children}
-          <BottomNav />
         </div>
       </ThemeProvider>
     </StyledEngineProvider>
