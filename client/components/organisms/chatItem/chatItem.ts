@@ -3,6 +3,6 @@ export interface chatItemPropsType {
   isOpen: boolean;
   title: string;
   price: string;
-  spot: string;
-  alertNum?: string;
+  alertNum: string;
+  address: string;
 }

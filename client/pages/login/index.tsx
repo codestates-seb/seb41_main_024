@@ -8,6 +8,8 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
+import { requestLogin } from '../../api/login';
+import Cookies from 'js-cookie';
 
 import React from 'react';
 
@@ -27,14 +29,6 @@ const LoginSlogan = () => {
 };
 
 const LoginPage = () => {
-  const [cookies, setCookie] = useCookies([
-    'access_token',
-    'refresh_token',
-    'memberId',
-    'nickName',
-  ]);
-  // const [cookies, setCookie] = useCookies(['userInfo']);
-
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -44,43 +38,21 @@ const LoginPage = () => {
 
   const { email, pw } = form;
 
-  function request() {
-    // return axios.get('http://localhost:3001/productList');
-    // return axios.get('http://3.34.54.131:8080/api/members');
-    return axios.post('http://3.34.54.131:8080/auth/login', form);
-  }
-
   const { data, isLoading, isError, refetch } = useQuery(
     ['loginData'],
-    request,
+    () => requestLogin(form),
     {
       enabled: false,
     }
   );
 
+  console.log('로그인 data >>>', data);
+
   if (data) {
-    setCookie('access_token', data.headers.authorization);
-    setCookie('refresh_token', data.headers.refresh);
-    setCookie('memberId', data.data.memberId);
-    setCookie('nickName', data.data.nickName);
-
-    // setCookie(
-    //   'access_token',
-    //   'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoidHR0dHJlMkBnbWFpbC5jb20iLCJzdWIiOiJ0dHR0cmUyQGdtYWlsLmNvbSIsImlhdCI6MTY3Mzg4MTk2MCwiZXhwIjoxNjczODg0MzYwfQ.EUE5WGZlTVqmnwZ0zkMGQJoFhR3SI8QIW9uqp3TXCP4'
-    // );
-    // setCookie(
-    //   'refresh_token',
-    //   'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0dHR0cmUyQGdtYWlsLmNvbSIsImlhdCI6MTY3Mzg4MTk2MCwiZXhwIjoxNjczOTA3MTYwfQ.VsuRLkixdd3GkuVfE3kNZontH-0FtoeLJUBndSVR0xM'
-    // );
-    // setCookie('memberId', 6);
-    // setCookie('nickName', '냠냠');
-
-    // setCookie('userInfo', {
-    //   access_token: data.headers.Authorization,
-    //   refresh_token: data.headers.Refresh,
-    //   memberId: data.data.memberId,
-    //   nickName: data.data.nickName,
-    // });
+    Cookies.set('access_token', data.headers.authorization);
+    Cookies.set('refresh_token', data.headers.refresh);
+    Cookies.set('memberId', data.data.memberId);
+    Cookies.set('nickName', data.data.nickName);
 
     router.push('/');
   }

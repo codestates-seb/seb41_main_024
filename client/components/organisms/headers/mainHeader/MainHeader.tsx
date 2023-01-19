@@ -6,16 +6,10 @@ import { ReactComponent as NavigatorIcon } from '../../../../public/header/navig
 import { ReactComponent as Logo } from '../../../../public/logos/logoRow.svg';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
-import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const MainHeader = () => {
-  const [cookies, setCookie, removeCookie] = useCookies([
-    'access_token',
-    'refresh_token',
-    'memberId',
-    'nickName',
-  ]);
   const router = useRouter();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -23,11 +17,14 @@ const MainHeader = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
+  const nickName = Cookies.get('nickName');
+  const isLogin = Cookies.get('access_token');
+
   const handleLogOut = () => {
-    removeCookie('access_token');
-    removeCookie('refresh_token');
-    removeCookie('memberId');
-    removeCookie('nickName');
+    Cookies.remove('access_token');
+    Cookies.remove('refresh_token');
+    Cookies.remove('memberId');
+    Cookies.remove('nickName');
     router.push('/');
   };
 
@@ -62,9 +59,9 @@ const MainHeader = () => {
       </AppBar>
       {/* <Divider /> */}
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        {cookies.access_token && (
+        {isLogin && (
           <div className="flex flex-col items-center m-4">
-            <span className="text-primary text-bold">{cookies.nickName}</span>
+            <span className="text-primary text-bold">{nickName}</span>
             <Button
               variant="contained"
               className="m-4"
