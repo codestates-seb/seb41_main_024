@@ -95,10 +95,11 @@ public class ChatService {
                     .nickName(member.getNickName())
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.ENTER)
-                    .message("[알림]" + member.getNickName() + "님이 입장하셨습니다.")
+                    .message("[알림] " + member.getNickName() + "님이 입장하셨습니다.")
                     .build();
-            sendingOperations.convertAndSend("/receive/chat/" + roomId, chatMessage.getMessage());
-            chatMessageRepository.save(chatMessage);
+            ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+            sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
+
 
         }
         return findMembersInChatRoom(roomId);
@@ -129,10 +130,10 @@ public class ChatService {
                     .nickName(member.getNickName())
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.LEAVE)
-                    .message("[알림]" + member.getNickName() + "님이 퇴장하셨습니다.")
+                    .message("[알림] " + member.getNickName() + "님이 퇴장하셨습니다.")
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
-            sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage.getMessage());
+            sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
         }
         return findMembersInChatRoom(roomId);
