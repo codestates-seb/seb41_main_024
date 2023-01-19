@@ -57,6 +57,7 @@ public class ChatService {
             chatRoom.setMemberId(member.getMemberId());
             chatRoom.setMemberCount(0);
             chatRoom.setDeclareStatus(false);
+            chatRoomRepository.save(chatRoom);
 
             return chatRoom;
         } else throw new BusinessLogicException(ExceptionCode.CHATROOM_ID_NOT_MATCH_BOARD_ID);
