@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import FormButton from '../formbutton/FormButton';
 import Input from '../../atoms/input/Input';
 import Label from '../../atoms/label/Label';
@@ -8,13 +7,14 @@ import { userInfoFormType } from './userInfoFormType';
 import useRegexText from '../../../hooks/useRegexText';
 import useForm from '../../../hooks/useForm';
 import axios from 'axios';
-import Router, { useRouter } from 'next/router';
-import useSetDefaultUserInfo from '../../../hooks/mypageHooks/useSetDefaultUserInfo';
+import { useRouter } from 'next/router';
+import setDefaultUserInfo from '../../../utils/setDefaultUserInfo/setDefaultUserInfo';
+import patchOneUserInfo from '../../../utils/patchOneUserInfo/patchOneUserInfo';
+import { useQueryClient } from '@tanstack/react-query';
 
 const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
 const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
 const SIGN_UP_URL = 'http://3.34.54.131:8080/api/members';
-const EDIT_USER_INFO_URL = 'http://3.34.54.131:8080/api/members/patch';
 
 const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
   const router = useRouter();
@@ -57,37 +57,25 @@ const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
     },
   });
 
-  editPage && useSetDefaultUserInfo({ setFormValue, userInfo });
+  editPage && setDefaultUserInfo({ setFormValue, userInfo });
 
-  const onSubmit = async (event: React.FormEvent) => {
+  const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
+
+  const onPatchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!editPage) {
-      try {
-        await axios.post(SIGN_UP_URL, JSON.stringify(formValue), {
-          headers: { 'Content-Type': 'application/json' },
-        });
-        alert('회원가입 완료되었습니다.');
-        router.push('/login');
-      } catch (error) {
-        console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
-      }
-    }
-    if (editPage) {
-      try {
-        await axios
-          .patch(EDIT_USER_INFO_URL, JSON.stringify(formValue), {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `${process.env.NEXT_PUBLIC_TOKEN_AUTHOR}`,
-            },
-          })
-          .then(() => {
-            alert('수정되었습니다.');
-            Router.reload();
-          });
-      } catch (error) {
-        console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
-      }
+    patchOneUserQuery.mutate();
+  };
+
+  const onPostSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      await axios.post(SIGN_UP_URL, JSON.stringify(formValue), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      alert('회원가입 완료되었습니다.');
+      router.push('/login');
+    } catch (error) {
+      console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
     }
   };
 
@@ -95,7 +83,7 @@ const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
     <div className="flex justify-center mt-7">
       <form
         className="flex flex-col justify-center w-10/12 max-w-lg"
-        onSubmit={onSubmit}
+        onSubmit={editPage ? onPatchSubmit : onPostSubmit}
       >
         {editPage && (
           <img
