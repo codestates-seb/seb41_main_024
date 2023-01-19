@@ -47,14 +47,8 @@ const UserMetaInfo = ({ productData }: productDataProps) => {
         <div>
           <Button
             className="w-14 p-2 m-2 bg-primary text-white rounded"
-            onClick={() => handleEdit()}
+            onClick={handleEdit}
           >
-            {/* <Image
-              src="/detail/edit.svg"
-              width={24}
-              height={24}
-              alt="edit-button"
-            /> */}
             수정
           </Button>
           <Button

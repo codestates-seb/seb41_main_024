@@ -35,7 +35,7 @@ interface productDataProps {
     category: string;
     address: string;
     content: string;
-    create_date: string;
+    createDate: string;
     maxNum: number;
     curNum: number;
     deadLine: string;

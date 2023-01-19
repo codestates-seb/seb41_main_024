@@ -9,7 +9,7 @@ const PostMeta = ({ productData }: productDataProps) => {
       </div>
       <p className="text-sm text-[#475569] mb-4">
         {productData?.category}•
-        <ElapsedTime createdAt={productData?.create_date} />
+        <ElapsedTime createdAt={productData?.createDate} />
       </p>
       <div className=" mb-2.5">
         <strong className="text-lg font-medium">

@@ -2,7 +2,7 @@ export interface productDataProps {
   content: string;
   title: string;
   category: string;
-  create_date: Date;
+  createDate: Date;
   price: number;
   maxNum: number;
   curNum: number;

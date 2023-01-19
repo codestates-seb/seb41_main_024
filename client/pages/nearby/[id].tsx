@@ -14,7 +14,7 @@ const POST_DETAIL_DATA = {
     '빨대가 필요한데 양이 너무 많아요 ㅠㅠ 500개짜리 사서 100개씩 나누실 5분 구합니다 위치는 일단 저희집 근처로 지정했는데 조정 가능해요! 편하게 말씀해주세요^^',
   title: '코멧 개별포장 일자빨대 블랙 500개',
   category: '대량주문',
-  create_date: new Date('Sat Jan 14 2023 00:00:53 GMT+0900 (GMT+09:00)'),
+  createDate: new Date('Sat Jan 14 2023 00:00:53 GMT+0900 (GMT+09:00)'),
   price: 22000,
   maxNum: 4,
   curNum: 1,
@@ -66,7 +66,7 @@ export default function ProductDetail(productData: any) {
       <Img src="/detail/straw.svg" alt="메인사진" />
       <UserMetaInfo productData={data.productData} />
       <PostMeta productData={data.productData} />
-      <DetailPageTab content={data.productData.content} />
+      <DetailPageTab productData={data.productData} />
       <DetailBottom />
 
       {/* <div>

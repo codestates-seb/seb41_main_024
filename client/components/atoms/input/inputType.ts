@@ -1,4 +1,3 @@
-import React from 'react';
 export interface inputType {
   id: string;
   name?: string;

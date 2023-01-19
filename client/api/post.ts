@@ -42,4 +42,4 @@ export const getPosts = async ({
     method: 'get',
     url,
   }).then((res) => res.data);
-
+};
