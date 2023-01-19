@@ -17,6 +17,7 @@ const Input = ({
   className,
   value,
   onChange,
+  ...props
 }: inputType) => {
   return (
     <TextField
@@ -33,6 +34,7 @@ const Input = ({
       className={className}
       value={value}
       onChange={onChange}
+      {...props}
     >
       {children}
     </TextField>
