@@ -8,6 +8,8 @@ import { userInfoFormType } from './userInfoFormType';
 import useRegexText from '../../../hooks/useRegexText';
 import useForm from '../../../hooks/useForm';
 import axios from 'axios';
+import Router, { useRouter } from 'next/router';
+import useSetDefaultUserInfo from '../../../hooks/mypageHooks/useSetDefaultUserInfo';
 
 const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
 const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
@@ -15,6 +17,8 @@ const SIGN_UP_URL = 'http://3.34.54.131:8080/api/members';
 const EDIT_USER_INFO_URL = 'http://3.34.54.131:8080/api/members/patch';
 
 const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
+  const router = useRouter();
+
   const { formValue, checkedPw, handleInputChange, setFormValue } = useForm({
     pw: '',
     nickName: '',
@@ -53,14 +57,7 @@ const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
     },
   });
 
-  useEffect(() => {
-    setFormValue({
-      ...formValue,
-      email: userInfo.email,
-      nickName: userInfo.nickName,
-      phoneNumber: userInfo.phoneNumber,
-    });
-  }, []);
+  editPage && useSetDefaultUserInfo({ setFormValue, userInfo });
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -69,7 +66,8 @@ const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
         await axios.post(SIGN_UP_URL, JSON.stringify(formValue), {
           headers: { 'Content-Type': 'application/json' },
         });
-        console.log('회원으로 가입되셨습니다!');
+        alert('회원가입 완료되었습니다.');
+        router.push('/login');
       } catch (error) {
         console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
       }
@@ -85,6 +83,7 @@ const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
           })
           .then(() => {
             alert('수정되었습니다.');
+            Router.reload();
           });
       } catch (error) {
         console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
