@@ -156,9 +156,8 @@ public class LocationController {
                     new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
         }
         else
-            new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
 
-        return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 
     //사용자별 지정 위치 삭제
