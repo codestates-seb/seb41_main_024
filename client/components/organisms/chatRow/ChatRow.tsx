@@ -1,13 +1,12 @@
 import classnames from 'classnames';
 import { chatRowType } from './chatRowType';
-import { Cookies } from 'react-cookie';
+import Cookie from 'js-cookie'
 
 
 
 const ChatRow = ({ thumbSrc, nickName, message, createDate }: chatRowType) => {
-  const cookies = new Cookies();
-  const MY_CHAT = localStorage.getItem('nickName') !== nickName;
-  const OTHER_CHAT = localStorage.getItem('nickName') === nickName;
+  const MY_CHAT = Cookie.get('nickName') !== nickName;
+  const OTHER_CHAT = Cookie.get('nickName') === nickName;
   
   return (
     <div

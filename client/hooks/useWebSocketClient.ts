@@ -13,45 +13,48 @@ interface chatMessageType {
   type: string
 }
 
-const useWebSocketClient = (token: {Authorization : string}) => {
+const useWebSocketClient = (token: {Authorization : string | undefined}) => {
   const {query: {roomId}, isReady} = useRouter();
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([])
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
 
   useEffect(() => {
-    if(!isReady) return
-    axios.get(`https://ngether.site/chat/room/messages/${roomId}`)
-    .then(res => setMessages(res.data.map((chatMessage: chatMessageType) => {
-      console.log(res)
-      return { ...chatMessage, createDate: transDateFormat(chatMessage.createDate) };
-    })));
-
-    const sockjs = new SockJS(`https://ngether.site/ws`);
-    const ws = StompJS.over(sockjs)
-    setStompClient(ws)
-
-    ws.connect(
-      {},
-      () => {
-        ws.subscribe(
-        `/receive/chat/${roomId}`, 
-        (messages) => {
-          console.log(messages)
-          let parsedMessage = JSON.parse(messages.body);
-          parsedMessage.createDate = transDateFormat(parsedMessage.createDate)
-          setMessages((prev) => [...prev, parsedMessage])
-        }, 
-        {});
-        axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: token})
-        .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
-      }, 
-      (error) => {
-        console.log(error)
-      }
-    )
-    axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers : token})
-    .then(res => console.log(res))
+    console.log(token)
+    setTimeout(() => {
+      if(!isReady && token !== undefined) return
+        axios.get(`https://ngether.site/chat/room/messages/${roomId}`)
+        .then(res => setMessages(res.data.map((chatMessage: chatMessageType) => {
+          console.log(res)
+          return { ...chatMessage, createDate: transDateFormat(chatMessage.createDate) };
+        })));
+    
+        const sockjs = new SockJS(`https://ngether.site/ws`);
+        const ws = StompJS.over(sockjs)
+        setStompClient(ws)
+    
+        ws.connect(
+          {},
+          () => {
+            ws.subscribe(
+            `/receive/chat/${roomId}`, 
+            (messages) => {
+              console.log(messages)
+              let parsedMessage = JSON.parse(messages.body);
+              parsedMessage.createDate = transDateFormat(parsedMessage.createDate)
+              setMessages((prev) => [...prev, parsedMessage])
+            }, 
+            {});
+            axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: token})
+            .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
+          }, 
+          (error) => {
+            console.log(error)
+          }
+        )
+        axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers : token})
+        .then(res => console.log(res))
+    }, 2000)
   }, [roomId, token])
 
   return {stompClient, messages, members, roomId}
