@@ -30,16 +30,19 @@ public class LocationController {
     private final LocationMapper locationMapper;
     private final MemberService memberService;
     private final DistanceRepository distanceRepository;
+    private final LocationRepository locationRepository;
 
 
     public LocationController(LocationService locationService,
                               LocationMapper locationMapper,
                               MemberService memberService,
-                              DistanceRepository distanceRepository) {
+                              DistanceRepository distanceRepository,
+                              LocationRepository locationRepository) {
         this.locationService = locationService;
         this.locationMapper = locationMapper;
         this.memberService = memberService;
         this.distanceRepository = distanceRepository;
+        this.locationRepository = locationRepository;
     }
 
     //사용자별 지정 위치 등록
@@ -85,8 +88,24 @@ public class LocationController {
         return new ResponseEntity<>(locationMapper.locationToLocationResponseDto(location), HttpStatus.OK);
     }
 
+    //사용자별 지정 위치 조회
+    @GetMapping("/myLocations")
+    public ResponseEntity getMemberLocations(@RequestParam(value = "page") int page,
+                                             @RequestParam(value = "size") int size) {
+        List<Location> locationList = locationRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()).get();
 
-    //모든 지정 위치 조회
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), locationList.size());
+        Page<Location> locationPage = new PageImpl<>(locationList.subList(start, end), pageRequest, locationList.size());
+        List<Location> locationList1 = locationPage.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(locationList1, locationPage), HttpStatus.OK);
+
+    }
+
+    //사용자별 지정 위치 조회
     @GetMapping("/locations")
     public ResponseEntity getLocations() {
         List<Location> locations = locationService.findLocations();
