@@ -139,7 +139,10 @@ public class LocationController {
             int start = (int) pageRequest.getOffset();
             int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
             Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
-            return new ResponseEntity<>(boardPage, HttpStatus.OK);
+            List<Board> boardList1 = boardPage.getContent();
+
+            return new ResponseEntity<>(
+                    new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
         }
 
         else if(sortBy.equals("distance")){
@@ -147,7 +150,10 @@ public class LocationController {
             int start = (int) pageRequest.getOffset();
             int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
             Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
-            return new ResponseEntity<>(boardPage, HttpStatus.OK);
+            List<Board> boardList1 = boardPage.getContent();
+
+            return new ResponseEntity<>(
+                    new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
         }
         else
             new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);

@@ -1,10 +1,17 @@
 package com.main024.ngether.member;
 
+import com.main024.ngether.board.Board;
+import com.main024.ngether.board.BoardDto;
 import com.main024.ngether.board.BoardMapper;
 import com.main024.ngether.board.BoardRepository;
+import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.chat.chatEntity.ChatRoom;
+import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatService.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/members")
@@ -78,25 +86,56 @@ public class MemberController {
     }
     //내가 좋아요 누른 게시물 검색
     @GetMapping("/like")
-    public ResponseEntity searchMyLike() {
-        return ResponseEntity.ok(boardMapper.boardsToBoardResponses(memberService.findMyLike()));
+    public ResponseEntity searchMyLike(@RequestParam(value = "page") int page,
+                                       @RequestParam(value = "size") int size) {
+        List<BoardDto.Response> boardList = boardMapper.boardsToBoardResponses(memberService.findMyLike());
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
+        Page<BoardDto.Response> responsePage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
+        List<BoardDto.Response> responseList = responsePage.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(responseList, responsePage), HttpStatus.OK);
     }
 
     //내가 참여하고 있는 채팅방 보기
     @GetMapping("/myChatting")
-    public ResponseEntity viewMyChattingRoom() {
-        return ResponseEntity.ok(chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()));
+    public ResponseEntity viewMyChattingRoom(@RequestParam(value = "page") int page,
+                                             @RequestParam(value = "size") int size) {
+        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), chatRoomMembersList.size());
+        Page<ChatRoomMembers> chatRoomMembersPage = new PageImpl<>(chatRoomMembersList.subList(start, end), pageRequest, chatRoomMembersList.size());
+        List<ChatRoomMembers> chatRoomMembersList1 = chatRoomMembersPage.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(chatRoomMembersList1, chatRoomMembersPage), HttpStatus.OK);
     }
     //내가 참여하고 있는 쉐어링 게시물 목록
     @GetMapping("/sharingList")
-    public ResponseEntity viewMySharingList(){
-        return ResponseEntity.ok(chatService.findMySharingList(chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId())));
+    public ResponseEntity viewMySharingList(@RequestParam(value = "page") int page,
+                                            @RequestParam(value = "size") int size){
+        List<Board> boardList = chatService.findMySharingList
+                (chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()));
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
+        Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
+        List<Board> boardList1 = boardPage.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
     }
     //내가 개설한 게시물 목록
     @GetMapping("/myBoard")
-    public ResponseEntity viewMyBoardList(){
-        int page = 1;
-        return ResponseEntity.ok(boardRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page, 10)));
+    public ResponseEntity viewMyBoardList(@RequestParam(value = "page") int page,
+                                          @RequestParam(value = "size") int size){
+        Page<Board> pageBoards = boardRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size));
+        List<Board> boardList = pageBoards.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
     }
 
 }

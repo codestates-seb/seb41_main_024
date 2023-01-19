@@ -103,8 +103,11 @@ public class BoardController {
     //내가 개설한 쉐어링 중 모집 완료된 쉐어링 게시물
     @GetMapping("/completeMySharing")
     public ResponseEntity viewMyCompleteMySharing() {
-        return ResponseEntity.ok(boardRepository.findByBoardStatusAndMemberMemberId(Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId()));
+        Page<Board> pageBoards = boardService.findCompleteMySharing();
+        List<Board> boardList = pageBoards.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
+
     }
-
-
 }
