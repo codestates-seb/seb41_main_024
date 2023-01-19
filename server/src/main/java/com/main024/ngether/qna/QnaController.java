@@ -1,0 +1,72 @@
+package com.main024.ngether.qna;
+
+import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.member.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import java.util.List;
+
+@RestController
+@RequestMapping("api/qna")
+@RequiredArgsConstructor
+public class QnaController {
+    private final QnaService qnaService;
+    private final QnaMapper mapper;
+    private final MemberService memberService;
+    private final QnaRepository qnaRepository;
+
+    //문의글 작성
+    @PostMapping
+    public ResponseEntity postQna(@Valid @RequestBody QnaDto.Post qnaDto) {
+        Qna qna = qnaService.createQna(mapper.QnaPostToQna(memberService, qnaDto));
+
+        return ResponseEntity.ok(mapper.QnaToQnaResponseDto(qna));
+    }
+
+    //문의글 수정
+    @PatchMapping("/{qna-id}")
+    public ResponseEntity patchQna(@PathVariable("qna-id") @Positive long qnaId,
+                                     @Valid @RequestBody QnaDto.Patch qnaDto) {
+
+        qnaDto.setQnaId(qnaId);
+        Qna qna = qnaService.updateQna(mapper.QnaPatchToQna(qnaDto));
+
+        return ResponseEntity.ok(mapper.QnaToQnaResponseDto(qna));
+    }
+
+    //문의글 삭제
+    @DeleteMapping("/{qna-id}")
+    public ResponseEntity deleteQna(@PathVariable("qna-id") long qnaId) {
+        qnaService.deleteQna(qnaId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //문의글 조회
+    @GetMapping("/{qna-id}")
+    public ResponseEntity getQna(@PathVariable("qna-id") long qnaId) {
+        Qna qna = qnaService.findQna(qnaId);
+
+        return new ResponseEntity<>(mapper.QnaToQnaResponseDto(qna), HttpStatus.OK);
+    }
+
+    //내가 작성한 문의글 목록
+    @GetMapping
+    public ResponseEntity qnaList(@RequestParam(value = "page") int page,
+                                          @RequestParam(value = "size") int size){
+        Page<Qna> pageQnas = qnaRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size));
+        List<Qna> qnaList = pageQnas.getContent();
+        for(int i = 0; i < qnaList.size(); i++) {
+            System.out.println("List : " + qnaList.get(i));
+        }
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(qnaList, pageQnas), HttpStatus.OK);
+    }
+}
