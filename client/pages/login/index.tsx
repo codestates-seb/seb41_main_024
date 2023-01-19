@@ -46,14 +46,14 @@ const LoginPage = () => {
     }
   );
 
-  console.log('로그인 data >>>', data);
+  console.log('로그인 data >>>>>', data);
 
   if (data) {
+    console.log(Cookies.get());
     Cookies.set('access_token', data.headers.authorization);
     Cookies.set('refresh_token', data.headers.refresh);
     Cookies.set('memberId', data.data.memberId);
     Cookies.set('nickName', data.data.nickName);
-
     router.push('/');
   }
 

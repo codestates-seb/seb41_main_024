@@ -23,18 +23,15 @@ export async function getServerSideProps(context: { params: { id: string } }) {
 
 export default function ProductDetail(productData: any) {
   const router = useRouter();
-  const { id } = router.query;
 
-  const { data } = useQuery(['productDetail'], () => getProductDetail(id), {
-    initialData: productData,
-  });
+  console.log('productData >>>', productData);
 
   return (
     <div>
       <Img src="/chatItem/productImg05.svg" alt="메인사진" />
-      <UserMetaInfo productData={data.productData} />
-      <PostMeta productData={data.productData} />
-      <DetailPageTab productData={data.productData} />
+      <UserMetaInfo productData={productData.productData} />
+      <PostMeta productData={productData.productData} />
+      <DetailPageTab productData={productData.productData} />
       <DetailBottom />
     </div>
   );

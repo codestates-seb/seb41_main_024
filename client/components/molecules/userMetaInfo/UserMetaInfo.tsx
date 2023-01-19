@@ -10,11 +10,11 @@ import Cookies from 'js-cookie';
 import { deleteProductDetail } from '../../../api/detail';
 
 const UserMetaInfo = ({ productData }: productDataProps) => {
-  const [cookies, setCookie] = useCookies(['memberId']);
-  const isWriter = Number(cookies.memberId) === productData.memberId;
+  const isWriter = Number(Cookies.get('memberId')) === productData?.memberId;
   const router = useRouter();
   const { id } = router.query;
 
+  console.log(productData);
   const handleEdit = () => {
     router.push(`/edit/${id}`);
   };

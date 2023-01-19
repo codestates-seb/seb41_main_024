@@ -11,13 +11,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { getProductDetail } from '../../api/detail';
 import { editProductDetail } from '../../api/detail';
 
 export async function getServerSideProps(context: { params: { id: number } }) {
   const { id } = context.params;
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/boards/${id}`
-  );
+  const { data } = await getProductDetail(id);
 
   return {
     props: {
@@ -69,7 +68,9 @@ const EditPage = ({ productData }: productDataProps) => {
     });
   };
 
-  const editMutation = useMutation(() => editProductDetail(id));
+  const editMutation = useMutation(() => editProductDetail(id, form));
+
+  console.log('editMutation', editMutation);
 
   return (
     <div>
