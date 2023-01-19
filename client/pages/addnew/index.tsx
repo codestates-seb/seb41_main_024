@@ -26,7 +26,7 @@ const AddNewPage = () => {
     lng: 0,
     address: '',
   });
-  const [searchAddress, setSearchAddress] = useState('');
+
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
       router.push('/');
@@ -69,11 +69,7 @@ const AddNewPage = () => {
               src={base}
               alt={'유저이미지'}
             />
-            <KakaoMap
-              setTargetCoord={setTargetCoord}
-              searchAddress={searchAddress}
-              setSearchAddress={setSearchAddress}
-            />
+            <KakaoMap setTargetCoord={setTargetCoord} />
             <Input
               id="address"
               name="address"

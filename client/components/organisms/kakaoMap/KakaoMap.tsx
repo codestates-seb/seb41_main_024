@@ -4,10 +4,10 @@ import { exchangeCoordToAddress, searchMap } from '../../../api/kakaoMap';
 import { getCurrentLocation } from '../../../api/location';
 import Input from '../../atoms/input/Input';
 import FormButton from '../../molecules/formbutton/FormButton';
-const KakaoMap = ({ setTargetCoord, searchAddress, setSearchAddress }: any) => {
+const KakaoMap = ({ setTargetCoord }: any) => {
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [error, setError] = useState('');
-
+  const [searchAddress, setSearchAddress] = useState('');
   const handleSearchAddress = (e) => {
     setSearchAddress(e.target.value);
   };
