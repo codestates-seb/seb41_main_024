@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import SockJS from 'sockjs-client';
 import StompJS from 'stompjs';
 import axios from 'axios';
@@ -12,11 +13,14 @@ interface chatMessageType {
   type: string
 }
 
-const useWebSocketClient = (roomId: number | string, token: string) => {
+const useWebSocketClient = (token: {Authorization : string}) => {
+  const {query: {roomId}, isReady} = useRouter();
   const [messages, setMessages] = useState<any[]>([]);
+  const [members, setMembers] = useState<any[]>([])
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
 
   useEffect(() => {
+    if(!isReady) return
     axios.get(`https://ngether.site/chat/room/messages/${roomId}`)
     .then(res => setMessages(res.data.map((chatMessage: chatMessageType) => {
       return { ...chatMessage, createDate: transDateFormat(chatMessage.createDate) };
@@ -27,7 +31,7 @@ const useWebSocketClient = (roomId: number | string, token: string) => {
     setStompClient(ws)
 
     ws.connect(
-      {Authorization : token},
+      {},
       () => {
         ws.subscribe(
         `/receive/chat/${roomId}`, 
@@ -36,16 +40,19 @@ const useWebSocketClient = (roomId: number | string, token: string) => {
           parsedMessage.createDate = transDateFormat(parsedMessage.createDate)
           setMessages((prev) => [...prev, parsedMessage])
         }, 
-        {Authorization : token});
-        // axios.get(`https://ngether.site/chat/enter/${roomId}`, headers: {Authorization : token})
+        {});
+        axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: token})
+        .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
       }, 
       (error) => {
         console.log(error)
       }
     )
+    axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers : token})
+    .then(res => setMembers(res))
   }, [roomId, token])
 
-  return {stompClient, messages}
+  return {stompClient, messages, members, roomId}
 }
 
 export default useWebSocketClient;
