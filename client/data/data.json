@@ -1,5 +1,5 @@
 {
-  "productList": [
+  "myData": [
     {
       "id": 1,
       "thumbnail": "",
@@ -7,7 +7,7 @@
       "title": "아삭아삭 나주배 3kg",
       "price": 9850,
       "productsLink": "https://www.coupang.com/vp/products/7048158498?itemId=17446727661",
-      "category": "상품 쉐어링",
+      "category": "product",
       "address": "서울 서초구",
       "content": "아삭아삭 나주배 3kg so good",
       "create_date": "2023-01-20",
@@ -16,7 +16,8 @@
       "deadLine": "2023-01-20",
       "nickname": "호호",
       "quantity": "1",
-      "spot": "서울 강남구"
+      "spot": "서울 강남구",
+      "memberId": 1
     },
     {
       "id": 2,

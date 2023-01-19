@@ -2,13 +2,16 @@ import Image from 'next/image';
 import React from 'react';
 import Button from '../../atoms/button/Button';
 import { productDataProps } from './userMetaInfo';
+import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
+import { deleteProductDetail } from '../../../api/detail';
 
 const UserMetaInfo = ({ productData }: productDataProps) => {
-  const isWriter = Number(Cookies.get('memberId')) === productData.memberId;
+  const [cookies, setCookie] = useCookies(['memberId']);
+  const isWriter = Number(cookies.memberId) === productData.memberId;
   const router = useRouter();
   const { id } = router.query;
 
@@ -16,20 +19,13 @@ const UserMetaInfo = ({ productData }: productDataProps) => {
     router.push(`/edit/${id}`);
   };
 
-  function deleteProductDetail() {
-    // return axios
-    //   .delete(`http://3.34.54.131:8080/api/boards/${id}`, {
-    return axios
-      .delete(`http://localhost:3001/productList/${id}`, {
-        headers: {
-          Authorization: Cookies.get('access_token'),
-          Refresh: Cookies.get('refresh_token'),
-        },
-      })
-      .then((res) => router.push('/'));
-  }
+  const deleteMutation = useMutation(() => deleteProductDetail(id));
 
-  const deleteMutation = useMutation(() => deleteProductDetail());
+  console.log(deleteMutation);
+
+  if (deleteMutation.data) {
+    router.push('/');
+  }
 
   return (
     <div className="flex items-center border-b-1 border-x-0 border-t-0 border-solid border-[#475569] py-6 px-6">

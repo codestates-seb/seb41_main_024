@@ -11,14 +11,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { editProductDetail } from '../../api/detail';
 
 export async function getServerSideProps(context: { params: { id: number } }) {
   const { id } = context.params;
-  console.log('context >>>', context);
-  console.log('context.params >>>', context.params);
-  // const { data } = await axios.get(`http://3.34.54.131:8080/api/boards/${id}`);
-  const { data } = await axios.get(`http://localhost:3001/productList/${id}`);
+  const { data } = await axios.get(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/boards/${id}`
+  );
 
   return {
     props: {
@@ -70,36 +69,7 @@ const EditPage = ({ productData }: productDataProps) => {
     });
   };
 
-  // function getProductDetail() {
-  //   return axios.get(`http://localhost:3001/productList/${id}`, {
-  //     // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
-  //     headers: {
-  //       Authorization: cookies.access_token,
-  //       Refresh: cookies.refresh_token,
-  //     },
-  //   });
-  // }
-
-  // const productDetailQuery = useQuery(['productDetail'], getProductDetail, {
-  //   initialData: productData,
-  // });
-
-  function editProductDetail() {
-    // return axios
-    //   .patch(`http://3.34.54.131:8080/api/boards/${id}`, form, {
-    return axios
-      .patch(`http://localhost:3001/productList/${id}`, form, {
-        headers: {
-          Authorization: Cookies.get('access_token'),
-          Refresh: Cookies.get('refresh_token'),
-        },
-      })
-      .then((res) => {
-        router.push(`/nearby/${id}`);
-      });
-  }
-
-  const editMutation = useMutation(() => editProductDetail());
+  const editMutation = useMutation(() => editProductDetail(id));
 
   return (
     <div>
