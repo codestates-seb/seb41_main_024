@@ -16,6 +16,7 @@ import com.main024.ngether.member.MemberDto;
 import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final BoardService boardService;
+    private final SimpMessageSendingOperations sendingOperations;
 
 
     //채팅방 하나 불러오기
@@ -55,41 +57,79 @@ public class ChatService {
             chatRoom.setMemberId(member.getMemberId());
             chatRoom.setMemberCount(0);
             chatRoom.setDeclareStatus(false);
-            ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
-            //연관매핑테이블에 저장
-            ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
-            chatRoomMembers.setChatRoom(savedChatRoom);
-            chatRoomMembers.setMember(member);
-            chatRoomMembersRepository.save(chatRoomMembers);
 
-            return savedChatRoom;
+            return chatRoom;
         } else throw new BusinessLogicException(ExceptionCode.CHATROOM_ID_NOT_MATCH_BOARD_ID);
     }
 
     //채팅방에 입장할 때
-    public ChatRoom enterRoom(Long roomId) {
+    public void enterRoom(Long roomId) {
+        Member member = memberService.getLoginMember();
+        if(member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        if(chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(),roomId)==null) {
+
+            ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+            Board board = boardService.findBoard(roomId);
+            //이미 채팅방 인원수가 가득 찼을 경우
+            if (chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
+                throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
+
+            //인원수 + 1 -> 지정된 인원 수가 가득 차면 게시물 상태 변경
+            chatRoom.setMemberCount(chatRoom.getMemberCount() + 1);
+            if (board.getMaxNum() == chatRoom.getMemberCount()) {
+                board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
+            }
+
+            board.setCurNum(board.getCurNum() + 1);
+            boardRepository.save(board);
+            //연관 매핑 테이블에 저장
+            ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
+            chatRoomMembers.setMember(member);
+            chatRoomMembers.setChatRoom(chatRoom);
+            chatRoomMembersRepository.save(chatRoomMembers);
+            chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
+            chatRoomRepository.save(chatRoom);
+            ChatMessage chatMessage = ChatMessage.builder()
+                    .nickName(member.getNickName())
+                    .chatRoomId(roomId)
+                    .type(ChatMessage.MessageType.ENTER)
+                    .message("[알림]"+member.getNickName()+"님이 입장하셨습니다.")
+                    .build();
+            sendingOperations.convertAndSend("/receive/chat/" + roomId, chatMessage.getMessage());
+            chatMessageRepository.save(chatMessage);
+        }
+    }
+    public void leaveRoom(Long roomId) {
+        Member member= memberService.getLoginMember();
+        if(member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         Board board = boardService.findBoard(roomId);
-        //이미 채팅방 인원수가 가득 찼을 경우
-        if (chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
-            throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
 
-        //인원수 + 1 -> 지정된 인원 수가 가득 차면 게시물 상태 변경
-        chatRoom.setMemberCount(chatRoom.getMemberCount() + 1);
-        if (board.getMaxNum() == chatRoom.getMemberCount()) {
-            board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
-        }
+        chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
 
-        board.setCurNum(board.getCurNum() + 1);
+        board.setCurNum(board.getCurNum() - 1);
         boardRepository.save(board);
-
-        ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
-        chatRoomMembers.setMember(memberService.getLoginMember());
-        chatRoomMembers.setChatRoom(chatRoom);
-        chatRoomMembersRepository.save(chatRoomMembers);
-
-        chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
-        return chatRoomRepository.save(chatRoom);
+        //채팅방 개설자가 나갈경우 채팅방 삭제, 채팅방 메시지 내역 삭제, 게시물 삭제
+        if (!chatRoom.isDeclareStatus()) {
+            if (Objects.equals(memberService.getLoginMember().getMemberId(), chatRoom.getMemberId())) {
+                chatMessageRepository.deleteAll(chatMessageRepository.findByChatRoomId(chatRoom.getRoomId()));
+                chatRoomRepository.delete(chatRoom);
+                boardRepository.delete(board);
+            }
+            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId());
+            chatRoomMembersRepository.delete(chatRoomMembers);
+            chatRoomRepository.save(chatRoom);
+            ChatMessage chatMessage = ChatMessage.builder()
+                    .nickName(member.getNickName())
+                    .chatRoomId(roomId)
+                    .type(ChatMessage.MessageType.LEAVE)
+                    .message("[알림]"+member.getNickName()+"님이 퇴장하셨습니다.")
+                    .build();
+            sendingOperations.convertAndSend("/receive/chat/" + roomId,chatMessage.getMessage());
+            chatMessageRepository.save(chatMessage);
+        }
     }
 
     public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId) {

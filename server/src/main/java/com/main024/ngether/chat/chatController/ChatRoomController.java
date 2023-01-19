@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
 @RequestMapping("/chat")
 public class ChatRoomController {
@@ -20,10 +20,6 @@ public class ChatRoomController {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
 
-    @GetMapping("/room")
-    public String rooms() {
-        return "/chat/room";
-    }
 
     // 모든 채팅방 목록 반환
     @GetMapping("/rooms")
@@ -44,6 +40,11 @@ public class ChatRoomController {
     @GetMapping("/room/enter/{room-Id}")
     public void enterRoom(@PathVariable("room-Id") Long roomId) {
         chatService.enterRoom(roomId);
+    }
+    //채팅방 퇴장
+    @GetMapping("/room/leave/{room-Id}")
+    public void leaveRoom(@PathVariable("room-Id") Long roomId) {
+        chatService.leaveRoom(roomId);
     }
 
     // 특정 채팅방 조회
