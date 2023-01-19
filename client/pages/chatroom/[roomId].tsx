@@ -1,5 +1,5 @@
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useState } from 'react';
 import ChatForm from '../../components/organisms/chatForm/ChatForm';
 import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
 import useWebSocketClient from '../../hooks/useWebSocketClient';
@@ -11,7 +11,7 @@ import axios from 'axios';
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
 
 
-let HEADER_TOKEN = {Authorization : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoic29uZ0BnbWFpbC5jb20iLCJzdWIiOiJzb25nQGdtYWlsLmNvbSIsImlhdCI6MTY3NDEwNjA1NywiZXhwIjoxNjc0MTA4NDU3fQ.My0GGb7UrNbMrxKQGYY0Ize2bgk0g6Xra6n2QcQa9i4'}; 
+let HEADER_TOKEN = {Authorization : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoic29uZ0BnbWFpbC5jb20iLCJzdWIiOiJzb25nQGdtYWlsLmNvbSIsImlhdCI6MTY3NDEwOTYyNiwiZXhwIjoxNjc0MTEyMDI2fQ.QM11SgAdjcqLxwpaqlIVJsFZ1WEO6mQog_92AzH7tvY'}; 
 
 const Chatroom = () => { 
   const [input, setInput] = useState('')

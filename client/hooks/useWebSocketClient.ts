@@ -23,6 +23,7 @@ const useWebSocketClient = (token: {Authorization : string}) => {
     if(!isReady) return
     axios.get(`https://ngether.site/chat/room/messages/${roomId}`)
     .then(res => setMessages(res.data.map((chatMessage: chatMessageType) => {
+      console.log(res)
       return { ...chatMessage, createDate: transDateFormat(chatMessage.createDate) };
     })));
 
@@ -36,6 +37,7 @@ const useWebSocketClient = (token: {Authorization : string}) => {
         ws.subscribe(
         `/receive/chat/${roomId}`, 
         (messages) => {
+          console.log(messages)
           let parsedMessage = JSON.parse(messages.body);
           parsedMessage.createDate = transDateFormat(parsedMessage.createDate)
           setMessages((prev) => [...prev, parsedMessage])
@@ -49,7 +51,7 @@ const useWebSocketClient = (token: {Authorization : string}) => {
       }
     )
     axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers : token})
-    .then(res => setMembers(res))
+    .then(res => console.log(res))
   }, [roomId, token])
 
   return {stompClient, messages, members, roomId}

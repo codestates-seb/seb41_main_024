@@ -6,18 +6,18 @@ import { Cookies } from 'react-cookie';
 
 const ChatRow = ({ thumbSrc, nickName, message, createDate }: chatRowType) => {
   const cookies = new Cookies();
-  const MY_CHAT = cookies.get('nickName') === nickName;
-  const OTHER_CHAT = cookies.get('nickName') !== nickName
+  const MY_CHAT = localStorage.getItem('nickName') !== nickName;
+  const OTHER_CHAT = localStorage.getItem('nickName') === nickName;
   
   return (
     <div
       className={classnames('mt-[1.625rem] first:mt-0', {
-        'flex flex-row-reverse': MY_CHAT
+        'flex flex-row-reverse': MY_CHAT,
       })}
     >
       <div
         className={classnames('flex items-start max-w-[31.25rem]', {
-          'flex-row-reverse': MY_CHAT
+          'flex-row-reverse': MY_CHAT,
         })}
       >
         {(OTHER_CHAT && thumbSrc) && (
@@ -32,7 +32,7 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate }: chatRowType) => {
 
         <span
           className={classnames('inline-flex flex-col ml-[0.75rem]', {
-            'mr-[0.75rem]': MY_CHAT
+            'mr-[0.75rem]': MY_CHAT,
           })}
         >
           {OTHER_CHAT && (
