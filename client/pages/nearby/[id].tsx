@@ -8,12 +8,11 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { getProductDetail } from '../../api/detail';
+import Cookies from 'js-cookie';
 
-export async function getServerSideProps(context: { params: { id: number } }) {
+export async function getServerSideProps(context: { params: { id: string } }) {
   const { id } = context.params;
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/boards/${id}`
-  );
+  const { data } = await getProductDetail(id);
 
   return {
     props: {

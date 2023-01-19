@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-export function getProductDetail({ id }: { id: number }) {
+export function getProductDetail(id: string) {
   return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/boards/${id}`, {
     headers: {
       Authorization: Cookies.get('access_token'),
@@ -10,7 +10,7 @@ export function getProductDetail({ id }: { id: number }) {
   });
 }
 
-export function editProductDetail({ id }: { id: number }) {
+export function editProductDetail(id: string) {
   return axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/api/boards/${id}`, {
     headers: {
       Authorization: Cookies.get('access_token'),
@@ -19,7 +19,7 @@ export function editProductDetail({ id }: { id: number }) {
   });
 }
 
-export function deleteProductDetail({ id }: { id: number }) {
+export function deleteProductDetail(id: string) {
   return axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/boards/${id}`, {
     headers: {
       Authorization: Cookies.get('access_token'),
@@ -29,7 +29,7 @@ export function deleteProductDetail({ id }: { id: number }) {
 }
 
 // json-server
-// export function getProductDetail({ id }: { id: number }) {
+// export function getProductDetail(id: number ) {
 //   return axios.get(`${process.env.NEXT_PUBLIC_API_URL}/myData/${id}`, {
 //     headers: {
 //       Authorization: Cookies.get('access_token'),
@@ -38,7 +38,7 @@ export function deleteProductDetail({ id }: { id: number }) {
 //   });
 // }
 
-// export function editProductDetail({ id }: { id: number }) {
+// export function editProductDetail(id: number ) {
 //   return axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/myData/${id}`, {
 //     headers: {
 //       Authorization: Cookies.get('access_token'),
@@ -47,7 +47,7 @@ export function deleteProductDetail({ id }: { id: number }) {
 //   });
 // }
 
-// export function deleteProductDetail({ id }: { id: number }) {
+// export function deleteProductDetail(id: number) {
 //   return axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/myData/${id}`, {
 //     headers: {
 //       Authorization: Cookies.get('access_token'),
