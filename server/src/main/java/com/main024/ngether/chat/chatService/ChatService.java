@@ -63,11 +63,11 @@ public class ChatService {
     }
 
     //채팅방에 입장할 때
-    public void enterRoom(Long roomId) {
+    public List<MemberDto.ResponseChat> enterRoom(Long roomId) {
         Member member = memberService.getLoginMember();
-        if(member == null)
+        if (member == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        if(chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(),roomId)==null) {
+        if (chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId) == null) {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
             Board board = boardService.findBoard(roomId);
@@ -94,15 +94,18 @@ public class ChatService {
                     .nickName(member.getNickName())
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.ENTER)
-                    .message("[알림]"+member.getNickName()+"님이 입장하셨습니다.")
+                    .message("[알림]" + member.getNickName() + "님이 입장하셨습니다.")
                     .build();
             sendingOperations.convertAndSend("/receive/chat/" + roomId, chatMessage.getMessage());
             chatMessageRepository.save(chatMessage);
+
         }
+        return findMembersInChatRoom(roomId);
     }
-    public void leaveRoom(Long roomId) {
-        Member member= memberService.getLoginMember();
-        if(member == null)
+
+    public List<MemberDto.ResponseChat> leaveRoom(Long roomId) {
+        Member member = memberService.getLoginMember();
+        if (member == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         Board board = boardService.findBoard(roomId);
@@ -125,11 +128,13 @@ public class ChatService {
                     .nickName(member.getNickName())
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.LEAVE)
-                    .message("[알림]"+member.getNickName()+"님이 퇴장하셨습니다.")
+                    .message("[알림]" + member.getNickName() + "님이 퇴장하셨습니다.")
                     .build();
-            sendingOperations.convertAndSend("/receive/chat/" + roomId,chatMessage.getMessage());
+            sendingOperations.convertAndSend("/receive/chat/" + roomId, chatMessage.getMessage());
             chatMessageRepository.save(chatMessage);
+
         }
+        return findMembersInChatRoom(roomId);
     }
 
     public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId) {
