@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
 @RequestMapping("/chat")
 public class ChatRoomController {
