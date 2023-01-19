@@ -3,6 +3,7 @@ import { ReactComponent as Alert } from '../../../../public/detail/alert.svg';
 import Img from '../../../atoms/image/Image';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
 import NearByList from '../../nearByList/NearByList';
+import { detailPageProps } from './detailPageTab';
 const LABEL = ['상세설명', '거래위치', '주변상품'];
 
 const DetailPageTab = ({ content }: detailPageProps) => {
@@ -11,7 +12,7 @@ const DetailPageTab = ({ content }: detailPageProps) => {
   const handleChange = (event: SyntheticEvent, newCurrentTab: number) => {
     setCurrentTab(newCurrentTab);
   };
-  const handleClick = (e) => {
+  const handleClick = (e: any) => {
     const element = document.getElementById(`section-${e.target.id.slice(-1)}`);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });

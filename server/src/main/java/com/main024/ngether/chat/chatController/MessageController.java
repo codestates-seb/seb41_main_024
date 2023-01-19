@@ -3,8 +3,6 @@ package com.main024.ngether.chat.chatController;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatRepository.ChatMessageRepository;
-import com.main024.ngether.chat.chatService.ChatRoomService;
-import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -34,12 +32,6 @@ public class MessageController {
         message.setNickName(memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken((Authorization.substring("Bearer ".length())))).get().getNickName());
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
-        if (message.getType().equals(ChatMessage.MessageType.ENTER)) {
-            message.setMessage(message.getNickName() + "님이 입장하였습니다.");
-
-        } else if (message.getType().equals(ChatMessage.MessageType.LEAVE)) {
-            message.setMessage(message.getNickName() + "님이 퇴장하였습니다.");
-        }
         message.setCreateDate(LocalDateTime.now());
         chatMessageRepository.save(message);
         //메시지 전송

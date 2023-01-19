@@ -68,8 +68,9 @@ public class BoardController {
 
     //게시물 전체 조회
     @GetMapping
-    public ResponseEntity getBoards(@Positive @RequestParam int page) {
-        Page<Board> pageBoards = boardService.findBoards(page - 1);
+    public ResponseEntity getBoards(@RequestParam(value = "page") int page,
+                                    @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = boardService.findBoards(page - 1, size);
         List<Board> boardList = pageBoards.getContent();
 
         return new ResponseEntity<>(
@@ -80,9 +81,9 @@ public class BoardController {
     @GetMapping("/search")
     public ResponseEntity search(@RequestParam(value = "type") String type,
                                  @RequestParam(value = "keyword") String keyword,
-                                 @Positive @RequestParam int page) {
-
-        Page<Board> pageBoards = boardService.searchBoard(type, keyword, page - 1);
+                                 @RequestParam(value = "page") int page,
+                                 @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = boardService.searchBoard(type, keyword, page - 1, size);
         List<Board> boardList = pageBoards.getContent();
 
         return new ResponseEntity<>(
@@ -101,9 +102,13 @@ public class BoardController {
 
     //내가 개설한 쉐어링 중 모집 완료된 쉐어링 게시물
     @GetMapping("/completeMySharing")
-    public ResponseEntity viewMyCompleteMySharing() {
-        return ResponseEntity.ok(boardRepository.findByBoardStatusAndMemberMemberId(Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId()));
+    public ResponseEntity viewMyCompleteMySharing(@RequestParam(value = "page") int page,
+                                                  @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = boardService.findCompleteMySharing(page-1, size);
+        List<Board> boardList = pageBoards.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
+
     }
-
-
 }

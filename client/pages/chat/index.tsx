@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 
-const Chat = (props) => {
+const Chat = () => {
   const [chatData, setChatData] = useState({
     roomName: '',
     chatRooms: [],
@@ -30,8 +30,8 @@ const Chat = (props) => {
         });
     }
   };
-  const enterRoom = async (roomId) => {
-    const sender = prompt('대화명을 입력해 주세요.');
+  const enterRoom = async (roomId: any) => {
+    const sender: any = prompt('대화명을 입력해 주세요.');
     if (sender !== '') {
       localStorage.setItem('wschat.sender', sender);
       localStorage.setItem('wschat.roomId', roomId);
@@ -66,7 +66,7 @@ const Chat = (props) => {
         </div>
         <ul>
           <li onClick={enterRoom}>
-            {chatData?.map((item) => (
+            {chatData?.chatRooms?.map((item: any) => (
               <span>{item.roomName}</span>
             ))}
           </li>
