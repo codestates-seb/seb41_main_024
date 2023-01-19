@@ -71,7 +71,22 @@ const MainHeader = () => {
             </Button>
           </div>
         )}
-        <DrawerListItem text={'마이페이지'} path={'/mypage/1'} />
+        {!isLogin && (
+          <div className="flex justify-center items-center m-2">
+            <Link href={'/login'}>
+              <Button variant="contained" className="m-2">
+                로그인
+              </Button>
+            </Link>
+            <Link href={'/signup'}>
+              <Button variant="contained" className="m-2">
+                회원가입
+              </Button>
+            </Link>
+          </div>
+        )}
+
+        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
         {/* <DrawerListItem text={'마이페이지'} path={'/mypage/로그인 한 사람의 멤버 아이디'} /> */}
         {/* 임의로 1로 지정 */}
       </DrawerList>
