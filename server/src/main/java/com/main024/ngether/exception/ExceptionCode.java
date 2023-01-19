@@ -15,7 +15,8 @@ public enum ExceptionCode {
     DECLARE_STATUS_TRUE(408,"Declare Status"),
 
     CHATROOM_ID_NOT_MATCH_BOARD_ID(409,"chatRoomId don't match boardId"),
-    SORTBY_NOT_FOUND(404, "SortBy not found");
+    SORTBY_NOT_FOUND(404, "SortBy not found"),
+    RANGE_NOT_FOUND(404, "Range not found");
 
 
     @Getter
