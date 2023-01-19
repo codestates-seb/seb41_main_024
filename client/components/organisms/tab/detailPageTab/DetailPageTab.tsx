@@ -14,7 +14,7 @@ const DetailPageTab = ({ productData }: productDataProps) => {
   const handleChange = (event: SyntheticEvent, newCurrentTab: number) => {
     setCurrentTab(newCurrentTab);
   };
-  const handleClick = (e) => {
+  const handleClick = (e: any) => {
     const element = document.getElementById(`section-${e.target.id.slice(-1)}`);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });

@@ -9,7 +9,7 @@ export default {
   },
 } as ComponentMeta<typeof ContentTextField>;
 
-const Template: ComponentStory<typeof ContentTextField> = (args) => (
+const Template: ComponentStory<typeof ContentTextField> = (args: any) => (
   <ContentTextField {...args} />
 );
 
