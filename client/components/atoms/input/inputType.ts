@@ -1,7 +1,9 @@
-import React from 'react';
-export interface inputType {
+import { SelectChangeEvent } from '@mui/material/Select';
+import { TextFieldProps } from '@mui/material';
+import React, { ChangeEvent, ChangeEventHandler } from 'react';
+export type inputType = TextFieldProps & {
   id: string;
-  name?:string;
+  name?: string;
   label?: string;
   type?: string;
   endAdornment?: React.ReactNode;
@@ -15,5 +17,5 @@ export interface inputType {
   multiline?: boolean;
   className?: string;
   value?: string | number;
-  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-}
+  onChange?: any;
+};
