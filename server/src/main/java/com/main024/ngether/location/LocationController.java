@@ -55,9 +55,10 @@ public class LocationController {
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
                                        @RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
-                                       @RequestParam(value = "sortBy") String sortBy) {
-        int page = 1;
-        Page<Board> pageBoards = locationService.createCurDistance(distanceCal, range, category, page - 1, sortBy);
+                                       @RequestParam(value = "sortBy") String sortBy,
+                                       @RequestParam(value = "page") int page,
+                                       @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = locationService.createCurDistance(distanceCal, range, category, page - 1, size, sortBy);
 
         List<Board> boardList = pageBoards.getContent();
 
@@ -103,7 +104,99 @@ public class LocationController {
     public ResponseEntity getDistances(@RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
                                        @PathVariable("location-id") @Positive long locationId,
-                                       @RequestParam(value = "sortBy") String sortBy) {
+                                       @RequestParam(value = "sortBy") String sortBy,
+                                       @RequestParam(value = "page") int page,
+                                       @RequestParam(value = "size") int size) {
+        /*
+        List<Distance> distanceList = new ArrayList<>();
+        if (range == 0.2)
+            if (sortBy.equals("time")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("distanceId").descending()).get();
+            }
+            else if(sortBy.equals("distance")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
+            }
+            else
+                new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+        else if (range == 0.4){
+            if (sortBy.equals("time")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("distanceId").descending()).get();
+            }
+            else if(sortBy.equals("distance")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
+            }
+            else
+                new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+        }
+        else if (range == 0.6){
+            if (sortBy.equals("time")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("distanceId").descending()).get();
+            }
+            else if(sortBy.equals("distance")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
+            }
+            else
+                new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+        }
+        else if (range == 0.5){
+            if (sortBy.equals("time")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("distanceId").descending()).get();
+            }
+            else if(sortBy.equals("distance")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
+            }
+            else
+                new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+        }
+        else if (range == 1){
+            if (sortBy.equals("time")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("distanceId").descending()).get();
+            }
+            else if(sortBy.equals("distance")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
+            }
+            else
+                new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+        }
+        else if (range == 1.5){
+            if (sortBy.equals("time")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("distanceId").descending()).get();
+            }
+            else if(sortBy.equals("distance")){
+                distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                        (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
+            }
+            else
+                new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+        }
+        else
+            new BusinessLogicException(ExceptionCode.RANGE_NOT_FOUND);
+
+        List<Board> boardList = new ArrayList<>();
+        for (int i = 0; i < distanceList.size(); i++) {
+            boardList.add(distanceList.get(i).getBoard());
+        }
+
+        PageRequest pageRequest = PageRequest.of(page-1, size);
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
+        Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
+        List<Board> boardList1 = boardPage.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
+
+         */
         List<Distance> distanceList;
         if (range == 0.2)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
@@ -132,10 +225,9 @@ public class LocationController {
             boardList.add(distanceList.get(i).getBoard());
         }
 
-        int page = 1;
         if (sortBy.equals("time")) {
             boardList = boardList.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
-            PageRequest pageRequest = PageRequest.of(page - 1, 10);
+            PageRequest pageRequest = PageRequest.of(page - 1, size);
             int start = (int) pageRequest.getOffset();
             int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
             Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
@@ -146,7 +238,7 @@ public class LocationController {
         }
 
         else if(sortBy.equals("distance")){
-            PageRequest pageRequest = PageRequest.of(page-1, 10);
+            PageRequest pageRequest = PageRequest.of(page-1, size);
             int start = (int) pageRequest.getOffset();
             int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
             Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
@@ -155,10 +247,10 @@ public class LocationController {
             return new ResponseEntity<>(
                     new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
         }
-        else
+        else {
             new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
-
-        return new ResponseEntity<>(boardList, HttpStatus.OK);
+            return null;
+        }
     }
 
     //사용자별 지정 위치 삭제
