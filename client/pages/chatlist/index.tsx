@@ -6,12 +6,11 @@ import ProductImg04 from '../../public/chatItem/productImg04.svg';
 import ProductImg05 from '../../public/chatItem/productImg05.svg';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 const ChatList = () => {
-  const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
   const router = useRouter();
   const { id } = router.query;
 
@@ -19,8 +18,8 @@ const ChatList = () => {
     return axios.get(`http://localhost:3001/productList`, {
       // return axios.get(`http://3.34.54.131:8080/api/boards/${id}`, {
       headers: {
-        Authorization: cookies.access_token,
-        Refresh: cookies.refresh_token,
+        Authorization: Cookies.get('access_token'),
+        Refresh: Cookies.get('refresh_token'),
       },
     });
   }

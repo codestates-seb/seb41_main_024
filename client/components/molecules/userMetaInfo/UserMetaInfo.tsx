@@ -2,14 +2,13 @@ import Image from 'next/image';
 import React from 'react';
 import Button from '../../atoms/button/Button';
 import { productDataProps } from './userMetaInfo';
-import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
 
 const UserMetaInfo = ({ productData }: productDataProps) => {
-  const [cookies, setCookie] = useCookies(['memberId']);
-  const isWriter = Number(cookies.memberId) === productData.memberId;
+  const isWriter = Number(Cookies.get('memberId')) === productData.memberId;
   const router = useRouter();
   const { id } = router.query;
 
@@ -23,8 +22,8 @@ const UserMetaInfo = ({ productData }: productDataProps) => {
     return axios
       .delete(`http://localhost:3001/productList/${id}`, {
         headers: {
-          Authorization: cookies.access_token,
-          Refresh: cookies.refresh_token,
+          Authorization: Cookies.get('access_token'),
+          Refresh: Cookies.get('refresh_token'),
         },
       })
       .then((res) => router.push('/'));

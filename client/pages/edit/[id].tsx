@@ -9,9 +9,9 @@ import Button from '../../components/atoms/button/Button';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useCookies } from 'react-cookie';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export async function getServerSideProps(context: { params: { id: number } }) {
   const { id } = context.params;
@@ -44,7 +44,6 @@ interface productDataProps {
 }
 
 const EditPage = ({ productData }: productDataProps) => {
-  const [cookies, setCookie] = useCookies(['access_token', 'refresh_token']);
   const router = useRouter();
   const { id } = router.query;
 
@@ -91,8 +90,8 @@ const EditPage = ({ productData }: productDataProps) => {
     return axios
       .patch(`http://localhost:3001/productList/${id}`, form, {
         headers: {
-          Authorization: cookies.access_token,
-          Refresh: cookies.refresh_token,
+          Authorization: Cookies.get('access_token'),
+          Refresh: Cookies.get('refresh_token'),
         },
       })
       .then((res) => {
