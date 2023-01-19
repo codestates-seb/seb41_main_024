@@ -76,13 +76,16 @@ const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
     }
     if (editPage) {
       try {
-        await axios.patch(EDIT_USER_INFO_URL, JSON.stringify(formValue), {
-          headers: {
-            'Content-Type': 'application/json',
-            // +JWT
-          },
-        });
-        console.log('회원으로 가입되셨습니다!');
+        await axios
+          .patch(EDIT_USER_INFO_URL, JSON.stringify(formValue), {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `${process.env.NEXT_PUBLIC_TOKEN_AUTHOR}`,
+            },
+          })
+          .then(() => {
+            alert('수정되었습니다.');
+          });
       } catch (error) {
         console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
       }
@@ -108,6 +111,7 @@ const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
           type={'text'}
           label={'새로운 이메일'}
           value={email}
+          disabled={editPage && editPage}
           onChange={handleInputChange}
         />
         <Label htmlFor={'email-input'} labelText={emailRegexText} />

@@ -16,6 +16,7 @@ const Input = ({
   multiline,
   className,
   value,
+  disabled,
   onChange,
 }: inputType) => {
   return (
@@ -32,6 +33,7 @@ const Input = ({
       {...(multiline ? { multiline: true } : null)}
       className={className}
       value={value}
+      disabled={disabled}
       onChange={onChange}
     >
       {children}

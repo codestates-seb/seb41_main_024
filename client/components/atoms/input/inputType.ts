@@ -1,7 +1,7 @@
 import React from 'react';
 export interface inputType {
   id: string;
-  name?:string;
+  name?: string;
   label?: string;
   type?: string;
   endAdornment?: React.ReactNode;
@@ -15,5 +15,6 @@ export interface inputType {
   multiline?: boolean;
   className?: string;
   value?: string | number;
+  disabled?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
