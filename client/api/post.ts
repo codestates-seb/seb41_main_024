@@ -19,7 +19,7 @@ interface getPostType {
   range: number;
   category: string;
 }
-const REQUEST_URL = ' https://ngether.site';
+const REQUEST_URL = 'https://ngether.site';
 
 export const uploadPost = async (data: uploadPostType) => {
   const query = data.category === '배달' ? 'delivery' : 'product';

@@ -47,7 +47,7 @@ const LoginPage = () => {
   function request() {
     // return axios.get('http://localhost:3001/productList');
     // return axios.get('http://3.34.54.131:8080/api/members');
-    return axios.post('http://3.34.54.131:8080/auth/login', form);
+    return axios.post('https://ngether.site/auth/login', form);
   }
 
   const { data, isLoading, isError, refetch } = useQuery(
