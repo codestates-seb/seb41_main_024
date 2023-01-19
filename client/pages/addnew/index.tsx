@@ -26,7 +26,6 @@ const AddNewPage = () => {
     lng: 0,
     address: '',
   });
-
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
       router.push('/');
@@ -54,7 +53,9 @@ const AddNewPage = () => {
   useEffect(() => {
     const authorization = cookie.get('access_token');
     const refresh = cookie.get('refresh_token');
-    setToken({ authorization, refresh });
+    authorization || refresh
+      ? setToken({ authorization, refresh })
+      : router.push('/login');
   }, []);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
