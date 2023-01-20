@@ -7,8 +7,9 @@ import { ReactComponent as Logo } from '../../../../public/logos/logoRow.svg';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import { mainHeaderType } from './mainHeader';
+import { nextTick } from 'process';
 
-const MainHeader = ({isLogin, logOutHandler}: mainHeaderType) => {
+const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -45,19 +46,23 @@ const MainHeader = ({isLogin, logOutHandler}: mainHeaderType) => {
       </AppBar>
       {/* <Divider /> */}
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        {isLogin && (
-          <div className="flex flex-col items-center m-4">
-            <span className="text-primary text-bold">{nickName}</span>
-            <Button
-              variant="contained"
-              className="m-4"
-              onClick={logOutHandler}
-            >
-              로그아웃
-            </Button>
-          </div>
+        {isLogin && nickName && (
+          <>
+            <div className="flex flex-col items-center m-4">
+              <span className="text-primary text-bold">{nickName}</span>
+              <Button
+                variant="contained"
+                className="m-4"
+                onClick={logOutHandler}
+              >
+                로그아웃
+              </Button>
+            </div>
+            <DrawerListItem text={'마이페이지'} path={'/mypage'} />
+          </>
         )}
-        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
+        <DrawerListItem text={'로그인'} path={'/login'} />
+        <DrawerListItem text={'회원가입'} path={'/signuo'} />
         {/* <DrawerListItem text={'마이페이지'} path={'/mypage/로그인 한 사람의 멤버 아이디'} /> */}
         {/* 임의로 1로 지정 */}
       </DrawerList>
