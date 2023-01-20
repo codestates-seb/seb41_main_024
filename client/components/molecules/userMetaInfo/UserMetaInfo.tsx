@@ -10,7 +10,12 @@ import Cookies from 'js-cookie';
 import { deleteProductDetail } from '../../../api/detail';
 import Link from 'next/link';
 
-const UserMetaInfo = ({ productData, deleteHandler, id }: productDataProps) => {
+const UserMetaInfo = ({
+  productData,
+  deleteHandler,
+  isWriter,
+  id,
+}: productDataProps) => {
   return (
     <div className="flex items-center border-b-1 border-x-0 border-t-0 border-solid border-[#475569] py-6 px-6 inline-block">
       <div>
@@ -22,20 +27,22 @@ const UserMetaInfo = ({ productData, deleteHandler, id }: productDataProps) => {
         </strong>
         <p>{productData?.address}</p>
       </div>
-      {/* <div className={isWriter ? 'flex items-center' : 'hidden'}>
-        <Link
-          href={`/edit/${id}`}
-          className="w-14 p-2 m-2 bg-primary text-white rounded inline-block text-center"
-        >
-          수정
-        </Link>
-        <Button
-          className="w-14 p-2 m-2 bg-primary text-white rounded"
-          onClick={deleteHandler}
-        >
-          삭제
-        </Button>
-      </div> */}
+      {isWriter && (
+        <div className={'flex items-center'}>
+          <Link
+            href={`/edit/${id}`}
+            className="w-14 p-2 m-2 bg-primary text-white rounded inline-block text-center"
+          >
+            수정
+          </Link>
+          <Button
+            className="w-14 p-2 m-2 bg-primary text-white rounded"
+            onClick={deleteHandler}
+          >
+            삭제
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
