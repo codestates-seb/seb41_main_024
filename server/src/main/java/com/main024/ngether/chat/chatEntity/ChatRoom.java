@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class ChatRoom {
     private int maxNum;//최대 수용 인원수
     private String sessionId;
     private boolean declareStatus;
+    private LocalDateTime lastMessageCreated;
     private String lastMessage;
 
     @JsonIgnore

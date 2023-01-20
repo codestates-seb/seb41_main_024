@@ -72,7 +72,7 @@ public class ChatRoomController {
     @GetMapping("/room/lastMessage")
     public ResponseEntity lastMessage() {
 
-        return new ResponseEntity<>(chatService.findLastMessage(), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
 
     }
 }

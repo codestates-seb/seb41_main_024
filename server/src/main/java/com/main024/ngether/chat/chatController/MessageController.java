@@ -38,9 +38,10 @@ public class MessageController {
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
         message.setCreateDate(LocalDateTime.now());
-        chatMessageRepository.save(message);
+        ChatMessage savedMessage = chatMessageRepository.save(message);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
-        chatRoom.setLastMessage(message.getMessage());
+        chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
+        chatRoom.setLastMessage(savedMessage.getMessage());
         chatRoomRepository.save(chatRoom);
 
         //메시지 전송

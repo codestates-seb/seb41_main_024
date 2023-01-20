@@ -99,6 +99,7 @@ public class ChatService {
                     .message("[알림] " + member.getNickName() + "님이 입장하셨습니다.")
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
             chatRoom.setLastMessage(savedMessage.getMessage());
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
@@ -136,6 +137,7 @@ public class ChatService {
                     .message("[알림] " + member.getNickName() + "님이 퇴장하셨습니다.")
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
             chatRoom.setLastMessage(savedMessage.getMessage());
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
@@ -169,16 +171,26 @@ public class ChatService {
 
     }
 
-    public List<ChatDto.lastMessage> findLastMessage(){
+    public List<ChatDto.lastMessageCreated> findLastMessageCreated() {
         List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
-        List<ChatDto.lastMessage> lastMessages = new ArrayList<>();
-        for(int i = 0; i < chatRoomMembersList.size(); i++){
-            ChatDto.lastMessage lastMessage = new ChatDto.lastMessage();
-            lastMessage.setMessage(chatRoomMembersList.get(i).getChatRoom().getLastMessage());
-            lastMessage.setRoomId(chatRoomMembersList.get(i).getChatRoom().getRoomId());
-            lastMessages.add(lastMessage);
+        List<ChatDto.lastMessageCreated> lastMessages = new ArrayList<>();
+        for (int i = 0; i < chatRoomMembersList.size(); i++) {
+            ChatDto.lastMessageCreated lastMessageCreated = new ChatDto.lastMessageCreated();
+            lastMessageCreated.setLastMessageCreated(chatRoomMembersList.get(i).getChatRoom().getLastMessageCreated());
+            lastMessageCreated.setRoomId(chatRoomMembersList.get(i).getChatRoom().getRoomId());
+            lastMessages.add(lastMessageCreated);
         }
         return lastMessages;
+    }
+
+    public List<ChatRoom> findMyChatRoom() {
+        Member member = memberService.getLoginMember();
+        List<ChatRoom> chatRoomList = new ArrayList<>();
+        List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+        for (int i = 0; i < chatRoomMembers.size(); i++){
+            chatRoomList.add(chatRoomMembers.get(i).getChatRoom());
+        }
+        return chatRoomList;
     }
 
 
