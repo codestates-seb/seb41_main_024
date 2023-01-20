@@ -53,12 +53,7 @@ public class SecurityConfiguration {
                 .logout()
                 .logoutUrl("/auth/logout") //logout 처리 url
                 .and()
-                //.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
-                .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.POST, "/api/members").permitAll()
-                        .antMatchers(HttpMethod.GET, "/auth/login").permitAll()
-                        .anyRequest().hasAnyRole("ADMIN", "USER")
-                );
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
         return http.build();
     }
     @Bean

@@ -19,7 +19,8 @@ public enum ExceptionCode {
     BOARD_NOT_DELETE(411, "Board not delete"),
     ROLE_NOT_ADMIN(412, "Role not admin"),
     REPORT_NOT_FOUND(413, " Report not found"),
-    RANGE_NOT_FOUND(414, "Range not found");
+    RANGE_NOT_FOUND(414, "Range not found"),
+    BAN(415, "Bye");
 
 
 
