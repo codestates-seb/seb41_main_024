@@ -3,6 +3,8 @@ import Cookies from 'js-cookie';
 
 const REQUEST_URL = 'https://ngether.site';
 
+const access_token = Cookies.get('access_token');
+
 export function getProductDetail(id: string) {
   return axios.get(`${REQUEST_URL}/api/boards/${id}`, {
     headers: {

@@ -10,14 +10,7 @@ import Cookies from 'js-cookie';
 import { deleteProductDetail } from '../../../api/detail';
 import Link from 'next/link';
 
-const UserMetaInfo = ({
-  productData,
-  isWriter,
-  deleteHandler,
-  id,
-}: productDataProps) => {
-  console.log('metaInfo', isWriter);
-
+const UserMetaInfo = ({ productData, deleteHandler, id }: productDataProps) => {
   return (
     <div className="flex items-center border-b-1 border-x-0 border-t-0 border-solid border-[#475569] py-6 px-6 inline-block">
       <div>
@@ -29,8 +22,7 @@ const UserMetaInfo = ({
         </strong>
         <p>{productData?.address}</p>
       </div>
-      <div className={isWriter ? 'flex items-center' : 'hidden'}>
-        {/* <div className={`flex items-center ${isWriter ? 'hidden' : ''}`}> */}
+      {/* <div className={isWriter ? 'flex items-center' : 'hidden'}>
         <Link
           href={`/edit/${id}`}
           className="w-14 p-2 m-2 bg-primary text-white rounded inline-block text-center"
@@ -43,7 +35,7 @@ const UserMetaInfo = ({
         >
           삭제
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };
