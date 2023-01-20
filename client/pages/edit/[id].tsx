@@ -66,7 +66,6 @@ const EditPage = ({ previousData, id }) => {
     router.push(`/nearby/${id}`);
   };
 
-  console.log(editMutation);
 
   const [form, setForm] = useState({
     title: previousData.title,
