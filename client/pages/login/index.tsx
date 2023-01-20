@@ -2,7 +2,7 @@ import Input from '../../components/atoms/input/Input';
 import Button from '../../components/atoms/button/Button';
 import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
@@ -10,30 +10,24 @@ import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { requestLogin } from '../../api/login';
 import Cookies from 'js-cookie';
-
+import { getCurrentLocation } from '../../api/location';
 import React from 'react';
-
-const LoginSlogan = () => {
-  return (
-    <div className="flex flex-col items-center">
-      <Logo />
-      <p className="pt-px mt-4 text-lg">
-        <strong className="text-primary font-bold">로그인</strong>하고
-      </p>
-      <p className="pb-px text-lg">
-        <strong className="text-primary font-bold">쇼핑 친구</strong>를
-        만나보세요
-      </p>
-    </div>
-  );
-};
 
 const LoginPage = () => {
   const router = useRouter();
 
+  const locationId = 1;
+  const [location, setLocation] = useState({
+    lat: 35.6194352,
+    lng: 129.3486386,
+  });
+  const [locationError, setLocationError] = useState('');
+  useEffect(() => getCurrentLocation(setLocation, setLocationError), []);
+
   const [form, setForm] = useState({
     email: '',
     pw: '',
+    // location
   });
 
   const { email, pw } = form;
@@ -45,16 +39,17 @@ const LoginPage = () => {
       enabled: false,
     }
   );
-
-  console.log('로그인 data >>>>>', data);
+  console.log('location', location);
+  console.log(data);
 
   if (data) {
-    console.log(Cookies.get());
     Cookies.set('access_token', data.headers.authorization);
     Cookies.set('refresh_token', data.headers.refresh);
     Cookies.set('memberId', data.data.memberId);
     Cookies.set('nickName', data.data.nickName);
-    router.push('/');
+    Cookies.set('locationId', data.data.locationId);
+
+    // router.push('/');
   }
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -109,3 +104,18 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+const LoginSlogan = () => {
+  return (
+    <div className="flex flex-col items-center">
+      <Logo />
+      <p className="pt-px mt-4 text-lg">
+        <strong className="text-primary font-bold">로그인</strong>하고
+      </p>
+      <p className="pb-px text-lg">
+        <strong className="text-primary font-bold">쇼핑 친구</strong>를
+        만나보세요
+      </p>
+    </div>
+  );
+};

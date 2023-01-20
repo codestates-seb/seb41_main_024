@@ -25,6 +25,7 @@ const MainHeader = () => {
     Cookies.remove('refresh_token');
     Cookies.remove('memberId');
     Cookies.remove('nickName');
+    Cookies.remove('locationId');
     router.push('/');
   };
 
