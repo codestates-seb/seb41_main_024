@@ -1,13 +1,14 @@
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
 import { Fragment, ReactElement, useEffect, useState } from 'react';
-import ChatForm from '../../components/organisms/chatForm/ChatForm';
-import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
+import ChatForm from '../../components/organisms/chatForm/ChatForm';;
 import useWebSocketClient from '../../hooks/useWebSocketClient';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import ChatItem from '../../components/organisms/chatItem/ChatItem'
 import { getChatSharing } from '../../api/chatSharing';
 import Link from 'next/link';
+import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
+import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -69,6 +70,7 @@ const Chatroom = () => {
 
   return (
     <div>
+      <ChatHeader />
       {/* <button onClick={exitChatRoom}>퇴장</button> */}
       <div className='left-2/4 translate-x-[-50%] fixed max-w-[672px] w-[80%] px-[3rem] rounded'>
         <Link href={`/nearby/${roomId}`}>

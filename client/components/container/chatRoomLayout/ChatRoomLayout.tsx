@@ -10,7 +10,6 @@ const ChatRoomLayout = ({ children }: defaultLayoutPropsType) => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={basicTheme}>
         <div className="max-w-2xl mx-auto min-h-[100vh] flex flex-col">
-          <ChatHeader />
           {children}
         </div>
       </ThemeProvider>
