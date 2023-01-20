@@ -15,9 +15,13 @@ import { inputType } from '../../hooks/addNewHooks/useInputType';
 
 import { useRouter } from 'next/router';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const AddNewPage = () => {
   const router = useRouter();
+  const [productImg, setProductImg] = useState<any>(base);
+
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
       router.push('/');
@@ -42,6 +46,17 @@ const AddNewPage = () => {
   const { title, price, productsLink, category, maxNum, address, content } =
     inputValue;
 
+  const fetchOgData = async (url:string) => {
+    try {
+      await axios.get(`https://localhost:3443/api/fetch-og-data?url=${url}`)
+      .then(res => setProductImg(res.data.image.url))
+      console.log(productImg)
+    }
+    catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     <LoginChecker path="/login">
       <Box component="form" onSubmit={handleSubmit}>
@@ -50,7 +65,7 @@ const AddNewPage = () => {
             <Stack spacing={4}>
               <img
                 className="h-40 w-40 mb-7 m-auto"
-                src={base}
+                src={productImg}
                 alt={'유저이미지'}
               />
               <Input
@@ -77,7 +92,10 @@ const AddNewPage = () => {
                 type="text"
                 label="상품 링크"
                 value={productsLink}
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange(e);
+                  fetchOgData(e.target.value);
+                }}
               />
               <Label htmlFor={'productsLink'} labelText={''} />
               <FormControl fullWidth>
