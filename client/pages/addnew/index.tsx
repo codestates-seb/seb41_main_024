@@ -13,10 +13,13 @@ import useInput from '../../hooks/addNewHooks/useInput';
 import { Box } from '@mui/material';
 import { inputType } from '../../hooks/addNewHooks/useInputType';
 
+import { useRouter } from 'next/router';
+
 const AddNewPage = () => {
+  const router = useRouter();
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
-      console.log(data);
+      router.push('/');
     },
     onError: (error) => {
       console.log(error);
@@ -27,7 +30,7 @@ const AddNewPage = () => {
       title: '',
       price: '',
       productsLink: '',
-      category: '상품 쉐어링',
+      category: 'product',
       maxNum: '1',
       address: '',
       content: '',
@@ -84,8 +87,8 @@ const AddNewPage = () => {
                 label="category"
                 onChange={onChange}
               >
-                <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
+                <MenuItem value="product">product</MenuItem>
+                <MenuItem value="delivery">delivery</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>

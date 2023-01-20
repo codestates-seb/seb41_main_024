@@ -1,4 +1,3 @@
-import React from 'react';
 export interface inputType {
   id: string;
   name?: string;
@@ -17,4 +16,5 @@ export interface inputType {
   value?: string | number;
   disabled?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder?: string;
 }

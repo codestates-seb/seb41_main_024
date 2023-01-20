@@ -10,6 +10,7 @@ import com.main024.ngether.auth.utils.CustomAuthorityUtils;
 import com.main024.ngether.location.LocationRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -52,7 +53,12 @@ public class SecurityConfiguration {
                 .logout()
                 .logoutUrl("/auth/logout") //logout 처리 url
                 .and()
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+                //.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.POST, "/api/members").permitAll()
+                        .antMatchers(HttpMethod.GET, "/auth/login").permitAll()
+                        .anyRequest().hasAnyRole("ADMIN", "USER")
+                );
         return http.build();
     }
     @Bean

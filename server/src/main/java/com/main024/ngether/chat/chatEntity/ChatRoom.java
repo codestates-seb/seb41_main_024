@@ -16,13 +16,14 @@ import java.util.List;
 public class ChatRoom {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long roomId;
     private String roomName;//채팅방 이름 =  게시판 이름
     private Long memberId;//채팅방 개설자 아이디
     private int memberCount;//채팅방에 있는 인원 수
     private int maxNum;//최대 수용 인원수
     private String sessionId;
+    private boolean declareStatus;
+    private String lastMessage;
 
     @JsonIgnore
     @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)

@@ -2,10 +2,10 @@ import { chatRowType } from '../chatRow/chatRowType';
 import { chatGroupType } from './chatGroupType';
 import ChatRow from '../chatRow/ChatRow';
 
-const ChatGroup = ({ chatData }: chatGroupType) => {
+const ChatGroup = ({ chatData }: any) => {
   return (
     <div className="mx-[1.25rem]">
-      {chatData.map((data: chatRowType, idx: number) => {
+      {chatData.map((data: any, idx: number) => {
         return (
           <ChatRow
             key={idx}
