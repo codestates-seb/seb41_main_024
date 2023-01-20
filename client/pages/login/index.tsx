@@ -16,18 +16,9 @@ import React from 'react';
 const LoginPage = () => {
   const router = useRouter();
 
-  const locationId = 1;
-  const [location, setLocation] = useState({
-    lat: 35.6194352,
-    lng: 129.3486386,
-  });
-  const [locationError, setLocationError] = useState('');
-  useEffect(() => getCurrentLocation(setLocation, setLocationError), []);
-
   const [form, setForm] = useState({
     email: '',
     pw: '',
-    // location
   });
 
   const { email, pw } = form;
@@ -48,8 +39,7 @@ const LoginPage = () => {
     Cookies.set('memberId', data.data.memberId);
     Cookies.set('nickName', data.data.nickName);
     Cookies.set('locationId', data.data.locationId);
-
-    // router.push('/');
+    router.push('/');
   }
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
