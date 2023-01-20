@@ -111,4 +111,10 @@ public class BoardController {
                 new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
 
     }
+    @GetMapping("/{board-id}/checkMyBoard")
+    public ResponseEntity checkMyBoard(@PathVariable(value = "board-id")Long boardId){
+        if(boardService.findBoard(boardId).getMember().equals(memberService.getLoginMember()))
+            return new ResponseEntity<>(true,HttpStatus.OK);
+        else return new ResponseEntity<>(false,HttpStatus.OK);
+    }
 }
