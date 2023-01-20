@@ -40,12 +40,13 @@ public class ChatRoomController {
     @GetMapping("/room/enter/{room-Id}")
     public ResponseEntity enterRoom(@PathVariable("room-Id") Long roomId) {
 
-        return new ResponseEntity<>(chatService.enterRoom(roomId),HttpStatus.OK);
+        return new ResponseEntity<>(chatService.enterRoom(roomId), HttpStatus.OK);
     }
+
     //채팅방 퇴장
     @GetMapping("/room/leave/{room-Id}")
     public ResponseEntity leaveRoom(@PathVariable("room-Id") Long roomId) {
-        return new ResponseEntity<>(chatService.leaveRoom(roomId),HttpStatus.OK);
+        return new ResponseEntity<>(chatService.leaveRoom(roomId), HttpStatus.OK);
     }
 
     // 특정 채팅방 조회
@@ -65,5 +66,13 @@ public class ChatRoomController {
     @GetMapping("/room/{room-id}/memberList")
     public ResponseEntity MemberList(@PathVariable(value = "room-id") Long roomId) {
         return new ResponseEntity<>(chatService.findMembersInChatRoom(roomId), HttpStatus.OK);
+    }
+
+    //로그인 한 유저가 참여중인 채팅방 마지막 메시지들
+    @GetMapping("/room/lastMessage")
+    public ResponseEntity lastMessage() {
+
+        return new ResponseEntity<>(chatService.findLastMessage(), HttpStatus.OK);
+
     }
 }
