@@ -13,7 +13,7 @@ const ChatItem = ({
   address,
 }: chatItemPropsType) => {
   return (
-    <div className="flex items-start border-solid border-0 border-b border-slate-400 h-22 p-4">
+    <div className="flex items-center border-solid border-0 border-b border-slate-400 h-22 p-4 bg-[#ffffff]">
       <img src={thumbnail} className="w-16" />
       <div className="flex-1 flex-col items-start px-4">
         <Badge declareStatus={declareStatus} />

@@ -69,6 +69,16 @@ public class ReportService {
         member.setRoles(roles);
         memberRepository.save(member);
     }
+    public void recoveryMemberRole(long memberId) {
+        if (memberService.getLoginMember().getRoles().get(0).equals("USER"))
+            throw new BusinessLogicException(ExceptionCode.ROLE_NOT_ADMIN);
+
+        Member member = memberRepository.findById(memberId).get();
+        List<String> roles = new ArrayList<>();
+        roles.add("USER");
+        member.setRoles(roles);
+        memberRepository.save(member);
+    }
 
     public Report findVerifiedReport(long reportId) {
         Optional<Report> optionalQuestion = reportRepository.findById(reportId);
