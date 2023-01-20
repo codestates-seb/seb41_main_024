@@ -20,13 +20,14 @@ export async function getServerSideProps(context: { params: { id: number } }) {
 
   return {
     props: {
-      productData: data,
+      previousData: data,
+      id,
     },
   };
 }
 
-interface productDataProps {
-  productData: {
+interface previousDataProps {
+  previousData: {
     title: string;
     price: number;
     productsLink: string;
@@ -41,22 +42,8 @@ interface productDataProps {
   };
 }
 
-const EditPage = ({ productData }: productDataProps) => {
+const EditPage = ({ previousData, id }) => {
   const router = useRouter();
-  const { id } = router.query;
-
-  const [form, setForm] = useState({
-    title: productData.title,
-    price: productData.price,
-    productsLink: productData.productsLink,
-    category: productData.category,
-    quantity: '1',
-    address: productData.address,
-    content: productData.content,
-  });
-
-  const { title, price, productsLink, category, quantity, address, content } =
-    form;
 
   const onChange = (
     event: React.ChangeEvent<HTMLTextAreaElement> | SelectChangeEvent
@@ -68,9 +55,35 @@ const EditPage = ({ productData }: productDataProps) => {
     });
   };
 
+  const { data } = useQuery(['productData'], () => getProductDetail(id), {
+    initialData: previousData,
+  });
+
   const editMutation = useMutation(() => editProductDetail(id, form));
 
-  console.log('editMutation', editMutation);
+  const handleEdit = () => {
+    editMutation.mutate();
+    router.push(`/nearby/${id}`);
+  };
+
+  const [form, setForm] = useState({
+    title: previousData.title,
+    content: previousData.content,
+    price: Number(previousData.price),
+    maxNum: 4,
+    address: previousData.address,
+    latitude: '37.6213085353565',
+    longitude: '127.083296516416',
+    deadLine: '2023-01-23',
+    productsLink: previousData.productsLink,
+    category: previousData.category,
+    quantity: '1',
+  });
+
+  console.log(form);
+
+  const { title, price, productsLink, category, quantity, address, content } =
+    form;
 
   return (
     <div>
@@ -89,7 +102,6 @@ const EditPage = ({ productData }: productDataProps) => {
               label="상품명"
               value={title}
               onChange={onChange}
-              placeholder={productData.title}
             />
             <Label htmlFor={'title'} labelText={''} />
             <Input
@@ -157,7 +169,7 @@ const EditPage = ({ productData }: productDataProps) => {
             ></Input>
             <Button
               className="h-14 mt-4 bg-primary text-white rounded "
-              onClick={() => editMutation.mutate()}
+              onClick={handleEdit}
             >
               쉐어링 수정
             </Button>
