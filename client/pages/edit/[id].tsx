@@ -10,7 +10,6 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery, useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { getProductDetail } from '../../api/detail';
 import { editProductDetail } from '../../api/detail';
 
@@ -40,9 +39,10 @@ interface previousDataProps {
     deadLine: string;
     nickname: string;
   };
+  id: string;
 }
 
-const EditPage = ({ previousData, id }) => {
+const EditPage = ({ previousData, id }: previousDataProps) => {
   const router = useRouter();
 
   const onChange = (
@@ -65,7 +65,6 @@ const EditPage = ({ previousData, id }) => {
     await editMutation.mutate();
     router.push(`/nearby/${id}`);
   };
-
 
   const [form, setForm] = useState({
     title: previousData.title,

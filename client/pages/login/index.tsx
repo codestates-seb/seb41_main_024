@@ -4,13 +4,11 @@ import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
 import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { requestLogin } from '../../api/login';
 import Cookies from 'js-cookie';
-import { getCurrentLocation } from '../../api/location';
+
 import React from 'react';
 
 const LoginPage = () => {

@@ -1,13 +1,6 @@
-import Image from 'next/image';
 import React from 'react';
 import Button from '../../atoms/button/Button';
 import { productDataProps } from './userMetaInfo';
-import { useCookies } from 'react-cookie';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import Cookies from 'js-cookie';
-import { deleteProductDetail } from '../../../api/detail';
 import Link from 'next/link';
 
 const UserMetaInfo = ({
