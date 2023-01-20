@@ -4,6 +4,7 @@ import ChatForm from '../../components/organisms/chatForm/ChatForm';
 import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
 import useWebSocketClient from '../../hooks/useWebSocketClient';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -11,7 +12,7 @@ import axios from 'axios';
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
 
 
-let HEADER_TOKEN = {Authorization : 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInVzZXJuYW1lIjoic29uZ0BnbWFpbC5jb20iLCJzdWIiOiJzb25nQGdtYWlsLmNvbSIsImlhdCI6MTY3NDEwOTYyNiwiZXhwIjoxNjc0MTEyMDI2fQ.QM11SgAdjcqLxwpaqlIVJsFZ1WEO6mQog_92AzH7tvY'}; 
+let HEADER_TOKEN = {Authorization : Cookies.get('access_token')}; 
 
 const Chatroom = () => { 
   const [input, setInput] = useState('')
