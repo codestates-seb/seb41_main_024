@@ -39,9 +39,6 @@ export default function ProductDetail({ id }) {
   const productData = res[0].data?.data;
   const isWriter = res[1].data?.data;
 
-  console.log('productData', productData);
-  console.log('isWriter', isWriter);
-
   const deleteMutation = useMutation(() => deleteProductDetail(id));
 
   function handleDelete() {

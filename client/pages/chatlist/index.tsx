@@ -18,7 +18,6 @@ const ChatList = () => {
   const { data } = useQuery(['mySharing'], getMySharing);
 
   const chatListData = data?.data;
-  console.log(chatListData);
 
   return (
     <div>

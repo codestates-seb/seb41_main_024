@@ -30,8 +30,6 @@ const LoginPage = () => {
       enabled: false,
     }
   );
-  console.log('location', location);
-  console.log(data);
 
   if (data) {
     Cookies.set('access_token', data.headers.authorization);

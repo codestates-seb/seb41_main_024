@@ -80,8 +80,6 @@ const EditPage = ({ previousData, id }) => {
     quantity: '1',
   });
 
-  console.log(form);
-
   const { title, price, productsLink, category, quantity, address, content } =
     form;
 
