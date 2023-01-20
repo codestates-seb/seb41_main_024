@@ -1,5 +1,6 @@
-package com.main024.ngether.qna;
+package com.main024.ngether.qna.qnaRepository;
 
+import com.main024.ngether.qna.qnaEntity.Qna;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

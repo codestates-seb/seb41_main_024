@@ -6,7 +6,8 @@ import com.main024.ngether.board.Board;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.likes.Like;
 import com.main024.ngether.location.Location;
-import com.main024.ngether.qna.Qna;
+import com.main024.ngether.qna.qnaEntity.Answer;
+import com.main024.ngether.qna.qnaEntity.Qna;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,12 +57,23 @@ public class Member {
 
     @JsonIgnore
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
-    private List<Qna> qnas = new ArrayList<>();
+    private List<Qna> questions = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<Answer> answers = new ArrayList<>();
 
     public void addQna(Qna qna) {
-        qnas.add(qna);
+        questions.add(qna);
         if(qna.getMember() != this) {
             qna.setMember(this);
+        }
+    }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        if(answer.getMember() != this) {
+            answer.setMember(this);
         }
     }
 

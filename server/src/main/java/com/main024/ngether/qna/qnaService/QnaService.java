@@ -1,9 +1,11 @@
-package com.main024.ngether.qna;
+package com.main024.ngether.qna.qnaService;
 
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberService;
+import com.main024.ngether.qna.qnaEntity.Qna;
+import com.main024.ngether.qna.qnaRepository.QnaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -64,9 +66,9 @@ public class QnaService {
 
     //Qna가 null이면 에러 발생
     private Qna findVerifyQna(long qnaId) {
-        Optional<Qna> optionalAnswer = qnaRepository.findById(qnaId);
-        Qna findQna = optionalAnswer.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.QNA_NOT_FOUND));
+        Optional<Qna> optionalQna = qnaRepository.findById(qnaId);
+        Qna findQna = optionalQna.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
         return findQna;
     }
 }

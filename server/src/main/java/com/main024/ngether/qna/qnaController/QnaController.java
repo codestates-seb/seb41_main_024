@@ -1,7 +1,12 @@
-package com.main024.ngether.qna;
+package com.main024.ngether.qna.qnaController;
 
 import com.main024.ngether.board.response.MultiResponseDto;
 import com.main024.ngether.member.MemberService;
+import com.main024.ngether.qna.qnaRepository.QnaRepository;
+import com.main024.ngether.qna.qnaService.QnaService;
+import com.main024.ngether.qna.qnaDto.QnaDto;
+import com.main024.ngether.qna.qnaEntity.Qna;
+import com.main024.ngether.qna.qnaMapper.QnaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

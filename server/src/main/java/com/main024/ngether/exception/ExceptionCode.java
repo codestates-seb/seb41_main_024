@@ -7,7 +7,6 @@ public enum ExceptionCode {
     MEMBER_EXISTS(401, "Member exists"),
     NOT_LOGIN(402,"login, please"),
     BOARD_NOT_FOUND(403,"login, please"),
-    QNA_NOT_FOUND(403,"login, please"),
     PERMISSION_DENIED(404,"check, please"),
     FULL_MEMBER(405,"Recruitment complete"),
 
@@ -16,7 +15,11 @@ public enum ExceptionCode {
     DECLARE_STATUS_TRUE(408,"Declare Status"),
 
     CHATROOM_ID_NOT_MATCH_BOARD_ID(409,"chatRoomId don't match boardId"),
-    SORTBY_NOT_FOUND(404, "SortBy not found");
+    SORTBY_NOT_FOUND(410, "SortBy not found"),
+    BOARD_NOT_DELETE(411, "Board not delete"),
+    ROLE_NOT_ADMIN(412, "Role not admin"),
+    REPORT_NOT_FOUND(413, " Report not found"),
+    RANGE_NOT_FOUND(414, "Range not found");
 
 
     @Getter

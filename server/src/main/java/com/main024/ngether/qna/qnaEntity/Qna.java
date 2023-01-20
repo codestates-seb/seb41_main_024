@@ -1,4 +1,4 @@
-package com.main024.ngether.qna;
+package com.main024.ngether.qna.qnaEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.main024.ngether.member.Member;
@@ -28,4 +28,9 @@ public class Qna {
     @ManyToOne(optional = false)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn(name = "ANSWER_ID")
+    private Answer answer;
 }

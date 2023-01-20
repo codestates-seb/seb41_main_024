@@ -1,6 +1,8 @@
-package com.main024.ngether.qna;
+package com.main024.ngether.qna.qnaMapper;
 
 import com.main024.ngether.member.MemberService;
+import com.main024.ngether.qna.qnaDto.QnaDto;
+import com.main024.ngether.qna.qnaEntity.Qna;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

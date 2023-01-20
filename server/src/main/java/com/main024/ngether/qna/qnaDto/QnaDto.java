@@ -1,4 +1,4 @@
-package com.main024.ngether.qna;
+package com.main024.ngether.qna.qnaDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
