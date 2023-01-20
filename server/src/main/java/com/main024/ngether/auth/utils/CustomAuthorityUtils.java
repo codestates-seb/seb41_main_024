@@ -18,6 +18,9 @@ public class CustomAuthorityUtils {
             AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
     private final List<GrantedAuthority> USER_ROLES =
             AuthorityUtils.createAuthorityList("ROLE_USER");
+
+    private final List<GrantedAuthority> BAN_ROLES =
+            AuthorityUtils.createAuthorityList("ROLE_BAN");
     private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "USER");
     private final List<String> USER_ROLES_STRING = List.of("USER");
 

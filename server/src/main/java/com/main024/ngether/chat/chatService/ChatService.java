@@ -3,6 +3,7 @@ package com.main024.ngether.chat.chatService;
 import com.main024.ngether.board.Board;
 import com.main024.ngether.board.BoardRepository;
 import com.main024.ngether.board.BoardService;
+import com.main024.ngether.chat.chatEntity.ChatDto;
 import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
@@ -90,7 +91,7 @@ public class ChatService {
             chatRoomMembers.setChatRoom(chatRoom);
             chatRoomMembersRepository.save(chatRoomMembers);
             chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
-            chatRoomRepository.save(chatRoom);
+
             ChatMessage chatMessage = ChatMessage.builder()
                     .nickName(member.getNickName())
                     .chatRoomId(roomId)
@@ -98,6 +99,9 @@ public class ChatService {
                     .message("[알림] " + member.getNickName() + "님이 입장하셨습니다.")
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
+            chatRoom.setLastMessage(savedMessage.getMessage());
+            chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
 
@@ -125,7 +129,7 @@ public class ChatService {
             }
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId());
             chatRoomMembersRepository.delete(chatRoomMembers);
-            chatRoomRepository.save(chatRoom);
+
             ChatMessage chatMessage = ChatMessage.builder()
                     .nickName(member.getNickName())
                     .chatRoomId(roomId)
@@ -133,6 +137,9 @@ public class ChatService {
                     .message("[알림] " + member.getNickName() + "님이 퇴장하셨습니다.")
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
+            chatRoom.setLastMessage(savedMessage.getMessage());
+            chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
         }
@@ -162,6 +169,28 @@ public class ChatService {
         }
         return boardList;
 
+    }
+
+    public List<ChatDto.lastMessageCreated> findLastMessageCreated() {
+        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
+        List<ChatDto.lastMessageCreated> lastMessages = new ArrayList<>();
+        for (int i = 0; i < chatRoomMembersList.size(); i++) {
+            ChatDto.lastMessageCreated lastMessageCreated = new ChatDto.lastMessageCreated();
+            lastMessageCreated.setLastMessageCreated(chatRoomMembersList.get(i).getChatRoom().getLastMessageCreated());
+            lastMessageCreated.setRoomId(chatRoomMembersList.get(i).getChatRoom().getRoomId());
+            lastMessages.add(lastMessageCreated);
+        }
+        return lastMessages;
+    }
+
+    public List<ChatRoom> findMyChatRoom() {
+        Member member = memberService.getLoginMember();
+        List<ChatRoom> chatRoomList = new ArrayList<>();
+        List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+        for (int i = 0; i < chatRoomMembers.size(); i++){
+            chatRoomList.add(chatRoomMembers.get(i).getChatRoom());
+        }
+        return chatRoomList;
     }
 
 

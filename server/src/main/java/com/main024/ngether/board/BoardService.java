@@ -129,10 +129,12 @@ public class BoardService {
     }
 
     public void deleteBoard(Long boardId) {
+        Board board = findVerifiedBoard(boardId);
         if (memberService.getLoginMember() == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        Board board = findVerifiedBoard(boardId);
-        if (board.getMember().getMemberId() == memberService.getLoginMember().getMemberId())
+        else if(board.getBoardStatus().equals(Board.BoardStatus.BOARD_NOT_DELETE))
+            throw new BusinessLogicException(ExceptionCode.BOARD_NOT_DELETE);
+        else if (board.getMember().getMemberId() == memberService.getLoginMember().getMemberId())
             boardRepository.delete(board);
         else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
     }
@@ -178,7 +180,7 @@ public class BoardService {
                         (keyword, PageRequest.of(page, size,
                                 Sort.by("boardId").descending()));
                 if(boardList.isEmpty())
-                    new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+                    throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
                 return boardList;
             }
             case "2": {
@@ -186,7 +188,7 @@ public class BoardService {
                         (keyword, PageRequest.of(page, size,
                                 Sort.by("boardId").descending()));
                 if(boardList.isEmpty())
-                    new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+                    throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
                 return boardList;
             }
             case "3": {
@@ -194,7 +196,7 @@ public class BoardService {
                         (memberService.findByNiceName(keyword).getMemberId(), PageRequest.of(page, size,
                                 Sort.by("boardId").descending()));
                 if(boardList.isEmpty())
-                    new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+                    throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
                 return boardList;
             }
             case "4": {
@@ -202,7 +204,7 @@ public class BoardService {
                         (keyword, PageRequest.of(page, 10,
                                 Sort.by("boardId").descending()));
                 if(boardList.isEmpty())
-                    new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+                    throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
                 return boardList;
             }
         }
