@@ -18,7 +18,7 @@ public enum ExceptionCode {
     SORTBY_NOT_FOUND(410, "SortBy not found"),
     BOARD_NOT_DELETE(411, "Board not delete"),
     ROLE_NOT_ADMIN(412, "Role not admin"),
-    REPORT_NOT_FOUND(413, " Report not found");
+    REPORT_NOT_FOUND(413, " Report not found"),
     RANGE_NOT_FOUND(414, "Range not found");
 
 
