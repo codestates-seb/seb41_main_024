@@ -14,7 +14,6 @@ import { useCookies } from 'react-cookie';
 export async function getServerSideProps(context: { params: { id: string } }) {
   const { id } = context.params;
   const { data } = await getProductDetail(id);
-  console.log(data);
 
   return {
     props: {
@@ -32,7 +31,6 @@ export default function ProductDetail(productData: any) {
   const { data } = useQuery(['productDetail'], () => getProductDetail(id), {
     initialData: productData,
   });
-  console.log(isWriter);
 
   function deleteHandler() {
     const deleteMutation = useMutation(() => deleteProductDetail(id));

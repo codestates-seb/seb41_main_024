@@ -46,8 +46,6 @@ const LoginPage = () => {
     }
   );
 
-  console.log('로그인 data >>>', data);
-
   if (data) {
     Cookies.set('access_token', data.headers.authorization);
     Cookies.set('refresh_token', data.headers.refresh);

@@ -5,30 +5,30 @@ import styles from './chatItem.module.css';
 import { chatItemPropsType } from './chatItem';
 import React from 'react';
 
-const ChatItemWithAlert = ({
+const ChatItem = ({
   thumbnail,
-  isOpen,
+  declareStatus,
   title,
-  price,
-  alertNum,
+  lastMessage,
   address,
 }: chatItemPropsType) => {
   return (
-    <div className="flex items-center border-solid border-0 border-b border-slate-400 h-22 p-4">
+    <div className="flex items-start border-solid border-0 border-b border-slate-400 h-22 p-4">
       <img src={thumbnail} className="w-16" />
       <div className="flex-1 flex-col items-start px-4">
-        <Badge isOpen={isOpen} />
+        <Badge declareStatus={declareStatus} />
         <span className={`${styles.title_ellipsis} text-s font-medium`}>
           {title}
         </span>
-        <span className="text-xs text-primary font-medium">인당 {price}원</span>
+        <span className="text-xs text-primary font-medium opacity-80">
+          {lastMessage}
+        </span>
       </div>
       <div className="flex flex-col items-end h-max">
         <SmallSpot address={address} />
-        {Number(alertNum) > 0 && <Alert alertNum={alertNum} />}
       </div>
     </div>
   );
 };
 
-export default ChatItemWithAlert;
+export default ChatItem;

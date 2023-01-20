@@ -16,8 +16,6 @@ const UserMetaInfo = ({
   deleteHandler,
   id,
 }: productDataProps) => {
-  console.log('metaInfo', isWriter);
-
   return (
     <div className="flex items-center border-b-1 border-x-0 border-t-0 border-solid border-[#475569] py-6 px-6 inline-block">
       <div>
