@@ -57,11 +57,10 @@ const Chatroom = () => {
     }
   }
 
-  const exitChatRoom = () => {
-    console.log(roomId)
+  const handleExitChatRoom = () => {
     if(stompClient){
       stompClient.disconnect(() => {
-        console.log('끊김')},
+        console.log('연결이 끊깁니다.')},
         HEADER_TOKEN
       )
       axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers: HEADER_TOKEN})
@@ -70,8 +69,7 @@ const Chatroom = () => {
 
   return (
     <div>
-      <ChatHeader />
-      {/* <button onClick={exitChatRoom}>퇴장</button> */}
+      <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
       <div className='left-2/4 translate-x-[-50%] fixed max-w-[672px] w-[80%] px-[3rem] rounded'>
         <Link href={`/nearby/${roomId}`}>
           <ChatItem
