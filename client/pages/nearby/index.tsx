@@ -2,8 +2,8 @@ import { BottomNavigation } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Img from '../../components/atoms/image/Image';
 import NearByPageTab from '../../components/organisms/tab/nearByPageTab/NearByPageTab';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { getPosts, getPostsInCurrentLocation } from '../../api/post';
+import { useQuery } from '@tanstack/react-query';
+import { getPosts } from '../../api/post';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import useDropDown from '../../hooks/common/useDropDown';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
@@ -34,32 +34,17 @@ const Index = () => {
     range: '',
   });
   const [locationError, setLocationError] = useState('');
-  const useMutationInCurrentLocation = useMutation({
-    mutationFn: getPostsInCurrentLocation,
-    mutationKey: ['sharingPosts'],
-    onSuccess: (data) => {
-      console.log('mutation :: ', data);
-    },
-    onError: (error) => {
-      console.log('mutataion ::', error);
-    },
-    retry: false,
-    cacheTime: 1000 * 60 * 60,
-  });
-  useEffect(() => {
-    getCurrentLocation(setLocation, setLocationError);
+  useEffect(() => getCurrentLocation(setLocation, setLocationError), []);
+  console.log(location);
 
-    useMutationInCurrentLocation.mutate({ range, category });
-  }, [inputValue]);
   const { category, range } = inputValue;
-
-  /* const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data, error } = useQuery({
     queryKey: ['sharingList'],
     queryFn: () => getPosts({ locationId, range, category }),
     staleTime: 1000 * 60 * 5,
     refetchOnWindowFocus: true,
     retry: false,
-  }); */
+  });
 
   return (
     <div className="flex flex-col items-center">
