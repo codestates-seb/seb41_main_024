@@ -1,6 +1,6 @@
 package com.main024.ngether.config;
 
-import com.main024.ngether.config.handler.StompHandler;
+//import com.main024.ngether.config.handler.StompHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -10,13 +10,14 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+
 @Configuration//해당 클래서가 Bean 설정을 할 것을 나타냄
 @EnableWebSocketMessageBroker//웹소켓 서버를 활성화 할 수 있는 기능
 @RequiredArgsConstructor
 @Slf4j
 public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final StompHandler stompHandler;
+   //private final StompHandler stompHandler;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -34,8 +35,8 @@ public class ChatConfig implements WebSocketMessageBrokerConfigurer {
         //메세지를 보낼 때 = message-handling methods으로 라우팅 되어야 한다는 것을 명시
         registry.setApplicationDestinationPrefixes("/send");
     }
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(stompHandler);
-    }
+//    @Override
+//    public void configureClientInboundChannel(ChannelRegistration registration) {
+//        registration.interceptors(stompHandler);
+//    }
 }

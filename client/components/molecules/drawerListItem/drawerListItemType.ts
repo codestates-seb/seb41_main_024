@@ -1,4 +1,5 @@
 export interface drawerListItemPropsType {
   text: string;
-  path: string;
+  path?: string;
+  onClick?: () => void;
 }

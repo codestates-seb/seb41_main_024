@@ -1,3 +1,3 @@
-export interface spotPropsType {
-  spot: string;
+export interface addressPropsType {
+  address: string;
 }

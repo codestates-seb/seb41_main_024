@@ -17,5 +17,6 @@ export type inputType = TextFieldProps & {
   multiline?: boolean;
   className?: string;
   value?: string | number;
-  onChange?: any;
+  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder?: string;
 };
