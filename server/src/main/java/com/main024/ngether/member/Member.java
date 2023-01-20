@@ -6,10 +6,7 @@ import com.main024.ngether.board.Board;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.likes.Like;
 import com.main024.ngether.location.Location;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Builder
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,5 +78,12 @@ public class Member {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    public Member update(String email, String name){
+        this.email = email;
+        this.nickName = name;
+
+        return this;
+    }
 
 }

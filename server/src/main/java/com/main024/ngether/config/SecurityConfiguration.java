@@ -5,8 +5,10 @@ import com.main024.ngether.auth.filter.JwtAuthenticationFilter;
 import com.main024.ngether.auth.filter.JwtVerificationFilter;
 import com.main024.ngether.auth.handler.MemberAuthenticationFailureHandler;
 import com.main024.ngether.auth.handler.MemberAuthenticationSuccessHandler;
+import com.main024.ngether.auth.handler.Oauth2MemberSuccessHandler;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
+import com.main024.ngether.auth.utils.CustomOauth2UserService;
 import com.main024.ngether.location.LocationRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,11 +32,19 @@ public class SecurityConfiguration {
     private final CustomAuthorityUtils authorityUtils;
 
     private final LocationRepository locationRepository;
+    private final CustomOauth2UserService customOAuth2UserService;
+    private final Oauth2MemberSuccessHandler oauth2MemberSuccessHandler;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, LocationRepository locationRepository) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer,
+                                 CustomAuthorityUtils authorityUtils,
+                                 LocationRepository locationRepository,
+                                 CustomOauth2UserService customOAuth2UserService,
+                                 Oauth2MemberSuccessHandler oauth2MemberSuccessHandler) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.locationRepository = locationRepository;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oauth2MemberSuccessHandler = oauth2MemberSuccessHandler;
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -57,8 +67,13 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/api/members").permitAll()
                         .antMatchers(HttpMethod.GET, "/auth/login").permitAll()
-                        .anyRequest().hasAnyRole("ADMIN", "USER")
-                );
+                        .anyRequest().hasAnyRole("ADMIN", "USER"))
+                .oauth2Login()//OAuth2 로그인 시작
+                .userInfoEndpoint()//로그인 성공시 사용자 정보를 가져옴
+                .userService(customOAuth2UserService); //로그인 성공 후 oauth2userservice 호출
+        http
+                .oauth2Login()
+                .successHandler(oauth2MemberSuccessHandler);//oauth2 인증 성공 후처리 handler 호출
         return http.build();
     }
     @Bean

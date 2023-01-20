@@ -32,8 +32,11 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // oauth
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+	implementation 'org.springframework.boot:spring-boot-starter-security'     // oauth
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' //oauth
 
 	//websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
