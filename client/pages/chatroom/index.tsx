@@ -5,7 +5,7 @@ import SendIcon from '@mui/icons-material/Send';
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
 
 import { ReactElement } from 'react';
-import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
+import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
 const chatDummy: any = [
   {
     thumbSrc: null,
