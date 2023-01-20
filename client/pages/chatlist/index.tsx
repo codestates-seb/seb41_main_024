@@ -109,7 +109,7 @@ const ChatList = () => {
         />
       </div>
       {chatListData &&
-        chatListData.map((el: any) => {
+        chatListData.map((el: ChatListResponse) => {
           return (
             <ChatItem
               key={el.id}

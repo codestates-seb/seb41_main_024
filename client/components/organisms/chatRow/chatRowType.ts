@@ -3,4 +3,5 @@ export interface chatRowType {
   nick: string | null;
   message: string;
   time: string;
+  myChat: string;
 }

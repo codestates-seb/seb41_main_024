@@ -1,8 +1,7 @@
 import React from 'react';
-import { FormControlProps } from '@mui/material';
-import { SelectInputProps } from '@mui/material/Select/SelectInput';
+import { TextFieldProps } from '@mui/material';
 
-export interface dropDownInputType extends FormControlProps {
+export interface dropDownInputType {
   id: string;
   label: string;
   dropDownOptions: { label: string; value: string | number }[];
@@ -11,4 +10,8 @@ export interface dropDownInputType extends FormControlProps {
   defaultValue?: any;
   onchange?: any;
   name?: string;
+  props: TextFieldProps;
+}
+export interface dropDownOptions {
+  options: { value: string | number; label: string };
 }
