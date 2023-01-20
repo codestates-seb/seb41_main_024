@@ -15,8 +15,8 @@ import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader
 // 따라서 게시물 작성 시 리턴되는 게시물 아이디를 이용해 바로 채팅방 생성 api로 호출해주시면 될 것 같습니다.
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
 
-
-let HEADER_TOKEN = {Authorization : Cookies.get('access_token')}; 
+let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
+let IS_ROOM_OWER = false
 
 const Chatroom = () => { 
   const [input, setInput] = useState('')
@@ -26,15 +26,18 @@ const Chatroom = () => {
     title: '',
     price: '',
     alertNum: '',
-    address: ''
+    address: '',
+    nickName: ''
   })
   const {stompClient, messages, members, roomId} = useWebSocketClient(HEADER_TOKEN);
 
+  
   useEffect(() => {
-      if(roomId)
-      getChatSharing(roomId)
-      .then((response) => {
+    if(roomId)
+    getChatSharing(roomId)
+    .then((response) => {
         setSharingData(response.data);
+        IS_ROOM_OWER = sharingData.nickName !== Cookies.get('nickName')
       })
       .catch((error) => {
         console.error(error);
@@ -57,14 +60,16 @@ const Chatroom = () => {
     }
   }
 
-  const handleExitChatRoom = () => {
-    if(stompClient){
-      stompClient.disconnect(() => {
-        console.log('연결이 끊깁니다.')},
-        HEADER_TOKEN
-      )
-      axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers: HEADER_TOKEN})
+  const handleExitChatRoom = (): void => {
+    if (!stompClient) return;
+    const confirmationMessage = IS_ROOM_OWER ? 
+      "방장님이 채팅에서 나가시면 N게더도 삭제되요" : 
+      "채팅에서 나가시면 N게더에서도 이탈해요"
+    if (stompClient && confirm(confirmationMessage)) {
+      stompClient.disconnect(() => {}, HEADER_TOKEN)
+      axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
     }
+    else return
   }
 
   return (
