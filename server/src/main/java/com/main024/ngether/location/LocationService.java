@@ -125,7 +125,7 @@ public class LocationService {
         return null;
     }
 
-    public Page<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category, int page,String sortBy) {
+    public Page<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category, int page,int size,String sortBy) {
         List<Board> boardList = boardRepository.findByCategory(category).get();
         String address1 = distanceCal.getAddress();
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
@@ -152,7 +152,7 @@ public class LocationService {
 
         if(sortBy.equals("time")){
             boardList1 = boardList1.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
-            PageRequest pageRequest = PageRequest.of(page, 10);
+            PageRequest pageRequest = PageRequest.of(page, size);
             int start = (int) pageRequest.getOffset();
             int end = Math.min((start + pageRequest.getPageSize()), boardList1.size());
             Page<Board> boardPage = new PageImpl<>(boardList1.subList(start, end), pageRequest, boardList1.size());
@@ -161,7 +161,7 @@ public class LocationService {
         else if(sortBy.equals("distance")){
             Map<Double, Board> sortedMap = new TreeMap<>(map);
             List<Board> boardList2 = new ArrayList<>(sortedMap.values());
-            PageRequest pageRequest = PageRequest.of(page, 10);
+            PageRequest pageRequest = PageRequest.of(page, size);
             int start = (int) pageRequest.getOffset();
             int end = Math.min((start + pageRequest.getPageSize()), boardList2.size());
             Page<Board> boardPage = new PageImpl<>(boardList2.subList(start, end), pageRequest, boardList2.size());

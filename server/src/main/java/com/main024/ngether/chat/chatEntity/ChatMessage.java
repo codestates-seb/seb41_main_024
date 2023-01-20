@@ -1,7 +1,5 @@
 package com.main024.ngether.chat.chatEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.main024.ngether.member.Member;
 import lombok.*;
 
 import javax.persistence.*;

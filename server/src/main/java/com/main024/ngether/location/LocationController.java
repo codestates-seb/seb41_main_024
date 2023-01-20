@@ -30,16 +30,19 @@ public class LocationController {
     private final LocationMapper locationMapper;
     private final MemberService memberService;
     private final DistanceRepository distanceRepository;
+    private final LocationRepository locationRepository;
 
 
     public LocationController(LocationService locationService,
                               LocationMapper locationMapper,
                               MemberService memberService,
-                              DistanceRepository distanceRepository) {
+                              DistanceRepository distanceRepository,
+                              LocationRepository locationRepository) {
         this.locationService = locationService;
         this.locationMapper = locationMapper;
         this.memberService = memberService;
         this.distanceRepository = distanceRepository;
+        this.locationRepository = locationRepository;
     }
 
     //사용자별 지정 위치 등록
@@ -55,9 +58,10 @@ public class LocationController {
     public ResponseEntity postDistance(@Valid @RequestBody LocationDto.DistanceCal distanceCal,
                                        @RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
-                                       @RequestParam(value = "sortBy") String sortBy) {
-        int page = 1;
-        Page<Board> pageBoards = locationService.createCurDistance(distanceCal, range, category, page - 1, sortBy);
+                                       @RequestParam(value = "sortBy") String sortBy,
+                                       @RequestParam(value = "page") int page,
+                                       @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = locationService.createCurDistance(distanceCal, range, category, page - 1, size, sortBy);
 
         List<Board> boardList = pageBoards.getContent();
 
@@ -84,8 +88,24 @@ public class LocationController {
         return new ResponseEntity<>(locationMapper.locationToLocationResponseDto(location), HttpStatus.OK);
     }
 
+    //사용자별 지정 위치 조회
+    @GetMapping("/myLocations")
+    public ResponseEntity getMemberLocations(@RequestParam(value = "page") int page,
+                                             @RequestParam(value = "size") int size) {
+        List<Location> locationList = locationRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()).get();
 
-    //모든 지정 위치 조회
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        int start = (int) pageRequest.getOffset();
+        int end = Math.min((start + pageRequest.getPageSize()), locationList.size());
+        Page<Location> locationPage = new PageImpl<>(locationList.subList(start, end), pageRequest, locationList.size());
+        List<Location> locationList1 = locationPage.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(locationList1, locationPage), HttpStatus.OK);
+
+    }
+
+    //사용자별 지정 위치 조회
     @GetMapping("/locations")
     public ResponseEntity getLocations() {
         List<Location> locations = locationService.findLocations();
@@ -103,7 +123,9 @@ public class LocationController {
     public ResponseEntity getDistances(@RequestParam(value = "range") double range,
                                        @RequestParam(value = "category") String category,
                                        @PathVariable("location-id") @Positive long locationId,
-                                       @RequestParam(value = "sortBy") String sortBy) {
+                                       @RequestParam(value = "sortBy") String sortBy,
+                                       @RequestParam(value = "page") int page,
+                                       @RequestParam(value = "size") int size) {
         List<Distance> distanceList;
         if (range == 0.2)
             distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
@@ -132,10 +154,9 @@ public class LocationController {
             boardList.add(distanceList.get(i).getBoard());
         }
 
-        int page = 1;
         if (sortBy.equals("time")) {
             boardList = boardList.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
-            PageRequest pageRequest = PageRequest.of(page - 1, 10);
+            PageRequest pageRequest = PageRequest.of(page - 1, size);
             int start = (int) pageRequest.getOffset();
             int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
             Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
@@ -146,7 +167,7 @@ public class LocationController {
         }
 
         else if(sortBy.equals("distance")){
-            PageRequest pageRequest = PageRequest.of(page-1, 10);
+            PageRequest pageRequest = PageRequest.of(page-1, size);
             int start = (int) pageRequest.getOffset();
             int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
             Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
@@ -155,8 +176,11 @@ public class LocationController {
             return new ResponseEntity<>(
                     new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
         }
+
         else
             throw new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+
+
 
     }
 
