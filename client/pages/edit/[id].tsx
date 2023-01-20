@@ -61,10 +61,12 @@ const EditPage = ({ previousData, id }) => {
 
   const editMutation = useMutation(() => editProductDetail(id, form));
 
-  const handleEdit = () => {
-    editMutation.mutate();
+  const handleEdit = async () => {
+    await editMutation.mutate();
     router.push(`/nearby/${id}`);
   };
+
+  console.log(editMutation);
 
   const [form, setForm] = useState({
     title: previousData.title,
