@@ -30,6 +30,8 @@ public class Answer {
     private Member member;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "answer")
+    @OneToOne(optional = false)
+    @JoinColumn(name = "QNA_ID")
     private Qna qna;
+
 }

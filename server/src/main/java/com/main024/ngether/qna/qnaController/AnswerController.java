@@ -22,9 +22,10 @@ public class AnswerController {
     private final MemberService memberService;
 
     //답변 작성
-    @PostMapping
-    public ResponseEntity postAnswer(@Valid @RequestBody AnswerDto.Post AnswerDto) {
-        Answer Answer = answerService.createAnswer(mapper.AnswerPostToAnswer(memberService, AnswerDto));
+    @PostMapping("/qna/{qna-id}")
+    public ResponseEntity postAnswer(@PathVariable("qna-id") @Positive long qnaId,
+                                     @Valid @RequestBody AnswerDto.Post AnswerDto) {
+        Answer Answer = answerService.createAnswer(mapper.AnswerPostToAnswer(qnaId, memberService, AnswerDto));
 
         return ResponseEntity.ok(mapper.AnswerToAnswerResponseDto(Answer));
     }

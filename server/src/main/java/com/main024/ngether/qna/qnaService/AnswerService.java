@@ -31,6 +31,7 @@ public class AnswerService {
         newAnswer.setTitle(answer.getTitle());
         newAnswer.setContent(answer.getContent());
         newAnswer.setCreateDate(answer.getCreateDate());
+        newAnswer.setQna(qnaService.findQna(answer.getQna().getQnaId()));
         member.addAnswer(newAnswer);
 
         Answer saveAnswer = answerRepository.save(newAnswer);

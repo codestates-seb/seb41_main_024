@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class QnaDto {
     @Getter
@@ -39,5 +41,6 @@ public class QnaDto {
         private String title;
         private String content;
         private LocalDateTime createDate;
+        private List<AnswerDto.Response> answers = new ArrayList<>();
     }
 }

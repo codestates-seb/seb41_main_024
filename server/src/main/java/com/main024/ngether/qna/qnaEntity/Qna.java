@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,7 +32,6 @@ public class Qna {
     private Member member;
 
     @JsonIgnore
-    @OneToOne
-    @JoinColumn(name = "ANSWER_ID")
-    private Answer answer;
+    @OneToOne(mappedBy = "qna", targetEntity = Qna.class)
+    private List<Answer> answers = new ArrayList<>();
 }

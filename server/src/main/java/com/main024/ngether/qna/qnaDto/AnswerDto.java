@@ -35,6 +35,7 @@ public class AnswerDto {
     public static class Response {
         private long answerId;
         private long memberId;
+        private long qnaId;
         private String nickName;
         private String title;
         private String content;
