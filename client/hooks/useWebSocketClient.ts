@@ -19,21 +19,33 @@ const useWebSocketClient = (token: {Authorization : string | undefined}) => {
   const [members, setMembers] = useState<any[]>([])
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
 
-  useEffect(() => {
-    console.log(token)
-    setTimeout(() => {
+  useEffect( () => {
+    // 쿠키가 왜 언디파인드일지 파악하보고
+    // 단순 로컬 오류였음
+    // 셋타임아웃으로 초단위를 맞추는건 지양하기
       if(!isReady && token !== undefined) return
-        axios.get(`https://ngether.site/chat/room/messages/${roomId}`)
+      // 이부분이 동기로 작동하는데 비동기로 짜보는게 좋겠다
+      // 
+      const sockjs = new SockJS(`https://ngether.site/ws`);
+      const ws = StompJS.over(sockjs);
+      setStompClient(ws);
+
+      const setChatWebsocket = async () => {
+        await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : token})
         .then(res => setMessages(res.data.map((chatMessage: chatMessageType) => {
           console.log(res)
           return { ...chatMessage, createDate: transDateFormat(chatMessage.createDate) };
         })));
-    
-        const sockjs = new SockJS(`https://ngether.site/ws`);
-        const ws = StompJS.over(sockjs)
-        setStompClient(ws)
-    
-        ws.connect(
+        
+        // .then(res => setMessages(res.data.map((chatMessage: chatMessageType) => {
+        //   console.log(res)
+        //   return { ...chatMessage, createDate: transDateFormat(chatMessage.createDate) };
+        // })));
+        // 중복되는 부분은 함수로 관리하면 좋겠다.
+        // function createChatMessage = (chatMessage: chatMessageType) => {
+        // return {...chatMessage, createDate: transDateFormat(chatMessage.createDate)}
+        
+        await ws.connect(
           {},
           () => {
             ws.subscribe(
@@ -52,9 +64,8 @@ const useWebSocketClient = (token: {Authorization : string | undefined}) => {
             console.log(error)
           }
         )
-        axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers : token})
-        .then(res => console.log(res))
-    }, 2000)
+      }
+      setChatWebsocket();
   }, [roomId, token])
 
   return {stompClient, messages, members, roomId}
@@ -67,3 +78,5 @@ const transDateFormat = (date: string) => {
   const formattedDate = `${targetDate.getHours() >= 12 ? '오후' : '오전'} ${targetDate.getHours() % 12 || 12}시 ${targetDate.getMinutes()}분`;
   return formattedDate
 }
+
+// 이거 테스트코드 만들어볼것
