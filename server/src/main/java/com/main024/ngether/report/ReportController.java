@@ -58,5 +58,11 @@ public class ReportController {
         reportService.updateMemberRole(memberId);
         return new ResponseEntity(HttpStatus.OK);
     }
+    //벤 푸는 api
+    @PatchMapping("/admin/recoveryMemberRole")
+        public ResponseEntity recoveryMemberRole(@RequestParam(value = "memberId") long memberId){
+            reportService.recoveryMemberRole(memberId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
 
-}
