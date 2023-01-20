@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/members")
@@ -84,6 +86,7 @@ public class MemberController {
     public ResponseEntity search(@RequestParam(value = "keyword") String keyword) {
         return ResponseEntity.ok(mapper.memberToMemberResponse(memberService.findByNiceName(keyword)));
     }
+
     //내가 좋아요 누른 게시물 검색
     @GetMapping("/like")
     public ResponseEntity searchMyLike(@RequestParam(value = "page") int page,
@@ -103,20 +106,25 @@ public class MemberController {
     @GetMapping("/myChatting")
     public ResponseEntity viewMyChattingRoom(@RequestParam(value = "page") int page,
                                              @RequestParam(value = "size") int size) {
-        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
+        List<ChatRoom> chatRoomList = chatService.findMyChatRoom()
+                .stream()
+                .sorted(Comparator.comparing(ChatRoom::getLastMessageCreated)
+                        .reversed())
+                .collect(Collectors.toList());
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), chatRoomMembersList.size());
-        Page<ChatRoomMembers> chatRoomMembersPage = new PageImpl<>(chatRoomMembersList.subList(start, end), pageRequest, chatRoomMembersList.size());
-        List<ChatRoomMembers> chatRoomMembersList1 = chatRoomMembersPage.getContent();
+        int end = Math.min((start + pageRequest.getPageSize()), chatRoomList.size());
+        Page<ChatRoom> chatRoomMembersPage = new PageImpl<>(chatRoomList.subList(start, end), pageRequest, chatRoomList.size());
+        List<ChatRoom> chatRoomList1 = chatRoomMembersPage.getContent();
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(chatRoomMembersList1, chatRoomMembersPage), HttpStatus.OK);
+                new MultiResponseDto<>(chatRoomList1, chatRoomMembersPage), HttpStatus.OK);
     }
+
     //내가 참여하고 있는 쉐어링 게시물 목록
     @GetMapping("/sharingList")
     public ResponseEntity viewMySharingList(@RequestParam(value = "page") int page,
-                                            @RequestParam(value = "size") int size){
+                                            @RequestParam(value = "size") int size) {
         List<Board> boardList = chatService.findMySharingList
                 (chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()));
         PageRequest pageRequest = PageRequest.of(page - 1, size);
@@ -128,11 +136,12 @@ public class MemberController {
         return new ResponseEntity<>(
                 new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
     }
+
     //내가 개설한 게시물 목록
     @GetMapping("/myBoard")
     public ResponseEntity viewMyBoardList(@RequestParam(value = "page") int page,
-                                          @RequestParam(value = "size") int size){
-        Page<Board> pageBoards = boardRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size));
+                                          @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = boardRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page - 1, size));
         List<Board> boardList = pageBoards.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
