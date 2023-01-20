@@ -36,7 +36,7 @@ public class ReportController {
     @PostMapping
     public ResponseEntity postReport(@Valid @RequestBody ReportDto.Post reportPostDto) {
         Report report = reportService.createReport
-                (reportMapper.reportPostToReport(memberService, boardRepository, reportPostDto));
+                (reportMapper.reportPostToReport(reportPostDto));
 
         return new ResponseEntity<>(reportMapper.reportToReportResponse(report), HttpStatus.CREATED);
     }
@@ -45,7 +45,7 @@ public class ReportController {
     @GetMapping("/admin/list")
     public ResponseEntity getReports(@Positive @RequestParam(value = "page") int page,
                                      @Positive @RequestParam(value = "size") int size) {
-        Page<Report> reportPage = reportService.findReports(page - 1, size, memberService);
+        Page<Report> reportPage = reportService.findReports(page - 1, size);
         List<Report> reportList = reportPage.getContent();
 
         return new ResponseEntity<>(
@@ -55,7 +55,7 @@ public class ReportController {
     //관리자가 member role, status 바꿀 수 있는 api
     @PatchMapping("/admin/changeMemberRole")
     public ResponseEntity patchMemberRole(@Positive @RequestParam(value = "memberId") long memberId) {
-        reportService.updateMemberRole(memberId, memberService);
+        reportService.updateMemberRole(memberId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
