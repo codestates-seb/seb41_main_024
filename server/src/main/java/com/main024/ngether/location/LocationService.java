@@ -168,8 +168,7 @@ public class LocationService {
             return boardPage;
         }
         else
-            new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
-        return null;
+            throw new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
     }
 
     public Location findVerifiedLocation(long locationId) {

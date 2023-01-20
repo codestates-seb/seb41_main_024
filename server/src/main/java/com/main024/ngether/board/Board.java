@@ -58,7 +58,8 @@ public class Board {
         BOARD_NOT_COMPLETE("모집 중"),
         BOARD_COMPLETE("모집 완료"),
 
-        BOARD_TERM_EXPIRE("모집 기간 만료");
+        BOARD_TERM_EXPIRE("모집 기간 만료"),
+        BOARD_NOT_DELETE("삭제 불가능");
 
         @Getter
         private String status;
