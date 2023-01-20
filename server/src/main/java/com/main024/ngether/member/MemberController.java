@@ -115,10 +115,9 @@ public class MemberController {
         int start = (int) pageRequest.getOffset();
         int end = Math.min((start + pageRequest.getPageSize()), chatRoomList.size());
         Page<ChatRoom> chatRoomMembersPage = new PageImpl<>(chatRoomList.subList(start, end), pageRequest, chatRoomList.size());
-        List<ChatRoom> chatRoomList1 = chatRoomMembersPage.getContent();
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(chatRoomList1, chatRoomMembersPage), HttpStatus.OK);
+                new MultiResponseDto<>(chatRoomMembersPage.getContent(), chatRoomMembersPage), HttpStatus.OK);
     }
 
     //내가 참여하고 있는 쉐어링 게시물 목록
