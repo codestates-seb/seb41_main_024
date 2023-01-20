@@ -12,7 +12,7 @@ import Link from 'next/link';
 
 const UserMetaInfo = ({
   productData,
-  deleteHandler,
+  handleDelete,
   isWriter,
   id,
 }: productDataProps) => {
@@ -37,7 +37,7 @@ const UserMetaInfo = ({
           </Link>
           <Button
             className="w-14 p-2 m-2 bg-primary text-white rounded"
-            onClick={deleteHandler}
+            onClick={handleDelete}
           >
             삭제
           </Button>

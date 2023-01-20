@@ -42,12 +42,11 @@ export default function ProductDetail({ id }) {
   console.log('productData', productData);
   console.log('isWriter', isWriter);
 
-  function deleteHandler() {
-    const deleteMutation = useMutation(() => deleteProductDetail(id));
+  const deleteMutation = useMutation(() => deleteProductDetail(id));
+
+  function handleDelete() {
     deleteMutation.mutate();
-    if (deleteMutation.data) {
-      router.push('/');
-    }
+    router.push('/');
   }
 
   return (
@@ -55,7 +54,7 @@ export default function ProductDetail({ id }) {
       <Img src="/chatItem/productImg05.svg" alt="메인사진" />
       <UserMetaInfo
         productData={productData}
-        deleteHandler={deleteHandler}
+        handleDelete={handleDelete}
         isWriter={isWriter}
         id={id}
       />
