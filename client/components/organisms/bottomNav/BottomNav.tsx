@@ -11,6 +11,7 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import { bottomNavPropsType } from './bottomNavType';
+import Cookies from 'js-cookie';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
@@ -43,6 +44,14 @@ export default function BottomNav(): JSX.Element {
     },
   ];
 
+  const handleOnClick = (path: string) => {
+    if (Cookies.get('access_token') || path === '/') {
+      router.push(path);
+    } else {
+      router.push('/login');
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -61,6 +70,7 @@ export default function BottomNav(): JSX.Element {
             maxWidth: '672px',
             transform: 'translateX(-50%)',
             bottom: '0',
+            // borderTop: '1px solid #475569',
           }}
         >
           {NAVIGATION_LIST.map(({ label, icon, path }: any) => {
@@ -70,7 +80,7 @@ export default function BottomNav(): JSX.Element {
                 label={label}
                 icon={icon}
                 value={path}
-                onClick={() => router.push(path)}
+                onClick={() => handleOnClick(path)}
                 sx={
                   path === '/addnew'
                     ? {

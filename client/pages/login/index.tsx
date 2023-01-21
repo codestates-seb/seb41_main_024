@@ -2,31 +2,14 @@ import Input from '../../components/atoms/input/Input';
 import Button from '../../components/atoms/button/Button';
 import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
-import axios from 'axios';
-import { useCookies } from 'react-cookie';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { requestLogin } from '../../api/login';
 import Cookies from 'js-cookie';
 
 import React from 'react';
-
-const LoginSlogan = () => {
-  return (
-    <div className="flex flex-col items-center">
-      <Logo />
-      <p className="pt-px mt-4 text-lg">
-        <strong className="text-primary font-bold">로그인</strong>하고
-      </p>
-      <p className="pb-px text-lg">
-        <strong className="text-primary font-bold">쇼핑 친구</strong>를
-        만나보세요
-      </p>
-    </div>
-  );
-};
 
 const LoginPage = () => {
   const router = useRouter();
@@ -38,12 +21,6 @@ const LoginPage = () => {
 
   const { email, pw } = form;
 
-  function request() {
-    // return axios.get('http://localhost:3001/productList');
-    // return axios.get('http://3.34.54.131:8080/api/members');
-    return axios.post('https://ngether.site/auth/login', form);
-  }
-
   const { data, isLoading, isError, refetch } = useQuery(
     ['loginData'],
     () => requestLogin(form),
@@ -52,14 +29,12 @@ const LoginPage = () => {
     }
   );
 
-  console.log('로그인 data >>>', data);
-
   if (data) {
     Cookies.set('access_token', data.headers.authorization);
     Cookies.set('refresh_token', data.headers.refresh);
     Cookies.set('memberId', data.data.memberId);
     Cookies.set('nickName', data.data.nickName);
-
+    Cookies.set('locationId', data.data.locationId);
     router.push('/');
   }
 
@@ -115,3 +90,18 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+const LoginSlogan = () => {
+  return (
+    <div className="flex flex-col items-center">
+      <Logo />
+      <p className="pt-px mt-4 text-lg">
+        <strong className="text-primary font-bold">로그인</strong>하고
+      </p>
+      <p className="pb-px text-lg">
+        <strong className="text-primary font-bold">쇼핑 친구</strong>를
+        만나보세요
+      </p>
+    </div>
+  );
+};
