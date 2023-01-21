@@ -5,54 +5,58 @@ import PostMeta from '../../components/molecules/postMeta/PostMeta';
 import UserMetaInfo from '../../components/molecules/userMetaInfo/UserMetaInfo';
 import DetailPageTab from '../../components/organisms/tab/detailPageTab/DetailPageTab';
 import axios from 'axios';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { deleteProductDetail, getProductDetail } from '../../api/detail';
+import { getIsWriter } from '../../api/isWriter';
 import Cookies from 'js-cookie';
-import { useCookies } from 'react-cookie';
 
-export async function getServerSideProps(context: { params: { id: string } }) {
+export async function getServerSideProps(context) {
   const { id } = context.params;
-  const { data } = await getProductDetail(id);
-  console.log(data);
-
   return {
     props: {
-      productData: data,
+      id,
     },
   };
 }
 
-export default function ProductDetail(productData: any) {
+export default function ProductDetail({ id }) {
   const router = useRouter();
-  const { id } = router.query;
-  const [cookies, setCookie] = useCookies(['memberId']);
-  const isWriter =
-    Number(cookies.memberId) === productData?.productData?.memberId;
-  const { data } = useQuery(['productDetail'], () => getProductDetail(id), {
-    initialData: productData,
-  });
-  console.log(isWriter);
 
-  function deleteHandler() {
-    const deleteMutation = useMutation(() => deleteProductDetail(id));
+  const res = useQueries({
+    queries: [
+      {
+        queryKey: ['productDetail'],
+        queryFn: () => getProductDetail(id),
+      },
+      {
+        queryKey: ['isWriter'],
+        queryFn: () => getIsWriter(id),
+      },
+    ],
+  });
+
+  const productData = res[0].data?.data;
+  const isWriter = res[1].data?.data;
+
+  const deleteMutation = useMutation(() => deleteProductDetail(id));
+
+  function handleDelete() {
     deleteMutation.mutate();
-    if (deleteMutation.data) {
-      router.push('/');
-    }
+    router.push('/');
   }
 
   return (
     <div>
       <Img src="/chatItem/productImg05.svg" alt="메인사진" />
       <UserMetaInfo
-        productData={productData.productData}
+        productData={productData}
+        handleDelete={handleDelete}
         isWriter={isWriter}
-        deleteHandler={deleteHandler}
         id={id}
       />
-      <PostMeta productData={productData.productData} />
-      <DetailPageTab productData={productData.productData} />
+      <PostMeta productData={productData} />
+      <DetailPageTab productData={productData} />
       <DetailBottom />
     </div>
   );

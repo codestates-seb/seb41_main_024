@@ -6,19 +6,12 @@ import ProductImg04 from '../../public/chatItem/productImg04.svg';
 import ProductImg05 from '../../public/chatItem/productImg05.svg';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-1;
 import { useQuery, useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { getMySharing } from '../../api/mySharing';
 
 const ChatList = () => {
-  const router = useRouter();
-  const { id } = router.query;
-
   const { data } = useQuery(['mySharing'], getMySharing);
-
   const chatListData = data?.data;
-  console.log(chatListData);
 
   return (
     <div>

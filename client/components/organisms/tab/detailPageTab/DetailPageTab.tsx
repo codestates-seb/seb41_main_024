@@ -49,7 +49,6 @@ const DetailPageTab = ({ productData }: productDataProps) => {
           latitude={productData?.latitude}
           longitude={productData?.longitude}
         />
-        {/* <Img src="/detail/map.svg" alt="지도" /> */}
       </section>
       <section id="section-2" className="px-2 py-4">
         <p className="text-base">주변 상품</p>

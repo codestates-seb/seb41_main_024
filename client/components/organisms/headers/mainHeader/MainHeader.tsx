@@ -1,3 +1,4 @@
+import React from 'react';
 import { Fragment, useState } from 'react';
 import { AppBar, Button } from '@mui/material';
 import Link from 'next/link';
@@ -9,7 +10,7 @@ import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import { mainHeaderType } from './mainHeader';
 import { nextTick } from 'process';
 
-const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
+const MainHeader = ({ isLogin, nickName, logOutHandler }: mainHeaderType) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -44,7 +45,6 @@ const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
           </Button>
         </div>
       </AppBar>
-      {/* <Divider /> */}
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
         {isLogin && nickName && (
           <>
@@ -58,13 +58,23 @@ const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
                 로그아웃
               </Button>
             </div>
-            <DrawerListItem text={'마이페이지'} path={'/mypage'} />
           </>
         )}
-        <DrawerListItem text={'로그인'} path={'/login'} />
-        <DrawerListItem text={'회원가입'} path={'/signuo'} />
-        {/* <DrawerListItem text={'마이페이지'} path={'/mypage/로그인 한 사람의 멤버 아이디'} /> */}
-        {/* 임의로 1로 지정 */}
+        {!isLogin && (
+          <div className="flex justify-center items-center m-2">
+            <Link href={'/login'}>
+              <Button variant="contained" className="m-2">
+                로그인
+              </Button>
+            </Link>
+            <Link href={'/signup'}>
+              <Button variant="contained" className="m-2">
+                회원가입
+              </Button>
+            </Link>
+          </div>
+        )}
+        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
       </DrawerList>
     </Fragment>
   );
