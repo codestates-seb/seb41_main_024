@@ -20,7 +20,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Page<Board> findByAddressContaining(String address, PageRequest pageRequest);
 
-    Optional<List<Board>> findByBoardStatusAndMemberMemberId(Board.BoardStatus boardStatus, Long memberId);
+    Page<Board> findByBoardStatusAndMemberMemberId(Board.BoardStatus boardStatus, Long memberId, PageRequest pageRequest);
 
 
 

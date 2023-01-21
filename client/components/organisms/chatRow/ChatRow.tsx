@@ -1,19 +1,23 @@
 import classnames from 'classnames';
 import { chatRowType } from './chatRowType';
+import Cookie from 'js-cookie';
 
-const ChatRow = ({ thumbSrc, nick, message, time }: chatRowType) => {
+const ChatRow = ({ thumbSrc, nickName, message, createDate }: chatRowType) => {
+  const MY_CHAT = Cookie.get('nickName') !== nickName;
+  const OTHER_CHAT = !MY_CHAT;
+
   return (
     <div
       className={classnames('mt-[1.625rem] first:mt-0', {
-        'flex flex-row-reverse': !thumbSrc,
+        'flex flex-row-reverse': MY_CHAT,
       })}
     >
       <div
         className={classnames('flex items-start max-w-[31.25rem]', {
-          'flex-row-reverse': !thumbSrc,
+          'flex-row-reverse': MY_CHAT,
         })}
       >
-        {thumbSrc && (
+        {OTHER_CHAT && thumbSrc && (
           <span className="min-w-[2.8125rem] h-[2.8125rem] rounded-full overflow-hidden">
             <img
               src={thumbSrc}
@@ -25,24 +29,26 @@ const ChatRow = ({ thumbSrc, nick, message, time }: chatRowType) => {
 
         <span
           className={classnames('inline-flex flex-col ml-[0.75rem]', {
-            'mr-[0.75rem]': thumbSrc,
+            'mr-[0.75rem]': MY_CHAT,
           })}
         >
-          {thumbSrc && (
-            <span className="block text-[#fefefe] my-[0.375rem]">{nick}</span>
+          {OTHER_CHAT && (
+            <span className="block text-[#fefefe] my-[0.375rem]">
+              {nickName}
+            </span>
           )}
           <span
             className={classnames(
               'inline-flex pt-[0.812rem] pb-[0.875rem] px-[1rem] rounded leading-[1.125rem] break-all',
-              { 'bg-[#fff]': thumbSrc },
-              { 'bg-[#faff00] ': !thumbSrc }
+              { 'bg-[#fff]': OTHER_CHAT },
+              { 'bg-[#faff00] ': MY_CHAT }
             )}
           >
             {message}
           </span>
         </span>
         <span className="min-w-[3.25rem] text-[0.75rem] leading-[0.875rem] text-[#fff] self-end pb-[0.0625rem]">
-          {time}
+          {createDate}
         </span>
       </div>
     </div>

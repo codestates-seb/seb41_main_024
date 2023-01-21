@@ -1,22 +1,36 @@
 import { chatRowType } from '../chatRow/chatRowType';
 import { chatGroupType } from './chatGroupType';
 import ChatRow from '../chatRow/ChatRow';
+import ChatNoticeRow from '../../molecules/chatNoticeRow/ChatNoticeRow';
 
 const ChatGroup = ({ chatData }: chatGroupType) => {
   return (
     <div className="mx-[1.25rem]">
-      {chatData.map((data: chatRowType, idx: number) => {
-        return (
-          <ChatRow
-            key={idx}
-            myChat={data.myChat}
-            thumbSrc={data.thumbSrc}
-            nick={data.nick}
-            message={data.message}
-            time={data.time}
-          />
-        );
-      })}
+      {chatData.map(
+        ({
+          thumbSrc,
+          chatMessageId,
+          nickName,
+          message,
+          createDate,
+          type,
+        }: chatRowType) => {
+          if (type !== 'TALK') {
+            return <ChatNoticeRow key={chatMessageId} message={message} />;
+          }
+
+          return (
+            <ChatRow
+              key={chatMessageId}
+              type={type}
+              thumbSrc={thumbSrc}
+              nickName={nickName}
+              message={message}
+              createDate={createDate}
+            />
+          );
+        }
+      )}
     </div>
   );
 };

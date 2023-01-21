@@ -1,34 +1,18 @@
 import { Fragment, useState } from 'react';
-import { AppBar, Button, Divider } from '@mui/material';
+import { AppBar, Button } from '@mui/material';
 import Link from 'next/link';
 import { ReactComponent as SearchIcon } from '../../../../public/header/search.svg';
 import { ReactComponent as NavigatorIcon } from '../../../../public/header/navigator.svg';
 import { ReactComponent as Logo } from '../../../../public/logos/logoRow.svg';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
-import { useCookies } from 'react-cookie';
-import { useRouter } from 'next/router';
+import { mainHeaderType } from './mainHeader';
+import { nextTick } from 'process';
 
-const MainHeader = () => {
-  const [cookies, setCookie, removeCookie] = useCookies([
-    'access_token',
-    'refresh_token',
-    'memberId',
-    'nickName',
-  ]);
-  const router = useRouter();
-
+const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
-  };
-
-  const handleLogOut = () => {
-    removeCookie('access_token');
-    removeCookie('refresh_token');
-    removeCookie('memberId');
-    removeCookie('nickName');
-    router.push('/');
   };
 
   return (
@@ -62,19 +46,23 @@ const MainHeader = () => {
       </AppBar>
       {/* <Divider /> */}
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        {cookies.access_token && (
-          <div className="flex flex-col items-center m-4">
-            <span className="text-primary text-bold">{cookies.nickName}</span>
-            <Button
-              variant="contained"
-              className="m-4"
-              onClick={() => handleLogOut()}
-            >
-              로그아웃
-            </Button>
-          </div>
+        {isLogin && nickName && (
+          <>
+            <div className="flex flex-col items-center m-4">
+              <span className="text-primary text-bold">{nickName}</span>
+              <Button
+                variant="contained"
+                className="m-4"
+                onClick={logOutHandler}
+              >
+                로그아웃
+              </Button>
+            </div>
+            <DrawerListItem text={'마이페이지'} path={'/mypage'} />
+          </>
         )}
-        <DrawerListItem text={'마이페이지'} path={'/mypage/1'} />
+        <DrawerListItem text={'로그인'} path={'/login'} />
+        <DrawerListItem text={'회원가입'} path={'/signuo'} />
         {/* <DrawerListItem text={'마이페이지'} path={'/mypage/로그인 한 사람의 멤버 아이디'} /> */}
         {/* 임의로 1로 지정 */}
       </DrawerList>
