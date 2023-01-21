@@ -3,11 +3,7 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { useState, useCallback, useRef } from 'react';
 import { inputType, uploadPostType } from './useInputType';
 
-function useInput(
-  initialValue: inputType,
-  mutate: UseMutateFunction<any, unknown, any, unknown>,
-  token: { authorization: string; refresh: string }
-) {
+function useInput(initialValue: inputType) {
   const [inputValue, setInputValue] = useState(initialValue);
 
   /* const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,22 +19,8 @@ function useInput(
       [name]: value,
     });
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    //토큰 일단 하드코딩했습니다.
 
-    const requestBody: uploadPostType = {
-      ...inputValue,
-      //아래 부분은 하드코딩했습니다.
-      latitude: inputValue.lat,
-      longitude: inputValue.lng,
-      address: inputValue.address,
-      accessToken: token.authorization,
-      refreshToken: token.refresh,
-    };
-    mutate(requestBody);
-  };
-  return { inputValue, onChange, handleSubmit } as const;
+  return { inputValue, onChange } as const;
 }
 
 export default useInput;
