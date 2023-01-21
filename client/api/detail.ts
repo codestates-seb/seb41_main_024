@@ -2,7 +2,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const REQUEST_URL = 'https://ngether.site';
-
 const access_token = Cookies.get('access_token');
 
 export function getProductDetail(id: string) {

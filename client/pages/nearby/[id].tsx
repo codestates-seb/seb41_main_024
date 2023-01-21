@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
+  const { data } = await getProductDetail(id);
   return {
     props: {
       id,

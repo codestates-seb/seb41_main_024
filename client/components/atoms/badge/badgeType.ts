@@ -1,3 +1,3 @@
 export interface badgeType {
-  isOpen: boolean;
+  declareStatus: boolean;
 }
