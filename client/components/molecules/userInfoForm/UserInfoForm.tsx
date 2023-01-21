@@ -11,8 +11,8 @@ import axios from 'axios';
 
 const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
 const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
-const SIGN_UP_URL = 'http://3.34.54.131:8080/api/members';
-const EDIT_USER_INFO_URL = 'http://3.34.54.131:8080/api/members/patch';
+const SIGN_UP_URL = 'https://ngether.site/api/members';
+const EDIT_USER_INFO_URL = 'https://ngether.site/api/members/patch';
 
 const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
   const { formValue, checkedPw, handleInputChange } = useForm({
