@@ -12,6 +12,7 @@ import com.main024.ngether.qna.qnaRepository.QnaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,7 @@ public class AnswerService {
         answer.setTitle("답변: " + qna.getTitle());
         answer.setContent(answerPostDto.getContent());
         answer.setQna(qna);
+        answer.setCreateDate(LocalDateTime.now());
         member.addAnswer(answer);
 
         return answerRepository.save(answer);
@@ -43,6 +45,7 @@ public class AnswerService {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         } else if (member.getRoles().get(0).equals("ADMIN")) {
             Answer findAnswer = findVerifyAnswer(answer.getAnswerId());
+            findAnswer.setModifiedAt(LocalDateTime.now());
             Optional.ofNullable(answer.getTitle())
                     .ifPresent(findAnswer::setTitle);
             Optional.ofNullable(answer.getContent())
