@@ -27,6 +27,7 @@ public interface LocationMapper {
         location.setLongitude(locationPostDto.getLongitude());
         location.setLatitude(locationPostDto.getLatitude());
         location.setAddress(locationPostDto.getAddress());
+        location.setLocationName(locationPostDto.getLocationName());
 
         location.setMember(memberService.getLoginMember());
 
@@ -50,6 +51,7 @@ public interface LocationMapper {
                 .latitude(location.getLatitude())
                 .longitude(location.getLongitude())
                 .address(location.getAddress())
+                .locationName(location.getLocationName())
                 .build();
     }
 

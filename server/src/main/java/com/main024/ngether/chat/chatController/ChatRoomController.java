@@ -20,10 +20,6 @@ public class ChatRoomController {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
 
-    @GetMapping("/room")
-    public String rooms() {
-        return "/chat/room";
-    }
 
     // 모든 채팅방 목록 반환
     @GetMapping("/rooms")
@@ -40,11 +36,17 @@ public class ChatRoomController {
         return chatService.createRoom(boardId);
     }
 
-    // 채팅방 입장 화면
+    // 채팅방 입장
     @GetMapping("/room/enter/{room-Id}")
-    public String roomDetail(@PathVariable("room-Id") Long roomId) {
-        chatService.enterRoom(roomId);
-        return "/chat/roomdetail";
+    public ResponseEntity enterRoom(@PathVariable("room-Id") Long roomId) {
+
+        return new ResponseEntity<>(chatService.enterRoom(roomId), HttpStatus.OK);
+    }
+
+    //채팅방 퇴장
+    @GetMapping("/room/leave/{room-Id}")
+    public ResponseEntity leaveRoom(@PathVariable("room-Id") Long roomId) {
+        return new ResponseEntity<>(chatService.leaveRoom(roomId), HttpStatus.OK);
     }
 
     // 특정 채팅방 조회
@@ -64,5 +66,13 @@ public class ChatRoomController {
     @GetMapping("/room/{room-id}/memberList")
     public ResponseEntity MemberList(@PathVariable(value = "room-id") Long roomId) {
         return new ResponseEntity<>(chatService.findMembersInChatRoom(roomId), HttpStatus.OK);
+    }
+
+    //로그인 한 유저가 참여중인 채팅방 마지막 메시지들
+    @GetMapping("/room/lastMessage")
+    public ResponseEntity lastMessage() {
+
+        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
+
     }
 }

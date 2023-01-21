@@ -1,7 +1,5 @@
 package com.main024.ngether.chat.chatEntity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.main024.ngether.member.Member;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +17,7 @@ public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatMessageId;
-
+    @Enumerated(value = EnumType.STRING)
     private MessageType type;
     //채팅방 ID
     private Long chatRoomId;
@@ -31,7 +29,7 @@ public class ChatMessage {
     //메세지 작성 날짜
     private LocalDateTime createDate = LocalDateTime.now();
     @Builder
-    public ChatMessage(MessageType type, Long chatRoomId, String nickName, String message, long userCount) {
+    public ChatMessage(MessageType type, Long chatRoomId, String nickName, String message) {
         this.type = type;
         this.chatRoomId = chatRoomId;
         this.nickName = nickName;

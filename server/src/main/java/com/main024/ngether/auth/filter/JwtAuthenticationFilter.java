@@ -3,6 +3,8 @@ package com.main024.ngether.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main024.ngether.auth.dto.LoginDto;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
+import com.main024.ngether.exception.BusinessLogicException;
+import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -59,6 +61,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
+        if(member.getRoles().get(0).equals("BAN"))
+            throw new BusinessLogicException(ExceptionCode.BAN);
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
 
@@ -73,6 +77,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     private String delegateRefreshToken(Member member) {
+        if(member.getRoles().get(0).equals("BAN"))
+            throw new BusinessLogicException(ExceptionCode.BAN);
         String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());

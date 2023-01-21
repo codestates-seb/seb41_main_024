@@ -6,13 +6,13 @@ const UserInquiry = () => {
   const [isPostQuestion, setIsPostQuestion] = useState<boolean>(false);
 
   const handleClick = (value: boolean) => {
-    setIsPostQuestion(value);
+    setIsPostQuestion(!isPostQuestion);
   };
 
   return (
     <div className="flex flex-col">
-      {isPostQuestion && <QuestionForm onClick={() => handleClick(false)} />}
-      {!isPostQuestion && <QuestionList onClick={() => handleClick(true)} />}
+      {isPostQuestion && <QuestionForm onClick={handleClick} />}
+      {!isPostQuestion && <QuestionList onClick={handleClick} />}
     </div>
   );
 };

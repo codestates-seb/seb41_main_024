@@ -1,9 +1,95 @@
 import Input from '../../components/atoms/input/Input';
-import FormButton from '../../components/atoms/formbutton/FormButton';
+import Button from '../../components/atoms/button/Button';
 import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
+import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
+import { requestLogin } from '../../api/login';
+import Cookies from 'js-cookie';
+
+import React from 'react';
+
+const LoginPage = () => {
+  const router = useRouter();
+
+  const [form, setForm] = useState({
+    email: '',
+    pw: '',
+  });
+
+  const { email, pw } = form;
+
+  const { data, isLoading, isError, refetch } = useQuery(
+    ['loginData'],
+    () => requestLogin(form),
+    {
+      enabled: false,
+    }
+  );
+
+  if (data) {
+    Cookies.set('access_token', data.headers.authorization);
+    Cookies.set('refresh_token', data.headers.refresh);
+    Cookies.set('memberId', data.data.memberId);
+    Cookies.set('nickName', data.data.nickName);
+    Cookies.set('locationId', data.data.locationId);
+    router.push('/');
+  }
+
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
+
+  return (
+    <div>
+      <div className="mt-24">
+        <LoginSlogan />
+      </div>
+      <div className="login flex justify-center m-7 my-12">
+        <div className="flex flex-col w-10/12 max-w-lg">
+          <Input
+            id={'email-input'}
+            name="email"
+            type={'text'}
+            label="이메일"
+            value={email}
+            onChange={onChange}
+          />
+          <Label htmlFor={'email-input'} labelText={''} />
+          <TextField
+            id={'password-input'}
+            name="pw"
+            type={'text'}
+            label="패스워드"
+            value={pw}
+            onChange={onChange}
+          />
+          <Label
+            htmlFor={'password-input'}
+            labelText={'소문자와 특수문자를 포함한 8글자'}
+          />
+          <Button
+            className="h-14 mt-4 bg-primary text-white rounded "
+            onClick={refetch}
+          >
+            로그인
+          </Button>
+          <Button className="h-14 mt-4 border-solid border-1 border-[#63A8DA] text-primary rounded ">
+            회원가입
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LoginPage;
 
 const LoginSlogan = () => {
   return (
@@ -19,75 +105,3 @@ const LoginSlogan = () => {
     </div>
   );
 };
-
-const LoginPage = () => {
-  const [form, setForm] = useState({
-    email: '',
-    password: '',
-  });
-
-  const { email, password } = form;
-
-  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
-
-  let emailRegexText = '사용가능한 이메일 입니다';
-  let checkedPasswordRegexText = '사용하실 패스워드를 한 번 더 입력해주세요';
-
-  const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-  if (email !== '' && !emailRegex.test(email)) {
-    emailRegexText = '이메일 양식과 맞게 입력해주세요';
-  }
-
-  return (
-    <div>
-      <div className="mt-24">
-        <LoginSlogan />
-      </div>
-      <div className="login flex justify-center m-7 my-12">
-        <form className="flex flex-col w-10/12 max-w-lg">
-          <Input
-            id={'email-input'}
-            name="email"
-            type={'text'}
-            label="이메일"
-            value={email}
-            onChange={onChange}
-          />
-          <Label htmlFor={'email-input'} labelText={emailRegexText} />
-          <TextField
-            id={'password-input'}
-            name="password"
-            type={'text'}
-            label="패스워드"
-            value={password}
-            onChange={onChange}
-          />
-          <Label
-            htmlFor={'password-input'}
-            labelText={'소문자와 특수문자를 포함한 8글자'}
-          />
-          <FormButton
-            className="h-14 mt-4"
-            variant="contained"
-            content="로그인"
-          />
-          <FormButton
-            className="h-14 mt-4"
-            variant="outlined"
-            content="회원가입"
-          />
-        </form>
-      </div>
-    </div>
-  );
-};
-
-export default LoginPage;

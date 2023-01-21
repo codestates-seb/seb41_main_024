@@ -28,7 +28,7 @@ public class Board {
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)
-    private LocalDateTime create_date = LocalDateTime.now();
+    private LocalDateTime createDate = LocalDateTime.now();
     @Column(nullable = false, name = "LAST_MODIFIED_AT")
     private LocalDateTime modifiedAt = LocalDateTime.now();
     @Column(nullable = false)
@@ -52,11 +52,14 @@ public class Board {
     private LocalDate deadLine;
     @Column(nullable = false)
     private String productsLink;
+    @Column(nullable = false)
+    private int curNum;
     public enum BoardStatus {
         BOARD_NOT_COMPLETE("모집 중"),
         BOARD_COMPLETE("모집 완료"),
 
-        BOARD_TERM_EXPIRE("모집 기간 만료");
+        BOARD_TERM_EXPIRE("모집 기간 만료"),
+        BOARD_NOT_DELETE("삭제 불가능");
 
         @Getter
         private String status;
@@ -70,6 +73,7 @@ public class Board {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Distance> distances = new ArrayList<>();
 /*

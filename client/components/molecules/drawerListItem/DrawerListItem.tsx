@@ -1,14 +1,17 @@
 import Link from 'next/link';
 import { ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { drawerListItemProps } from './drawerListItemType';
+import { drawerListItemPropsType } from './drawerListItemType';
 
-const DrawerListItem = ({ text, path }: drawerListItemPropsType) => {
+const DrawerListItem = ({ text, path, onClick }: drawerListItemPropsType) => {
   return (
     <ListItem key={text} disablePadding>
-      <ListItemButton>
+      <ListItemButton onClick={onClick}>
+      {path && (
         <Link href={path}>
           <ListItemText primary={text} />
         </Link>
+      )}
+      {!path && <ListItemText primary={text} />}
       </ListItemButton>
     </ListItem>
   );

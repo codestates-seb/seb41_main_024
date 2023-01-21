@@ -12,6 +12,9 @@ import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberRepository;
 import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -45,7 +48,7 @@ public class BoardService {
         returnBoard.setPrice(board.getPrice());
         returnBoard.setMember(member);
         returnBoard.setContent(board.getContent());
-        returnBoard.setCreate_date(board.getCreate_date());
+        returnBoard.setCreateDate(board.getCreateDate());
         returnBoard.setTitle(board.getTitle());
         if(board.getMaxNum() >= 2) {
             returnBoard.setMaxNum(board.getMaxNum());
@@ -57,6 +60,7 @@ public class BoardService {
         returnBoard.setDeadLine(board.getDeadLine());
         returnBoard.setProductsLink(board.getProductsLink());
         returnBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
+        returnBoard.setCurNum(0);
         member.addBoard(returnBoard);
         Board board1 = boardRepository.save(returnBoard);
 
@@ -125,10 +129,12 @@ public class BoardService {
     }
 
     public void deleteBoard(Long boardId) {
+        Board board = findVerifiedBoard(boardId);
         if (memberService.getLoginMember() == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        Board board = findVerifiedBoard(boardId);
-        if (board.getMember().getMemberId() == memberService.getLoginMember().getMemberId())
+        else if(board.getBoardStatus().equals(Board.BoardStatus.BOARD_NOT_DELETE))
+            throw new BusinessLogicException(ExceptionCode.BOARD_NOT_DELETE);
+        else if (board.getMember().getMemberId() == memberService.getLoginMember().getMemberId())
             boardRepository.delete(board);
         else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
     }
@@ -154,28 +160,52 @@ public class BoardService {
 
     }
 
-    public List<Board> findBoards() {
-        return boardRepository.findAll();
+    public Page<Board> findBoards(int page, int size) {
+        return boardRepository.findAll(PageRequest.of(page, size,
+                Sort.by("createDate").descending()));
     }
 
+    public Page<Board> findCompleteMySharing(int page, int size){
+        return boardRepository.findByBoardStatusAndMemberMemberId
+                (Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size,
+                        Sort.by("createDate").descending()));
+
+    }
 
     //타입으로 나눠서 질문 검색 기능 구현 1 : 제목, 2 : 내용, 3 : 작성자 이름
-    public List<Board> searchBoard(String type, String keyword) {
+    public Page<Board> searchBoard(String type, String keyword, int page, int size) {
         switch (type) {
             case "1": {
-                Optional<List<Board>> optionalBoards = boardRepository.findByTitleContaining(keyword);
-                return optionalBoards.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
+                Page<Board> boardList = boardRepository.findByTitleContaining
+                        (keyword, PageRequest.of(page, size,
+                                Sort.by("boardId").descending()));
+                if(boardList.isEmpty())
+                    throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+                return boardList;
             }
             case "2": {
-                Optional<List<Board>> optionalBoards = boardRepository.findByContentContaining(keyword);
-                return optionalBoards.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
+                Page<Board> boardList = boardRepository.findByContentContaining
+                        (keyword, PageRequest.of(page, size,
+                                Sort.by("boardId").descending()));
+                if(boardList.isEmpty())
+                    throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+                return boardList;
             }
             case "3": {
-                Optional<List<Board>> optionalBoards = boardRepository.findByMemberMemberId(memberService.findByNiceName(keyword).getMemberId());
-                return optionalBoards.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
+                Page<Board> boardList = boardRepository.findByMemberMemberId
+                        (memberService.findByNiceName(keyword).getMemberId(), PageRequest.of(page, size,
+                                Sort.by("boardId").descending()));
+                if(boardList.isEmpty())
+                    throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+                return boardList;
+            }
+            case "4": {
+                Page<Board> boardList = boardRepository.findByAddressContaining
+                        (keyword, PageRequest.of(page, 10,
+                                Sort.by("boardId").descending()));
+                if(boardList.isEmpty())
+                    throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+                return boardList;
             }
         }
 
