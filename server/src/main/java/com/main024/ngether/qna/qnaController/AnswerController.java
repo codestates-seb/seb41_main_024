@@ -24,8 +24,9 @@ public class AnswerController {
     //답변 작성
     @PostMapping("/qna/{qna-id}")
     public ResponseEntity postAnswer(@PathVariable("qna-id") @Positive long qnaId,
-                                     @Valid @RequestBody AnswerDto.Post AnswerDto) {
-        Answer Answer = answerService.createAnswer(mapper.AnswerPostToAnswer(qnaId, memberService, AnswerDto));
+                                     @Valid @RequestBody AnswerDto.Post answerDto) {
+        answerDto.setQnaId(qnaId);
+        Answer Answer = answerService.createAnswer(answerDto);
 
         return ResponseEntity.ok(mapper.AnswerToAnswerResponseDto(Answer));
     }

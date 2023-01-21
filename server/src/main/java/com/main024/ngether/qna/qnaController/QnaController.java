@@ -30,13 +30,11 @@ public class QnaController {
     //문의글 작성
     @PostMapping
     public ResponseEntity postQna(@Valid @RequestBody QnaDto.Post qnaDto) {
-        Qna qna = qnaService.createQna(mapper.QnaPostToQna(memberService, qnaDto));
-
-        return ResponseEntity.ok(mapper.QnaToQnaResponseDto(qna));
+        return ResponseEntity.ok(mapper.QnaToQnaResponseDto(qnaService.createQna(qnaDto)));
     }
 
     //문의글 수정
-    @PatchMapping("/{qna-id}")
+    @PatchMapping("patch/{qna-id}")
     public ResponseEntity patchQna(@PathVariable("qna-id") @Positive long qnaId,
                                      @Valid @RequestBody QnaDto.Patch qnaDto) {
 
@@ -47,7 +45,7 @@ public class QnaController {
     }
 
     //문의글 삭제
-    @DeleteMapping("/{qna-id}")
+    @DeleteMapping("delete/{qna-id}")
     public ResponseEntity deleteQna(@PathVariable("qna-id") long qnaId) {
         qnaService.deleteQna(qnaId);
 
@@ -68,9 +66,6 @@ public class QnaController {
                                           @RequestParam(value = "size") int size){
         Page<Qna> pageQnas = qnaRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size));
         List<Qna> qnaList = pageQnas.getContent();
-        for(int i = 0; i < qnaList.size(); i++) {
-            System.out.println("List : " + qnaList.get(i));
-        }
         return new ResponseEntity<>(
                 new MultiResponseDto<>(qnaList, pageQnas), HttpStatus.OK);
     }

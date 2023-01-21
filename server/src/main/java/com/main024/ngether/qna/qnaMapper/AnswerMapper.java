@@ -11,21 +11,9 @@ import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AnswerMapper {
-    default Answer AnswerPostToAnswer(long qnaId, MemberService memberService, AnswerDto.Post answerPostDto) {
-        Answer answer = new Answer();
-        answer.setTitle(answerPostDto.getTitle());
-        answer.setContent(answerPostDto.getContent());
-        answer.setCreateDate(LocalDateTime.now());
-        answer.setMember(memberService.getLoginMember());
-        Qna qna = new Qna();
-        qna.setQnaId(qnaId);
-        answer.setQna(qna);
-        return answer;
-    }
 
     default Answer AnswerPatchToAnswer(AnswerDto.Patch answerPatchDto) {
         Answer answer = new Answer();
-        answer.setTitle(answerPatchDto.getTitle());
         answer.setAnswerId(answerPatchDto.getAnswerId());
         answer.setContent(answerPatchDto.getContent());
         return answer;

@@ -13,16 +13,14 @@ public class AnswerDto {
     @Setter
     @AllArgsConstructor
     public static class Post {
-        @NotBlank(message = "제목을 반드시 입력해주세요.")
-        private String title;
         @NotBlank(message = "내용을 입력해주세요.")
         private String content;
+        long qnaId;
     }
 
     @Getter
     public static class Patch {
         private long answerId;
-        private String title;
         private String content;
 
         public void setAnswerId(Long answerId) { this.answerId = answerId; }

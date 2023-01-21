@@ -13,14 +13,6 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface QnaMapper {
-    default Qna QnaPostToQna(MemberService memberService, QnaDto.Post qnaPostDto) {
-        Qna qna = new Qna();
-        qna.setTitle(qnaPostDto.getTitle());
-        qna.setContent(qnaPostDto.getContent());
-        qna.setCreateDate(LocalDateTime.now());
-        qna.setMember(memberService.getLoginMember());
-        return qna;
-    }
 
     default Qna QnaPatchToQna(QnaDto.Patch qnaPatchDto) {
         Qna qna = new Qna();
