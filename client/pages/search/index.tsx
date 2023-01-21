@@ -13,6 +13,7 @@ import {
   getPostsInSpecifiedLocation,
   searchPostsByTitle,
 } from '../../api/post';
+import { useRouter } from 'next/router';
 
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
@@ -24,17 +25,19 @@ const SEARCH_OPTIONS = [
 ];
 const Search = () => {
   // 이곳의 폼 데이터 관리도 useState, useRef, react-hook-form 등 기호에 맞게 사용하시면 됩니다
+  const router = useRouter();
   const [targetCoord, setTargetCoord] = useState({
     lat: 0,
     lng: 0,
     address: '',
   });
+
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [error, setError] = useState('');
   const { inputValue, onChange } = useInput({
     title: '',
-    searchOption: '',
-    category: '',
+    searchOption: '주소',
+    category: '상품 쉐어링',
   });
   const [searchAddress, setSearchAddress] = useState({});
 
@@ -48,26 +51,47 @@ const Search = () => {
     exchangeCoordToAddress(center, setTargetCoord);
   }, [center]);
   const { title, searchOption, category } = inputValue;
-  const handleSubmit = () => {
-    let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
-    const range = category === '상품 쉐어링' ? 1.5 : 0.6;
-    const type = 1;
-    if (searchOption === '글 제목') {
-      const { data } = useQuery(['sharingList'], () =>
-        searchPostsByTitle(type, title)
-      );
-      console.log(data);
-    } else if (searchOption === '주소') {
-      const { data } = useQuery(['sharingList'], () =>
-        getPostsInSpecifiedLocation(targetCoord, range, categoryValue, 1, 10)
-      );
+  const categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
+  const range = category === '상품 쉐어링' ? 1.5 : 0.6;
+  const type = 1;
+  const { data, refetch } = useQuery(
+    ['sharingList'],
+    () => {
+      if (searchOption === '주소') {
+        return getPostsInSpecifiedLocation({
+          data: targetCoord,
+          range,
+          category: categoryValue,
+          page: 1,
+          size: 10,
+        });
+      } else if (searchOption === '글 제목') {
+        return searchPostsByTitle({ type, keyword: title, page: 1, size: 10 });
+      }
+    },
+    {
+      onSuccess: (data) => router.push('/nearby'),
+      onError: (data) => console.log(data),
+      retry: false,
+      cacheTime: 1000 * 60 * 60,
+      staleTime: 1000 * 60 * 60,
+      enabled: false,
+      refetchOnWindowFocus: false,
     }
-    console.log(data);
+  );
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    refetch();
   };
 
   return (
     <div className="flex flex-col items-center">
-      <form className="flex flex-col max-w-lg mt-3 w-[100%]">
+      <form
+        className="flex flex-col max-w-lg mt-3 w-[100%]"
+        onSubmit={handleSubmit}
+      >
         <div id="map" className="w-[100%] h-[350px]"></div>
         <p className="mb-4">
           <em>지도를 클릭해주세요!</em>
@@ -98,6 +122,7 @@ const Search = () => {
             label="검색옵션"
             width="150px"
             value={searchOption}
+            defaultValue="주소"
             onChange={onChange}
           />
           <Input
@@ -109,7 +134,7 @@ const Search = () => {
             fullWidth
             onChange={onChange}
             {...(searchOption === '주소' && { disabled: true })}
-            value={searchOption === '주소' ? title : targetCoord.address}
+            value={searchOption === '주소' ? targetCoord.address : title}
           />
         </FormControl>
         <DropdownInput
@@ -118,6 +143,7 @@ const Search = () => {
           name="category"
           label="카테고리"
           onChange={onChange}
+          defaultValue="상품 쉐어링"
           value={category}
         />
         <FormButton
@@ -125,7 +151,6 @@ const Search = () => {
           className="h-14 mt-4"
           variant="contained"
           type="submit"
-          onClick={handleSubmit}
         />
       </form>
       <NoContent />
