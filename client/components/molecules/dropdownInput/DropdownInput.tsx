@@ -12,7 +12,7 @@ const DropdownInput = ({
   onchange,
   defaultValue,
   ...props
-}: any) => {
+}: dropDownInputType) => {
   return (
     <FormControl
       sx={{ marginTop: 1, marginBottom: 1, width }}

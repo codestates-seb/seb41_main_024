@@ -10,6 +10,7 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import { bottomNavPropsType } from './bottomNavType';
 import Cookies from 'js-cookie';
 
 export default function BottomNav(): JSX.Element {

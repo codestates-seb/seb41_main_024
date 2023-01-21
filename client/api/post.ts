@@ -15,7 +15,7 @@ interface uploadPostType {
   refreshToken: string;
 }
 interface getPostType {
-  locationId: number;
+  locationId?: number;
   range: number;
   category: string;
 }

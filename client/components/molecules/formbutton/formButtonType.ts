@@ -1,8 +1,9 @@
-import React from 'react';
+import { ButtonProps } from '@mui/material';
 
-export interface formButtonType {
+export interface formButtonType extends ButtonProps {
   content: string;
   variant: 'outlined' | 'contained';
   className?: string;
-  type?: string;
+  type?: 'reset' | 'button' | 'submit' | undefined;
+  props?: ButtonProps;
 }
