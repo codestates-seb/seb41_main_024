@@ -35,18 +35,20 @@ public class ReportService {
         ChatRoom chatRoom = new ChatRoom();
         if(report.getReportType().equals("board")) {
             board = boardRepository.findByBoardId(report.getReportedId()).get();
-            report.setReportedMemberId(board.getMember().getMemberId());
+            report.setTitle(board.getTitle());
+            //report.setReportedMemberId(board.getMember().getMemberId());
             board.setBoardStatus(Board.BoardStatus.BOARD_NOT_DELETE);
             boardRepository.save(board);
         }
         else {
-            report.setReportedMemberId(null);
+            //report.setReportedMemberId(null);
             chatRoom = chatRoomRepository.findByRoomId(report.getReportedId());
+            report.setTitle(chatRoom.getRoomName());
             chatRoom.setDeclareStatus(true);
             chatRoomRepository.save(chatRoom);
         }
 
-        report.setReportMemberId(memberService.getLoginMember().getMemberId());
+        //report.setReportMemberId(memberService.getLoginMember().getMemberId());
 
         return reportRepository.save(report);
     }
@@ -59,7 +61,7 @@ public class ReportService {
         return reportRepository.findAll(PageRequest.of(page, size));
     }
 
-    public void updateMemberRole(long memberId) {
+    public void updateMemberIdRole(long memberId) {
         if (memberService.getLoginMember().getRoles().get(0).equals("USER"))
             throw new BusinessLogicException(ExceptionCode.ROLE_NOT_ADMIN);
 
@@ -69,6 +71,17 @@ public class ReportService {
         member.setRoles(roles);
         memberRepository.save(member);
     }
+    public void updateMemberNickNameRole(String nickName) {
+        if (memberService.getLoginMember().getRoles().get(0).equals("USER"))
+            throw new BusinessLogicException(ExceptionCode.ROLE_NOT_ADMIN);
+
+        Member member = memberRepository.findByNickName(nickName).get();
+        List<String> roles = new ArrayList<>();
+        roles.add("BAN");
+        member.setRoles(roles);
+        memberRepository.save(member);
+    }
+
     public void recoveryMemberRole(long memberId) {
         if (memberService.getLoginMember().getRoles().get(0).equals("USER"))
             throw new BusinessLogicException(ExceptionCode.ROLE_NOT_ADMIN);
@@ -78,6 +91,11 @@ public class ReportService {
         roles.add("USER");
         member.setRoles(roles);
         memberRepository.save(member);
+    }
+    public void deleteReport(long reportId) {
+        Report report = findVerifiedReport(reportId);
+
+        reportRepository.delete(report);
     }
 
     public Report findVerifiedReport(long reportId) {
