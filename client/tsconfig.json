@@ -24,7 +24,9 @@
     "pages/login/index.jsx",
     "stories/main.js",
     "src/custom.d.ts",
-    "public/navbar"
+    "public/navbar",
+    "__tests__/addNew/addNew.js",
+    "jest.config.js"
   ],
   "exclude": ["node_modules"]
 }

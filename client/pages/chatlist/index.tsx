@@ -5,6 +5,8 @@ import ProductImg03 from '../../public/chatItem/productImg03.svg';
 import ProductImg04 from '../../public/chatItem/productImg04.svg';
 import ProductImg05 from '../../public/chatItem/productImg05.svg';
 import Link from 'next/link';
+
+import { useRouter } from 'next/router';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { getMySharing } from '../../api/mySharing';
 

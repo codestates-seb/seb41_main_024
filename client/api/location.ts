@@ -3,11 +3,10 @@ export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log(position);
-
         let lat = position.coords.latitude;
         let lng = position.coords.longitude;
-        setLocation({ lat, lng });
+        const center = { lat, lng };
+        setLocation(center);
       },
       setLocationError,
       geoLocationOptions
