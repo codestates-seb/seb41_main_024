@@ -2,6 +2,7 @@ package com.main024.ngether.qna.qnaController;
 
 import com.main024.ngether.board.response.MultiResponseDto;
 import com.main024.ngether.member.MemberService;
+import com.main024.ngether.qna.qnaRepository.AnswerRepository;
 import com.main024.ngether.qna.qnaRepository.QnaRepository;
 import com.main024.ngether.qna.qnaService.QnaService;
 import com.main024.ngether.qna.qnaDto.QnaDto;
@@ -27,10 +28,13 @@ public class QnaController {
     private final MemberService memberService;
     private final QnaRepository qnaRepository;
 
+    private final AnswerController answerController;
+    private final AnswerRepository answerRepository;
+
     //문의글 작성
     @PostMapping
     public ResponseEntity postQna(@Valid @RequestBody QnaDto.Post qnaDto) {
-        return ResponseEntity.ok(mapper.QnaToQnaResponseDto(qnaService.createQna(qnaDto)));
+        return ResponseEntity.ok(mapper.QnaToQnaResponseDto(qnaService.createQna(qnaDto), answerRepository));
     }
 
     //문의글 수정
@@ -41,7 +45,7 @@ public class QnaController {
         qnaDto.setQnaId(qnaId);
         Qna qna = qnaService.updateQna(mapper.QnaPatchToQna(qnaDto));
 
-        return ResponseEntity.ok(mapper.QnaToQnaResponseDto(qna));
+        return ResponseEntity.ok(mapper.QnaToQnaResponseDto(qna, answerRepository));
     }
 
     //문의글 삭제
@@ -57,7 +61,7 @@ public class QnaController {
     public ResponseEntity getQna(@PathVariable("qna-id") long qnaId) {
         Qna qna = qnaService.findQna(qnaId);
 
-        return new ResponseEntity<>(mapper.QnaToQnaResponseDto(qna), HttpStatus.OK);
+        return new ResponseEntity<>(mapper.QnaToQnaResponseDto(qna, answerRepository), HttpStatus.OK);
     }
 
     //내가 작성한 문의글 목록

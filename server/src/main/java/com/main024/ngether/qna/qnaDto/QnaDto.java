@@ -1,5 +1,6 @@
 package com.main024.ngether.qna.qnaDto;
 
+import com.main024.ngether.qna.qnaEntity.Answer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -3,7 +3,9 @@ package com.main024.ngether.qna.qnaMapper;
 import com.main024.ngether.member.MemberService;
 import com.main024.ngether.qna.qnaDto.AnswerDto;
 import com.main024.ngether.qna.qnaDto.QnaDto;
+import com.main024.ngether.qna.qnaEntity.Answer;
 import com.main024.ngether.qna.qnaEntity.Qna;
+import com.main024.ngether.qna.qnaRepository.AnswerRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -22,7 +24,7 @@ public interface QnaMapper {
         return qna;
     }
 
-    default QnaDto.Response QnaToQnaResponseDto(Qna qna) {
+    default QnaDto.Response QnaToQnaResponseDto(Qna qna, AnswerRepository answerRepository) {
         QnaDto.Response response = new QnaDto.Response();
         response.setQnaId(qna.getQnaId());
         response.setMemberId(qna.getMember().getMemberId());
@@ -30,7 +32,18 @@ public interface QnaMapper {
         response.setTitle(qna.getTitle());
         response.setContent(qna.getContent());
         response.setCreateDate(qna.getCreateDate());
-        //answer list
+        List<Answer> answerList = answerRepository.findByQnaQnaId(qna.getQnaId());
+        List<AnswerDto.Response> answerResponse =
+                answerList.stream()
+                        .map(answer ->
+                                new AnswerDto.Response(answer.getAnswerId(),
+                                        answer.getMember().getMemberId(),
+                                        answer.getQna().getQnaId(),
+                                        answer.getMember().getNickName(),
+                                        answer.getTitle(),
+                                        answer.getContent(),
+                                        answer.getCreateDate())).collect(Collectors.toList());
+        response.setAnswers(answerResponse);
         return response;
     }
 }

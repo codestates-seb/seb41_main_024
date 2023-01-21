@@ -33,7 +33,6 @@ public class AnswerService {
         answer.setTitle("답변: " + qna.getTitle());
         answer.setContent(answerPostDto.getContent());
         answer.setQna(qna);
-        answer.setCreateDate(LocalDateTime.now());
         member.addAnswer(answer);
 
         return answerRepository.save(answer);
