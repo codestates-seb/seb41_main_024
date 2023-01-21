@@ -22,11 +22,13 @@ interface getPostType {
 const REQUEST_URL = 'https://ngether.site';
 
 export const uploadPost = async (data: uploadPostType) => {
-  console.log(data);
   return await axios({
     method: 'post',
     data,
-    headers: { Authorization: data.accessToken, Refresh: data.refreshToken },
+    headers: {
+      Authorization: data.accessToken,
+      Refresh: data.refreshToken,
+    },
     url: `${REQUEST_URL}/api/boards`,
   });
 };
@@ -50,8 +52,15 @@ export const getPostsInSpecifiedLocation = async ({
   page = 1,
   size = 10,
 }: any) => {
-  const url = `${REQUEST_URL}/api/distance?range=${range}&category=${category}&sortBy=distance&page={page}&size={size}`;
-  return await axios({ method: 'post', url, data }).then((res) => res.data);
+  const newData = {
+    latitude: data.lat,
+    longitude: data.lng,
+    address: data.address,
+  };
+  const url = `${REQUEST_URL}/api/distance?range=${range}&category=${category}&sortBy=distance&page=${page}&size=${size}`;
+  return await axios({ method: 'post', url, data: newData }).then(
+    (res) => res.data
+  );
 };
 
 export const searchPostsByTitle = async ({
@@ -60,9 +69,9 @@ export const searchPostsByTitle = async ({
   page = 1,
   size = 10,
 }) => {
-  const url = `${REQUEST_URL}/api/boards/search?type={type}&keyword=${encodeURIComponent(
+  const url = `${REQUEST_URL}/api/boards/search?type=${type}&keyword=${encodeURIComponent(
     keyword
-  )}&page={page}&size={size}`;
+  )}&page=${page}&size=${size}`;
   return await axios({
     method: 'get',
     url,
