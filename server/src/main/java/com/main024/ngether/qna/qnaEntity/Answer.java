@@ -20,9 +20,9 @@ public class Answer {
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)
-    private LocalDateTime createDate;
+    private LocalDateTime createDate = LocalDateTime.now();
     @Column(nullable = false, name = "LAST_MODIFIED_AT")
-    private LocalDateTime modifiedAt;
+    private LocalDateTime modifiedAt = LocalDateTime.now();
 
     @JsonIgnore
     @ManyToOne(optional = false)
