@@ -23,7 +23,7 @@ const DropdownInput = ({
         label={label}
         select={true}
         defaultValue={dropDownOptions[0]?.label || '기본값'}
-        selectProps={{
+        selectprops={{
           native: true,
         }}
         onChange={onchange}
