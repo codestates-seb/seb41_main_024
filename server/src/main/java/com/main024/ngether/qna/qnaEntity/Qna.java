@@ -32,6 +32,6 @@ public class Qna {
     private Member member;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "qna", targetEntity = Qna.class)
+    @OneToMany(mappedBy = "qna",cascade = CascadeType.ALL)
     private List<Answer> answers = new ArrayList<>();
 }

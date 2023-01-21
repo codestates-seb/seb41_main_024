@@ -38,19 +38,7 @@ public interface QnaMapper {
         response.setTitle(qna.getTitle());
         response.setContent(qna.getContent());
         response.setCreateDate(qna.getCreateDate());
-        List<AnswerDto.Response> answers = qna.getAnswers().stream().map(answer -> {
-                    return new AnswerDto.Response(
-                            answer.getAnswerId(),
-                            answer.getMember().getMemberId(),
-                            answer.getQna().getQnaId(),
-                            answer.getMember().getNickName(),
-                            answer.getTitle(),
-                            answer.getContent(),
-                            answer.getCreateDate()
-                    );
-                })
-                .collect(Collectors.toList());
-        response.setAnswers(answers);
+        //answer list
         return response;
     }
 }

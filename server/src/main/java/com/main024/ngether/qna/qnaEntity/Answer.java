@@ -30,7 +30,7 @@ public class Answer {
     private Member member;
 
     @JsonIgnore
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "QNA_ID")
     private Qna qna;
 
