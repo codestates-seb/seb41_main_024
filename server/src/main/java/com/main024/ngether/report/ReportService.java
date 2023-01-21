@@ -2,8 +2,10 @@ package com.main024.ngether.report;
 
 import com.main024.ngether.board.Board;
 import com.main024.ngether.board.BoardRepository;
+import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
+import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
@@ -28,19 +30,19 @@ public class ReportService {
     public final MemberRepository memberRepository;
     public final MemberService memberService;
     public final ChatRoomRepository chatRoomRepository;
+    public final ChatService chatService;
 
 
     public Report createReport(Report report) {
         Board board = new Board();
         ChatRoom chatRoom = new ChatRoom();
-        if(report.getReportType().equals("board")) {
+        if (report.getReportType().equals("board")) {
             board = boardRepository.findByBoardId(report.getReportedId()).get();
             report.setTitle(board.getTitle());
             //report.setReportedMemberId(board.getMember().getMemberId());
             board.setBoardStatus(Board.BoardStatus.BOARD_NOT_DELETE);
             boardRepository.save(board);
-        }
-        else {
+        } else {
             //report.setReportedMemberId(null);
             chatRoom = chatRoomRepository.findByRoomId(report.getReportedId());
             report.setTitle(chatRoom.getRoomName());
@@ -70,7 +72,9 @@ public class ReportService {
         roles.add("BAN");
         member.setRoles(roles);
         memberRepository.save(member);
+        chatService.removeChatRoomAndBoard(member.getMemberId());
     }
+
     public void updateMemberNickNameRole(String nickName) {
         if (memberService.getLoginMember().getRoles().get(0).equals("USER"))
             throw new BusinessLogicException(ExceptionCode.ROLE_NOT_ADMIN);
@@ -80,6 +84,7 @@ public class ReportService {
         roles.add("BAN");
         member.setRoles(roles);
         memberRepository.save(member);
+        chatService.removeChatRoomAndBoard(member.getMemberId());
     }
 
     public void recoveryMemberRole(long memberId) {
@@ -92,6 +97,7 @@ public class ReportService {
         member.setRoles(roles);
         memberRepository.save(member);
     }
+
     public void deleteReport(long reportId) {
         Report report = findVerifiedReport(reportId);
 
