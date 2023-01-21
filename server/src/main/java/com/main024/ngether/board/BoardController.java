@@ -68,9 +68,9 @@ public class BoardController {
 
     //게시물 전체 조회
     @GetMapping
-    public ResponseEntity getBoards() {
-        int page = 1;
-        Page<Board> pageBoards = boardService.findBoards(page - 1);
+    public ResponseEntity getBoards(@RequestParam(value = "page") int page,
+                                    @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = boardService.findBoards(page - 1, size);
         List<Board> boardList = pageBoards.getContent();
 
         return new ResponseEntity<>(
@@ -80,10 +80,10 @@ public class BoardController {
     //게시글 검색 1번 제목, 2번 내용, 3번 작성자닉네임, 4번 위치정보
     @GetMapping("/search")
     public ResponseEntity search(@RequestParam(value = "type") String type,
-                                 @RequestParam(value = "keyword") String keyword) {
-        int page = 1;
-
-        Page<Board> pageBoards = boardService.searchBoard(type, keyword, page - 1);
+                                 @RequestParam(value = "keyword") String keyword,
+                                 @RequestParam(value = "page") int page,
+                                 @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = boardService.searchBoard(type, keyword, page - 1, size);
         List<Board> boardList = pageBoards.getContent();
 
         return new ResponseEntity<>(
@@ -102,12 +102,19 @@ public class BoardController {
 
     //내가 개설한 쉐어링 중 모집 완료된 쉐어링 게시물
     @GetMapping("/completeMySharing")
-    public ResponseEntity viewMyCompleteMySharing() {
-        Page<Board> pageBoards = boardService.findCompleteMySharing();
+    public ResponseEntity viewMyCompleteMySharing(@RequestParam(value = "page") int page,
+                                                  @RequestParam(value = "size") int size) {
+        Page<Board> pageBoards = boardService.findCompleteMySharing(page-1, size);
         List<Board> boardList = pageBoards.getContent();
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
 
+    }
+    @GetMapping("/{board-id}/checkMyBoard")
+    public ResponseEntity checkMyBoard(@PathVariable(value = "board-id")Long boardId){
+        if(boardService.findBoard(boardId).getMember().equals(memberService.getLoginMember()))
+            return new ResponseEntity<>(true,HttpStatus.OK);
+        else return new ResponseEntity<>(false,HttpStatus.OK);
     }
 }

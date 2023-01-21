@@ -20,7 +20,9 @@ public enum ExceptionCode {
     ROLE_NOT_ADMIN(412, "Role not admin"),
     REPORT_NOT_FOUND(413, " Report not found"),
     RANGE_NOT_FOUND(414, "Range not found"),
-    BAN(415, "Bye");
+    BAN(415, "Bye"),
+    QNA_NOT_FOUND(416,"Qna not found");
+
 
 
     @Getter
