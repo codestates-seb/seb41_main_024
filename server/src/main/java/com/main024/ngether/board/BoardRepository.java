@@ -16,6 +16,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findByTitleContaining(String keyword, PageRequest pageRequest);
     Page<Board> findByContentContaining(String keyword, PageRequest pageRequest);
     Page<Board> findByMemberMemberId(@Param(value = "memberId") Long memberId, PageRequest pageRequest);
+
+    List<Board> findByMemberMemberId(@Param(value = "memberId") Long memberId);
     Optional<List<Board>> findByCategory(String category);
 
     Page<Board> findByAddressContaining(String address, PageRequest pageRequest);
