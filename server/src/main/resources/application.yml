@@ -20,7 +20,7 @@ spring:
 
 
 
-    datasource:
+  datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     #jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
