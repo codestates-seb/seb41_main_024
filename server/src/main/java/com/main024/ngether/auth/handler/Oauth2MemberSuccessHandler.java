@@ -63,7 +63,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", member.getNickName());
         claims.put("roles", member.getRoles());
-        claims.put("userId", member.getMemberId());
+        //claims.put("userId", member.getMemberId());
         //Payload에 username, roles, userId로 구성
         String subject = member.getEmail();
         //토큰 유지 시간으로 accessToken Expiration 설정
