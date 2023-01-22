@@ -109,6 +109,11 @@ export const exchangeCoordToAddress = async (
   // 지도 좌측상단에 지도 중심좌표에 대한 주소정보를 표출하는 함수입니다
 };
 
+export const setDefaultCoordsAndAddress = (center, callback) => {
+  let geocoder = new kakao.maps.services.Geocoder();
+  geocoder.coord2Address(center.lng, center.lat, callback);
+};
+
 export const searchMap = (searchAddress: string, setCenter: any) => {
   const geocoder = new kakao.maps.services.Geocoder();
   let switchLocationToCoordinate = function (result: any, status: any) {
@@ -117,6 +122,7 @@ export const searchMap = (searchAddress: string, setCenter: any) => {
       setCenter({
         lat: newSearch.y,
         lng: newSearch.x,
+        address: searchAddress,
       });
     }
   };
