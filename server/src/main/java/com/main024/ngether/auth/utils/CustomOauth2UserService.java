@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -65,11 +66,20 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private Member saveMember(OauthAttributes attributes){
+        /*
         Member member = Member.builder()
                 .email(attributes.getEmail())
                 .nickName(attributes.getName())
                 .pw(getPasswordEncoder().encode("oauth2member!!"))
                 .build();
+
+         */
+        Member member = new Member();
+        member.setEmail(attributes.getEmail());
+        member.setNickName(attributes.getName());
+        member.setPw(getPasswordEncoder().encode("oauth2member!"));
+        List<String> roles = List.of("USER");
+        //member.setRoles(roles);
         return memberRepository.save(member);
     }
 }

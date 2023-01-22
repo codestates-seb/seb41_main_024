@@ -43,10 +43,18 @@ public class OauthAttributes {
     }
     //Member 엔티티 생성
     public Member toEntity() {
+        Member member = new Member();
+        member.setEmail(email);
+        member.setNickName(name);
+        member.setPw(getPasswordEncoder().encode("oauth2member"));
+        return member;
+        /*
         return Member.builder()
                 .email(email)
                 .nickName(name)
                 .pw(getPasswordEncoder().encode("oauth2Member!"))
                 .build();
+
+         */
     }
 }

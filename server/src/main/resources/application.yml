@@ -15,6 +15,9 @@ spring:
           google:
             clientId:
             clientSecret:
+            scope:
+              - email
+              - profile
 
 
 

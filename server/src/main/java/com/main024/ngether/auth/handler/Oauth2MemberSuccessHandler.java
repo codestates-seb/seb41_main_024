@@ -37,9 +37,11 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
+
         //OAuth2 로그인 사용자 정보
         var oauth2User = (OAuth2User)authentication.getPrincipal();
         String email = String.valueOf(oauth2User.getAttributes().get("email"));
+        List<String> authorities = customAuthorityUtils.createRoles(email);
 
         //DB에서 email를 통해 사용자 정보 확인
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
@@ -53,11 +55,13 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         //최초 로그인일 경우와 아닌 경우를 구분
         //URI newMemberUri = newMemberCreateURI(accessToken, findMember.getInitialLogin().toString());
+        URI newMemberUri = newMemberCreateURI(accessToken, refreshToken);
 
         //users/info 에 토큰과 initialLogin을 쿼리로 담아 리다이렉트
-        //getRedirectStrategy().sendRedirect(request, response, newMemberUri.toString());
+        getRedirectStrategy().sendRedirect(request, response, newMemberUri.toString());
 
     }
+
 
     public String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
@@ -86,17 +90,20 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return refreshToken;
     }
 
-    private URI newMemberCreateURI(String accessToken, String initialLogin) {
+    private URI newMemberCreateURI(String accessToken, String refreshToken) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken); //쿼리에 accessToken 전송
-        queryParams.add("initial_login", initialLogin); //쿼리에 initialLogin 상태 전송
+        queryParams.add("refresh_token", refreshToken); //쿼리에 refreshToken 전송
 
 
 
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .path("/login/oauth2/code/google")
+                //.path("/login/oauth2/code/google")
+                .host("localhost")
+                //.port(80)
+                .path("/receive-token.html")
                 .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
                 .build()
                 .toUri();
