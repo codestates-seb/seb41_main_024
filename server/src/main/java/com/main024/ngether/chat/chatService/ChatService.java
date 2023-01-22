@@ -16,6 +16,9 @@ import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberDto;
 import com.main024.ngether.member.MemberRepository;
 import com.main024.ngether.member.MemberService;
+import io.github.jehuipark.polling.core.Builder;
+import io.github.jehuipark.polling.core.PollingManager;
+import io.github.jehuipark.polling.model.ResponseMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -203,6 +206,29 @@ public class ChatService {
             chatRoomList.add(chatRoomMembers.get(i).getChatRoom());
         }
         return chatRoomList;
+    }
+    public ResponseMap<ChatDto.lastMessageCreated> progress(String id) {
+        PollingManager pollingManager = null;
+        long LIFE_TIME = 10000;
+        long TRANSACTION = 5000;
+        long INTERVAL = 100;
+
+        Builder<ChatDto.lastMessageCreated> builder = new Builder<>();
+        builder.setInterval(INTERVAL)
+                .setTransactionTime(TRANSACTION)
+                .setObserve(()->{
+
+                    return (ChatDto.lastMessageCreated) findLastMessageCreated();
+                })
+                .setValidation((value, origin)->{
+                    boolean isUpdate = false;
+                    if(!value.equals(origin))
+                        isUpdate = true;
+                    return isUpdate;
+                });
+
+        ResponseMap<ChatDto.lastMessageCreated> start = (ResponseMap<ChatDto.lastMessageCreated>) pollingManager.start(id, LIFE_TIME, builder);
+        return start;
     }
 
 

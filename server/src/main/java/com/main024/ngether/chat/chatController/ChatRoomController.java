@@ -1,16 +1,20 @@
 package com.main024.ngether.chat.chatController;
 
-import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
+import com.main024.ngether.chat.chatService.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
@@ -27,6 +31,13 @@ public class ChatRoomController {
     public List<ChatRoom> room() {
         return chatRoomRepository.findAll();
     }
+
+    @GetMapping("/room")
+    @ResponseBody
+    public String roomList() {
+        return "/chat/room";
+    }
+
 
     // 채팅방 생성
     @PostMapping("/room/{board-id}")
@@ -71,8 +82,8 @@ public class ChatRoomController {
     //로그인 한 유저가 참여중인 채팅방 마지막 메시지들
     @GetMapping("/room/lastMessage")
     public ResponseEntity lastMessage() {
-
-        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
-
+        String id = UUID.randomUUID().toString();
+        return new ResponseEntity<>(chatService.progress(id), HttpStatus.OK);
     }
+
 }

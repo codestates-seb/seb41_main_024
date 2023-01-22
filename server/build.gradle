@@ -16,9 +16,11 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url "https://jitpack.io" }
 }
 
 dependencies {
+	implementation 'com.github.JeHuiPark:LongPolling:0.1.2'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -53,6 +55,7 @@ dependencies {
 	implementation 'org.webjars.bower:bootstrap:5.2.2'
 	implementation 'org.webjars.bower:vue:2.6.14'
 	implementation 'org.webjars.bower:axios:0.21.1'
+
 }
 
 tasks.named('test') {
