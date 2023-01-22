@@ -1,41 +1,25 @@
 import { ReactElement, useState } from 'react';
 import LayoutWithFooter from '../../components/container/layoutWithFooter/LayoutWithFooter';
-import BasicTabs from '../../components/molecules/tab/BasicTabs';
-import TabPanel from '../../components/atoms/tabPanel/TabPanel';
 import UserInfoEdit from '../../components/organisms/tabPanel/myPage/UserInfoEdit';
 import MySharingTab from '../../components/organisms/tab/mySharingTab/MySharingTab';
 import UserInquiry from '../../components/organisms/tabPanel/myPage/UserInquiry';
-
-const TAB_LABEL = ['내정보', '쉐어링', '1:1 문의'];
+import NTabs from '../../components/organisms/nTabs/NTabs';
 
 const Mypage = () => {
-  const [currentTab, setCurrentTab] = useState(0);
-
-  const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
-    setCurrentTab(newCurrentTab);
-  };
-
   return (
     <div className="flex flex-col">
       <div className="flex justify-center items-end h-[4.5rem] mb-10">
         <p className="text-xl">마이페이지</p>
       </div>
 
-      <BasicTabs
-        currentTab={currentTab}
-        handleChange={handleChange}
-        tabLabels={TAB_LABEL}
-        centered={true}
-      />
-      <TabPanel currentTab={currentTab} index={0} boxPadding={0}>
+      <NTabs
+        ariaLabel="내 서비스 탭"
+        tabLabels={['내정보', '쉐어링', '1:1문의']}
+      >
         <UserInfoEdit />
-      </TabPanel>
-      <TabPanel currentTab={currentTab} index={1} boxPadding={0}>
         <MySharingTab />
-      </TabPanel>
-      <TabPanel currentTab={currentTab} index={2} boxPadding={0}>
         <UserInquiry />
-      </TabPanel>
+      </NTabs>
     </div>
   );
 };
