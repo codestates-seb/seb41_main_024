@@ -32,7 +32,7 @@ const Search = () => {
     address: '',
   });
 
-  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const [center, setCenter] = useState({ lat: 0, lng: 0, address: '' });
   const [error, setError] = useState('');
   const { inputValue, onChange } = useInput({
     title: '',
@@ -49,7 +49,7 @@ const Search = () => {
   }, []);
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center]);
+  }, [center.lat, center.lng]);
   const { title, searchOption, category } = inputValue;
   const categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
   const range = category === '상품 쉐어링' ? 1.5 : 0.6;
@@ -58,8 +58,9 @@ const Search = () => {
     ['sharingList'],
     () => {
       if (searchOption === '주소') {
+        const finalLocation = targetCoord.address ? targetCoord : center;
         return getPostsInSpecifiedLocation({
-          data: targetCoord,
+          data: finalLocation,
           range,
           category: categoryValue,
           page: 1,
@@ -70,7 +71,10 @@ const Search = () => {
       }
     },
     {
-      onSuccess: (data) => router.push('/nearby'),
+      onSuccess: (data) => {
+        console.log(data);
+        router.push('/nearby');
+      },
       onError: (data) => console.log(data),
       retry: false,
       cacheTime: 1000 * 60 * 60,
@@ -134,7 +138,11 @@ const Search = () => {
             fullWidth
             onChange={onChange}
             {...(searchOption === '주소' && { disabled: true })}
-            value={searchOption === '주소' ? targetCoord.address : title}
+            value={
+              searchOption === '주소'
+                ? targetCoord.address || center.address
+                : title
+            }
           />
         </FormControl>
         <DropdownInput
