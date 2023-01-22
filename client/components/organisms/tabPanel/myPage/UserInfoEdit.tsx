@@ -1,22 +1,16 @@
 import React from 'react';
 import UserInfoForm from '../../../molecules/userInfoForm/UserInfoForm';
-import { useQuery } from '@tanstack/react-query';
-import getOneUserData from '../../../../api/getOneUserData';
-import Loading from '../../loading/Loading';
+import NearByList from '../../nearByList/NearByList';
+import SubTab from '../../subTab/subTab';
 
 const UserInfoEdit = () => {
-  const { isLoading, data } = useQuery({
-    queryKey: ['userInfo'],
-    queryFn: getOneUserData,
-  });
-
   return (
-    <div>
-      {data && (
-        <UserInfoForm editPage={true} content="수정하기" userInfo={data.data} />
-      )}
-      {isLoading && <Loading />}
-    </div>
+    <>
+      <SubTab tabLabels={['내정보 수정', '검색위치 등록']}>
+        <UserInfoForm editPage={true} content="수정하기" />
+        <NearByList />
+      </SubTab>
+    </>
   );
 };
 

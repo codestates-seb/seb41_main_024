@@ -17,7 +17,7 @@ const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
 const SIGN_UP_URL = 'https://ngether.site/api/members';
 const EDIT_USER_INFO_URL = 'https://ngether.site/api/members/patch';
 
-const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
+const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
   const router = useRouter();
 
   const { formValue, checkedPw, handleInputChange, setFormValue } = useForm({
@@ -58,9 +58,9 @@ const UserInfoForm = ({ editPage, content, userInfo }: userInfoFormType) => {
     },
   });
 
-  editPage && setDefaultUserInfo({ setFormValue, userInfo });
+  //editPage && setDefaultUserInfo({ setFormValue, userInfo });
 
-  const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
+  //const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
 
   const onPatchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
