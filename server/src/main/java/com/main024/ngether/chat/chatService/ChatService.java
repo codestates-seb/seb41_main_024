@@ -181,7 +181,6 @@ public class ChatService {
             boardList.add(boardRepository.findByBoardId(chatRoomMembersList.get(i).getChatRoom().getRoomId()).get());
         }
         return boardList;
-
     }
 
     public List<ChatDto.lastMessageCreated> findLastMessageCreated() {

@@ -23,7 +23,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long boardId;
-    @Column(length = 20, nullable = false)
+    @Column(nullable = false)
     private String title;
     @Column(nullable = false)
     private String content;
