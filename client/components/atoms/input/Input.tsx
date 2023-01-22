@@ -7,6 +7,9 @@ const Input = ({
   children,
   select,
   multiline,
+  className,
+  value,
+  onChange,
   ...props
 }: inputType) => {
   return (
@@ -14,6 +17,10 @@ const Input = ({
       {...props}
       {...(select ? { select: true } : null)}
       {...(multiline ? { multiline: true } : null)}
+      className={className}
+      value={value}
+      onChange={onChange}
+      {...props}
       InputProps={{ endAdornment }}
     >
       {children}

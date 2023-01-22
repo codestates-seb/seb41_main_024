@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import LayoutWithFooter from '../../components/layout/layoutWithFooter/LayoutWithFooter';
+import LayoutWithFooter from '../../components/container/layoutWithFooter/LayoutWithFooter';
 import MyPageTab from '../../components/organisms/tab/myPageTab/MyPageTab';
 
 const Mypage = () => {

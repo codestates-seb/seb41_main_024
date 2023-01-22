@@ -43,3 +43,13 @@ export const getPosts = async ({
     url,
   }).then((res) => res.data);
 };
+export const getPostsInCurrentLocation = async ({ range, category }: any) => {
+  const data = {
+    latitude: 35.6194352,
+    longitude: 129.3486386,
+    address: '서울시 노원구 공릉1동',
+  };
+  console.log('api::', range, category);
+  const url = `${REQUEST_URL}/api/distance?range=${range}&category=${category}`;
+  return await axios({ method: 'post', url, data }).then((res) => res.data);
+};
