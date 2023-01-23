@@ -28,7 +28,9 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final CustomAuthorityUtils customAuthorityUtils;
     private final MemberRepository memberRepository;
 
-    public Oauth2MemberSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils customAuthorityUtils, MemberRepository memberRepository) {
+    public Oauth2MemberSuccessHandler(JwtTokenizer jwtTokenizer,
+                                      CustomAuthorityUtils customAuthorityUtils,
+                                      MemberRepository memberRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.customAuthorityUtils = customAuthorityUtils;
         this.memberRepository = memberRepository;
