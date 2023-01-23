@@ -173,7 +173,7 @@ export const setMarkerCluster = async (
     });
     markers.push(sharingItemMarker);
 
-    const infoWindowContent = `<div class="bg-white rounded-2xl">
+    /* const infoWindowContent = `<div class="bg-white rounded-2xl">
     <div>${sharingLists[i]?.title}</div>
     </div>`;
     let infoWindow = new kakao.maps.InfoWindow({
@@ -183,6 +183,37 @@ export const setMarkerCluster = async (
     });
     kakao.maps.event.addListener(sharingItemMarker, 'click', function () {
       infoWindow.open(map, sharingItemMarker);
+    }); */
+    const customOverlayContent = `<div class="absolute bg-white" style="bottom: 40px; transform: translateX(-50%); border-radius: 15px; border: 1px solid #63A8DA; padding: 0 10px;">
+    <a href=/nearby/${sharingLists[i]?.boardId}>${sharingLists[i]?.title}</a>
+    </div>`;
+    let customOverlay = new kakao.maps.CustomOverlay({
+      content: customOverlayContent,
+      position: sharingItemMarker.getPosition(),
+      zIndex: 3,
+    });
+    let isAllOverlayOpen = false;
+    let isOverlayOpen = false;
+    kakao.maps.event.addListener(map, 'click', function () {
+      if (!isAllOverlayOpen) {
+        customOverlay.setMap(map);
+        isAllOverlayOpen = true;
+        isOverlayOpen = true;
+      } else {
+        customOverlay.setMap(null);
+        isAllOverlayOpen = false;
+        isOverlayOpen = false;
+      }
+    });
+
+    kakao.maps.event.addListener(sharingItemMarker, 'click', function () {
+      if (!isOverlayOpen) {
+        customOverlay.setMap(map);
+        isOverlayOpen = true;
+      } else if (isOverlayOpen) {
+        customOverlay.setMap(null);
+        isOverlayOpen = false;
+      }
     });
   }
   clusterer.addMarkers(markers);
