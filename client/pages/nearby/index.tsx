@@ -53,7 +53,7 @@ const Index = ({ dehydratedState, lat, lng }) => {
         </p>
         {locationError && <div>{locationError}</div>}
       </div>
-      <form>
+      {/* <form>
         <DropdownInput
           dropDownOptions={CATEGORY_OPTIONS}
           id="category"
@@ -84,7 +84,7 @@ const Index = ({ dehydratedState, lat, lng }) => {
             value={range}
           />
         )}
-      </form>
+      </form> */}
       <NearByPageTab sharingLists={sharingLists} />
     </div>
   );
