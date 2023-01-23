@@ -1,6 +1,8 @@
 import React from 'react';
 import TabPanel from '../../../atoms/tabPanel/TabPanel';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
+import ReportWork from '../../tabPanel/admin/ReportWork';
+
 const LABEL = ['신고 처리', '1:1 문의'];
 
 const AdminTab = () => {
@@ -18,7 +20,7 @@ const AdminTab = () => {
         centered={true}
       />
       <TabPanel currentTab={currentTab} index={0}>
-        
+        <ReportWork />
       </TabPanel>
       <TabPanel currentTab={currentTab} index={1}>
         
