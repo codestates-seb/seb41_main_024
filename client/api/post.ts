@@ -50,7 +50,7 @@ export const getPostsInSpecifiedLocation = async ({
   range = 1,
   category,
   page = 1,
-  size = 10,
+  size = 300,
 }: any) => {
   const newData = {
     latitude: data.lat,
