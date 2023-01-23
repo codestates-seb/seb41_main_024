@@ -14,6 +14,7 @@ import {
   searchPostsByTitle,
 } from '../../api/post';
 import { useRouter } from 'next/router';
+import useSearch from '../../hooks/search/useSearch';
 
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
@@ -54,39 +55,24 @@ const Search = () => {
   const categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
   const range = category === '상품 쉐어링' ? 1.5 : 0.6;
   const type = 1;
-  const { data, refetch } = useQuery(
-    ['sharingList'],
-    () => {
-      if (searchOption === '주소') {
-        const finalLocation = targetCoord.address ? targetCoord : center;
-        return getPostsInSpecifiedLocation({
-          data: finalLocation,
-          range,
-          category: categoryValue,
-          page: 1,
-          size: 10,
-        });
-      } else if (searchOption === '글 제목') {
-        return searchPostsByTitle({ type, keyword: title, page: 1, size: 10 });
-      }
-    },
-    {
-      onSuccess: (data) => {
-        console.log(data);
-        router.push('/nearby');
-      },
-      onError: (data) => console.log(data),
-      retry: false,
-      cacheTime: 1000 * 60 * 60,
-      staleTime: 1000 * 60 * 60,
-      enabled: false,
-      refetchOnWindowFocus: false,
-    }
-  );
+  const finalLocation = targetCoord.address ? targetCoord : center;
 
-  const handleSubmit = async (e) => {
+  const argumentOfLocation = {
+    data: finalLocation,
+    range,
+    category: categoryValue,
+    page: 1,
+    size: 300,
+  };
+  const argumentOfTitle = { type, keyword: title, page: 1, size: 300 };
+  const { data, refetch } = useSearch({
+    searchOption,
+    argumentOfLocation,
+    argumentOfTitle,
+  });
+
+  const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
-
     refetch();
   };
 
