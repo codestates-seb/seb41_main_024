@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface QnaRepository extends JpaRepository<Qna,Long> {
     Optional<Qna> findById(Long qnaId);
     Page<Qna> findByMemberMemberId(@Param(value = "memberId") Long memberId, PageRequest pageRequest);
+
+    Page<Qna> findAllByQnaStatus(Qna.QnaStatus qnaStatus, PageRequest pageRequest);
 }

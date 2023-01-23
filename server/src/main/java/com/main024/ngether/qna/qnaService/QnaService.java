@@ -29,6 +29,7 @@ public class QnaService {
         qna.setTitle(qnaPost.getTitle());
         qna.setContent(qnaPost.getContent());
         qna.setMember(member);
+        qna.setQnaStatus(Qna.QnaStatus.NO_ANSWER);
 
         member.addQna(qna);
         return qnaRepository.save(qna);

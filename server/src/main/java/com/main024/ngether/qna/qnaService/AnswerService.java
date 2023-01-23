@@ -26,6 +26,8 @@ public class AnswerService {
         Answer answer = new Answer();
         Member member = memberService.getLoginMember();
         Qna qna = qnaRepository.findById(answerPostDto.getQnaId()).get();
+        qna.setQnaStatus(Qna.QnaStatus.ANSWERED);
+        qnaRepository.save(qna);
         if (memberService.getLoginMember().getRoles().get(0).equals("USER")) {  //관리자가 아닐 시 에러 메세지 출력
             throw new BusinessLogicException(ExceptionCode.ROLE_NOT_ADMIN);
         }

@@ -32,6 +32,7 @@ public interface QnaMapper {
         response.setTitle(qna.getTitle());
         response.setContent(qna.getContent());
         response.setCreateDate(qna.getCreateDate());
+        response.setQnaStatus(qna.getQnaStatus());
         List<Answer> answerList = answerRepository.findByQnaQnaId(qna.getQnaId());
         List<AnswerDto.Response> answerResponse =
                 answerList.stream()
