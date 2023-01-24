@@ -1,17 +1,17 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const patchOneUserData = (formValue) => {
+  const REQUEST_URL = 'https://ngether.site';
+
   return () =>
-    axios.patch(
-      `${process.env.NEXT_PUBLIC_URL_API}/members/patch`,
-      JSON.stringify(formValue),
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `${process.env.NEXT_PUBLIC_TOKEN_AUTHOR}`,
-        },
-      }
-    );
+    axios.patch(`${REQUEST_URL}/api/members/patch`, JSON.stringify(formValue), {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: Cookies.get('access_token'),
+        Refresh: Cookies.get('refresh_token'),
+      },
+    });
 };
 
 export default patchOneUserData;
