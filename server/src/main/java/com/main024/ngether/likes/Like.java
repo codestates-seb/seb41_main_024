@@ -29,7 +29,6 @@ public class    Like {
     @JoinColumn(name = "BOARD_ID")
     private Board board;
     
-    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private boolean status;
 }
