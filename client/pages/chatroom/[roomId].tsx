@@ -39,7 +39,7 @@ const Chatroom = () => {
     getChatSharing(roomId)
     .then((response) => {
         setSharingData(response.data);
-        IS_ROOM_OWER = sharingData.nickName !== Cookies.get('nickName')
+        IS_ROOM_OWER = sharingData.nickName === Cookies.get('nickName')
       })
       .catch((error) => {
         console.error(error);
