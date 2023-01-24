@@ -18,21 +18,22 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined} ,
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
+  console.log(WEBSOCKET_TOKEN)
 
   useEffect( () => {
       if(!isReady && HEADER_TOKEN !== undefined) return
 
       const setChatWebsocket = async () => {
         try {
-          const sockjs = new SockJS(`https://ngether.site/ws`);
-          const ws = StompJS.over(sockjs);
-          setStompClient(ws);
-  
           await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
           .then(res => setMessages(res.data.map(transDateFormChatMessage)));
 
           await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: HEADER_TOKEN})
           .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
+
+          const sockjs = new SockJS(`https://ngether.site/ws`);
+          const ws = StompJS.over(sockjs);
+          setStompClient(ws);
 
           await ws.connect(
             {WEBSOCKET_TOKEN},

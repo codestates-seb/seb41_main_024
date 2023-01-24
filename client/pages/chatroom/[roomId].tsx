@@ -79,7 +79,7 @@ const Chatroom = () => {
   return (
     <div>
       <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
-      <div className='left-2/4 translate-x-[-50%] fixed max-w-[642px] min-w-[372px] w-[80%] px-[3rem] rounded'>
+      <div className='left-2/4 mt-3 translate-x-[-50%] fixed max-w-[642px] min-w-[372px] w-[80%] px-[3rem] rounded'>
         <Link href={`/nearby/${roomId}`}>
           <ChatItem
             thumbnail={''}
