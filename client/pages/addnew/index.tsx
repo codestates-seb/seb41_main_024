@@ -77,7 +77,7 @@ const AddNewPage = () => {
   };
 
   return (
-    <LoginChecker path="/login">
+    <LoginChecker>
       <Box component="form" onSubmit={handleSubmit}>
         <div className="flex justify-center m-7 my-12">
           <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
@@ -137,20 +137,78 @@ const AddNewPage = () => {
                   value={category}
                   label="category"
                   onChange={onChange}
-                >
-                  <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                  <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
-                </Select>
-              </FormControl>
-              <FormControl fullWidth>
+                />
+                <Label htmlFor={'title'} labelText={''} />
                 <Input
                   variant="outlined"
                   id="maxNum"
                   name="maxNum"
                   value={maxNum}
                   label="모집 인원"
+                  id="price"
+                  name="price"
                   type="number"
+                  label="가격"
+                  value={price}
                   onChange={onChange}
+                />
+                <Label htmlFor={'price'} labelText={''} />
+                <Input
+                  variant="outlined"
+                  id="productsLink"
+                  name="productsLink"
+                  type="text"
+                  label="상품 링크"
+                  value={productsLink}
+                  onChange={onChange}
+                />
+                <Label htmlFor={'productsLink'} labelText={''} />
+                <FormControl fullWidth>
+                  <InputLabel id="category">카테고리</InputLabel>
+                  <Select
+                    labelId="category"
+                    name="category"
+                    value={category}
+                    label="category"
+                    onChange={onChange}
+                  >
+                    <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
+                    <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <Input
+                    variant="outlined"
+                    id="maxNum"
+                    name="maxNum"
+                    value={maxNum}
+                    label="모집 인원"
+                    type="number"
+                    onChange={onChange}
+                  ></Input>
+                </FormControl>
+
+                <Input
+                  variant="outlined"
+                  id="deadLine"
+                  name="deadLine"
+                  type="date"
+                  label="모집기간"
+                  onChange={onChange}
+                  value={deadLine}
+                  InputLabelProps={{ shrink: true }}
+                />
+                <Label htmlFor={'address'} labelText={''} />
+                <Input
+                  variant="outlined"
+                  id="content"
+                  name="content"
+                  label="내용"
+                  value={content}
+                  onChange={onChange}
+                  rows={10}
+                  multiline
+                  className="h-15.75"
                 ></Input>
               </FormControl>
 

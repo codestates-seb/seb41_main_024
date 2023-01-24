@@ -12,7 +12,7 @@ const DropdownInput = ({
   onchange,
   defaultValue,
   ...props
-}: any) => {
+}: dropDownInputType) => {
   return (
     <FormControl sx={{ m: 1, width }} variant="outlined">
       <Input

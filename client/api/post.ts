@@ -15,7 +15,7 @@ interface uploadPostType {
   refreshToken: string;
 }
 interface getPostType {
-  locationId: number;
+  locationId?: number;
   range: number;
   category: string;
 }
@@ -43,7 +43,10 @@ export const getPosts = async ({
     url,
   }).then((res) => res.data);
 };
-export const getPostsInCurrentLocation = async ({ range, category }: any) => {
+export const getPostsInCurrentLocation = async ({
+  range,
+  category,
+}: getPostType) => {
   const data = {
     latitude: 35.6194352,
     longitude: 129.3486386,

@@ -1,4 +1,15 @@
-export const getMapAndMarker = async (center: any, setTargetCoord: any) => {
+interface getMapAndMarkerPropsType {
+  center: {
+    lat: number;
+    lng: number;
+  };
+  setTargetCoord: (item: {}) => void;
+}
+
+export const getMapAndMarker = async (
+  center: getMapAndMarkerPropsType['center'],
+  setTargetCoord: getMapAndMarkerPropsType['setTargetCoord']
+) => {
   let mapContainer =
       document.getElementById('map') || document.createElement('div'), // 지도를 표시할 div
     mapOption = {
@@ -41,8 +52,8 @@ export const getMapAndMarker = async (center: any, setTargetCoord: any) => {
 };
 
 export const exchangeCoordToAddress = async (
-  center: any,
-  setTargetCoord: any
+  center: getMapAndMarkerPropsType['center'],
+  setTargetCoord: getMapAndMarkerPropsType['setTargetCoord']
 ) => {
   let mapContainer =
       document.getElementById('map') || document.createElement('div'), // 지도를 표시할 div
@@ -66,22 +77,25 @@ export const exchangeCoordToAddress = async (
     map,
     'click',
     function (mouseEvent: kakao.maps.event.MouseEvent) {
-      searchDetailAddrFromCoords(mouseEvent.latLng, function (result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-          let detailAddr = !!result[0].address.address_name
-            ? result[0].address.address_name
-            : result[0].road_address.address_name;
-          // 마커를 클릭한 위치에 표시합니다
-          marker.setPosition(mouseEvent.latLng);
-          marker.setMap(map);
-          let latlng = mouseEvent.latLng;
-          setTargetCoord({
-            lat: latlng.getLat(),
-            lng: latlng.getLng(),
-            address: detailAddr,
-          });
+      searchDetailAddrFromCoords(
+        mouseEvent.latLng,
+        function (result: any, status: any) {
+          if (status === kakao.maps.services.Status.OK) {
+            let detailAddr = !!result[0].address.address_name
+              ? result[0].address.address_name
+              : result[0].road_address.address_name;
+            // 마커를 클릭한 위치에 표시합니다
+            marker.setPosition(mouseEvent.latLng);
+            marker.setMap(map);
+            let latlng = mouseEvent.latLng;
+            setTargetCoord({
+              lat: latlng.getLat(),
+              lng: latlng.getLng(),
+              address: detailAddr,
+            });
+          }
         }
-      });
+      );
     }
   );
 

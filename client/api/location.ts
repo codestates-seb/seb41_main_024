@@ -1,4 +1,14 @@
-export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
+import { Dispatch, SetStateAction } from 'react';
+
+interface getCurrentLocationPropsType {
+  setLocation: (item: {}) => void;
+  setLocationError: () => void;
+  center: { lat: number; lng: number };
+}
+export const getCurrentLocation = (
+  setLocation: getCurrentLocationPropsType['setLocation'],
+  setLocationError: getCurrentLocationPropsType['setLocationError']
+) => {
   const geoLocationOptions = { enableHighAccuracy: true };
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(

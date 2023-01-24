@@ -6,7 +6,7 @@ import { inputType, uploadPostType } from './useInputType';
 function useInput(
   initialValue: inputType,
   mutate: UseMutateFunction<any, unknown, any, unknown>,
-  token: any
+  token: { authorization: string; refresh: string }
 ) {
   const [inputValue, setInputValue] = useState(initialValue);
 
