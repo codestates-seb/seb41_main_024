@@ -11,14 +11,18 @@ import Cookies from 'js-cookie';
 import { signIn, useSession } from 'next-auth/react';
 import { getAllUsers } from '../../api/members';
 import axios from 'axios';
-
+import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 
 const LoginPage = () => {
+  const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
+  const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
+
   const router = useRouter();
   const session = useSession();
   console.log('[Login] session & statue', session); // 소셜 로그인 정보 & 상태
 
+  const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [form, setForm] = useState({
     email: '',
     pw: '',
@@ -26,7 +30,38 @@ const LoginPage = () => {
 
   const { email, pw } = form;
 
-  const { data, mutate } = useMutation(() => requestLogin(form));
+  const emailRegexText = useRegexText({
+    state: email,
+    regex: emailRegex,
+    text: {
+      default: '',
+      match: '',
+      unMatch: '이메일 양식에 맞게 입력해주세요',
+    },
+  });
+  const passwordRegexText = useRegexText({
+    state: pw,
+    regex: passwordRegex,
+    text: {
+      default: '',
+      match: '',
+      unMatch: '소문자, 특수문자를 각 하나 포함한 8자리 이상이여야 합니다.',
+    },
+  });
+
+  const { data, error, mutate } = useMutation(() => requestLogin(form), {
+    onSuccess: (data) => {
+      Cookies.set('access_token', data.headers.authorization);
+      Cookies.set('refresh_token', data.headers.refresh);
+      Cookies.set('memberId', data.data.memberId);
+      Cookies.set('nickName', data.data.nickName);
+      Cookies.set('locationId', data.data.locationId);
+      router.push('/');
+    },
+    onError: (error) => {
+      setLoginErrorMessage('정확하지 않은 이메일 또는 패스워드입니다');
+    },
+  });
 
   const handleLogin = async () => {
     await mutate();
@@ -55,14 +90,14 @@ const LoginPage = () => {
     });
   };
 
-  if (data) {
-    Cookies.set('access_token', data.headers.authorization);
-    Cookies.set('refresh_token', data.headers.refresh);
-    Cookies.set('memberId', data.data.memberId);
-    Cookies.set('nickName', data.data.nickName);
-    Cookies.set('locationId', data.data.locationId);
-    router.push('/');
-  }
+  // if (data) {
+  //   Cookies.set('access_token', data.headers.authorization);
+  //   Cookies.set('refresh_token', data.headers.refresh);
+  //   Cookies.set('memberId', data.data.memberId);
+  //   Cookies.set('nickName', data.data.nickName);
+  //   Cookies.set('locationId', data.data.locationId);
+  //   router.push('/');
+  // }
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -87,7 +122,7 @@ const LoginPage = () => {
             value={email}
             onChange={onChange}
           />
-          <Label htmlFor={'email-input'} labelText={''} />
+          <Label htmlFor={'email-input'} labelText={emailRegexText} />
           <TextField
             id={'password-input'}
             name="pw"
@@ -96,10 +131,8 @@ const LoginPage = () => {
             value={pw}
             onChange={onChange}
           />
-          <Label
-            htmlFor={'password-input'}
-            labelText={'소문자와 특수문자를 포함한 8글자'}
-          />
+          <Label htmlFor={'password-input'} labelText={passwordRegexText} />
+          <p className="text-[#dd3030]">{loginErrorMessage}</p>
           <Button
             className="h-14 mt-4 bg-primary text-white rounded"
             onClick={handleLogin}
