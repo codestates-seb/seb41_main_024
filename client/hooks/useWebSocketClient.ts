@@ -18,7 +18,7 @@ const useWebSocketClient = (token: {Authorization : string | undefined}) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([])
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
-
+  
   useEffect( () => {
       if(!isReady && token !== undefined) return
 
@@ -30,6 +30,9 @@ const useWebSocketClient = (token: {Authorization : string | undefined}) => {
   
           await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : token})
           .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+
+          await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: token})
+          .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
           
           await ws.connect(
             {token},
@@ -40,8 +43,6 @@ const useWebSocketClient = (token: {Authorization : string | undefined}) => {
                 setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(JSON.parse(messages.body))])
               }, 
               {token});
-              axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: token})
-              .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
             }, 
             (error) => {
               console.log(error)

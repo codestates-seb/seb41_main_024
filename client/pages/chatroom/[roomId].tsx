@@ -9,6 +9,7 @@ import { getChatSharing } from '../../api/chatSharing';
 import Link from 'next/link';
 import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
+import { useRouter } from 'next/router';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -30,6 +31,7 @@ const Chatroom = () => {
     nickName: ''
   })
   const {stompClient, messages, members, roomId} = useWebSocketClient(HEADER_TOKEN);
+  const router = useRouter();
 
   
   useEffect(() => {
@@ -68,6 +70,7 @@ const Chatroom = () => {
     if (stompClient && confirm(confirmationMessage)) {
       stompClient.disconnect(() => {}, HEADER_TOKEN)
       axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
+      router.push('/chatlist')
     }
     else return
   }
