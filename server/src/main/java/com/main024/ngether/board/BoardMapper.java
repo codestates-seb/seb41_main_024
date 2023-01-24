@@ -32,6 +32,7 @@ public interface BoardMapper {
         response.setDeadLine(board.getDeadLine());
         response.setProductsLink(board.getProductsLink());
         response.setBoardStatus(board.getBoardStatus());
+        response.setCurNum(board.getCurNum());
 
         return response;
     }

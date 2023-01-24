@@ -3,7 +3,7 @@ package com.main024.ngether.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
-    MEMBER_NOT_FOUND(400, "Member not found"),
+     MEMBER_NOT_FOUND(400, "Member not found"),
     MEMBER_EXISTS(401, "Member exists"),
     NOT_LOGIN(402,"login, please"),
     BOARD_NOT_FOUND(403,"login, please"),
@@ -20,7 +20,8 @@ public enum ExceptionCode {
     ROLE_NOT_ADMIN(412, "Role not admin"),
     REPORT_NOT_FOUND(413, " Report not found"),
     RANGE_NOT_FOUND(414, "Range not found"),
-    BAN(415, "Bye");
+    BAN(415, "Bye"),
+    QNA_NOT_FOUND(416,"Qna not found");
 
 
 
