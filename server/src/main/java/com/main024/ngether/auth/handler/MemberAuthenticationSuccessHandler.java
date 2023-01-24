@@ -43,6 +43,7 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
             locationId.add(locationList.get(i).getLocationId());
         }
         dto.setLocationId(locationId);
+        dto.setRole(member.getRoles().get(0));
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(gson.toJson(dto, LoginResponseDto.class));

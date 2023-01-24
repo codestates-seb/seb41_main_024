@@ -9,16 +9,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Controller
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
 @RequestMapping("/chat")
 public class ChatRoomController {
+    Queue<DeferredResult<String>> results = new ConcurrentLinkedQueue<>();
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomMembersRepository chatRoomMembersRepository;
 
 
     // 모든 채팅방 목록 반환
@@ -68,11 +71,12 @@ public class ChatRoomController {
         return new ResponseEntity<>(chatService.findMembersInChatRoom(roomId), HttpStatus.OK);
     }
 
-    //로그인 한 유저가 참여중인 채팅방 마지막 메시지들
-    @GetMapping("/room/lastMessage")
+    //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
+    @GetMapping("/room/findNewMessages")
     public ResponseEntity lastMessage() {
 
-        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
+        return new ResponseEntity<>(chatService.findNewMessages(), HttpStatus.OK);
 
     }
+
 }

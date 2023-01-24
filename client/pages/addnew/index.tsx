@@ -18,15 +18,19 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import KakaoMap from '../../components/organisms/kakaoMap/KakaoMap';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
+import axios from 'axios';
 
 const AddNewPage = () => {
   const [token, setToken] = useState({});
   const router = useRouter();
+
+  const [productImg, setProductImg] = useState<any>(base);
   const [targetCoord, setTargetCoord] = useState({
     lat: 0,
     lng: 0,
     address: '',
   });
+
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
       router.push('/');
@@ -61,6 +65,17 @@ const AddNewPage = () => {
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
 
+  const fetchOgData = async (url:string) => {
+    try {
+      await axios.get(`https://localhost:3443/api/fetch-og-data?url=${url}`)
+      .then(res => setProductImg(res.data.image.url))
+      console.log(productImg)
+    }
+    catch (error) {
+      console.log(error)
+    }
+  };
+
   return (
     <LoginChecker>
       <Box component="form" onSubmit={handleSubmit}>
@@ -69,7 +84,7 @@ const AddNewPage = () => {
             <Stack spacing={4}>
               <img
                 className="h-40 w-40 mb-7 m-auto"
-                src={base}
+                src={productImg}
                 alt={'유저이미지'}
               />
               <KakaoMap setTargetCoord={setTargetCoord} />
@@ -108,7 +123,10 @@ const AddNewPage = () => {
                 type="text"
                 label="상품 링크"
                 value={productsLink}
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange(e);
+                  fetchOgData(e.target.value);
+                }}
               />
               <Label htmlFor={'productsLink'} labelText={''} />
               <FormControl fullWidth>

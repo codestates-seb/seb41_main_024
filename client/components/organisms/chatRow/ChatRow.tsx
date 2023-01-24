@@ -3,7 +3,7 @@ import { chatRowType } from './chatRowType';
 import Cookie from 'js-cookie';
 
 const ChatRow = ({ thumbSrc, nickName, message, createDate }: chatRowType) => {
-  const MY_CHAT = Cookie.get('nickName') !== nickName;
+  const MY_CHAT = Cookie.get('nickName') === nickName;
   const OTHER_CHAT = !MY_CHAT;
 
   return (

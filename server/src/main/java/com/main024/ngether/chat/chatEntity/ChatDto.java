@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 public class ChatDto {
     @Setter
     @Getter
-    public static class lastMessageCreated{
-        LocalDateTime lastMessageCreated;
+    public static class newMessages{
+        int messagesCount;
         Long roomId;
     }
 }
