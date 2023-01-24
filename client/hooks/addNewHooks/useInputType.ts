@@ -12,6 +12,7 @@ export interface searchUseInputType {
   title?: string;
   searchOption?: string;
   category?: string;
+
 }
 export interface uploadPostType extends inputType {
   latitude: number;

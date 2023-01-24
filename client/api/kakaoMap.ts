@@ -1,5 +1,7 @@
+
 import { kakaoMapItemType } from './../components/molecules/sharingListItem/sharingListItemType';
 import { ListItemPropsType } from '../components/molecules/sharingListItem/sharingListItemType';
+
 
 interface getMapAndMarkerPropsType {
   center: {

@@ -5,7 +5,6 @@ import {
   getPostsInSpecifiedLocation,
   searchPostsByTitle,
 } from '../../api/post';
-
 import { setMarkerCluster } from '../../api/kakaoMap';
 import { useSearchPropsType } from '../../hooks/search/useSearch';
 import BasicTabs from '../../components/molecules/tab/BasicTabs';
@@ -66,6 +65,7 @@ const Index = ({
   }, [mapCenter.address]);
   const [locationError, setLocationError] = useState('');
   const [currentTab, setCurrentTab] = useState(0);
+
 
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
     if (newCurrentTab === 2) {

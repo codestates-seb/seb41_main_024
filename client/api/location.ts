@@ -1,4 +1,5 @@
 import { setDefaultCoordsAndAddress } from './kakaoMap';
+
 interface getCurrentLocationPropsType {
   setLocation: (item: {}) => void;
   setLocationError: () => void;
