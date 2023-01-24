@@ -1,9 +1,11 @@
 import { useMutation, UseMutateFunction } from '@tanstack/react-query';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useState, useCallback, useRef } from 'react';
-import { inputType, uploadPostType } from './useInputType';
+import { inputType, uploadPostType, searchUseInputType } from './useInputType';
 
-function useInput(initialValue: inputType) {
+
+function useInput(initialValue: inputType & searchUseInputType) {
+
   const [inputValue, setInputValue] = useState(initialValue);
 
   /* const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

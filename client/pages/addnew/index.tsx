@@ -74,8 +74,11 @@ const AddNewPage = () => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
     const requestBody: uploadPostType = {
       ...inputValue,
+      category: categoryValue,
       latitude: targetCoord.lat,
       longitude: targetCoord.lng,
       address: targetCoord.address,
