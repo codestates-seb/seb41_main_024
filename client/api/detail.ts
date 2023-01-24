@@ -32,7 +32,7 @@ export function deleteProductDetail(id: string) {
 }
 
 export function likeProduct(id: string) {
-  return axios.post(`${REQUEST_URL}/api/boards/${id}/like`, {
+  return axios.get(`${REQUEST_URL}/api/boards/like/${id}`, {
     headers: {
       Authorization: Cookies.get('access_token'),
       Refresh: Cookies.get('refresh_token'),
@@ -49,30 +49,20 @@ export function reportProduct(reportForm: object) {
   });
 }
 
-// json-server
-// export function getProductDetail(id: string) {
-//   return axios.get(`http://localhost:3001/myData/${id}`, {
-//     headers: {
-//       Authorization: Cookies.get('access_token'),
-//       Refresh: Cookies.get('refresh_token'),
-//     },
-//   });
-// }
+export function getMyFavorite() {
+  return axios.get(`${REQUEST_URL}/api/members/like?page=1&size=10`, {
+    headers: {
+      Authorization: Cookies.get('access_token'),
+      Refresh: Cookies.get('refresh_token'),
+    },
+  });
+}
 
-// export function editProductDetail(id: string, form: any) {
-//   return axios.patch(`http://localhost:3001/myData/${id}`, form, {
-//     headers: {
-//       Authorization: Cookies.get('access_token'),
-//       Refresh: Cookies.get('refresh_token'),
-//     },
-//   });
-// }
-
-// export function deleteProductDetail(id: string) {
-//   return axios.delete(`http://localhost:3001/myData/${id}`, {
-//     headers: {
-//       Authorization: Cookies.get('access_token'),
-//       Refresh: Cookies.get('refresh_token'),
-//     },
-//   });
-// }
+export function goChatroom(id: string) {
+  return axios.get(`${REQUEST_URL}/chat/room/enter/${id}`, {
+    headers: {
+      Authorization: Cookies.get('access_token'),
+      Refresh: Cookies.get('refresh_token'),
+    },
+  });
+}

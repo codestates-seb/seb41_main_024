@@ -17,7 +17,6 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
   const nickName = Cookies.get('nickName');
   const session = useSession();
 
-  console.log('DefaultLayout isLogin >>>', isLogin);
   const handleLogOut = () => {
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');

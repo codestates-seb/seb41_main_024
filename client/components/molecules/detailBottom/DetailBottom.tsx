@@ -1,10 +1,17 @@
 import FormButton from '../formbutton/FormButton';
 import React from 'react';
-import Button from '../../atoms/button/Button';
+import { Button } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Cookie } from '@mui/icons-material';
 
-const DetailBottom = ({ isLiked, handleLike, handleReport, id }) => {
+const DetailBottom = ({
+  isLiked,
+  handleLike,
+  handleReport,
+  handleGether,
+  id,
+}) => {
   return (
     <div className="flex justify-between items-center p-4 mb-4 border-y-1 px-2 py-4 border-x-0 border-solid border-[#475569]">
       <Button onClick={handleLike}>
@@ -25,17 +32,22 @@ const DetailBottom = ({ isLiked, handleLike, handleReport, id }) => {
           />
         )}
       </Button>
-      <span>22,000원</span>
-      <Button
-        onClick={handleReport}
-        variant="contained"
-        className="bg-[#FF0000] m-2"
-      >
-        신고하기
-      </Button>
-      <Link href={`/chatroom/${id}`}>
-        <FormButton variant="contained" content="참여하기" />
-      </Link>
+      {/* <span>22,000원</span> */}
+      <div>
+        <Button
+          onClick={handleReport}
+          variant="contained"
+          className="bg-[red] m-2"
+        >
+          신고하기
+        </Button>
+        <Button onClick={handleGether} variant="contained" className="m-2">
+          참여하기
+        </Button>
+        {/* <Link href={`/chatroom/${id}`}>
+          <FormButton variant="contained" content="참여하기" />
+        </Link> */}
+      </div>
     </div>
   );
 };

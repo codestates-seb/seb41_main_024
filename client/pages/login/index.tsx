@@ -20,7 +20,6 @@ const LoginPage = () => {
 
   const router = useRouter();
   const session = useSession();
-  console.log('[Login] session & statue', session); // 소셜 로그인 정보 & 상태
 
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [form, setForm] = useState({

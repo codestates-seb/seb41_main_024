@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Img from '../../components/atoms/image/Image';
 import DetailBottom from '../../components/molecules/detailBottom/DetailBottom';
 import PostMeta from '../../components/molecules/postMeta/PostMeta';
@@ -12,6 +12,8 @@ import {
   getProductDetail,
   likeProduct,
   reportProduct,
+  getMyFavorite,
+  goChatroom,
 } from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
 import Cookies from 'js-cookie';
@@ -29,7 +31,6 @@ export async function getServerSideProps(context) {
 
 export default function ProductDetail({ id }) {
   const router = useRouter();
-
   const res = useQueries({
     queries: [
       {
@@ -40,26 +41,33 @@ export default function ProductDetail({ id }) {
         queryKey: ['isWriter'],
         queryFn: () => getIsWriter(id),
       },
+      {
+        queryKey: ['MyFavorites'],
+        queryFn: getMyFavorite,
+      },
     ],
   });
 
   const productData = res[0].data?.data;
   const isWriter = res[1].data?.data;
+  const isMyFavorite =
+    res[2].data?.data?.data.filter((item) => item.boardId === Number(id))
+      .length > 0;
+
+  console.log(res);
 
   const reportForm = {
     reportedId: id,
     reportType: 'board',
   };
-
-  console.log('dfs', productData);
-  const deleteMutation = useMutation(() => deleteProductDetail(id));
-  const likeMutation = useMutation(() => likeProduct(id));
   const reportutation = useMutation(() => reportProduct(reportForm));
 
-  const [isLiked, setIsLiked] = useState(false);
-  // const [isLiked, setIsLiked] = useState(likeMutation.data.status);
+  const [isLiked, setIsLiked] = useState(isMyFavorite);
 
-  console.log('likeMutation', likeMutation);
+  const deleteMutation = useMutation(() => deleteProductDetail(id));
+  const likeMutation = useMutation(() => likeProduct(id));
+
+  console.log(likeMutation);
 
   const handleDelete = () => {
     deleteMutation.mutate();
@@ -73,6 +81,10 @@ export default function ProductDetail({ id }) {
 
   const handleReport = () => {
     reportutation.mutate();
+  };
+
+  const handleGether = () => {
+    goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
   };
 
   return (
@@ -90,6 +102,7 @@ export default function ProductDetail({ id }) {
         isLiked={isLiked}
         handleLike={handleLike}
         handleReport={handleReport}
+        handleGether={handleGether}
         id={id}
       />
     </div>

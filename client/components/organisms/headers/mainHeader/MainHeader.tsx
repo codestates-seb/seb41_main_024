@@ -21,9 +21,6 @@ const MainHeader = ({
     setIsDrawerOpen(!isDrawerOpen);
   };
 
-  console.log('[MainHeader] isLogin', isLogin);
-  console.log('[MainHeader] session', session);
-
   return (
     <Fragment>
       <AppBar
