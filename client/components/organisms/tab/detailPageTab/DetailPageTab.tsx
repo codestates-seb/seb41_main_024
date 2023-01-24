@@ -44,7 +44,6 @@ const DetailPageTab = ({ productData }: productDataProps) => {
         </div>
       </section>
       <section id="section-1" className="px-2 py-4">
-        {/* 🍉 카카오 지도 */}
         <DetailMap
           latitude={productData?.latitude}
           longitude={productData?.longitude}

@@ -58,7 +58,7 @@ export default function ProductDetail({ id }) {
       />
       <PostMeta productData={productData} />
       <DetailPageTab productData={productData} />
-      <DetailBottom />
+      <DetailBottom id={id} />
     </div>
   );
 }
