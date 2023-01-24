@@ -13,6 +13,8 @@ import { getAllUsers } from '../../api/members';
 import axios from 'axios';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
+import Image from 'next/image';
+import Divider from '@mui/material/Divider';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -138,17 +140,25 @@ const LoginPage = () => {
           >
             로그인
           </Button>
+
           <Button
-            className="h-14 mt-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
+            className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
             onClick={() => router.push('/signup')}
           >
             회원가입
           </Button>
-          <Button
-            className="h-14 mt-4 bg-primary text-white rounded"
-            onClick={handleSocialLogin}
-          >
-            GOOGLE LOGIN
+          <Divider />
+          <Button className="h-14 mt-4" onClick={handleSocialLogin}>
+            <div
+              style={{ width: '100%', height: '100%', position: 'relative' }}
+            >
+              <Image
+                alt="google login"
+                src="/login/btn_google.png"
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
           </Button>
         </div>
       </div>
