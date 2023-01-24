@@ -46,16 +46,16 @@ export const getPosts = async ({
   }).then((res) => res.data);
 };
 export const getPostsInSpecifiedLocation = async ({
-  data,
+  locationData,
   range = 1,
   category,
   page = 1,
-  size = 10,
+  size = 300,
 }: any) => {
   const newData = {
-    latitude: data.lat,
-    longitude: data.lng,
-    address: data.address,
+    latitude: locationData?.lat,
+    longitude: locationData?.lng,
+    address: locationData?.address,
   };
   const url = `${REQUEST_URL}/api/distance?range=${range}&category=${category}&sortBy=distance&page=${page}&size=${size}`;
   return await axios({ method: 'post', url, data: newData }).then(
