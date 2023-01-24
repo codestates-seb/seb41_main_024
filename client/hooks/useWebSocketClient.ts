@@ -71,7 +71,7 @@ const transDateFormat = (date: string) => {
 // let parsedMessage = JSON.parse(messages.body);
 // parsedMessage.createDate = transDateFormat(parsedMessage.createDate);
 // 이 부분도 parse부분을 인자로 직접 넣으면 됨
-const transDateFormChatMessage = (chatMessage: chatMessageType) => {
+export const transDateFormChatMessage = (chatMessage: chatMessageType) => {
   return {...chatMessage, createDate: transDateFormat(chatMessage.createDate)}
 }
 
