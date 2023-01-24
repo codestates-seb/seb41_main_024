@@ -16,6 +16,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -34,7 +35,7 @@ public class StompHandler implements ChannelInterceptor {
     @CrossOrigin
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        String jwt = accessor.getFirstNativeHeader("Authorization");
+        String jwt = Objects.requireNonNull(accessor.getFirstNativeHeader("Authorization")).substring("Bearer ".length());
         if (StompCommand.CONNECT == accessor.getCommand()) {
             jwtTokenizer.validateToken(jwt);
         }
