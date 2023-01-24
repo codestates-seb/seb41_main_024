@@ -35,7 +35,7 @@ public class StompHandler implements ChannelInterceptor {
     @CrossOrigin
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        String jwt = Objects.requireNonNull(accessor.getFirstNativeHeader("Authorization")).substring("Bearer ".length());
+        String jwt = accessor.getFirstNativeHeader("Authorization");
         if (StompCommand.CONNECT == accessor.getCommand()) {
             jwtTokenizer.validateToken(jwt);
         }
