@@ -1,48 +1,66 @@
-import { BottomNavigation } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import Img from '../../components/atoms/image/Image';
 import NearByPageTab from '../../components/organisms/tab/nearByPageTab/NearByPageTab';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import {
-  getPosts,
   getPostsInSpecifiedLocation,
   searchPostsByTitle,
 } from '../../api/post';
-import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
-import useDropDown from '../../hooks/common/useDropDown';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import { getCurrentLocation } from '../../api/location';
-import { useRouter } from 'next/router';
-import useSearch from '../../hooks/search/useSearch';
+
 import { setMarkerCluster } from '../../api/kakaoMap';
-const CATEGORY_OPTIONS = [
-  { label: '상품 쉐어링', value: '상품 쉐어링' },
-  { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
-];
-const DISTANCE_OPTIONS_PRODUCTS = [
-  { label: '0.5km', value: '0.5km' },
-  { label: '1km', value: '1km' },
-  { label: '1.5km', value: '1.5km' },
-];
-const DISTANCE_OPTIONS_DELIVERY = [
-  { label: '200m', value: '200m' },
-  { label: '400m', value: '400m' },
-  { label: '600m', value: '600m' },
-];
+import { useSearchPropsType } from '../../hooks/search/useSearch';
 
-const Index = ({ dehydratedState, lat, lng }) => {
-  const sharingLists = dehydratedState?.queries[0]?.state.data.data;
+interface nearbyPropsType {
+  dehydratedState: any;
+  lat: number;
+  lng: number;
+  argumentOfLocation: useSearchPropsType['argumentOfLocation'];
+}
 
-  const { inputValue, onChange } = useDropDown({
-    category: '',
-    range: '',
+const Index = ({
+  dehydratedState,
+  lat,
+  lng,
+  argumentOfLocation,
+}: nearbyPropsType) => {
+  const [sharingLists, setSharingLists] = useState(
+    dehydratedState?.queries[0]?.state.data.data
+  );
+  const [mapCenter, setMapCenter] = useState({
+    lat,
+    lng,
+    address: argumentOfLocation?.address,
   });
-  useEffect(() => {
-    const coords = { lat, lng };
-    setMarkerCluster(coords, sharingLists);
-  }, []);
+  console.log('default', sharingLists);
 
-  const { category, range } = inputValue;
+  useEffect(() => {
+    setMarkerCluster(mapCenter, sharingLists, setMapCenter);
+  }, [sharingLists, dehydratedState?.queries[0]?.state.data.data]);
+
+  const { data, refetch } = useQuery({
+    queryKey: ['sharingList'],
+    queryFn: () => {
+      return getPostsInSpecifiedLocation({
+        locationData: mapCenter,
+        range: 1.5,
+        category: argumentOfLocation?.category,
+        page: 1,
+        size: 300,
+      });
+    },
+    onSuccess: (data) => {
+      console.log('query', data);
+
+      setSharingLists(data.data);
+    },
+    enabled: false,
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (!!argumentOfLocation?.category) {
+      refetch();
+    }
+  }, [mapCenter.address]);
   const [locationError, setLocationError] = useState('');
   return (
     <div className="flex flex-col items-center">
@@ -53,38 +71,6 @@ const Index = ({ dehydratedState, lat, lng }) => {
         </p>
         {locationError && <div>{locationError}</div>}
       </div>
-      {/* <form>
-        <DropdownInput
-          dropDownOptions={CATEGORY_OPTIONS}
-          id="category"
-          label="카테고리"
-          width="164px"
-          name="category"
-          onchange={onChange}
-          value={category}
-        />
-        {category === 'product' ? (
-          <DropdownInput
-            dropDownOptions={DISTANCE_OPTIONS_PRODUCTS}
-            id="distance"
-            label="거리설정"
-            width="120px"
-            name="range"
-            onchange={onChange}
-            value={range}
-          />
-        ) : (
-          <DropdownInput
-            dropDownOptions={DISTANCE_OPTIONS_DELIVERY}
-            id="distance"
-            label="거리설정"
-            width="120px"
-            name="range"
-            onchange={onChange}
-            value={range}
-          />
-        )}
-      </form> */}
       <NearByPageTab sharingLists={sharingLists} />
     </div>
   );
@@ -111,7 +97,7 @@ export async function getServerSideProps(context) {
   };
 
   const argumentOfLocation = {
-    data: requestData,
+    locationData: requestData,
     range: defaultRange || '',
     category: defaultCategory || '',
     page: page || 1,
