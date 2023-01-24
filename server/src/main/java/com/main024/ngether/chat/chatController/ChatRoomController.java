@@ -9,13 +9,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Controller
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
 @RequestMapping("/chat")
 public class ChatRoomController {
+    Queue<DeferredResult<String>> results = new ConcurrentLinkedQueue<>();
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
@@ -69,10 +73,18 @@ public class ChatRoomController {
     }
 
     //로그인 한 유저가 참여중인 채팅방 마지막 메시지들
-    @GetMapping("/room/lastMessage")
-    public ResponseEntity lastMessage() {
-
-        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
-
-    }
+//    @GetMapping("/room/lastMessage")
+//    public ResponseEntity lastMessage() {
+//
+//        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
+//
+//    }
+//    @GetMapping("/room/lastMessage")
+//    public DeferredResult<String> deferredResult() {
+//        DeferredResult<String> dr = new DeferredResult<>();
+//        results.add(dr);
+//
+//        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
+//
+//    }
 }

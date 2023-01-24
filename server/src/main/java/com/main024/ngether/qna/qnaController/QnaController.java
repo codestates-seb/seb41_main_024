@@ -63,7 +63,7 @@ public class QnaController {
 
         return new ResponseEntity<>(mapper.QnaToQnaResponseDto(qna, answerRepository), HttpStatus.OK);
     }
-    @GetMapping("/{qna-status}")
+    @GetMapping("/search/{qna-status}")
     public ResponseEntity getQna(@PathVariable("qna-status") String qnaStatus,
                                  @RequestParam(value = "page") int page,
                                  @RequestParam(value = "size") int size) {
