@@ -55,7 +55,7 @@ const Chatroom = () => {
     if(stompClient){
       stompClient.send(
         `/send/chat/${roomId}`, 
-        HEADER_TOKEN ,
+        HEADER_TOKEN,
         JSON.stringify({type:'TALK', message:input})
       );
       setInput('');
@@ -90,7 +90,7 @@ const Chatroom = () => {
           />
         </Link>
       </div>
-      <div className="bg-primary pt-[90px] pb-[7.5rem] min-h-[calc(100vh-121px)] max-w-[672px] w-[100%]">
+      <div className="bg-primary pt-[90px] pb-[7.5rem] overflow-auto max-w-[672px] w-[100%]">
         <ChatGroup chatData={messages} />
       </div>
       <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">

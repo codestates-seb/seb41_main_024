@@ -4,5 +4,6 @@ export interface chatRowType {
   nickName: string | null;
   message: string;
   createDate: string;
-  type: string
+  type: string;
+  unreadCount: number;
 }
