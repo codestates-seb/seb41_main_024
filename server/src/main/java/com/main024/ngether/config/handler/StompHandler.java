@@ -35,11 +35,12 @@ public class StompHandler implements ChannelInterceptor {
     @CrossOrigin
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        String jwt = accessor.getFirstNativeHeader("Authorization");
         if (StompCommand.CONNECT == accessor.getCommand()) {
+            String jwt = accessor.getFirstNativeHeader("Authorization").substring("Bearer ".length());
             jwtTokenizer.validateToken(jwt);
         }
         else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {// 채팅룸 구독요청
+            String jwt = accessor.getFirstNativeHeader("Authorization").substring("Bearer ".length());
             Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(jwt)).get();
             // header정보에서 구독 destination정보를 얻고, roomId를 추출한다.
             String roomId = chatRoomService.getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
