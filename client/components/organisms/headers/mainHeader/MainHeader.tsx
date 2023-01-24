@@ -62,7 +62,7 @@ const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
           </>
         )}
         <DrawerListItem text={'로그인'} path={'/login'} />
-        <DrawerListItem text={'회원가입'} path={'/signuo'} />
+        <DrawerListItem text={'회원가입'} path={'/signup'} />
         {/* <DrawerListItem text={'마이페이지'} path={'/mypage/로그인 한 사람의 멤버 아이디'} /> */}
         {/* 임의로 1로 지정 */}
       </DrawerList>
