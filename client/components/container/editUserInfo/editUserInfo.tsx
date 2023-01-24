@@ -57,6 +57,7 @@ const EditUserInfo = () => {
       phoneNumber: data?.data.phoneNumber,
       pw: '',
     });
+    setPwConfirm('');
   }, [data]);
 
   const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
@@ -86,9 +87,6 @@ const EditUserInfo = () => {
               validation={isValid.isEmail}
               helperText={helperText.ofEmail}
               onChange={handleInputChange}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') event.preventDefault();
-              }}
               disabled={true}
             />
             <NTextField

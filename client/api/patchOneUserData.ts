@@ -1,7 +1,12 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const patchOneUserData = (formValue) => {
+const patchOneUserData = (formValue: {
+  email: string;
+  nickName: string;
+  phoneNumber: string;
+  pw: string;
+}) => {
   const REQUEST_URL = 'https://ngether.site';
 
   return () =>

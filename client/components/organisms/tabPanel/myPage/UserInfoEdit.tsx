@@ -1,5 +1,5 @@
 import React from 'react';
-import EditUserInfo from '../../../container/editUserInfo/EditUserInfo';
+import EditUserInfo from '../../../container/editUserInfo/editUserInfo';
 import NearByList from '../../nearByList/NearByList';
 import NTabs from '../../nTabs/NTabs';
 
@@ -12,7 +12,7 @@ const UserInfoEdit = () => {
         themeSub={true}
       >
         <EditUserInfo />
-        <NearByList />
+        <NearByList sharingLists={[]} />
       </NTabs>
     </>
   );
