@@ -58,7 +58,7 @@ const Search = () => {
   const finalLocation = targetCoord.address ? targetCoord : center;
 
   const argumentOfLocation = {
-    data: finalLocation,
+    locationData: finalLocation,
     range,
     category: categoryValue,
     page: 1,
