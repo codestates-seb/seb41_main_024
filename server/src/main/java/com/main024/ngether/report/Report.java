@@ -34,6 +34,7 @@ public class Report {
     @Column(nullable = false)
     private String reportType;
 
+    /*
     //신고한 사람
     @Column(nullable = false)
     private Long reportMemberId;
@@ -41,6 +42,11 @@ public class Report {
     //신고 당한 사람
     @Column
     private Long reportedMemberId;
+
+     */
+
+    @Column(nullable = false)
+    private String title;
 
     /*
     public enum ReportType {

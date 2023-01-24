@@ -1,20 +1,22 @@
-import * as React from 'react';
 import { useRouter } from 'next/router';
 import { AppBar, Button, Divider, Menu, MenuItem } from '@mui/material';
 import { ReactComponent as ArrowbackIcon } from '../../../../public/header/arrowback.svg';
-import { ReactComponent as MenuIcon } from '../../../../public/header/menu.svg';
+import { ReactComponent as NavigatorIcon } from '../../../../public/header/navigator.svg';
 import { ReactComponent as Logo } from '../../../../public/logos/logoFooter.svg';
+import { useState } from 'react';
+import DrawerList from '../drawer/DrawerList';
+import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 
-const ChatHeader = () => {
+interface ChatHeaderType {
+  members: string[];
+  handleExitChat: () => void;
+}
+
+const ChatHeader = ({members, handleExitChat}: ChatHeaderType) => {
   const router = useRouter();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const handleDrawerToggle = () => {
+    setIsDrawerOpen(!isDrawerOpen);
   };
 
   return (
@@ -37,45 +39,21 @@ const ChatHeader = () => {
             <Logo />
           </div>
           <Button
-            className="border-0 m-0 p-0 bg-inherit"
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
+            className="border-0 ml-2 p-0 bg-inherit min-w-0"
             type="button"
+            onClick={handleDrawerToggle}
           >
-            <MenuIcon />
+            <NavigatorIcon />
           </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem
-              sx={{ color: (theme) => theme.palette.primary.main }}
-              onClick={handleClose}
-            >
-              채팅방 나가기
-            </MenuItem>
-            <MenuItem
-              sx={{ color: (theme) => theme.palette.primary.main }}
-              onClick={handleClose}
-            >
-              신고
-            </MenuItem>
-            <MenuItem
-              sx={{ color: (theme) => theme.palette.primary.main }}
-              onClick={handleClose}
-            >
-              닫기
-            </MenuItem>
-          </Menu>
         </div>
       </AppBar>
       <Divider />
+      <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
+        {members.map((member) => <DrawerListItem text={member}/>)}
+        <div className='fixed bottom-0 w-[100%]'>
+          <DrawerListItem text={'나가기'} onClick={handleExitChat}/>
+        </div>
+      </DrawerList>
     </>
   );
 };
