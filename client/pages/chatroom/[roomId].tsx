@@ -17,7 +17,6 @@ import { useRouter } from 'next/router';
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
 
 let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
-let WEBSOCKET_TOKEN = {Authorization : Cookies.get('access_token')?.replace('Bearer ', '')};
 let IS_ROOM_OWER = false
 
 const Chatroom = () => { 
@@ -31,7 +30,7 @@ const Chatroom = () => {
     address: '',
     nickName: ''
   })
-  const {stompClient, messages, members, roomId} = useWebSocketClient(HEADER_TOKEN, WEBSOCKET_TOKEN);
+  const {stompClient, messages, members, roomId} = useWebSocketClient(HEADER_TOKEN);
   const router = useRouter();
 
   
@@ -69,7 +68,7 @@ const Chatroom = () => {
       "방장님이 채팅에서 나가시면 N게더도 삭제되요" : 
       "채팅에서 나가시면 N게더에서도 이탈해요"
     if (stompClient && confirm(confirmationMessage)) {
-      stompClient.disconnect(() => {}, WEBSOCKET_TOKEN)
+      stompClient.disconnect(() => {})
       axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
       router.push('/chatlist')
     }
