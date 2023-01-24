@@ -28,7 +28,7 @@ public class    Like {
     @ManyToOne(optional = false)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
-    
+
     @Column(nullable = false)
     private boolean status;
 }
