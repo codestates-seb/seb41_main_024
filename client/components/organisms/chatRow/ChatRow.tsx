@@ -1,13 +1,11 @@
 import classnames from 'classnames';
 import { chatRowType } from './chatRowType';
-import Cookie from 'js-cookie'
-
-
+import Cookie from 'js-cookie';
 
 const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatRowType) => {
   const MY_CHAT = Cookie.get('nickName') === nickName;
   const OTHER_CHAT = !MY_CHAT;
-  
+
   return (
     <div
       className={classnames('mt-[1.625rem] first:mt-0', {
@@ -19,7 +17,7 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatR
           'flex-row-reverse': MY_CHAT,
         })}
       >
-        {(OTHER_CHAT && thumbSrc) && (
+        {OTHER_CHAT && thumbSrc && (
           <span className="min-w-[2.8125rem] h-[2.8125rem] rounded-full overflow-hidden">
             <img
               src={thumbSrc}
@@ -35,7 +33,9 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatR
           })}
         >
           {OTHER_CHAT && (
-            <span className="block text-[#fefefe] my-[0.375rem]">{nickName}</span>
+            <span className="block text-[#fefefe] my-[0.375rem]">
+              {nickName}
+            </span>
           )}
           <span
             className={classnames(

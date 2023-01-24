@@ -110,6 +110,19 @@ const ChatList = () => {
           address="서울 서초구"
         />
       </div>
+      {chatListData &&
+        chatListData.map((el: any) => {
+          return (
+            <ChatItem
+              key={el.id}
+              thumbnail={ProductImg}
+              isOpen={el.isOpen}
+              title={el.title}
+              price={el.price}
+              spot={el.spot}
+            />
+          );
+        })}
     </div>
   );
 };

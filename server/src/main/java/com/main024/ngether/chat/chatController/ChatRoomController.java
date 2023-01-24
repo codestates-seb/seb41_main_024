@@ -1,12 +1,15 @@
 package com.main024.ngether.chat.chatController;
 
+import com.main024.ngether.chat.chatService.AsyncService;
 import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
-import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ConditionalOnEnabledResourceChain;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
@@ -22,7 +25,8 @@ public class ChatRoomController {
     Queue<DeferredResult<String>> results = new ConcurrentLinkedQueue<>();
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomMembersRepository chatRoomMembersRepository;
+    @Autowired
+    AsyncService asyncService;
 
 
     // 모든 채팅방 목록 반환
@@ -33,7 +37,7 @@ public class ChatRoomController {
     }
 
     // 채팅방 생성
-    @PostMapping("/room/{board-id}")
+    @GetMapping("/room/{board-id}")
     @ResponseBody
     public ChatRoom createRoom(@PathVariable(value = "board-id") Long boardId) {
 
@@ -72,19 +76,20 @@ public class ChatRoomController {
         return new ResponseEntity<>(chatService.findMembersInChatRoom(roomId), HttpStatus.OK);
     }
 
-    //로그인 한 유저가 참여중인 채팅방 마지막 메시지들
-//    @GetMapping("/room/lastMessage")
-//    public ResponseEntity lastMessage() {
-//
-//        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
-//
-//    }
-//    @GetMapping("/room/lastMessage")
-//    public DeferredResult<String> deferredResult() {
-//        DeferredResult<String> dr = new DeferredResult<>();
-//        results.add(dr);
-//
-//        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
-//
-//    }
+    //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
+    @GetMapping("/room/findNewMessages")
+    @ResponseBody
+    public ResponseEntity<DeferredResult<Boolean>> messageAlarm() throws InterruptedException {
+        DeferredResult<Boolean> result = new DeferredResult<>(1L);
+        asyncService.getBoolean(result);
+                result.onTimeout(() ->
+                        result.setErrorResult(
+                                ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
+                                        .body("Request timeout occurred.")));
+        asyncService.getBoolean(result);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
+
 }
