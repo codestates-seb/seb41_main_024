@@ -8,6 +8,9 @@ import {
 
 import { setMarkerCluster } from '../../api/kakaoMap';
 import { useSearchPropsType } from '../../hooks/search/useSearch';
+import BasicTabs from '../../components/molecules/tab/BasicTabs';
+import TabPanel from '../../components/atoms/tabPanel/TabPanel';
+import NearByList from '../../components/organisms/nearByList/NearByList';
 
 interface nearbyPropsType {
   dehydratedState: any;
@@ -15,7 +18,7 @@ interface nearbyPropsType {
   lng: number;
   argumentOfLocation: useSearchPropsType['argumentOfLocation'];
 }
-
+const LABEL = ['거리순', '최신순'];
 const Index = ({
   dehydratedState,
   lat,
@@ -31,7 +34,7 @@ const Index = ({
     address: argumentOfLocation?.address,
   });
   console.log('default', sharingLists);
-
+  const [sharingListsSortedByTime, setSharingListsSortedByTime] = useState();
   useEffect(() => {
     setMarkerCluster(mapCenter, sharingLists, setMapCenter);
   }, [sharingLists, dehydratedState?.queries[0]?.state.data.data]);
@@ -62,6 +65,14 @@ const Index = ({
     }
   }, [mapCenter.address]);
   const [locationError, setLocationError] = useState('');
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
+    if (newCurrentTab === 2) {
+      // const sortedByTime = [...sharingLists]?.sort((a,b)=>)
+    }
+    setCurrentTab(newCurrentTab);
+  };
   return (
     <div className="flex flex-col items-center">
       <div className="mx-auto w-full h-fit">
@@ -71,7 +82,19 @@ const Index = ({
         </p>
         {locationError && <div>{locationError}</div>}
       </div>
-      <NearByPageTab sharingLists={sharingLists} />
+      {/* <NearByPageTab sharingLists={sharingLists} /> */}
+      <BasicTabs
+        currentTab={currentTab}
+        handleChange={handleChange}
+        tabLabels={LABEL}
+        centered={false}
+      />
+      <TabPanel currentTab={currentTab} index={0}>
+        <NearByList sharingLists={sharingLists} />
+      </TabPanel>
+      <TabPanel currentTab={currentTab} index={1}>
+        <NearByList sharingLists={sharingListsSortedByTime || []} />
+      </TabPanel>
     </div>
   );
 };
