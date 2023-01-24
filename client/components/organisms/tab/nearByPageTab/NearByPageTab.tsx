@@ -2,7 +2,7 @@ import React from 'react';
 import TabPanel from '../../../atoms/tabPanel/TabPanel';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
 import NearByList from '../../nearByList/NearByList';
-const LABEL = ['최신순', '거리순'];
+const LABEL = ['거리순', '최신순'];
 
 const NearByPageTab = ({ sharingLists }) => {
   const [currentTab, seCurrentTab] = React.useState(0);
