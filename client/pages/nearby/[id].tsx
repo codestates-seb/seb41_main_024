@@ -7,9 +7,14 @@ import DetailPageTab from '../../components/organisms/tab/detailPageTab/DetailPa
 import axios from 'axios';
 import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { deleteProductDetail, getProductDetail } from '../../api/detail';
+import {
+  deleteProductDetail,
+  getProductDetail,
+  likeProduct,
+} from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
 import Cookies from 'js-cookie';
+import { useState } from 'react';
 
 export async function getServerSideProps(context) {
   const { id } = context.params;
@@ -40,12 +45,24 @@ export default function ProductDetail({ id }) {
   const productData = res[0].data?.data;
   const isWriter = res[1].data?.data;
 
+  console.log('dfs', productData);
   const deleteMutation = useMutation(() => deleteProductDetail(id));
+  const likeMutation = useMutation(() => likeProduct(id));
 
-  function handleDelete() {
+  const [isLiked, setIsLiked] = useState(false);
+  // const [isLiked, setIsLiked] = useState(likeMutation.data.status);
+
+  console.log('likeMutation', likeMutation);
+
+  const handleDelete = () => {
     deleteMutation.mutate();
     router.push('/');
-  }
+  };
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    likeMutation.mutate();
+  };
 
   return (
     <div>
@@ -58,7 +75,7 @@ export default function ProductDetail({ id }) {
       />
       <PostMeta productData={productData} />
       <DetailPageTab productData={productData} />
-      <DetailBottom id={id} />
+      <DetailBottom isLiked={isLiked} handleLike={handleLike} id={id} />
     </div>
   );
 }

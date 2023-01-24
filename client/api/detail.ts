@@ -31,6 +31,15 @@ export function deleteProductDetail(id: string) {
   });
 }
 
+export function likeProduct(id: string) {
+  return axios.post(`${REQUEST_URL}/api/boards/${id}/like`, {
+    headers: {
+      Authorization: Cookies.get('access_token'),
+      Refresh: Cookies.get('refresh_token'),
+    },
+  });
+}
+
 // json-server
 // export function getProductDetail(id: string) {
 //   return axios.get(`http://localhost:3001/myData/${id}`, {
