@@ -4,6 +4,6 @@ export interface formButtonType extends ButtonProps {
   content: string;
   variant: 'outlined' | 'contained';
   className?: string;
-  type?: 'reset' | 'button' | 'submit' | undefined;
+  type?: 'reset' | 'button' | 'submit';
   props?: ButtonProps;
 }
