@@ -46,10 +46,9 @@ public class StompHandler implements ChannelInterceptor {
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             chatRoomService.setSessionId(Long.valueOf(roomId),member,sessionId);
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
-            Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(jwt)).get();
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndSessionId(member.getMemberId(),sessionId);
+            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findBySessionId(sessionId);
             chatRoomMembers.setSessionId(null);
             chatRoomMembersRepository.save(chatRoomMembers);
         }
