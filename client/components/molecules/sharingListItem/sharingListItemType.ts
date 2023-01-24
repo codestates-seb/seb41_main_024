@@ -19,3 +19,9 @@ export interface ListItemPropsType {
   alt?: string;
   isFavorite?: boolean;
 }
+export interface kakaoMapItemType {
+  latitude: number;
+  longitude: number;
+  boardId: number;
+  title: string;
+}
