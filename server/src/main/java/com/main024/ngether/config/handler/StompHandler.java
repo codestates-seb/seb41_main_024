@@ -35,21 +35,21 @@ public class StompHandler implements ChannelInterceptor {
     @CrossOrigin
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        String jwt = accessor.getFirstNativeHeader("Authorization");
         if (StompCommand.CONNECT == accessor.getCommand()) {
+            String jwt = accessor.getFirstNativeHeader("Authorization").substring("Bearer ".length());
             jwtTokenizer.validateToken(jwt);
         }
         else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {// 채팅룸 구독요청
+            String jwt = accessor.getFirstNativeHeader("Authorization").substring("Bearer ".length());
             Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(jwt)).get();
             // header정보에서 구독 destination정보를 얻고, roomId를 추출한다.
             String roomId = chatRoomService.getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             chatRoomService.setSessionId(Long.valueOf(roomId),member,sessionId);
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
-            Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(jwt)).get();
             // 연결이 종료된 클라이언트 sesssionId로 채팅방 id를 얻는다.
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndSessionId(member.getMemberId(),sessionId);
+            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findBySessionId(sessionId);
             chatRoomMembers.setSessionId(null);
             chatRoomMembersRepository.save(chatRoomMembers);
         }
