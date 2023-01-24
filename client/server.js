@@ -1,17 +1,17 @@
-const { createServer: https } = require('https');
-const { createServer: http } = require('http');
+const og = require('open-graph');
+const https = require('https');
 const { parse } = require('url');
 const next = require('next');
 const fs = require('fs');
+const cors = require('cors');
+
+app.use(cors());
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-const ports = {
-  http: 3080,
-  https: 3443,
-};
+const port = 3443;
 
 const httpsOptions = {
   key: fs.readFileSync('./key.pem'),
@@ -19,19 +19,27 @@ const httpsOptions = {
 };
 
 app.prepare().then(() => {
-  http((req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
-  }).listen(ports.http, (err) => {
-    if (err) throw err;
-    console.log(`> HTTP: Ready on http://localhost:${ports.http}`);
-  });
-
-  https(httpsOptions, (req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
-  }).listen(ports.https, (err) => {
-    if (err) throw err;
-    console.log(`> HTTPS: Ready on https://localhost:${ports.https}`);
+  https.createServer(httpsOptions, (req, res) => {
+      const parsedUrl = parse(req.url, true);
+      if (parsedUrl.pathname === '/api/fetch-og-data') {
+        const url = parsedUrl.query.url;
+          og(url, (err, meta) => {
+              if (err) {
+                  res.statusCode = 500;
+                  res.end(JSON.stringify({ error: err }));
+                  console.log(err)
+                  return;
+              }
+              res.statusCode = 200;
+              res.end(JSON.stringify(meta));
+              console.log(meta)
+          });
+      } 
+      else {
+        handle(req, res, parsedUrl);
+      }
+  }).listen(port, (err) => {
+      if (err) throw err;
+      console.log(`> HTTPS: Ready on https://localhost:${port}`);
   });
 });
