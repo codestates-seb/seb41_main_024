@@ -40,6 +40,15 @@ export function likeProduct(id: string) {
   });
 }
 
+export function reportProduct(reportForm: object) {
+  return axios.post(`${REQUEST_URL}/api/reports`, reportForm, {
+    headers: {
+      Authorization: Cookies.get('access_token'),
+      Refresh: Cookies.get('refresh_token'),
+    },
+  });
+}
+
 // json-server
 // export function getProductDetail(id: string) {
 //   return axios.get(`http://localhost:3001/myData/${id}`, {

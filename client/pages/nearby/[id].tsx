@@ -11,6 +11,7 @@ import {
   deleteProductDetail,
   getProductDetail,
   likeProduct,
+  reportProduct,
 } from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
 import Cookies from 'js-cookie';
@@ -45,9 +46,15 @@ export default function ProductDetail({ id }) {
   const productData = res[0].data?.data;
   const isWriter = res[1].data?.data;
 
+  const reportForm = {
+    reportedId: id,
+    reportType: 'board',
+  };
+
   console.log('dfs', productData);
   const deleteMutation = useMutation(() => deleteProductDetail(id));
   const likeMutation = useMutation(() => likeProduct(id));
+  const reportutation = useMutation(() => reportProduct(reportForm));
 
   const [isLiked, setIsLiked] = useState(false);
   // const [isLiked, setIsLiked] = useState(likeMutation.data.status);
@@ -64,6 +71,10 @@ export default function ProductDetail({ id }) {
     likeMutation.mutate();
   };
 
+  const handleReport = () => {
+    reportutation.mutate();
+  };
+
   return (
     <div>
       <Img src="/chatItem/productImg05.svg" alt="메인사진" />
@@ -75,7 +86,12 @@ export default function ProductDetail({ id }) {
       />
       <PostMeta productData={productData} />
       <DetailPageTab productData={productData} />
-      <DetailBottom isLiked={isLiked} handleLike={handleLike} id={id} />
+      <DetailBottom
+        isLiked={isLiked}
+        handleLike={handleLike}
+        handleReport={handleReport}
+        id={id}
+      />
     </div>
   );
 }
