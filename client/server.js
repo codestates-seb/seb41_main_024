@@ -3,9 +3,6 @@ const https = require('https');
 const { parse } = require('url');
 const next = require('next');
 const fs = require('fs');
-const cors = require('cors');
-
-app.use(cors());
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
