@@ -61,6 +61,7 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .csrf().disable()
                 .exceptionHandling()  // 추가
                 .authenticationEntryPoint(new MemberAuthenticationEntryPoint())  // 추가
                 .accessDeniedHandler(new MemberAccessDeniedHandler())            // 추가
@@ -72,6 +73,7 @@ public class SecurityConfiguration {
                 .and()
                 //.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
                 .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/**").permitAll()
                         .antMatchers(HttpMethod.POST, "/api/members").permitAll()
                         .antMatchers(HttpMethod.GET, "/auth/login").permitAll()
                         .anyRequest().hasAnyRole("ADMIN", "USER"))
