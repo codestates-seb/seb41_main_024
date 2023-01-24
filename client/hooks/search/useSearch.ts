@@ -4,10 +4,10 @@ import {
 } from './../../api/post';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-interface useSearchPropsType {
+export interface useSearchPropsType {
   searchOption?: string;
   argumentOfLocation: {
-    data: { lat: number; lng: number; address: string };
+    locationData: { lat: number; lng: number; address: string };
     range: number;
     category: string;
     page: number;
@@ -43,7 +43,7 @@ const useSearch = ({
           category,
           page,
           size,
-          data: { lat, lng, address },
+          locationData: { lat, lng, address },
         } = argumentOfLocation;
         const {
           type,
