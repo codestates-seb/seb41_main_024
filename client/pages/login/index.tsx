@@ -138,7 +138,10 @@ const LoginPage = () => {
           >
             로그인
           </Button>
-          <Button className="h-14 mt-4 border-solid border-1 border-[#63A8DA] text-primary rounded">
+          <Button
+            className="h-14 mt-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
+            onClick={() => router.push('/signup')}
+          >
             회원가입
           </Button>
           <Button
