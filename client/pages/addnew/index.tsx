@@ -18,7 +18,6 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import KakaoMap from '../../components/organisms/kakaoMap/KakaoMap';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const AddNewPage = () => {
