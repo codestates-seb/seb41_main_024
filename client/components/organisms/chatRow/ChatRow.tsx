@@ -51,7 +51,7 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatR
           {createDate}
         </span>
         {unreadCount !== 0 && 
-        <span className="mr-3 text-[0.75rem] leading-[0.875rem] text-[#333] self-end pb-[0.0625rem]">
+        <span className="mx-3 text-[0.75rem] leading-[0.875rem] text-[#333] self-end pb-[0.0625rem]">
           {unreadCount}
         </span>}
       </div>
