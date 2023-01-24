@@ -28,7 +28,8 @@ public class    Like {
     @ManyToOne(optional = false)
     @JoinColumn(name = "BOARD_ID")
     private Board board;
-
+    
+    @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private boolean status;
 }
