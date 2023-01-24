@@ -10,11 +10,19 @@ import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import { mainHeaderType } from './mainHeader';
 import { nextTick } from 'process';
 
-const MainHeader = ({ isLogin, nickName, logOutHandler }: mainHeaderType) => {
+const MainHeader = ({
+  isLogin,
+  nickName,
+  logOutHandler,
+  session,
+}: mainHeaderType) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
+
+  console.log('[MainHeader] isLogin', isLogin);
+  console.log('[MainHeader] session', session);
 
   return (
     <Fragment>
@@ -46,10 +54,12 @@ const MainHeader = ({ isLogin, nickName, logOutHandler }: mainHeaderType) => {
         </div>
       </AppBar>
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        {isLogin && nickName && (
+        {((isLogin && nickName) || session?.data?.user) && (
           <>
             <div className="flex flex-col items-center m-4">
-              <span className="text-primary text-bold">{nickName}</span>
+              <span className="text-primary text-bold">
+                {nickName || session.data.user.name}
+              </span>
               <Button
                 variant="contained"
                 className="m-4"
@@ -60,7 +70,7 @@ const MainHeader = ({ isLogin, nickName, logOutHandler }: mainHeaderType) => {
             </div>
           </>
         )}
-        {!isLogin && (
+        {!isLogin && !session?.data?.user && (
           <div className="flex justify-center items-center m-2">
             <Link href={'/login'}>
               <Button variant="contained" className="m-2">

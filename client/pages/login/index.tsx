@@ -5,14 +5,19 @@ import TextField from '../../components/molecules/passwordTextField/TextField';
 import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
-import { requestLogin } from '../../api/login';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
+import { signIn, useSession } from 'next-auth/react';
+import { getAllUsers } from '../../api/members';
+import axios from 'axios';
 
 import React from 'react';
 
 const LoginPage = () => {
   const router = useRouter();
+  const session = useSession();
+  console.log('[Login] session & statue', session); // 소셜 로그인 정보 & 상태
 
   const [form, setForm] = useState({
     email: '',
@@ -21,13 +26,34 @@ const LoginPage = () => {
 
   const { email, pw } = form;
 
-  const { data, isLoading, isError, refetch } = useQuery(
-    ['loginData'],
-    () => requestLogin(form),
-    {
-      enabled: false,
-    }
-  );
+  const { data, mutate } = useMutation(() => requestLogin(form));
+
+  const handleLogin = async () => {
+    await mutate();
+  };
+
+  const handleSocialLogin = async () => {
+    await signIn('google');
+    getAllUsers().then((res) => {
+      console.log('res.data', res.data);
+      const isNewUser = !res.data.filter(
+        (user: { email?: string }) => user.email === session?.data?.user?.email
+      );
+      if (isNewUser) {
+        // DB에 해당 이메일 없으면
+        // 회원가입 시키고
+        requestSignUp({
+          pw: 'qqqqqq-123',
+          nickName: session?.data?.user?.name,
+          email: session?.data?.user?.email,
+          phoneNumber: '010-9601-1712',
+        });
+      }
+      // 자체 로그인 진행
+      setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
+      handleLogin();
+    });
+  };
 
   if (data) {
     Cookies.set('access_token', data.headers.authorization);
@@ -75,13 +101,19 @@ const LoginPage = () => {
             labelText={'소문자와 특수문자를 포함한 8글자'}
           />
           <Button
-            className="h-14 mt-4 bg-primary text-white rounded "
-            onClick={refetch}
+            className="h-14 mt-4 bg-primary text-white rounded"
+            onClick={handleLogin}
           >
             로그인
           </Button>
-          <Button className="h-14 mt-4 border-solid border-1 border-[#63A8DA] text-primary rounded ">
+          <Button className="h-14 mt-4 border-solid border-1 border-[#63A8DA] text-primary rounded">
             회원가입
+          </Button>
+          <Button
+            className="h-14 mt-4 bg-primary text-white rounded"
+            onClick={handleSocialLogin}
+          >
+            GOOGLE LOGIN
           </Button>
         </div>
       </div>

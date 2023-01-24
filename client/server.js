@@ -9,7 +9,7 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const ports = {
-  http: 3080,
+  http: 3000,
   https: 3443,
 };
 
