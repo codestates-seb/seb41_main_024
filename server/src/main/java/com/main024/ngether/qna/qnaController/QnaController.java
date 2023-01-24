@@ -63,11 +63,30 @@ public class QnaController {
 
         return new ResponseEntity<>(mapper.QnaToQnaResponseDto(qna, answerRepository), HttpStatus.OK);
     }
+    @GetMapping("/search/{qna-status}")
+    public ResponseEntity getQna(@PathVariable("qna-status") String qnaStatus,
+                                 @RequestParam(value = "page") int page,
+                                 @RequestParam(value = "size") int size) {
+
+        if(qnaStatus.equals("NO_ANSWERED")) {
+            Page<Qna> pageQna = qnaRepository.findAllByQnaStatus(Qna.QnaStatus.NO_ANSWER, PageRequest.of(page - 1, size));
+            List<Qna> qnaList = pageQna.getContent();
+            return new ResponseEntity<>(
+                    new MultiResponseDto<>(qnaList, pageQna), HttpStatus.OK);
+        }
+        else {
+            Page<Qna> pageQna = qnaRepository.findAllByQnaStatus(Qna.QnaStatus.ANSWERED, PageRequest.of(page - 1, size));
+            List<Qna> qnaList = pageQna.getContent();
+            return new ResponseEntity<>(
+                    new MultiResponseDto<>(qnaList, pageQna), HttpStatus.OK);
+        }
+
+    }
 
     //내가 작성한 문의글 목록
     @GetMapping
     public ResponseEntity qnaList(@RequestParam(value = "page") int page,
-                                          @RequestParam(value = "size") int size){
+                                  @RequestParam(value = "size") int size){
         Page<Qna> pageQnas = qnaRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size));
         List<Qna> qnaList = pageQnas.getContent();
         return new ResponseEntity<>(

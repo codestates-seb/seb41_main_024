@@ -1,7 +1,13 @@
 import { Button } from '@mui/material';
 import { formButtonType } from './formButtonType';
 
-const FormButton = ({ variant, content, className, type, ...props }: any) => {
+const FormButton = ({
+  variant,
+  content,
+  className,
+  type,
+  ...props
+}: formButtonType) => {
   return (
     <Button
       className={

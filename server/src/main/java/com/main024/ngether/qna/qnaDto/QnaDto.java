@@ -1,6 +1,7 @@
 package com.main024.ngether.qna.qnaDto;
 
 import com.main024.ngether.qna.qnaEntity.Answer;
+import com.main024.ngether.qna.qnaEntity.Qna;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,7 @@ public class QnaDto {
         private String title;
         private String content;
         private LocalDateTime createDate;
+        private Qna.QnaStatus qnaStatus;
         private List<AnswerDto.Response> answers = new ArrayList<>();
     }
 }

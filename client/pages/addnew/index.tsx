@@ -11,22 +11,30 @@ import { uploadPost } from '../../api/post';
 import { useMutation } from '@tanstack/react-query';
 import useInput from '../../hooks/addNewHooks/useInput';
 import { Box } from '@mui/material';
-import { inputType } from '../../hooks/addNewHooks/useInputType';
+import { uploadPostType } from '../../hooks/addNewHooks/useInputType';
 import { Cookies } from 'react-cookie';
+import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
+import { getCurrentLocation } from '../../api/location';
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import KakaoMap from '../../components/organisms/kakaoMap/KakaoMap';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
+import axios from 'axios';
 
 const AddNewPage = () => {
-  const [token, setToken] = useState({});
+  const [token, setToken] = useState({ authorization: '', refresh: '' });
   const router = useRouter();
+
+  const [productImg, setProductImg] = useState<any>(base);
   const [targetCoord, setTargetCoord] = useState({
     lat: 0,
     lng: 0,
     address: '',
   });
+  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const [locationError, setLocationError] = useState('');
+  const [searchAddress, setSearchAddress] = useState('');
+
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
       router.push('/');
@@ -37,42 +45,91 @@ const AddNewPage = () => {
     },
   });
   const cookie = new Cookies();
-  const { inputValue, onChange, handleSubmit } = useInput(
-    {
-      title: '',
-      price: '',
-      productsLink: '',
-      category: 'product',
-      maxNum: '1',
-      content: '',
-      deadLine: '',
-      ...targetCoord,
-    },
-    mutate,
-    token
-  );
+
+  const { inputValue, onChange } = useInput({
+    title: '',
+    price: '',
+    productsLink: '',
+    category: 'product',
+    maxNum: '1',
+    content: '',
+    deadLine: '',
+  });
+
   useEffect(() => {
+    getCurrentLocation(setCenter, setLocationError);
     const authorization = cookie.get('access_token');
     const refresh = cookie.get('refresh_token');
     authorization || refresh
       ? setToken({ authorization, refresh })
       : router.push('/login');
   }, []);
+  useEffect(() => {
+    exchangeCoordToAddress(center, setTargetCoord);
+  }, [center]);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
+  const handleSearchAddress = (e) => {
+    setSearchAddress(e.target.value);
+  };
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
+    const requestBody: uploadPostType = {
+      ...inputValue,
+      category: categoryValue,
+      latitude: targetCoord.lat,
+      longitude: targetCoord.lng,
+      address: targetCoord.address,
+      accessToken: token.authorization,
+      refreshToken: token.refresh,
+    };
+
+    mutate(requestBody);
+  };
+
+  const fetchOgData = async (url: string) => {
+    try {
+      await axios
+        .get(`https://localhost:3443/api/fetch-og-data?url=${url}`)
+        .then((res) => setProductImg(res.data.image.url));
+      console.log(productImg);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <LoginChecker path="/login">
+    <LoginChecker path="/addnew">
       <Box component="form" onSubmit={handleSubmit}>
         <div className="flex justify-center m-7 my-12">
           <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
             <Stack spacing={4}>
               <img
                 className="h-40 w-40 mb-7 m-auto"
-                src={base}
+                src={productImg}
                 alt={'유저이미지'}
               />
-              <KakaoMap setTargetCoord={setTargetCoord} />
+              <div id="map" className="w-[100%] h-[350px]"></div>
+              <p>
+                <em>지도를 클릭해주세요!</em>
+              </p>
+              <div className="flex width-[100%]">
+                <Input
+                  id="location"
+                  name="location"
+                  type="text"
+                  label="도로명주소 검색"
+                  onChange={handleSearchAddress}
+                />
+                <FormButton
+                  variant="contained"
+                  className="bg-[#63A8DA] text-[white] ml-[10px]"
+                  content="검색"
+                  onClick={() => searchMap(searchAddress, setCenter)}
+                ></FormButton>
+              </div>
               <Input
                 id="address"
                 name="address"
@@ -81,6 +138,7 @@ const AddNewPage = () => {
                 value={targetCoord.address}
                 disabled
               />
+              <Label htmlFor={'title'} labelText={''} />
               <Input
                 variant="outlined"
                 id="title"
@@ -90,7 +148,7 @@ const AddNewPage = () => {
                 value={title}
                 onChange={onChange}
               />
-              <Label htmlFor={'title'} labelText={''} />
+              <Label htmlFor={'price'} labelText={''} />
               <Input
                 variant="outlined"
                 id="price"
@@ -100,7 +158,7 @@ const AddNewPage = () => {
                 value={price}
                 onChange={onChange}
               />
-              <Label htmlFor={'price'} labelText={''} />
+              <Label htmlFor={'productsLink'} labelText={''} />
               <Input
                 variant="outlined"
                 id="productsLink"
@@ -108,9 +166,12 @@ const AddNewPage = () => {
                 type="text"
                 label="상품 링크"
                 value={productsLink}
-                onChange={onChange}
+                onChange={(e) => {
+                  onChange(e);
+                  fetchOgData(e.target.value);
+                }}
               />
-              <Label htmlFor={'productsLink'} labelText={''} />
+
               <FormControl fullWidth>
                 <InputLabel id="category">카테고리</InputLabel>
                 <Select

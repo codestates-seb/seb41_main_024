@@ -6,12 +6,12 @@ const DrawerListItem = ({ text, path, onClick }: drawerListItemPropsType) => {
   return (
     <ListItem key={text} disablePadding>
       <ListItemButton onClick={onClick}>
-      {path && (
-        <Link href={path}>
-          <ListItemText primary={text} />
-        </Link>
-      )}
-      {!path && <ListItemText primary={text} />}
+        {path && (
+          <Link href={path}>
+            <ListItemText primary={text} />
+          </Link>
+        )}
+        {!path && <ListItemText primary={text} />}
       </ListItemButton>
     </ListItem>
   );
