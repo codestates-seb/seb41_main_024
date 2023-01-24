@@ -22,12 +22,14 @@ interface getPostType {
 const REQUEST_URL = 'https://ngether.site';
 
 export const uploadPost = async (data: uploadPostType) => {
-  const query = data.category === '배달' ? 'delivery' : 'product';
   return await axios({
     method: 'post',
     data,
-    headers: { Authorization: data.accessToken, Refresh: data.refreshToken },
-    url: `${REQUEST_URL}/api/boards?category=${query}`,
+    headers: {
+      Authorization: data.accessToken,
+      Refresh: data.refreshToken,
+    },
+    url: `${REQUEST_URL}/api/boards`,
   });
 };
 
@@ -43,16 +45,35 @@ export const getPosts = async ({
     url,
   }).then((res) => res.data);
 };
-export const getPostsInCurrentLocation = async ({
-  range,
+export const getPostsInSpecifiedLocation = async ({
+  locationData,
+  range = 1,
   category,
-}: getPostType) => {
-  const data = {
-    latitude: 35.6194352,
-    longitude: 129.3486386,
-    address: '서울시 노원구 공릉1동',
+  page = 1,
+  size = 300,
+}: any) => {
+  const newData = {
+    latitude: locationData?.lat,
+    longitude: locationData?.lng,
+    address: locationData?.address,
   };
-  console.log('api::', range, category);
-  const url = `${REQUEST_URL}/api/distance?range=${range}&category=${category}`;
-  return await axios({ method: 'post', url, data }).then((res) => res.data);
+  const url = `${REQUEST_URL}/api/distance?range=${range}&category=${category}&sortBy=distance&page=${page}&size=${size}`;
+  return await axios({ method: 'post', url, data: newData }).then(
+    (res) => res.data
+  );
+};
+
+export const searchPostsByTitle = async ({
+  type,
+  keyword,
+  page = 1,
+  size = 10,
+}) => {
+  const url = `${REQUEST_URL}/api/boards/search?type=${type}&keyword=${encodeURIComponent(
+    keyword
+  )}&page=${page}&size=${size}`;
+  return await axios({
+    method: 'get',
+    url,
+  }).then((res) => res.data);
 };
