@@ -22,7 +22,6 @@ public class ChatRoomController {
     Queue<DeferredResult<String>> results = new ConcurrentLinkedQueue<>();
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomMembersRepository chatRoomMembersRepository;
 
 
     // 모든 채팅방 목록 반환

@@ -43,12 +43,15 @@ public class MessageController {
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
         message.setCreateDate(LocalDateTime.now());
+        message.setUnreadCount(chatService.setUnreadMessageCount(roomId));
         ChatMessage savedMessage = chatMessageRepository.save(message);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         chatRoom.setLastMessage(savedMessage.getMessage());
         chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
         chatRoomRepository.save(chatRoom);
-        chatService.setUnreadMessageCount(roomId);
+
+
+
 
 
         //메시지 전송
