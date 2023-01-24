@@ -38,7 +38,7 @@ public class MessageController {
     @CrossOrigin
     @MessageMapping("/chat/{room-id}")//메세지를 발행하는 경로
     public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message,@Header("Authorization") String Authorization) {
-        Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(Authorization).substring("Bearer ".length())).get();
+        Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(Authorization.substring("Bearer ".length()))).get();
         message.setNickName(member.getNickName());
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
