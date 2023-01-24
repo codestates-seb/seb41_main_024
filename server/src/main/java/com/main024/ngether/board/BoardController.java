@@ -92,8 +92,8 @@ public class BoardController {
 
 
     //게시글 추천하기
-    @PostMapping("/{board-id}/like")
-    public ResponseEntity postLike(@PathVariable("board-id") long boardId) {
+    @PostMapping("/like")
+    public ResponseEntity postLike(@RequestBody long boardId) {
 
         Like like = likeService.createLike(mapper.boardLikeToBoard(boardService, memberService, boardId));
 
