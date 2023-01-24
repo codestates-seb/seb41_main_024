@@ -72,19 +72,12 @@ public class ChatRoomController {
         return new ResponseEntity<>(chatService.findMembersInChatRoom(roomId), HttpStatus.OK);
     }
 
-    //로그인 한 유저가 참여중인 채팅방 마지막 메시지들
-//    @GetMapping("/room/lastMessage")
-//    public ResponseEntity lastMessage() {
-//
-//        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
-//
-//    }
-//    @GetMapping("/room/lastMessage")
-//    public DeferredResult<String> deferredResult() {
-//        DeferredResult<String> dr = new DeferredResult<>();
-//        results.add(dr);
-//
-//        return new ResponseEntity<>(chatService.findLastMessageCreated(), HttpStatus.OK);
-//
-//    }
+    //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
+    @GetMapping("/room/findNewMessages")
+    public ResponseEntity lastMessage() {
+
+        return new ResponseEntity<>(chatService.findNewMessages(), HttpStatus.OK);
+
+    }
+
 }

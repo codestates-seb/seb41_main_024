@@ -188,14 +188,22 @@ public class ChatService {
 
     }
 
-    public List<ChatRoomMembers> findNewMessages() {
-        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
-        List<ChatRoomMembers> chatRoomMembers = null;
+    public List<ChatDto.newMessages> findNewMessages() {
+        Member member = memberService.getLoginMember();
+        if(member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+        List<ChatDto.newMessages> newMessagesList = null;
+        ChatDto.newMessages newMessages = new ChatDto.newMessages();
         for (int i = 0; i < chatRoomMembersList.size(); i++) {
-            if(chatRoomMembersList.get(i).getUnreadMessageCount() != 0)
-                chatRoomMembers.add(chatRoomMembersList.get(i));
+            if(chatRoomMembersList.get(i).getUnreadMessageCount() != 0) {
+                newMessages.setMessagesCount(chatRoomMembersList.get(i).getUnreadMessageCount());
+                newMessages.setRoomId(chatRoomMembersList.get(i).getChatRoom().getRoomId());
+                newMessagesList.add(newMessages);
+            }
+
         }
-        return chatRoomMembers;
+        return newMessagesList;
     }
 
     public List<ChatRoom> findMyChatRoom() {
