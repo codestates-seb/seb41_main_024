@@ -52,17 +52,35 @@ public class ReportController {
                 new MultiResponseDto<>(reportMapper.reportsToReportResponses(reportList), reportPage), HttpStatus.OK);
     }
 
-    //관리자가 member role, status 바꿀 수 있는 api
-    @PatchMapping("/admin/changeMemberRole")
-    public ResponseEntity patchMemberRole(@Positive @RequestParam(value = "memberId") long memberId) {
-        reportService.updateMemberRole(memberId);
+    //관리자가 memberId로 member role 바꿀 수 있는 api
+    @PatchMapping("/admin/changeMemberIdRole/{member-id}")
+    public ResponseEntity patchMemberIdRole(@PathVariable("member-id") @Positive long memberId) {
+        reportService.updateMemberIdRole(memberId);
         return new ResponseEntity(HttpStatus.OK);
     }
-    //벤 푸는 api
-    @PatchMapping("/admin/recoveryMemberRole")
-        public ResponseEntity recoveryMemberRole(@RequestParam(value = "memberId") long memberId){
-            reportService.recoveryMemberRole(memberId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+
+    //관리자가 nickName으로 member role 바꿀 수 있는 api
+    @PatchMapping("/admin/changeMemberNickNameRole")
+    public ResponseEntity patchMemberNickNameRole(@RequestParam(value = "nickName") String nickName) {
+        reportService.updateMemberNickNameRole(nickName);
+        return new ResponseEntity(HttpStatus.OK);
     }
+
+    //차단 푸는 api
+    @PatchMapping("/admin/recoveryMemberRole/{member-id}")
+    public ResponseEntity recoveryMemberRole(@PathVariable("member-id") @Positive long memberId){
+        reportService.recoveryMemberRole(memberId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    //신고 내역 삭제
+    @DeleteMapping("/{report-id}")
+    public ResponseEntity deleteReport(@PathVariable("report-id") @Positive long reportId){
+        reportService.deleteReport(reportId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+}
+
 

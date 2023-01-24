@@ -1,5 +1,7 @@
 package com.main024.ngether.auth.jwt;
 
+import com.main024.ngether.exception.BusinessLogicException;
+import com.main024.ngether.exception.ExceptionCode;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -87,7 +89,10 @@ public class JwtTokenizer {
         return verifySignature(token, encodeBase64SecretKey(secretKey));
     }
     public boolean validateToken(String token){
-        return this.getClaims(token,encodeBase64SecretKey(secretKey)) != null;
+        if(getClaims(token,encodeBase64SecretKey(secretKey)) == null){
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        }
+        else return true;
     }
 
     public Date getTokenExpiration(int expirationMinutes) {

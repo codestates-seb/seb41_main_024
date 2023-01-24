@@ -25,7 +25,8 @@ public class ReportDto {
         private long reportedId;
         //private Report.ReportType reportType;
         private String reportType;
-        private long reportMemberId;
-        private long reportedMemberId;
+        //private long reportMemberId;
+        //private long reportedMemberId;
+        private String title;
     }
 }

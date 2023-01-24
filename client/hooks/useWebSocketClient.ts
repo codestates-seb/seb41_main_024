@@ -13,35 +13,36 @@ interface chatMessageType {
   type: string
 }
 
-const useWebSocketClient = (token: {Authorization : string | undefined}) => {
+const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) => {
   const {query: {roomId}, isReady} = useRouter();
   const [messages, setMessages] = useState<any[]>([]);
-  const [members, setMembers] = useState<any[]>([])
+  const [members, setMembers] = useState<any[]>([]);
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
 
   useEffect( () => {
-      if(!isReady && token !== undefined) return
+      if(!isReady && HEADER_TOKEN !== undefined) return
 
       const setChatWebsocket = async () => {
         try {
+          await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
+          .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+
+          await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: HEADER_TOKEN})
+          .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
+
           const sockjs = new SockJS(`https://ngether.site/ws`);
           const ws = StompJS.over(sockjs);
           setStompClient(ws);
-  
-          await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : token})
-          .then(res => setMessages(res.data.map(transDateFormChatMessage)));
-          
+
           await ws.connect(
-            {token},
+            HEADER_TOKEN,
             () => {
               ws.subscribe(
               `/receive/chat/${roomId}`, 
               (messages) => {
                 setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(JSON.parse(messages.body))])
               }, 
-              {token});
-              axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: token})
-              .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
+              HEADER_TOKEN);
             }, 
             (error) => {
               console.log(error)
@@ -53,7 +54,7 @@ const useWebSocketClient = (token: {Authorization : string | undefined}) => {
         }
       }
       setChatWebsocket();
-  }, [roomId, token])
+  }, [roomId, HEADER_TOKEN])
   return {stompClient, messages, members, roomId}
 }
 

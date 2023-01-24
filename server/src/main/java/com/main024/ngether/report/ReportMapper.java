@@ -18,8 +18,9 @@ public interface ReportMapper {
                 .reportId(report.getReportId())
                 .reportedId(report.getReportedId())
                 .reportType(report.getReportType())
-                .reportMemberId(report.getReportMemberId())
-                .reportedMemberId(report.getReportedId())
+                //.reportMemberId(report.getReportMemberId())
+                //.reportedMemberId(report.getReportedId())
+                .title(report.getTitle())
                 .build();
     }
     List<ReportDto.Response> reportsToReportResponses(List<Report> reports);
