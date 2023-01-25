@@ -73,7 +73,7 @@ export default function BottomNav(): JSX.Element {
             // borderTop: '1px solid #475569',
           }}
         >
-          {NAVIGATION_LIST.map(({ label, icon, path }: bottomNavPropsType) => {
+          {NAVIGATION_LIST.map(({ label, icon, path }: any) => {
             return (
               <BottomNavigationAction
                 key={label}

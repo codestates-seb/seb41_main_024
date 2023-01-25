@@ -7,7 +7,7 @@ import basicTheme from '../../../theme/basic';
 import useLogin from '../../../hooks/common/useLogin';
 import Cookies from 'js-cookie';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 //메인페이지, 마이페이지
 const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {

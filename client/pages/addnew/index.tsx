@@ -37,8 +37,10 @@ const AddNewPage = () => {
 
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
+      axios.post(`https://ngether.site/chat/room/${data.data.boardId}`, token);
       router.push('/');
     },
+
     onError: (error) => {
       console.log(error);
       alert(error);
@@ -55,7 +57,21 @@ const AddNewPage = () => {
     content: '',
     deadLine: '',
   });
-
+  interface requestType {
+    title?: string;
+    price?: number;
+    productsLink: string;
+    category: string;
+    maxNum: string;
+    content: string;
+    deadLine: string;
+    searchOption: string;
+    latitude: any;
+    longitude: any;
+    accessToken: string;
+    refreshToken: string;
+    address: string;
+  }
   useEffect(() => {
     getCurrentLocation(setCenter, setLocationError);
     const authorization = cookie.get('access_token');
@@ -78,7 +94,7 @@ const AddNewPage = () => {
     e.preventDefault();
 
     let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
-    const requestBody: uploadPostType = {
+    const requestBody: requestType = {
       ...inputValue,
       category: categoryValue,
       latitude: targetCoord.lat,
