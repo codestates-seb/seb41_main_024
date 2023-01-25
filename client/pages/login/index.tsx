@@ -2,15 +2,14 @@ import Input from '../../components/atoms/input/Input';
 import Button from '../../components/atoms/button/Button';
 import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import { useRouter } from 'next/router';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
 import { signIn, useSession } from 'next-auth/react';
 import { getAllUsers } from '../../api/members';
-import axios from 'axios';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
@@ -54,8 +53,8 @@ const LoginPage = () => {
 
   const { data, error, mutate } = useMutation(() => requestLogin(form), {
     onSuccess: (data) => {
-      Cookies.set('access_token', data.headers.authorization);
-      Cookies.set('refresh_token', data.headers.refresh);
+      data.headers.authorization && Cookies.set('access_token', data.headers.authorization);
+      data.headers.refresh && Cookies.set('refresh_token', data.headers.refresh);
       Cookies.set('memberId', data.data.memberId);
       Cookies.set('nickName', data.data.nickName);
       Cookies.set('locationId', data.data.locationId);
@@ -89,7 +88,7 @@ const LoginPage = () => {
         });
       }
       // 자체 로그인 진행
-      setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
+      session?.data?.user?.email && setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
       console.log(form);
       mutate();
     });

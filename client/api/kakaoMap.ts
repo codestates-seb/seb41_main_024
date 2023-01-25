@@ -1,7 +1,4 @@
-
 import { kakaoMapItemType } from './../components/molecules/sharingListItem/sharingListItemType';
-import { ListItemPropsType } from '../components/molecules/sharingListItem/sharingListItemType';
-
 
 interface getMapAndMarkerPropsType {
   center: {
@@ -53,7 +50,7 @@ export const getMapAndMarker = async (
       message += '경도는 ' + latlng.getLng() + ' 입니다';
 
       let resultDiv = document.getElementById('clickLatlng');
-      resultDiv.innerText = message;
+      if (resultDiv !== null) resultDiv.innerText = message;
     }
   );
 };
