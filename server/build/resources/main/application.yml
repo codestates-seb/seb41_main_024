@@ -13,12 +13,11 @@ spring:
       client:
         registration:
           google:
-            clientId:
-            clientSecret:
+            clientId: ${G_CLIENT_ID}
+            clientSecret: ${G_CLIENT_SECRET}
             scope:
               - email
               - profile
-
 
 
 
