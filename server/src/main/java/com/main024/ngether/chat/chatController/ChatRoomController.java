@@ -1,17 +1,16 @@
 package com.main024.ngether.chat.chatController;
 
-import com.main024.ngether.chat.chatService.AsyncService;
-import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
+import com.main024.ngether.chat.chatService.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ConditionalOnEnabledResourceChain;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
@@ -25,8 +24,7 @@ public class ChatRoomController {
     Queue<DeferredResult<String>> results = new ConcurrentLinkedQueue<>();
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
-    @Autowired
-    AsyncService asyncService;
+
 
 
     // 모든 채팅방 목록 반환
@@ -76,20 +74,14 @@ public class ChatRoomController {
         return new ResponseEntity<>(chatService.findMembersInChatRoom(roomId), HttpStatus.OK);
     }
 
-    //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
-    @GetMapping("/room/findNewMessages")
-    @ResponseBody
-    public ResponseEntity<DeferredResult<Boolean>> messageAlarm() throws InterruptedException {
-        DeferredResult<Boolean> result = new DeferredResult<>(1L);
-        asyncService.getBoolean(result);
-                result.onTimeout(() ->
-                        result.setErrorResult(
-                                ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-                                        .body("Request timeout occurred.")));
-        asyncService.getBoolean(result);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
-
-    }
+//    //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
+//    @GetMapping("/room/findNewMessages")
+//    public ResponseEntity<WebAsyncTask<Boolean>> messageAlarm() {
+//
+//
+//
+//       // return new ResponseEntity<>(new WebAsyncTask<Boolean>(5000L,"asyncThreadPoolTaskExecutor"), HttpStatus.OK);
+//
+//    }
 
 }
