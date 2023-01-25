@@ -80,13 +80,19 @@ public class ChatRoomController {
     @GetMapping("/room/findNewMessages")
     @ResponseBody
     public ResponseEntity<DeferredResult<Boolean>> messageAlarm() throws InterruptedException {
-        DeferredResult<Boolean> result = new DeferredResult<>(1L);
-        asyncService.getBoolean(result);
-                result.onTimeout(() ->
+        DeferredResult<Boolean> result = new DeferredResult<>(100000000L);
+
+                result.onTimeout(() -> {
+                    try {
+                        asyncService.getBoolean(result);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
                         result.setErrorResult(
                                 ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-                                        .body("Request timeout occurred.")));
-        asyncService.getBoolean(result);
+                                        .body("Request timeout occurred."));
+
 
         return new ResponseEntity<>(result, HttpStatus.OK);
 
