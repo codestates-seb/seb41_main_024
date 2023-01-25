@@ -7,7 +7,12 @@ interface getCurrentLocationPropsType {
   center: { lat: number; lng: number };
 }
 export const getCurrentLocation = (
-  setLocation: getCurrentLocationPropsType['setLocation'],
+  setLocation: Dispatch<
+    SetStateAction<{
+      lat: number;
+      lng: number;
+    }>
+  >,
   setLocationError: Dispatch<SetStateAction<string>>
 ) => {
   const geoLocationOptions = { enableHighAccuracy: true };

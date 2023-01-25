@@ -25,13 +25,13 @@ const AddNewPage = () => {
   const [token, setToken] = useState({ authorization: '', refresh: '' });
   const router = useRouter();
 
-  const [productImg, setProductImg] = useState<any>(base);
+  const [productImg, setProductImg] = useState(base);
   const [targetCoord, setTargetCoord] = useState({
     lat: 0,
     lng: 0,
     address: '',
   });
-  const [center, setCenter] = useState<any>({ lat: 0, lng: 0 });
+  const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
 
