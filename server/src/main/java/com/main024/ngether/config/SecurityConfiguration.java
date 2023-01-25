@@ -3,11 +3,12 @@ package com.main024.ngether.config;
 
 import com.main024.ngether.auth.filter.JwtAuthenticationFilter;
 import com.main024.ngether.auth.filter.JwtVerificationFilter;
-import com.main024.ngether.auth.handler.MemberAuthenticationFailureHandler;
-import com.main024.ngether.auth.handler.MemberAuthenticationSuccessHandler;
+import com.main024.ngether.auth.handler.*;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
+import com.main024.ngether.auth.utils.CustomOauth2UserService;
 import com.main024.ngether.location.LocationRepository;
+import com.main024.ngether.member.MemberRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,11 +31,22 @@ public class SecurityConfiguration {
     private final CustomAuthorityUtils authorityUtils;
 
     private final LocationRepository locationRepository;
+    private final CustomOauth2UserService customOAuth2UserService;
+    private final Oauth2MemberSuccessHandler oauth2MemberSuccessHandler;
+    private final MemberRepository memberRepository;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, LocationRepository locationRepository) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer,
+                                 CustomAuthorityUtils authorityUtils,
+                                 LocationRepository locationRepository,
+                                 CustomOauth2UserService customOAuth2UserService,
+                                 Oauth2MemberSuccessHandler oauth2MemberSuccessHandler,
+                                 MemberRepository memberRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.locationRepository = locationRepository;
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.oauth2MemberSuccessHandler = oauth2MemberSuccessHandler;
+        this.memberRepository = memberRepository;
     }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -48,12 +60,23 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
+                .csrf().disable()
+                .exceptionHandling()  // 추가
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())  // 추가
+                .accessDeniedHandler(new MemberAccessDeniedHandler())            // 추가
+                .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .logout()
                 .logoutUrl("/auth/logout") //logout 처리 url
                 .and()
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+                .oauth2Login()//OAuth2 로그인 시작
+                .userInfoEndpoint()//로그인 성공시 사용자 정보를 가져옴
+                .userService(customOAuth2UserService); //로그인 성공 후 oauth2userservice 호출
+        http
+                .oauth2Login()
+                .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository));//oauth2 인증 성공 후처리 handler 호출
         return http.build();
     }
     @Bean
@@ -91,6 +114,7 @@ public class SecurityConfiguration {
             builder
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
+                    //.addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
     }
 

@@ -92,7 +92,13 @@ public class MemberService {
     //로그인한 회원정보 가져오기
     public Member getLoginMember(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();  //SecurityContextHolder에서 회원정보 가져오기
-        Optional<Member> optionalMember = memberRepository.findByEmail(principal.toString());
+        Optional<Member> optionalMember;
+
+        if(principal.toString().contains("@"))
+            optionalMember = memberRepository.findByEmail(principal.toString());
+        else
+            optionalMember = memberRepository.findByNickName(principal.toString());
+
         if (optionalMember.isPresent()) return optionalMember.get();
         else return null;
     }
