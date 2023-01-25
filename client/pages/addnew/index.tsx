@@ -17,7 +17,7 @@ import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
 import { getCurrentLocation } from '../../api/location';
 
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 import axios from 'axios';
 
@@ -31,7 +31,7 @@ const AddNewPage = () => {
     lng: 0,
     address: '',
   });
-  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const [center, setCenter] = useState<any>({ lat: 0, lng: 0 });
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
 
@@ -48,7 +48,7 @@ const AddNewPage = () => {
 
   const { inputValue, onChange } = useInput({
     title: '',
-    price: '',
+    price: 0,
     productsLink: '',
     category: 'product',
     maxNum: '1',
@@ -69,7 +69,9 @@ const AddNewPage = () => {
   }, [center]);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
-  const handleSearchAddress = (e) => {
+  const handleSearchAddress = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
     setSearchAddress(e.target.value);
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -86,9 +88,14 @@ const AddNewPage = () => {
       refreshToken: token.refresh,
     };
 
-    mutate(requestBody, {onSuccess:(data) =>  {
-      axios.post(`https://ngether.site/chat/room/${data.data.boardId}`, token)
-    },});
+    mutate(requestBody, {
+      onSuccess: (data) => {
+        axios.post(
+          `https://ngether.site/chat/room/${data.data.boardId}`,
+          token
+        );
+      },
+    });
   };
 
   const fetchOgData = async (url: string) => {

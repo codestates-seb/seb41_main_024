@@ -27,13 +27,13 @@ const SEARCH_OPTIONS = [
 const Search = () => {
   // 이곳의 폼 데이터 관리도 useState, useRef, react-hook-form 등 기호에 맞게 사용하시면 됩니다
   const router = useRouter();
-  const [targetCoord, setTargetCoord] = useState({
+  const [targetCoord, setTargetCoord] = useState<any>({
     lat: 0,
     lng: 0,
     address: '',
   });
 
-  const [center, setCenter] = useState({ lat: 0, lng: 0, address: '' });
+  const [center, setCenter] = useState<any>({ lat: 0, lng: 0, address: '' });
   const [error, setError] = useState('');
   const { inputValue, onChange } = useInput({
     title: '',
@@ -42,7 +42,9 @@ const Search = () => {
   });
   const [searchAddress, setSearchAddress] = useState({});
 
-  const handleSearchAddress = (e) => {
+  const handleSearchAddress = (e: {
+    target: { value: React.SetStateAction<{}> };
+  }) => {
     setSearchAddress(e.target.value);
   };
   useEffect(() => {

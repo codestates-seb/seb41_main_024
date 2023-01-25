@@ -12,6 +12,7 @@ interface chatMessageType {
   message: string;
   time: string;
 }
+
 const chatDummy: chatMessageType = [
   {
     thumbSrc: null,

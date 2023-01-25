@@ -18,6 +18,8 @@ export type inputType = TextFieldProps & {
   className?: string;
   value?: string | number;
   disabled?: boolean;
-  onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (
+    event: React.ChangeEvent<HTMLTextAreaElement> | SelectChangeEvent
+  ) => void;
   placeholder?: string;
 };
