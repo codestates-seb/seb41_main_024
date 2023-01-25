@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public class BoardDto {
@@ -20,15 +22,26 @@ public class BoardDto {
         private String content;
         private String category;
         private long price;
+        private int maxNum;
+        private String address;
+        private String latitude;
+        private String longitude;
+        private LocalDate deadLine;
+        private String productsLink;
     }
 
     @Getter
     public static class Patch {
         private Long boardId;
         private String title;
-        @NotBlank
         private String content;
         private long price;
+        private int maxNum;
+        private String address;
+        private String latitude;
+        private String longitude;
+        private LocalDate deadLine;
+        private String productsLink;
 
 
         public void setBoardId(Long boardId) {
@@ -46,10 +59,18 @@ public class BoardDto {
         private String Nickname;
         private String title;
         private String content;
-        private LocalDateTime create_date;
+        private LocalDateTime createDate;
         private String category;
         private int likeCount;
         private long price;
+        private int maxNum;
+        private int curNum;
+        private String address;
+        private String latitude;
+        private String longitude;
+        private LocalDate deadLine;
+        private String productsLink;
+        private Board.BoardStatus boardStatus;
     }
 
     @Getter

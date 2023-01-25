@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -15,6 +15,18 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/index.jsx",
+    "pages/signup/index.jsx",
+    "pages/login/index.jsx",
+    "stories/main.js",
+    "src/custom.d.ts",
+    "public/navbar",
+    "__tests__/addNew/addNew.js",
+    "jest.config.js"
+  ],
   "exclude": ["node_modules"]
 }

@@ -20,14 +20,23 @@ public interface BoardMapper {
         response.setMemberId(board.getMember().getMemberId());
         response.setNickname((board.getMember().getNickName()));
         response.setTitle(board.getTitle());
-        response.setCreate_date(board.getCreate_date());
+        response.setCreateDate(board.getCreateDate());
         response.setContent(board.getContent());
         response.setLikeCount(board.getLikeCount());
         response.setCategory(board.getCategory());
         response.setPrice(board.getPrice());
+        response.setMaxNum(board.getMaxNum());
+        response.setAddress(board.getAddress());
+        response.setLatitude(board.getLatitude());
+        response.setLongitude(board.getLongitude());
+        response.setDeadLine(board.getDeadLine());
+        response.setProductsLink(board.getProductsLink());
+        response.setBoardStatus(board.getBoardStatus());
+        response.setCurNum(board.getCurNum());
 
         return response;
     }
+
     default BoardDto.LikeResponse boardLikeToBoardResponse(Like like) {
         BoardDto.LikeResponse response = new BoardDto.LikeResponse();
 
@@ -46,7 +55,12 @@ public interface BoardMapper {
         board.setBoardId(requestBody.getBoardId());
         board.setContent(requestBody.getContent());
         board.setPrice(requestBody.getPrice());
-
+        board.setMaxNum(requestBody.getMaxNum());
+        board.setAddress(requestBody.getAddress());
+        board.setLatitude(requestBody.getLatitude());
+        board.setLongitude(requestBody.getLongitude());
+        board.setDeadLine(requestBody.getDeadLine());
+        board.setProductsLink(requestBody.getProductsLink());
 
         return board;
     }
@@ -61,8 +75,14 @@ public interface BoardMapper {
         board.setContent(boardPostDto.getContent());
         board.setPrice(boardPostDto.getPrice());
         board.setLikeCount(0);
+        board.setMaxNum(boardPostDto.getMaxNum());
         board.setMember(memberService.getLoginMember());
-        board.setCreate_date(LocalDateTime.now());
+        board.setCreateDate(LocalDateTime.now());
+        board.setAddress(boardPostDto.getAddress());
+        board.setLatitude(boardPostDto.getLatitude());
+        board.setLongitude(boardPostDto.getLongitude());
+        board.setDeadLine(boardPostDto.getDeadLine());
+        board.setProductsLink(boardPostDto.getProductsLink());
 
         return board;
     }
