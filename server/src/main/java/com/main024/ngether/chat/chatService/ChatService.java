@@ -226,6 +226,8 @@ public class ChatService {
 
     public List<ChatRoom> findMyChatRoom() {
         Member member = memberService.getLoginMember();
+        if(member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         List<ChatRoom> chatRoomList = new ArrayList<>();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
         for (int i = 0; i < chatRoomMembers.size(); i++) {
