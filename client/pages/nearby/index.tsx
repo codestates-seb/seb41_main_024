@@ -30,7 +30,7 @@ const Index = ({
   const [mapCenter, setMapCenter] = useState({
     lat,
     lng,
-    address: argumentOfLocation?.address,
+    address: argumentOfLocation?.locationData?.address,
   });
   console.log('default', sharingLists);
   const [sharingListsSortedByTime, setSharingListsSortedByTime] = useState();
@@ -65,7 +65,6 @@ const Index = ({
   }, [mapCenter.address]);
   const [locationError, setLocationError] = useState('');
   const [currentTab, setCurrentTab] = useState(0);
-
 
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
     if (newCurrentTab === 2) {
