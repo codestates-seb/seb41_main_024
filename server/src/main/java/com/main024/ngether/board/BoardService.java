@@ -1,6 +1,8 @@
 package com.main024.ngether.board;
 
 import com.main024.ngether.chat.chatEntity.ChatRoom;
+import com.main024.ngether.chat.chatRepository.ChatMessageRepository;
+import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
@@ -35,6 +37,8 @@ public class BoardService {
 
     private final LocationRepository locationRepository;
     private final LocationService locationService;
+    private final ChatRoomMembersRepository chatRoomMembersRepository;
+    private final ChatMessageRepository chatMessageRepository;
 
 
     public Board createBoard(Board board) {
@@ -134,6 +138,7 @@ public class BoardService {
 
     public void deleteBoard(Long boardId) {
         Board board = findVerifiedBoard(boardId);
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(boardId);
         Member member = memberService.getLoginMember();
         if (member == null){
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);}
@@ -142,6 +147,9 @@ public class BoardService {
         }
         else if(Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId())){
             boardRepository.delete(board);
+            chatRoomMembersRepository.deleteAll(chatRoomMembersRepository.findByChatRoomRoomId(boardId));
+            chatMessageRepository.deleteAll(chatMessageRepository.findByChatRoomId(boardId));
+            chatRoomRepository.delete(chatRoom);
         }
         else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
     }
