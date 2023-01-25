@@ -23,6 +23,5 @@ export const Dropdown = Template.bind({});
 //이렇게 설정하면 해당 props를 전달받는 컴포넌트를 생성할 수 있다.
 export const test = Template.bind({});
 test.args = {
-  color: 'primary',
   label: 'Button',
 };

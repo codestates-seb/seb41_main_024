@@ -2,15 +2,14 @@ import Input from '../../components/atoms/input/Input';
 import Button from '../../components/atoms/button/Button';
 import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import { useRouter } from 'next/router';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
 import { signIn, useSession } from 'next-auth/react';
 import { getAllUsers } from '../../api/members';
-import axios from 'axios';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
@@ -22,8 +21,6 @@ const LoginPage = () => {
 
   const router = useRouter();
   const session = useSession();
-
-  console.log(session);
 
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [form, setForm] = useState({
@@ -54,8 +51,10 @@ const LoginPage = () => {
 
   const { data, error, mutate } = useMutation(() => requestLogin(form), {
     onSuccess: (data) => {
-      Cookies.set('access_token', data.headers.authorization);
-      Cookies.set('refresh_token', data.headers.refresh);
+      data.headers.authorization &&
+        Cookies.set('access_token', data.headers.authorization);
+      data.headers.refresh &&
+        Cookies.set('refresh_token', data.headers.refresh);
       Cookies.set('memberId', data.data.memberId);
       Cookies.set('nickName', data.data.nickName);
       Cookies.set('locationId', data.data.locationId);
@@ -73,11 +72,9 @@ const LoginPage = () => {
   const handleSocialLogin = async () => {
     await signIn('google');
     getAllUsers().then((res) => {
-      console.log('res.data', res.data);
       const isNewUser = !res.data.filter(
         (user: { email?: string }) => user.email === session?.data?.user?.email
       );
-      console.log(isNewUser);
       if (isNewUser) {
         // DB에 해당 이메일 없으면
         // 회원가입 시키고
@@ -89,14 +86,15 @@ const LoginPage = () => {
         });
       }
       // 자체 로그인 진행
-      setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
-      console.log(form);
+      session?.data?.user?.email &&
+        setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
       mutate();
     });
   };
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
+
     setForm({
       ...form,
       [name]: value,
@@ -111,7 +109,7 @@ const LoginPage = () => {
       <div className="login flex justify-center m-7 my-12">
         <div className="flex flex-col w-10/12 max-w-lg">
           <Input
-            id={'email-input'}
+            id="email-input"
             name="email"
             type={'text'}
             label="이메일"
@@ -120,9 +118,8 @@ const LoginPage = () => {
           />
           <Label htmlFor={'email-input'} labelText={emailRegexText} />
           <TextField
-            id={'password-input'}
+            id="password-input"
             name="pw"
-            type={'text'}
             label="패스워드"
             value={pw}
             onChange={onChange}

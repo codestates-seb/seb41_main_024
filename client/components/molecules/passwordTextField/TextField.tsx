@@ -6,16 +6,8 @@ import Label from '../../atoms/label/Label';
 import PasswordIcon from '../../atoms/passwordIcon/PasswordIcon';
 import { passwordTextFieldPropsType } from './passwordTextFieldType';
 
-const TextField = ({
-  id,
-  name,
-  label,
-  type,
-  value,
-  onChange,
-}: passwordTextFieldPropsType) => {
+const TextField = (props: passwordTextFieldPropsType) => {
   const [showPassword, setShowPassword] = useState(false);
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -27,11 +19,7 @@ const TextField = ({
   return (
     <FormControl variant="outlined">
       <Input
-        id={id}
-        name={name}
         type={showPassword ? 'text' : 'password'}
-        label={label}
-        onChange={onChange}
         endAdornment={
           <InputAdornment position="end">
             <PasswordIcon
@@ -41,6 +29,7 @@ const TextField = ({
             {showPassword ? <VisibilityOff /> : <Visibility />}
           </InputAdornment>
         }
+        {...props}
       />
     </FormControl>
   );

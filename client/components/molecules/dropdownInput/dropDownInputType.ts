@@ -1,17 +1,17 @@
 import React from 'react';
-import { TextFieldProps } from '@mui/material';
+import { StandardTextFieldProps, TextFieldProps } from '@mui/material';
 
 export interface dropDownInputType {
   id: string;
-  label: string;
-  dropDownOptions: { label: string; value: string | number }[];
-  width: string;
-  value: string | number;
+  label: any;
+  dropDownOptions: { label: any; value: any }[];
+  width?: string;
+  value: any;
   defaultValue?: any;
-  onchange?: any;
+  onChange?: any;
   name?: string;
-  props: TextFieldProps;
+  props?: TextFieldProps;
 }
 export interface dropDownOptions {
-  options: { value: string | number; label: string };
+  options: { value: any; label: any };
 }

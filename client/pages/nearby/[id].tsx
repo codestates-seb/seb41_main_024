@@ -19,7 +19,7 @@ import { getIsWriter } from '../../api/isWriter';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   const { id } = context.params;
   const { data } = await getProductDetail(id);
   return {
@@ -29,7 +29,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function ProductDetail({ id }) {
+export default function ProductDetail({ id }: any) {
   const router = useRouter();
   const res = useQueries({
     queries: [
@@ -51,7 +51,7 @@ export default function ProductDetail({ id }) {
   const productData = res[0].data?.data;
   const isWriter = res[1].data?.data;
   const isMyFavorite =
-    res[2].data?.data?.data.filter((item) => item.boardId === Number(id))
+    res[2].data?.data?.data.filter((item: any) => item.boardId === Number(id))
       .length > 0;
 
   console.log(res);

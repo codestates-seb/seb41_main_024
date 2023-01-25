@@ -21,13 +21,13 @@ const MySharingTab = () => {
         color="#999999"
       />
       <TabPanel currentTab={currentTab} index={0} boxPadding={2}>
-        <NearByList />
+        <NearByList sharingLists={[]} />
       </TabPanel>
       <TabPanel currentTab={currentTab} index={1} boxPadding={2}>
-        <NearByList />
+        <NearByList sharingLists={[]} />
       </TabPanel>
       <TabPanel currentTab={currentTab} index={2} boxPadding={2}>
-        <NearByList />
+        <NearByList sharingLists={[]} />
       </TabPanel>{' '}
     </section>
   );

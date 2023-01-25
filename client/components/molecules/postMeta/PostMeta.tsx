@@ -1,5 +1,5 @@
 import ElapsedTime from '../elapsedTime/ElapsedTime';
-import { productDataProps } from './postMeta';
+import { productDataProps } from './postMetaType';
 
 const PostMeta = ({ productData }: productDataProps) => {
   return (

@@ -1,9 +1,10 @@
 import List from '@mui/material/List';
 import QuestionListItem from '../questionListItem/QuestionListItem';
 import FormButton from '../../molecules/formbutton/FormButton';
+import { MouseEventHandler } from 'react';
 
 interface QuestionFormProps {
-  onClick: (value: boolean) => void;
+  onClick: MouseEventHandler<HTMLButtonElement>;
 }
 const QuestionList = ({ onClick }: QuestionFormProps) => {
   return (

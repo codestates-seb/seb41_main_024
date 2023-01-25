@@ -1,8 +1,8 @@
 import React from 'react';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import { addressPropsType } from './spot';
+import { spotPropsType } from './spotType';
 
-const SmallSpot = ({ address }: addressPropsType) => {
+const SmallSpot = ({ address }: spotPropsType) => {
   return (
     <div className="flex justify-center items-center w-fit mb-1">
       <LocationOnOutlinedIcon color="primary" sx={{ width: '16px' }} />

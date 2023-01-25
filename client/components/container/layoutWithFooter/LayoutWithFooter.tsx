@@ -1,5 +1,5 @@
 import MainHeader from '../../organisms/headers/mainHeader/MainHeader';
-import { defaultLayoutPropsType } from '../defalutLayout/defaultLayout';
+import { defaultLayoutPropsType } from '../defalutLayout/defaultLayoutType';
 import Navigation from '../../organisms/bottomNav/BottomNav';
 import Footer from '../../molecules/footer/Footer';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
@@ -7,7 +7,7 @@ import basicTheme from '../../../theme/basic';
 import useLogin from '../../../hooks/common/useLogin';
 import Cookies from 'js-cookie';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 
 //메인페이지, 마이페이지
 const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
@@ -31,6 +31,18 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
             isLogin={isLogin}
             nickName={nickName}
             logOutHandler={handleLogOut}
+            session={{
+              data: {
+                user: {
+                  name: '',
+                  email: '',
+                  image: '',
+                },
+                accessToken: '',
+                expires: '',
+              },
+              status: '',
+            }}
           />
           {children}
           <div>

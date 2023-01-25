@@ -4,9 +4,8 @@ import { ReactElement, useState } from 'react';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Button from '@mui/material/Button';
 import MainSlogan from '../components/molecules/slogan/mainSlogan/MainSlogan';
-import Footer from '../components/molecules/footer/Footer';
 import LayoutWithFooter from '../components/container/layoutWithFooter/LayoutWithFooter';
-import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayout';
+import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayoutType';
 
 const MainPage: NextPageWithLayout = () => {
   const [nearBy, setNearBy] = useState('');

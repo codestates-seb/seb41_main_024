@@ -15,8 +15,8 @@ export interface ListItemPropsType {
   deadLine?: string;
   productsLink?: string;
   curNum: number;
-  src?: string;
-  alt?: string;
+  src: string;
+  alt: string;
   isFavorite?: boolean;
 }
 export interface kakaoMapItemType {

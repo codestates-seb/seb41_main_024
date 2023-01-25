@@ -9,7 +9,7 @@ export default class MyDocument extends Document {
         <script
           type="text/javascript"
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP}&libraries=services,clusterer,drawing`}
-          strategy="beforeInteractive"
+          // strategy="beforeInteractive"
           id="kakaoScript"
         ></script>
         <body>

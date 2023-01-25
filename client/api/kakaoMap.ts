@@ -1,8 +1,6 @@
-
 import { kakaoMapItemType } from './../components/molecules/sharingListItem/sharingListItemType';
-import { ListItemPropsType } from '../components/molecules/sharingListItem/sharingListItemType';
-
-
+import { SetStateAction } from 'react';
+const kakao = typeof window !== 'undefined' ? (window as any).kakao : null;
 interface getMapAndMarkerPropsType {
   center: {
     lat: number;
@@ -10,7 +8,9 @@ interface getMapAndMarkerPropsType {
     mapLevel?: number;
     address?: string;
   };
-  setTargetCoord: (item: {}) => void;
+  setTargetCoord: React.Dispatch<
+    SetStateAction<{ lat: number; lng: number; address: string }>
+  >;
 }
 
 export const getMapAndMarker = async (
@@ -40,27 +40,37 @@ export const getMapAndMarker = async (
   kakao.maps.event.addListener(
     map,
     'click',
-    function mapClickHandler(mouseEvent: kakao.maps.event.MouseEvent) {
+    function mapClickHandler(mouseEvent: any) {
       // 클릭한 위도, 경도 정보를 가져옵니다
-      let latlng = mouseEvent.latLng;
+      let latlng: any = mouseEvent.latLng;
 
       // 마커 위치를 클릭한 위치로 옮깁니다
       marker.setPosition(latlng);
       // 클릭한 위도, 경도 정보 저장
-      setTargetCoord({ lat: latlng.getLat(), lng: latlng.getLng() });
+      setTargetCoord({
+        lat: latlng.getLat(),
+        lng: latlng.getLng(),
+        address: '',
+      });
 
       let message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
       message += '경도는 ' + latlng.getLng() + ' 입니다';
 
       let resultDiv = document.getElementById('clickLatlng');
-      resultDiv.innerText = message;
+      if (resultDiv !== null) resultDiv.innerText = message;
     }
   );
 };
 
 export const exchangeCoordToAddress = async (
   center: getMapAndMarkerPropsType['center'],
-  setTargetCoord: getMapAndMarkerPropsType['setTargetCoord']
+  setTargetCoord: React.Dispatch<
+    React.SetStateAction<{
+      lat: number;
+      lng: number;
+      address: string;
+    }>
+  >
 ) => {
   let mapContainer =
       document.getElementById('map') || document.createElement('div'), // 지도를 표시할 div
@@ -80,36 +90,32 @@ export const exchangeCoordToAddress = async (
   // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
 
   // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
-  kakao.maps.event.addListener(
-    map,
-    'click',
-    function (mouseEvent: kakao.maps.event.MouseEvent) {
-      searchDetailAddrFromCoords(
-        mouseEvent.latLng,
-        function (result: any, status: any) {
-          if (status === kakao.maps.services.Status.OK) {
-            let detailAddr = !!result[0].address.address_name
-              ? result[0].address.address_name
-              : result[0].road_address.address_name;
-            // 마커를 클릭한 위치에 표시합니다
-            marker.setPosition(mouseEvent.latLng);
-            marker.setMap(map);
-            let latlng = mouseEvent.latLng;
-            setTargetCoord({
-              lat: latlng.getLat(),
-              lng: latlng.getLng(),
-              address: detailAddr,
-            });
-          }
+  kakao.maps.event.addListener(map, 'click', function (mouseEvent: any) {
+    searchDetailAddrFromCoords(
+      mouseEvent.latLng,
+      function (result: any, status: any) {
+        if (status === kakao.maps.services.Status.OK) {
+          let detailAddr = !!result[0].address.address_name
+            ? result[0].address.address_name
+            : result[0].road_address.address_name;
+          // 마커를 클릭한 위치에 표시합니다
+          marker.setPosition(mouseEvent.latLng);
+          marker.setMap(map);
+          let latlng = mouseEvent.latLng;
+          setTargetCoord({
+            lat: latlng.getLat(),
+            lng: latlng.getLng(),
+            address: detailAddr,
+          });
         }
-      );
-    }
-  );
+      }
+    );
+  });
 
   // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
 
   function searchDetailAddrFromCoords(
-    coords: kakao.maps.LatLng,
+    coords: any,
     displayMarkerOnClick: (result: any, status: any) => void
   ) {
     // 좌표로 법정동 상세 주소 정보를 요청합니다
@@ -125,7 +131,7 @@ export const exchangeCoordToAddress = async (
 
 export const setDefaultCoordsAndAddress = (
   center: getMapAndMarkerPropsType['center'],
-  setCoordsAndAddress: (result: any, status: kakao.maps.services.Status) => void
+  setCoordsAndAddress: (result: any, status: any) => void
 ) => {
   let geocoder = new kakao.maps.services.Geocoder();
   geocoder.coord2Address(center.lng, center.lat, setCoordsAndAddress);
@@ -133,10 +139,7 @@ export const setDefaultCoordsAndAddress = (
 
 export const searchMap = (searchAddress: string, setCenter: any) => {
   const geocoder = new kakao.maps.services.Geocoder();
-  let switchLocationToCoordinate = function (
-    result: any,
-    status: kakao.maps.services.Status
-  ) {
+  let switchLocationToCoordinate = function (result: any, status: any) {
     if (status === kakao.maps.services.Status.OK) {
       const newSearch = result[0];
       setCenter({
@@ -173,7 +176,7 @@ export const setMarkerCluster = async (
   let mapLevel: number;
   kakao.maps.event.addListener(map, 'zoom_changed', function () {
     mapLevel = map.getLevel();
-    setMapCenter((prev: getMapAndMarkerPropsType) => {
+    setMapCenter((prev: any) => {
       return { ...prev, mapLevel };
     });
   });
@@ -187,7 +190,7 @@ export const setMarkerCluster = async (
         let detailAddr = !!result[0].address.address_name
           ? result[0].address.address_name
           : result[0].road_address.address_name;
-        setMapCenter((prev: getMapAndMarkerPropsType) => {
+        setMapCenter((prev: any) => {
           return { ...prev, ...mapCenter, address: detailAddr };
         });
       }
