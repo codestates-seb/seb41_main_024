@@ -1,6 +1,6 @@
 spring:
   mvc:
-    hiddenmethod:
+    hidden-method:
       filter:
         enabled: true
   freemarker:
