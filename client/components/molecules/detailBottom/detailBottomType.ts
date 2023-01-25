@@ -3,4 +3,5 @@ export interface DetailBottomPropsType {
   handleLike: () => void;
   handleReport: () => void;
   handleGether: () => void;
+  id: number;
 }

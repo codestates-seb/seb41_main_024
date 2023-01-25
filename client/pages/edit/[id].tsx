@@ -26,7 +26,8 @@ export async function getServerSideProps(context: { params: { id: string } }) {
 }
 
 interface previousDataProps {
-  previousData: {
+  previousData: any;
+  previousData2: {
     title: string;
     price: number;
     productsLink: string;
@@ -68,16 +69,16 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
   };
 
   const [form, setForm] = useState({
-    title: previousData.title,
-    content: previousData.content,
-    price: Number(previousData.price),
+    title: previousData?.title,
+    content: previousData?.content,
+    price: Number(previousData?.price),
     maxNum: 4,
-    address: previousData.address,
+    address: previousData?.address,
     latitude: '37.6213085353565',
     longitude: '127.083296516416',
     deadLine: '2023-01-23',
-    productsLink: previousData.productsLink,
-    category: previousData.category,
+    productsLink: previousData?.productsLink,
+    category: previousData?.category,
     quantity: '1',
   });
 

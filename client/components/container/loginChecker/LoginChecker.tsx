@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import useLogin from '../../../hooks/common/useLogin';
-import { loginCheckerPropsType } from './loginChecker';
+import { loginCheckerPropsType } from './loginCheckerType';
 
 const LoginChecker = ({ children, path }: loginCheckerPropsType) => {
   const router = useRouter();

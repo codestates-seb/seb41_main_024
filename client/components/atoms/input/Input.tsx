@@ -11,7 +11,7 @@ const Input = ({
   value,
   onChange,
   ...props
-}: inputType) => {
+}: any) => {
   return (
     <TextField
       {...props}
@@ -20,7 +20,6 @@ const Input = ({
       className={className}
       value={value}
       onChange={onChange}
-      {...props}
       InputProps={{ endAdornment }}
     >
       {children}

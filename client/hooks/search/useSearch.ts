@@ -13,13 +13,7 @@ export interface useSearchPropsType {
     page: number;
     size: number;
   };
-  argumentOfTitle: {
-    type: number;
-    //keword?: string은 에러뜹니다.
-    keyword: string | undefined;
-    page: number;
-    size: number;
-  };
+  argumentOfTitle: any;
 }
 const useSearch = ({
   searchOption,
