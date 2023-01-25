@@ -86,7 +86,9 @@ const AddNewPage = () => {
       refreshToken: token.refresh,
     };
 
-    mutate(requestBody);
+    mutate(requestBody, {onSuccess:(data) =>  {
+      axios.post(`https://ngether.site/chat/room/${data.data.boardId}`, token)
+    },});
   };
 
   const fetchOgData = async (url: string) => {
