@@ -59,8 +59,8 @@ export const getMapAndMarker = async (
 
 export const exchangeCoordToAddress = async (
   center: getMapAndMarkerPropsType['center'],
-  setTargetCoord: Dispatch<
-    SetStateAction<{
+  setTargetCoord: React.Dispatch<
+    React.SetStateAction<{
       lat: number;
       lng: number;
       address: string;

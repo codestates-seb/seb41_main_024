@@ -40,10 +40,10 @@ const Search = () => {
     searchOption: '주소',
     category: '상품 쉐어링',
   });
-  const [searchAddress, setSearchAddress] = useState({});
+  const [searchAddress, setSearchAddress] = useState('');
 
   const handleSearchAddress = (e: {
-    target: { value: React.SetStateAction<{}> };
+    target: { value: React.SetStateAction<string> };
   }) => {
     setSearchAddress(e.target.value);
   };
@@ -73,7 +73,7 @@ const Search = () => {
     argumentOfTitle,
   });
 
-  const handleSubmit = async (e: SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     refetch();
   };
