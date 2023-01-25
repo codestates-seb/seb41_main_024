@@ -70,26 +70,26 @@ const LoginPage = () => {
   };
 
   const handleSocialLogin = async () => {
-    await signIn('google');
-    getAllUsers().then((res) => {
-      const isNewUser = !res.data.filter(
-        (user: { email?: string }) => user.email === session?.data?.user?.email
-      );
-      if (isNewUser) {
-        // DB에 해당 이메일 없으면
-        // 회원가입 시키고
-        requestSignUp({
-          pw: 'qqqqqq-123',
-          nickName: session?.data?.user?.name,
-          email: session?.data?.user?.email,
-          phoneNumber: '010-9601-1712',
-        });
-      }
-      // 자체 로그인 진행
-      session?.data?.user?.email &&
-        setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
-      mutate();
-    });
+    await signIn('google', { callbackUrl: '/google' });
+    // getAllUsers().then((res) => {
+    //   const isNewUser = !res.data.filter(
+    //     (user: { email?: string }) => user.email === session?.data?.user?.email
+    //   );
+    //   if (isNewUser) {
+    //     // DB에 해당 이메일 없으면
+    //     // 회원가입 시키고
+    //     requestSignUp({
+    //       pw: 'qqqqqq-123',
+    //       nickName: session?.data?.user?.name,
+    //       email: session?.data?.user?.email,
+    //       phoneNumber: '010-9601-1712',
+    //     });
+    //   }
+    //   // 자체 로그인 진행
+    //   session?.data?.user?.email &&
+    //     setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
+    //   mutate();
+    // });
   };
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
