@@ -14,6 +14,7 @@ const SharingListItem = ({
   curNum,
   maxNum,
   address,
+  boardId,
 }: ListItemPropsType) => {
   const localAddress = address
     ?.split(' ')
@@ -26,7 +27,7 @@ const SharingListItem = ({
       <Img src={src} alt={alt} />
       <div className="px-2 mt-2.5">
         <strong className={`${styles.title_ellipsis} font-normal`}>
-          <Link href="/nearbydetail">{title}</Link>
+          <Link href={`/nearby/${boardId}`}>{title}</Link>
         </strong>
       </div>
       <div className={styles.flex_listItem}>
