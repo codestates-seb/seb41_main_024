@@ -1,4 +1,4 @@
-import { defaultLayoutPropsType } from '../defalutLayout/defaultLayout';
+import { defaultLayoutPropsType } from '../defalutLayout/defaultLayoutType';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import basicTheme from '../../../theme/basic';
 

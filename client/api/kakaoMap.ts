@@ -1,5 +1,7 @@
 import { SetStateAction } from 'react';
 import { kakaoMapItemType } from './../components/molecules/sharingListItem/sharingListItemType';
+import { ListItemPropsType } from '../components/molecules/sharingListItem/sharingListItemType';
+
 
 interface getMapAndMarkerPropsType {
   center: {
@@ -58,7 +60,13 @@ export const getMapAndMarker = async (
 
 export const exchangeCoordToAddress = async (
   center: getMapAndMarkerPropsType['center'],
-  setTargetCoord: getMapAndMarkerPropsType['setTargetCoord']
+  setTargetCoord: React.Dispatch<
+    React.SetStateAction<{
+      lat: number;
+      lng: number;
+      address: string;
+    }>
+  >
 ) => {
   let mapContainer =
       document.getElementById('map') || document.createElement('div'), // 지도를 표시할 div
