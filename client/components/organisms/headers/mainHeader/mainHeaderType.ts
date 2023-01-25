@@ -1,17 +1,24 @@
+import { Session } from 'next-auth';
+
 export interface mainHeaderType {
   isLogin: boolean;
   nickName: string | undefined;
   logOutHandler: () => void;
-  session?: {
-    data: {
-      user: {
-        name: string;
-        email: string;
-        image: string;
+  session?:
+    | {
+        readonly data: null;
+        readonly status: 'loading';
+      }
+    | {
+        data: Session;
+        status: 'authenticated';
+      }
+    | {
+        data: null;
+        status: 'loading' | 'unauthenticated';
+      }
+    | {
+        data: Session;
+        status: 'authenticated';
       };
-      accessToken: string;
-      expires: string;
-    };
-    status: string;
-  };
 }
