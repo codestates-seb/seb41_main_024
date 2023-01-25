@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import FormButton from '../formbutton/FormButton';
 import Input from '../../atoms/input/Input';
 import Label from '../../atoms/label/Label';
@@ -8,6 +7,10 @@ import { userInfoFormType } from './userInfoFormType';
 import useRegexText from '../../../hooks/useRegexText';
 import useForm from '../../../hooks/useForm';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import setDefaultUserInfo from '../../../utils/setDefaultUserInfo/setDefaultUserInfo';
+import patchOneUserInfo from '../../../utils/patchOneUserInfo/patchOneUserInfo';
+import { useQueryClient } from '@tanstack/react-query';
 
 const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
 const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
@@ -15,7 +18,9 @@ const SIGN_UP_URL = 'https://ngether.site/api/members';
 const EDIT_USER_INFO_URL = 'https://ngether.site/api/members/patch';
 
 const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
-  const { formValue, checkedPw, handleInputChange } = useForm({
+  const router = useRouter();
+
+  const { formValue, checkedPw, handleInputChange, setFormValue } = useForm({
     pw: '',
     nickName: '',
     email: '',
@@ -53,30 +58,25 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
     },
   });
 
-  const onSubmit = async (event: React.FormEvent) => {
+  //editPage && setDefaultUserInfo({ setFormValue, userInfo });
+
+  //const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
+
+  const onPatchSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (!editPage) {
-      try {
-        await axios.post(SIGN_UP_URL, JSON.stringify(formValue), {
-          headers: { 'Content-Type': 'application/json' },
-        });
-        console.log('회원으로 가입되셨습니다!');
-      } catch (error) {
-        console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
-      }
-    }
-    if (editPage) {
-      try {
-        await axios.patch(EDIT_USER_INFO_URL, JSON.stringify(formValue), {
-          headers: {
-            'Content-Type': 'application/json',
-            // +JWT
-          },
-        });
-        console.log('회원으로 가입되셨습니다!');
-      } catch (error) {
-        console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
-      }
+    patchOneUserQuery.mutate();
+  };
+
+  const onPostSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      await axios.post(SIGN_UP_URL, JSON.stringify(formValue), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      alert('회원가입 완료되었습니다.');
+      router.push('/login');
+    } catch (error) {
+      console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
     }
   };
 
@@ -84,7 +84,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
     <div className="flex justify-center mt-7">
       <form
         className="flex flex-col justify-center w-10/12 max-w-lg"
-        onSubmit={onSubmit}
+        onSubmit={editPage ? onPatchSubmit : onPostSubmit}
       >
         {editPage && (
           <img
@@ -99,6 +99,7 @@ const UserInfoForm = ({ editPage, content }: userInfoFormType) => {
           type={'text'}
           label={'새로운 이메일'}
           value={email}
+          disabled={editPage && editPage}
           onChange={handleInputChange}
         />
         <Label htmlFor={'email-input'} labelText={emailRegexText} />

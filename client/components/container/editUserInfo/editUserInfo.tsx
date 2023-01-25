@@ -1,28 +1,21 @@
-import { useState } from 'react';
-import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
-import FormButton from '../../components/molecules/formbutton/FormButton';
-import NTextField from '../../components/organisms/nTextField/NTextField';
-import useValidation from '../../hooks/common/useValidation';
-import validationInfo from '../../utils/validationInfo/validationInfo';
-import postSignup from '../../api/postSignup';
-import router from 'next/router';
+import NTextField from '../../organisms/nTextField/NTextField';
+import FormButton from '../../molecules/formbutton/FormButton';
+import validationInfo from '../../../utils/validationInfo/validationInfo';
+import { useEffect, useState } from 'react';
+import useValidation from '../../../hooks/common/useValidation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import getOneUserData from '../../../api/getOneUserData';
+import Loading from '../../organisms/loading/Loading';
+import patchOneUserInfo from '../../../utils/patchOneUserInfo/patchOneUserInfo';
 
-const SignupSlogan = () => {
-  return (
-    <div className="flex flex-col items-center">
-      <Logo />
-      <p className="pt-px mt-4 text-lg">
-        간편하게
-        <strong className="text-primary font-bold"> 회원가입</strong>하고
-      </p>
-      <p className="pb-px text-lg">
-        <strong className="text-primary font-bold">N게더</strong>에 참여해보세요
-      </p>
-    </div>
-  );
-};
-
-const SignupPage = () => {
+const EditUserInfo = () => {
+  const { isLoading, data } = useQuery({
+    queryKey: ['userInfo'],
+    queryFn: getOneUserData,
+    onSuccess(data) {
+      console.log(data);
+    },
+  });
   const [formValue, setFormValue] = useState({
     email: '',
     nickName: '',
@@ -31,7 +24,7 @@ const SignupPage = () => {
   });
   const [pwConfirm, setPwConfirm] = useState('');
   const { email, nickName, pw, phoneNumber } = formValue;
-  const { helperText, isValid, formValid } = useValidation(
+  const { helperText, isValid } = useValidation(
     formValue,
     pwConfirm,
     validationInfo
@@ -57,30 +50,35 @@ const SignupPage = () => {
     }
   };
 
-  const onSubmitHandler = async (event: React.FormEvent) => {
+  useEffect(() => {
+    setFormValue({
+      email: data?.data.email,
+      nickName: data?.data.nickName,
+      phoneNumber: data?.data.phoneNumber,
+      pw: '',
+    });
+    setPwConfirm('');
+  }, [data]);
+
+  const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
+
+  const onSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    try {
-      await postSignup(formValue);
-      alert('회원가입 완료되었습니다.');
-      router.push('/login');
-    } catch (error) {
-      console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
-    }
-
-    console.log(formValue);
+    patchOneUserQuery.mutate();
   };
-
   return (
     <div>
-      <div className="mt-24">
-        <SignupSlogan />
-      </div>
-      <div className="m-7 my-12">
-        <div className="flex justify-center mb-[3.75rem]">
+      {data && (
+        <div className="flex justify-center mt-7 mb-[3.75rem]">
           <form
             className="flex flex-col justify-center w-10/12 max-w-lg"
             onSubmit={onSubmitHandler}
           >
+            <img
+              className="h-40 w-40 mb-7 m-auto"
+              src="/imageBox/base-box.svg"
+              alt=""
+            />
             <NTextField
               id="email"
               type="email"
@@ -89,7 +87,7 @@ const SignupPage = () => {
               validation={isValid.isEmail}
               helperText={helperText.ofEmail}
               onChange={handleInputChange}
-              required={true}
+              disabled={true}
             />
             <NTextField
               id="nickName"
@@ -136,14 +134,20 @@ const SignupPage = () => {
               type="submit"
               className="h-14 mt-4"
               variant="contained"
-              content="회원가입"
-              disabled={formValid ? false : true}
+              content="수정하기"
+            />
+            <FormButton
+              type="button"
+              className="h-14 mt-4"
+              variant="outlined"
+              content="회원탈퇴"
             />
           </form>
         </div>
-      </div>
+      )}
+      {isLoading && <Loading />}
     </div>
   );
 };
 
-export default SignupPage;
+export default EditUserInfo;
