@@ -171,7 +171,7 @@ public class BoardService {
 
     public Page<Board> findCompleteMySharing(int page, int size){
         return boardRepository.findByBoardStatusAndMemberMemberId
-                (Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size,
+                (Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId(), PageRequest.of(page, size,
                         Sort.by("createDate").descending()));
 
     }
