@@ -1,17 +1,22 @@
 export interface inputType {
-  title: string;
-  price: number | string;
-  productsLink: string;
-  category: string;
-  maxNum: string;
-  address: string;
-  content: string;
+  title?: string;
+  price?: number;
+  productsLink?: string;
+  category?: string;
+  maxNum?: string;
+  content?: string;
+  deadLine?: string;
+  searchOption?: string;
+}
+export interface searchUseInputType {
+  title?: string;
+  searchOption?: string;
+  category?: string;
 }
 export interface uploadPostType extends inputType {
-  category: string;
-  latitude: string;
-  longitude: string;
-  deadLine: string;
-  accessToken: string | undefined;
-  refreshToken: string | undefined;
+  latitude: number;
+  longitude: number;
+  accessToken?: string;
+  refreshToken?: string;
+  address: string;
 }

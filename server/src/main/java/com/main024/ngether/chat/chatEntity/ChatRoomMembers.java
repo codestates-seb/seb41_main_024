@@ -15,6 +15,8 @@ public class ChatRoomMembers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatRoomMembersId;
+    private int unreadMessageCount;
+    private String sessionId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "CHATROOM_ID")

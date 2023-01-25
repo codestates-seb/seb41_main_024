@@ -14,6 +14,7 @@ import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberDto;
+import com.main024.ngether.member.MemberRepository;
 import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 public class ChatService {
+    private final MemberRepository memberRepository;
     private final BoardRepository boardRepository;
 
     private final ChatRoomMembersRepository chatRoomMembersRepository;
@@ -58,6 +60,7 @@ public class ChatService {
             chatRoom.setMemberId(member.getMemberId());
             chatRoom.setMemberCount(0);
             chatRoom.setDeclareStatus(false);
+            chatRoom.setAddress(board.getAddress());
             chatRoomRepository.save(chatRoom);
 
             return chatRoom;
@@ -89,21 +92,35 @@ public class ChatService {
             ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
             chatRoomMembers.setMember(member);
             chatRoomMembers.setChatRoom(chatRoom);
+            chatRoomMembers.setUnreadMessageCount(0);
             chatRoomMembersRepository.save(chatRoomMembers);
             chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
+
 
             ChatMessage chatMessage = ChatMessage.builder()
                     .nickName(member.getNickName())
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.ENTER)
                     .message("[알림] " + member.getNickName() + "님이 입장하셨습니다.")
+                    .unreadCount(setUnreadMessageCount(roomId) - 1)
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
-            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
             chatRoom.setLastMessage(savedMessage.getMessage());
+            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
+        } else {
+            List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
+            for (ChatMessage chatMessage : chatMessageList) {
+                if(chatMessage.getUnreadCount() != 0 && !Objects.equals(chatMessage.getNickName(), member.getNickName()))
+                chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
+            }
+            chatMessageRepository.saveAll(chatMessageList);
+            sendingOperations.convertAndSend("/receive/chat/" + roomId,ChatMessage.builder()
+                    .message("")
+                    .type(ChatMessage.MessageType.REENTER)
+                    .build());
 
         }
         return findMembersInChatRoom(roomId);
@@ -135,15 +152,29 @@ public class ChatService {
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.LEAVE)
                     .message("[알림] " + member.getNickName() + "님이 퇴장하셨습니다.")
+                    .unreadCount(setUnreadMessageCount(roomId))
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
-            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
             chatRoom.setLastMessage(savedMessage.getMessage());
+            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
+
         }
         return findMembersInChatRoom(roomId);
+    }
+
+    public void removeChatRoomAndBoard(Long memberId) {
+        //게시판 삭제
+        boardRepository.deleteAll(boardRepository.findByMemberMemberId(memberId));
+        //채팅방 삭제
+        chatRoomRepository.deleteAll(chatRoomRepository.findByMemberId(memberId));
+        //채팅방 참여 멤버에서 삭제
+        chatRoomMembersRepository.deleteAll(chatRoomMembersRepository.findByMemberMemberId(memberId));
+        //채팅방 메시지 삭제
+        chatMessageRepository.deleteAll(chatMessageRepository.findByNickName(memberRepository.findById(memberId).get().getNickName()));
+
     }
 
     public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId) {
@@ -171,26 +202,47 @@ public class ChatService {
 
     }
 
-    public List<ChatDto.lastMessageCreated> findLastMessageCreated() {
-        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
-        List<ChatDto.lastMessageCreated> lastMessages = new ArrayList<>();
+    public List<ChatDto.newMessages> findNewMessages() {
+        Member member = memberService.getLoginMember();
+        if (member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+        List<ChatDto.newMessages> newMessagesList = null;
+        ChatDto.newMessages newMessages = new ChatDto.newMessages();
         for (int i = 0; i < chatRoomMembersList.size(); i++) {
-            ChatDto.lastMessageCreated lastMessageCreated = new ChatDto.lastMessageCreated();
-            lastMessageCreated.setLastMessageCreated(chatRoomMembersList.get(i).getChatRoom().getLastMessageCreated());
-            lastMessageCreated.setRoomId(chatRoomMembersList.get(i).getChatRoom().getRoomId());
-            lastMessages.add(lastMessageCreated);
+            if (chatRoomMembersList.get(i).getUnreadMessageCount() != 0) {
+                newMessages.setMessagesCount(chatRoomMembersList.get(i).getUnreadMessageCount());
+                newMessages.setRoomId(chatRoomMembersList.get(i).getChatRoom().getRoomId());
+                newMessagesList.add(newMessages);
+            }
+
         }
-        return lastMessages;
+        return newMessagesList;
     }
 
     public List<ChatRoom> findMyChatRoom() {
         Member member = memberService.getLoginMember();
         List<ChatRoom> chatRoomList = new ArrayList<>();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
-        for (int i = 0; i < chatRoomMembers.size(); i++){
+        for (int i = 0; i < chatRoomMembers.size(); i++) {
             chatRoomList.add(chatRoomMembers.get(i).getChatRoom());
         }
         return chatRoomList;
+    }
+
+
+    public int setUnreadMessageCount(Long roomId) {
+        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
+        int count = 0;
+        for (int i = 0; i < chatRoomMembersList.size(); i++) {
+            if (chatRoomMembersList.get(i).getSessionId() == null) {
+                chatRoomMembersList.get(i).setUnreadMessageCount(chatRoomMembersList.get(i).getUnreadMessageCount() + 1);
+                count++;
+            }
+        }
+        chatRoomMembersRepository.saveAll(chatRoomMembersList);
+
+        return count;
     }
 
 

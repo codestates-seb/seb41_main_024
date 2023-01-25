@@ -11,28 +11,37 @@ const SharingListItem = ({
   alt,
   title,
   isFavorite,
+  curNum,
+  maxNum,
+  address,
+  boardId,
 }: ListItemPropsType) => {
+  const localAddress = address
+    ?.split(' ')
+    .filter((item, index) => {
+      if (index <= 2) return true;
+    })
+    .join(' ');
   return (
     <div className={`flex flex-col ${styles.flex_container}`}>
       <Img src={src} alt={alt} />
       <div className="px-2 mt-2.5">
         <strong className={`${styles.title_ellipsis} font-normal`}>
-          <Link href="/nearbydetail">{title}</Link>
+          <Link href={`/nearby/${boardId}`}>{title}</Link>
         </strong>
       </div>
-      {isFavorite && (
-        <div className={styles.flex_listItem}>
-          <strong className="font-normal">1/4</strong>
-          <Button>
-            <Image
-              src="/sharingList/favorite_border.svg"
-              alt="heart"
-              width={24}
-              height={24}
-            ></Image>
-          </Button>
-        </div>
-      )}
+      <div className={styles.flex_listItem}>
+        <strong className="font-normal">{`${curNum + 1} / ${maxNum}`}</strong>
+        {/* <Button>
+          <Image
+            src="/sharingList/favorite_border.svg"
+            alt="heart"
+            width={24}
+            height={24}
+          ></Image>
+        </Button> */}
+        <div>{localAddress}</div>
+      </div>
     </div>
   );
 };

@@ -6,10 +6,9 @@ import com.main024.ngether.board.Board;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.likes.Like;
 import com.main024.ngether.location.Location;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import com.main024.ngether.qna.qnaEntity.Answer;
+import com.main024.ngether.qna.qnaEntity.Qna;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -53,6 +52,28 @@ public class Member {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Location> locations = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<Qna> questions = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<Answer> answers = new ArrayList<>();
+
+    public void addQna(Qna qna) {
+        questions.add(qna);
+        if(qna.getMember() != this) {
+            qna.setMember(this);
+        }
+    }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        if(answer.getMember() != this) {
+            answer.setMember(this);
+        }
+    }
+
 
 
     public Member(long memberId, String pw, String nickName, String email, String phoneNumber) {
@@ -80,5 +101,12 @@ public class Member {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    public Member update(String email, String name){
+        this.email = email;
+        this.nickName = name;
+
+        return this;
+    }
 
 }

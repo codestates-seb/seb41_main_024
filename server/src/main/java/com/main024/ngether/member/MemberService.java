@@ -5,6 +5,7 @@ import com.main024.ngether.board.Board;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.helper.event.MemberRegistrationApplicationEvent;
+import com.main024.ngether.likes.Like;
 import com.main024.ngether.likes.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,9 +93,14 @@ public class MemberService {
     //로그인한 회원정보 가져오기
     public Member getLoginMember(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();  //SecurityContextHolder에서 회원정보 가져오기
-        Optional<Member> optionalMember = memberRepository.findByEmail(principal.toString());
-        if (optionalMember.isPresent()) return optionalMember.get();
-        else return null;
+        Optional<Member> optionalMember;
+
+        if(principal.toString().contains("@"))
+            optionalMember = memberRepository.findByEmail(principal.toString());
+        else
+            optionalMember = memberRepository.findByNickName(principal.toString());
+
+        return optionalMember.orElse(null);
     }
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
@@ -115,8 +121,10 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
         List<Board> boards = new ArrayList<>();
-        for(int i = 0; i < likeRepository.findLikeByMemberMemberId(member.getMemberId()).get().size(); i++){
-            boards.add(likeRepository.findLikeByMemberMemberId(member.getMemberId()).get().get(i).getBoard());
+        List<Like> likeList = likeRepository.findLikeByMemberMemberId(member.getMemberId()).get();
+        for(int i = 0; i < likeList.size(); i++){
+            if(likeList.get(i).isStatus())
+            boards.add(likeList.get(i).getBoard());
         }
 
         return boards;

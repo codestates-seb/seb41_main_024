@@ -5,7 +5,7 @@ import QuestionForm from '../../questionForm/QuestionForm';
 const UserInquiry = () => {
   const [isPostQuestion, setIsPostQuestion] = useState<boolean>(false);
 
-  const handleClick = (value: boolean) => {
+  const handleClick = () => {
     setIsPostQuestion(!isPostQuestion);
   };
 

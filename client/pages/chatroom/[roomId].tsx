@@ -9,6 +9,7 @@ import { getChatSharing } from '../../api/chatSharing';
 import Link from 'next/link';
 import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
+import { useRouter } from 'next/router';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -30,6 +31,7 @@ const Chatroom = () => {
     nickName: ''
   })
   const {stompClient, messages, members, roomId} = useWebSocketClient(HEADER_TOKEN);
+  const router = useRouter();
 
   
   useEffect(() => {
@@ -37,7 +39,7 @@ const Chatroom = () => {
     getChatSharing(roomId)
     .then((response) => {
         setSharingData(response.data);
-        IS_ROOM_OWER = sharingData.nickName !== Cookies.get('nickName')
+        IS_ROOM_OWER = sharingData.nickName === Cookies.get('nickName')
       })
       .catch((error) => {
         console.error(error);
@@ -53,7 +55,7 @@ const Chatroom = () => {
     if(stompClient){
       stompClient.send(
         `/send/chat/${roomId}`, 
-        HEADER_TOKEN ,
+        HEADER_TOKEN,
         JSON.stringify({type:'TALK', message:input})
       );
       setInput('');
@@ -66,8 +68,9 @@ const Chatroom = () => {
       "방장님이 채팅에서 나가시면 N게더도 삭제되요" : 
       "채팅에서 나가시면 N게더에서도 이탈해요"
     if (stompClient && confirm(confirmationMessage)) {
-      stompClient.disconnect(() => {}, HEADER_TOKEN)
+      stompClient.disconnect(() => {})
       axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
+      router.push('/chatlist')
     }
     else return
   }
@@ -75,7 +78,7 @@ const Chatroom = () => {
   return (
     <div>
       <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
-      <div className='left-2/4 translate-x-[-50%] fixed max-w-[672px] w-[80%] px-[3rem] rounded'>
+      <div className='left-2/4 mt-3 translate-x-[-50%] fixed max-w-[642px] min-w-[372px] w-[80%] px-[3rem] rounded'>
         <Link href={`/nearby/${roomId}`}>
           <ChatItem
             thumbnail={''}
@@ -87,7 +90,7 @@ const Chatroom = () => {
           />
         </Link>
       </div>
-      <div className="bg-primary pt-[90px] pb-[7.5rem] min-h-[calc(100vh-121px)] max-w-[672px] w-[100%]">
+      <div className="bg-primary pt-[90px] pb-[7.5rem] min-h-[calc(100vh-121px)] max-w-[672px] w-full">
         <ChatGroup chatData={messages} />
       </div>
       <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">

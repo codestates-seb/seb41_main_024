@@ -1,4 +1,4 @@
-import { FormControl, FormHelperText } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem } from '@mui/material';
 import React from 'react';
 import Input from '../../atoms/input/Input';
 import { dropDownInputType } from './dropDownInputType';
@@ -9,12 +9,15 @@ const DropdownInput = ({
   dropDownOptions,
   width,
   value,
-  onchange,
+  onChange,
   defaultValue,
   ...props
-}: any) => {
+}: dropDownInputType) => {
   return (
-    <FormControl sx={{ m: 1, width }} variant="outlined">
+    <FormControl
+      sx={{ marginTop: 1, marginBottom: 1, width }}
+      variant="outlined"
+    >
       <Input
         id={id}
         label={label}
@@ -23,18 +26,15 @@ const DropdownInput = ({
         selectProps={{
           native: true,
         }}
-        onChange={onchange}
+        onChange={onChange}
         {...props}
       >
         {dropDownOptions?.map((option: any) => (
-          <option value={option.value} key={option.value}>
+          <MenuItem value={option.value} key={option.value}>
             {option.label}
-          </option>
+          </MenuItem>
         ))}
       </Input>
-      <FormHelperText id="outlined-category-helper-text">
-        카테고리를 선택해주세요
-      </FormHelperText>
     </FormControl>
   );
 };

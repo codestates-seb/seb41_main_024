@@ -1,9 +1,18 @@
 addReviewers: true
 addAssignees: false
 
-numberOfReviewers: 1
+reviewers:
+  - koreadinosaur
+  - pikadev1771
+  - SHWsgithub
+  - noah-eunsoo
+  - yeonzzoo
+  - parkjiyun98
+  - Aru-slave
 
-useReviewGroups: false
+numberOfReviewers: 0
+
+useReviewGroups: true
 
 # A list of reviewers, split into different groups, to be added to pull requests (GitHub user name)
 reviewGroups:

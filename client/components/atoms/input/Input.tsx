@@ -7,13 +7,19 @@ const Input = ({
   children,
   select,
   multiline,
+  className,
+  value,
+  onChange,
   ...props
-}: inputType) => {
+}: any) => {
   return (
     <TextField
       {...props}
       {...(select ? { select: true } : null)}
       {...(multiline ? { multiline: true } : null)}
+      className={className}
+      value={value}
+      onChange={onChange}
       InputProps={{ endAdornment }}
     >
       {children}

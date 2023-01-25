@@ -2,9 +2,10 @@ import Input from '../../../components/atoms/input/Input';
 import ContentTextField from '../../../components/molecules/contentTextField/ContentTextField';
 import FormButton from '../../molecules/formbutton/FormButton';
 import { FormControl, FormHelperText } from '@mui/material';
+import { MouseEventHandler } from 'react';
 
 interface QuestionFormProps {
-  onClick: (value: boolean) => void;
+  onClick: MouseEventHandler<HTMLButtonElement>;
 }
 const QuestionForm = ({ onClick }: QuestionFormProps) => {
   // useState? useRef? reacthookform?

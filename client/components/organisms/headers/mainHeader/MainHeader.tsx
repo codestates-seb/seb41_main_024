@@ -1,3 +1,4 @@
+import React from 'react';
 import { Fragment, useState } from 'react';
 import { AppBar, Button } from '@mui/material';
 import Link from 'next/link';
@@ -6,10 +7,15 @@ import { ReactComponent as NavigatorIcon } from '../../../../public/header/navig
 import { ReactComponent as Logo } from '../../../../public/logos/logoRow.svg';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
-import { mainHeaderType } from './mainHeader';
+import { mainHeaderType } from './mainHeaderType';
 import { nextTick } from 'process';
 
-const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
+const MainHeader = ({
+  isLogin,
+  nickName,
+  logOutHandler,
+  session,
+}: mainHeaderType) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -44,12 +50,13 @@ const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
           </Button>
         </div>
       </AppBar>
-      {/* <Divider /> */}
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        {isLogin && nickName && (
+        {((isLogin && nickName) || session?.data?.user) && (
           <>
             <div className="flex flex-col items-center m-4">
-              <span className="text-primary text-bold">{nickName}</span>
+              <span className="text-primary text-bold">
+                {nickName || session?.data?.user?.name}
+              </span>
               <Button
                 variant="contained"
                 className="m-4"
@@ -58,13 +65,23 @@ const MainHeader = ({isLogin, nickName, logOutHandler}: mainHeaderType) => {
                 로그아웃
               </Button>
             </div>
-            <DrawerListItem text={'마이페이지'} path={'/mypage'} />
           </>
         )}
-        <DrawerListItem text={'로그인'} path={'/login'} />
-        <DrawerListItem text={'회원가입'} path={'/signup'} />
-        {/* <DrawerListItem text={'마이페이지'} path={'/mypage/로그인 한 사람의 멤버 아이디'} /> */}
-        {/* 임의로 1로 지정 */}
+        {!isLogin && !session?.data?.user && (
+          <div className="flex justify-center items-center m-2">
+            <Link href={'/login'}>
+              <Button variant="contained" className="m-2">
+                로그인
+              </Button>
+            </Link>
+            <Link href={'/signup'}>
+              <Button variant="contained" className="m-2">
+                회원가입
+              </Button>
+            </Link>
+          </div>
+        )}
+        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
       </DrawerList>
     </Fragment>
   );

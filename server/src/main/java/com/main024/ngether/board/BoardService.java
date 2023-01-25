@@ -83,6 +83,7 @@ public class BoardService {
             if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
                 boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
                 boardRepository.save(boardList.get(i));
+                chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
             }
         }
         return boardList;
@@ -96,13 +97,18 @@ public class BoardService {
         } else if (Objects.equals(findVerifiedBoard(board.getBoardId()).getMember().getMemberId(), memberService.getLoginMember().getMemberId())) {
 
             Board findBoard = findVerifiedBoard(board.getBoardId());
+            ChatRoom chatRoom = chatRoomRepository.findByRoomId(board.getBoardId());
             findBoard.setModifiedAt(LocalDateTime.now());
             Optional.ofNullable(board.getTitle())
                     .ifPresent(findBoard::setTitle);
+            Optional.ofNullable(board.getTitle())
+                    .ifPresent(chatRoom::setRoomName);
             Optional.ofNullable(board.getProductsLink())
                     .ifPresent(findBoard::setProductsLink);
             Optional.ofNullable(board.getAddress())
                     .ifPresent(findBoard::setAddress);
+            Optional.ofNullable(board.getAddress())
+                    .ifPresent(chatRoom::setAddress);
             Optional.ofNullable(board.getLatitude())
                     .ifPresent(findBoard::setLatitude);
             Optional.ofNullable(board.getLongitude())
@@ -116,12 +122,10 @@ public class BoardService {
             if(board.getMaxNum() >= 2) {
                 Optional.ofNullable(board.getMaxNum())
                         .ifPresent(findBoard::setMaxNum);
-                ChatRoom chatRoom = chatRoomRepository.findByRoomId(findBoard.getBoardId());
                 chatRoom.setMaxNum(findBoard.getMaxNum());
-                chatRoomRepository.save(chatRoom);
             }
             else throw new BusinessLogicException(ExceptionCode.NOT_ALLOW);
-
+            chatRoomRepository.save(chatRoom);
             return boardRepository.save(findBoard);
         } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
 

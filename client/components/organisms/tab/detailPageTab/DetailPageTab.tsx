@@ -44,16 +44,16 @@ const DetailPageTab = ({ productData }: productDataProps) => {
         </div>
       </section>
       <section id="section-1" className="px-2 py-4">
-        {/* 🍉 카카오 지도 */}
-        <DetailMap
-          latitude={productData?.latitude}
-          longitude={productData?.longitude}
-        />
-        {/* <Img src="/detail/map.svg" alt="지도" /> */}
+        {productData && (
+          <DetailMap
+            latitude={productData?.latitude}
+            longitude={productData?.longitude}
+          />
+        )}
       </section>
       <section id="section-2" className="px-2 py-4">
         <p className="text-base">주변 상품</p>
-        <NearByList />
+        <NearByList sharingLists={[]} />
       </section>
     </div>
   );
