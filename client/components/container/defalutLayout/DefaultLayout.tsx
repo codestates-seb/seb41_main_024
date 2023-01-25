@@ -1,5 +1,5 @@
 import MainHeader from '../../organisms/headers/mainHeader/MainHeader';
-import { defaultLayoutPropsType } from './defaultLayout';
+import { defaultLayoutPropsType } from './defaultLayoutType';
 import Navigation from '../../organisms/bottomNav/BottomNav';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import basicTheme from '../../../theme/basic';
@@ -30,12 +30,14 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={basicTheme}>
         <div className="max-w-2xl mx-auto min-h-[100vh]">
-          <MainHeader
-            isLogin={isLogin}
-            nickName={nickName}
-            logOutHandler={handleLogOut}
-            session={session}
-          />
+          {session && (
+            <MainHeader
+              isLogin={isLogin}
+              nickName={nickName}
+              logOutHandler={handleLogOut}
+              session={session}
+            />
+          )}
           {children}
           <Navigation />
         </div>
