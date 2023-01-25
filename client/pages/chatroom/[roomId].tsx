@@ -1,5 +1,5 @@
 import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
-import { Fragment, ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 import ChatForm from '../../components/organisms/chatForm/ChatForm';;
 import useWebSocketClient from '../../hooks/useWebSocketClient';
 import axios from 'axios';
@@ -32,7 +32,7 @@ const Chatroom = () => {
   })
   const {stompClient, messages, members, roomId} = useWebSocketClient(HEADER_TOKEN);
   const router = useRouter();
-
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     if(roomId)
@@ -60,6 +60,7 @@ const Chatroom = () => {
       );
       setInput('');
     }
+    messagesEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   const handleExitChatRoom = (): void => {
@@ -90,8 +91,9 @@ const Chatroom = () => {
           />
         </Link>
       </div>
-      <div className="bg-primary pt-[90px] pb-[7.5rem] min-h-[calc(100vh-121px)] max-w-[672px] w-full">
+      <div className="bg-primary pt-[90px] max-h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
         <ChatGroup chatData={messages} />
+        <div className="h-[9rem]" ref={messagesEndRef} />
       </div>
       <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
         <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
