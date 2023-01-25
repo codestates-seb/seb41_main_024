@@ -8,7 +8,6 @@ import { passwordTextFieldPropsType } from './passwordTextFieldType';
 
 const TextField = (props: passwordTextFieldPropsType) => {
   const [showPassword, setShowPassword] = useState(false);
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -16,12 +15,11 @@ const TextField = (props: passwordTextFieldPropsType) => {
   ) => {
     event.preventDefault();
   };
+
   return (
     <FormControl variant="outlined">
       <Input
-        id={props.id}
         type={showPassword ? 'text' : 'password'}
-        label={props.label}
         endAdornment={
           <InputAdornment position="end">
             <PasswordIcon
@@ -31,6 +29,7 @@ const TextField = (props: passwordTextFieldPropsType) => {
             {showPassword ? <VisibilityOff /> : <Visibility />}
           </InputAdornment>
         }
+        {...props}
       />
     </FormControl>
   );
