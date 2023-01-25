@@ -82,25 +82,30 @@ const Chatroom = () => {
   return (
     <div>
       <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
-      <div className='left-2/4 mt-3 translate-x-[-50%] fixed w-[604px] min-w-[372px] pl-[1.5rem] pr-[2.5rem] rounded'>
-        <Link href={`/nearby/${roomId}`}>
-          <ChatItem
-            thumbnail={''}
-            isOpen={sharingData.isOpen}
-            title={sharingData.title}
-            price={sharingData.price}
-            address={sharingData.address}
-            alertNum={sharingData.alertNum}
-          />
-        </Link>
-      </div>
-      <div className="bg-primary pt-[90px] h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
-        <ChatGroup chatData={messages} />
-        <div className="h-[5rem]" ref={messagesEndRef} />
-      </div>
-      <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
-        <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
-      </div>
+      {!messages[0] && <div>잘못된 접근입니다.</div>}
+      {messages[0] && (
+        <>
+          <div className='left-2/4 mt-3 translate-x-[-50%] fixed w-[604px] min-w-[372px] pl-[1.5rem] pr-[2rem] rounded'>
+            <Link href={`/nearby/${roomId}`}>
+              <ChatItem
+                thumbnail={''}
+                isOpen={sharingData.isOpen}
+                title={sharingData.title}
+                price={sharingData.price}
+                address={sharingData.address}
+                alertNum={sharingData.alertNum}
+              />
+            </Link>
+          </div>
+          <div className="bg-primary pt-[90px] h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
+            <ChatGroup chatData={messages} />
+            <div className="h-[5rem]" ref={messagesEndRef} />
+          </div>
+          <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
+            <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
+          </div>
+        </>
+      )}
     </div>
   );
 };

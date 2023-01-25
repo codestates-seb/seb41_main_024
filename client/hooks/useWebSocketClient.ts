@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import SockJS from 'sockjs-client';
 import StompJS from 'stompjs';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 interface chatMessageType {
   chatMessageId: number,
@@ -18,17 +19,20 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
+  const nickName = Cookies.get('nickName')
 
-  useEffect( () => {
+  useEffect(() => {
       if(!isReady && HEADER_TOKEN !== undefined) return
 
       const setChatWebsocket = async () => {
         try {
-          await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
-          .then(res => setMessages(res.data.map(transDateFormChatMessage)));
-
           await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: HEADER_TOKEN})
           .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
+          
+          if(members.includes(nickName) === false) return;
+
+          await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
+          .then(res => setMessages(res.data.map(transDateFormChatMessage)));
 
           const sockjs = new SockJS(`https://ngether.site/ws`);
           const ws = StompJS.over(sockjs);
