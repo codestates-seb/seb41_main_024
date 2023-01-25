@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { setDefaultCoordsAndAddress } from './kakaoMap';
-
+const kakao = typeof window !== 'undefined' ? (window as any).kakao : null;
 interface getCurrentLocationPropsType {
   setLocation: React.Dispatch<
     React.SetStateAction<{
@@ -11,15 +11,7 @@ interface getCurrentLocationPropsType {
   >;
   setLocationError: React.Dispatch<React.SetStateAction<string>>;
 }
-export const getCurrentLocation = (
-  setLocation: Dispatch<
-    SetStateAction<{
-      lat: number;
-      lng: number;
-    }>
-  >,
-  setLocationError: Dispatch<SetStateAction<string>>
-) => {
+export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
   const geoLocationOptions = { enableHighAccuracy: true };
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(

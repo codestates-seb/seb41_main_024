@@ -9,7 +9,7 @@ const DropdownInput = ({
   dropDownOptions,
   width,
   value,
-  onchange,
+  onChange,
   defaultValue,
   ...props
 }: dropDownInputType) => {
@@ -23,10 +23,10 @@ const DropdownInput = ({
         label={label}
         select={true}
         defaultValue={dropDownOptions[0]?.label || '기본값'}
-        selectprops={{
+        selectProps={{
           native: true,
         }}
-        onChange={onchange}
+        onChange={onChange}
         {...props}
       >
         {dropDownOptions?.map((option: any) => (

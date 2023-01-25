@@ -1,9 +1,11 @@
 export interface chatItemPropsType {
   thumbnail: string;
-  declareStatus: boolean;
+  declareStatus?: any;
   title: string;
   price: string;
-  alertNum: string;
-  address: string;
-  lastMessage: string;
+  alertNum?: string;
+  address?: string;
+  lastMessage?: string;
+  isOpen?: any;
+  spot?: any;
 }

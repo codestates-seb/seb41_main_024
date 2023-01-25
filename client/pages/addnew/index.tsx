@@ -17,7 +17,14 @@ import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
 import { getCurrentLocation } from '../../api/location';
 
 import { useRouter } from 'next/router';
-import { SetStateAction, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  ReactElement,
+  ReactEventHandler,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 import axios from 'axios';
 
@@ -94,7 +101,7 @@ const AddNewPage = () => {
     e.preventDefault();
 
     let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
-    const requestBody: requestType = {
+    const requestBody: any = {
       ...inputValue,
       category: categoryValue,
       latitude: targetCoord.lat,
@@ -191,7 +198,7 @@ const AddNewPage = () => {
                 type="text"
                 label="상품 링크"
                 value={productsLink}
-                onChange={(e) => {
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
                   onChange(e);
                   fetchOgData(e.target.value);
                 }}

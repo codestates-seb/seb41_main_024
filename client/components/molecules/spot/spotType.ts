@@ -1,4 +1,4 @@
 export interface spotPropsType {
-  address: string;
-  spot: string;
+  address?: string;
+  spot?: string;
 }
