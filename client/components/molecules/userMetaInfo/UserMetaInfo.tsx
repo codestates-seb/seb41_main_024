@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../../atoms/button/Button';
-import { productDataProps } from './userMetaInfo';
+import { productDataProps } from './userMetaInfoType';
 import Link from 'next/link';
 
 const UserMetaInfo = ({

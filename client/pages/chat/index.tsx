@@ -30,8 +30,8 @@ const Chat = () => {
         });
     }
   };
-  const enterRoom = async (roomId: number) => {
-    const sender: string | null = prompt('대화명을 입력해 주세요.');
+  const enterRoom = async (roomId: string) => {
+    const sender: any = prompt('대화명을 입력해 주세요.');
     if (sender !== '') {
       localStorage.setItem('wschat.sender', sender);
       localStorage.setItem('wschat.roomId', roomId);

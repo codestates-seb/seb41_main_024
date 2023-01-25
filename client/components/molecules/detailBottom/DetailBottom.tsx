@@ -4,14 +4,14 @@ import { Button } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Cookie } from '@mui/icons-material';
+import { DetailBottomPropsType } from './detailBottomType';
 
 const DetailBottom = ({
   isLiked,
   handleLike,
   handleReport,
   handleGether,
-  id,
-}) => {
+}: DetailBottomPropsType) => {
   return (
     <div className="flex justify-between items-center p-4 mb-4 border-y-1 px-2 py-4 border-x-0 border-solid border-[#475569]">
       <Button onClick={handleLike}>
@@ -32,7 +32,6 @@ const DetailBottom = ({
           />
         )}
       </Button>
-      {/* <span>22,000원</span> */}
       <div>
         <Button
           onClick={handleReport}
@@ -44,9 +43,6 @@ const DetailBottom = ({
         <Button onClick={handleGether} variant="contained" className="m-2">
           참여하기
         </Button>
-        {/* <Link href={`/chatroom/${id}`}>
-          <FormButton variant="contained" content="참여하기" />
-        </Link> */}
       </div>
     </div>
   );

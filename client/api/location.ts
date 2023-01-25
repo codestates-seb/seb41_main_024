@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { setDefaultCoordsAndAddress } from './kakaoMap';
 
 interface getCurrentLocationPropsType {
@@ -11,8 +12,13 @@ interface getCurrentLocationPropsType {
   setLocationError: React.Dispatch<React.SetStateAction<string>>;
 }
 export const getCurrentLocation = (
-  setLocation: getCurrentLocationPropsType['setLocation'],
-  setLocationError: getCurrentLocationPropsType['setLocationError']
+  setLocation: Dispatch<
+    SetStateAction<{
+      lat: number;
+      lng: number;
+    }>
+  >,
+  setLocationError: Dispatch<SetStateAction<string>>
 ) => {
   const geoLocationOptions = { enableHighAccuracy: true };
   if (navigator.geolocation) {

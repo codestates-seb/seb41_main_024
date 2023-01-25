@@ -2,15 +2,12 @@ package com.main024.ngether.chat.chatService;
 
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
-import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

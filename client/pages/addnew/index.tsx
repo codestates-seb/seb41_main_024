@@ -17,7 +17,7 @@ import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
 import { getCurrentLocation } from '../../api/location';
 
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 import axios from 'axios';
 
@@ -25,7 +25,7 @@ const AddNewPage = () => {
   const [token, setToken] = useState({ authorization: '', refresh: '' });
   const router = useRouter();
 
-  const [productImg, setProductImg] = useState<any>(base);
+  const [productImg, setProductImg] = useState(base);
   const [targetCoord, setTargetCoord] = useState({
     lat: 0,
     lng: 0,
@@ -50,7 +50,7 @@ const AddNewPage = () => {
 
   const { inputValue, onChange } = useInput({
     title: '',
-    price: '',
+    price: 0,
     productsLink: '',
     category: 'product',
     maxNum: '1',
@@ -85,7 +85,9 @@ const AddNewPage = () => {
   }, [center]);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
-  const handleSearchAddress = (e) => {
+  const handleSearchAddress = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
     setSearchAddress(e.target.value);
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

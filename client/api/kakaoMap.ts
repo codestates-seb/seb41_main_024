@@ -1,6 +1,7 @@
 import { SetStateAction } from 'react';
 import { kakaoMapItemType } from './../components/molecules/sharingListItem/sharingListItemType';
 import { ListItemPropsType } from '../components/molecules/sharingListItem/sharingListItemType';
+import { Dispatch, SetStateAction } from 'react';
 
 
 interface getMapAndMarkerPropsType {
