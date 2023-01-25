@@ -134,12 +134,15 @@ public class BoardService {
 
     public void deleteBoard(Long boardId) {
         Board board = findVerifiedBoard(boardId);
-        if (memberService.getLoginMember() == null)
-            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        else if(board.getBoardStatus().equals(Board.BoardStatus.BOARD_NOT_DELETE))
+        Member member = memberService.getLoginMember();
+        if (member == null){
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);}
+        else if(board.getBoardStatus().equals(Board.BoardStatus.BOARD_NOT_DELETE)){
             throw new BusinessLogicException(ExceptionCode.BOARD_NOT_DELETE);
-        else if (board.getMember().getMemberId() == memberService.getLoginMember().getMemberId())
+        }
+        else if(Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId())){
             boardRepository.delete(board);
+        }
         else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
     }
 
@@ -171,7 +174,7 @@ public class BoardService {
 
     public Page<Board> findCompleteMySharing(int page, int size){
         return boardRepository.findByBoardStatusAndMemberMemberId
-                (Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size,
+                (Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId(), PageRequest.of(page, size,
                         Sort.by("createDate").descending()));
 
     }

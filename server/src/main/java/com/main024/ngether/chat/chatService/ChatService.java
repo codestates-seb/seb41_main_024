@@ -19,11 +19,14 @@ import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -113,11 +116,11 @@ public class ChatService {
         } else {
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             for (ChatMessage chatMessage : chatMessageList) {
-                if(chatMessage.getUnreadCount() != 0 && !Objects.equals(chatMessage.getNickName(), member.getNickName()))
-                chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
+                if (chatMessage.getUnreadCount() != 0 && !Objects.equals(chatMessage.getNickName(), member.getNickName()))
+                    chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
             }
             chatMessageRepository.saveAll(chatMessageList);
-            sendingOperations.convertAndSend("/receive/chat/" + roomId,ChatMessage.builder()
+            sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
                     .message("")
                     .type(ChatMessage.MessageType.REENTER)
                     .build());
@@ -137,14 +140,15 @@ public class ChatService {
 
         board.setCurNum(board.getCurNum() - 1);
         boardRepository.save(board);
+        ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId());
         //채팅방 개설자가 나갈경우 채팅방 삭제, 채팅방 메시지 내역 삭제, 게시물 삭제
         if (!chatRoom.isDeclareStatus()) {
             if (Objects.equals(memberService.getLoginMember().getMemberId(), chatRoom.getMemberId())) {
                 chatMessageRepository.deleteAll(chatMessageRepository.findByChatRoomId(chatRoom.getRoomId()));
+                chatRoomMembersRepository.delete(chatRoomMembers);
                 chatRoomRepository.delete(chatRoom);
                 boardRepository.delete(board);
             }
-            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId());
             chatRoomMembersRepository.delete(chatRoomMembers);
 
             ChatMessage chatMessage = ChatMessage.builder()
@@ -222,6 +226,8 @@ public class ChatService {
 
     public List<ChatRoom> findMyChatRoom() {
         Member member = memberService.getLoginMember();
+        if(member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         List<ChatRoom> chatRoomList = new ArrayList<>();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
         for (int i = 0; i < chatRoomMembers.size(); i++) {
@@ -244,6 +250,23 @@ public class ChatService {
 
         return count;
     }
-
-
+//    @Async
+//    public boolean checkNewMessages() throws InterruptedException {
+//        try {
+//            while (true) {
+//                List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
+//                for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
+//                    if (chatRoomMember.getUnreadMessageCount() > 0) {
+//                        break;
+//                    }
+//                }
+//                return true;
+//                Thread.sleep(1000L);
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//
+//
+//        }
+//    }
 }
