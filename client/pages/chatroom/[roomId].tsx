@@ -10,6 +10,7 @@ import Link from 'next/link';
 import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 import { useRouter } from 'next/router';
+import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMessage';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -82,7 +83,7 @@ const Chatroom = () => {
   return (
     <div>
       <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
-      {!messages[0] && <div>잘못된 접근입니다.</div>}
+      {!messages[0] && <ForbiddenMessage />}
       {messages[0] && (
         <>
           <div className='left-2/4 mt-3 translate-x-[-50%] fixed w-[604px] min-w-[372px] pl-[1.5rem] pr-[2rem] rounded'>
