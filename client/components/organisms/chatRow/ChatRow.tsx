@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { chatRowType } from './chatRowType';
 import Cookie from 'js-cookie';
 
-const ChatRow = ({ thumbSrc, nickName, message, createDate }: chatRowType) => {
+const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatRowType) => {
   const MY_CHAT = Cookie.get('nickName') === nickName;
   const OTHER_CHAT = !MY_CHAT;
 
@@ -50,6 +50,10 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate }: chatRowType) => {
         <span className="min-w-[3.25rem] text-[0.75rem] leading-[0.875rem] text-[#fff] self-end pb-[0.0625rem]">
           {createDate}
         </span>
+        {unreadCount !== 0 && 
+        <span className="mx-3 text-[0.75rem] leading-[0.875rem] text-[#333] self-end pb-[0.0625rem]">
+          {unreadCount}
+        </span>}
       </div>
     </div>
   );

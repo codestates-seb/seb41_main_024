@@ -7,4 +7,5 @@ export interface chatRowType {
   myChat: string;
   createDate: string;
   type: string;
+  unreadCount: number;
 }

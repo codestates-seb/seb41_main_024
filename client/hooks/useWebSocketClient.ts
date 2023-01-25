@@ -39,8 +39,13 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
             () => {
               ws.subscribe(
               `/receive/chat/${roomId}`, 
-              (messages) => {
+              async (messages) => {
+                if((JSON.parse(messages.body).type) === 'REENTER') {
+                  await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
+                  .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+                }
                 setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(JSON.parse(messages.body))])
+                window.scrollTo({ top: document.body.scrollHeight })
               }, 
               HEADER_TOKEN);
             }, 
