@@ -59,7 +59,7 @@ public class BoardController {
     }
 
     //해당 게시물 삭제
-    @DeleteMapping("/boardId")
+    @DeleteMapping("/{boardId}")
     public ResponseEntity deleteBoard(@PathVariable(value = "boardId") Long boardId) {
         boardService.deleteBoard(boardId);
 
