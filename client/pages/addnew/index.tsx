@@ -113,11 +113,11 @@ const AddNewPage = () => {
 
     mutate(requestBody, {
       onSuccess: (data) => {
-        axios.post(
-          `https://ngether.site/chat/room/${data.data.boardId}`,
-          {},
-          {headers: token}
-        );
+        axios({
+          url: `https://ngether.site/chat/room/${data.data.boardId}`,
+          method: 'get',
+          headers: token
+        });
       },
     });
   };
