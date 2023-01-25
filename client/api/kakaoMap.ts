@@ -1,6 +1,7 @@
-
+import { SetStateAction } from 'react';
 import { kakaoMapItemType } from './../components/molecules/sharingListItem/sharingListItemType';
 import { ListItemPropsType } from '../components/molecules/sharingListItem/sharingListItemType';
+import { Dispatch, SetStateAction } from 'react';
 
 
 interface getMapAndMarkerPropsType {
@@ -10,7 +11,7 @@ interface getMapAndMarkerPropsType {
     mapLevel?: number;
     address?: string;
   };
-  setTargetCoord: (item: {}) => void;
+  setTargetCoord: React.Dispatch<SetStateAction<{ lat: number; lng: number; address: string; }>>;
 }
 
 export const getMapAndMarker = async (
@@ -53,14 +54,20 @@ export const getMapAndMarker = async (
       message += '경도는 ' + latlng.getLng() + ' 입니다';
 
       let resultDiv = document.getElementById('clickLatlng');
-      resultDiv.innerText = message;
+      if (resultDiv !== null) resultDiv.innerText = message;
     }
   );
 };
 
 export const exchangeCoordToAddress = async (
   center: getMapAndMarkerPropsType['center'],
-  setTargetCoord: getMapAndMarkerPropsType['setTargetCoord']
+  setTargetCoord: React.Dispatch<
+    React.SetStateAction<{
+      lat: number;
+      lng: number;
+      address: string;
+    }>
+  >
 ) => {
   let mapContainer =
       document.getElementById('map') || document.createElement('div'), // 지도를 표시할 div

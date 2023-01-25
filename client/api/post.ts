@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { inputType } from '../hooks/addNewHooks/useInputType';
+
 interface uploadPostType {
   title: string;
   price: number | string;
@@ -19,6 +19,13 @@ interface getPostType {
   range: number;
   category: string;
 }
+interface searchPostsByTitleType {
+    type: string;
+    keyword: string;
+    page: number;
+    size: number;
+}
+
 const REQUEST_URL = 'https://ngether.site';
 
 export const uploadPost = async (data: uploadPostType) => {
@@ -68,7 +75,7 @@ export const searchPostsByTitle = async ({
   keyword,
   page = 1,
   size = 10,
-}) => {
+}:searchPostsByTitleType) => {
   const url = `${REQUEST_URL}/api/boards/search?type=${type}&keyword=${encodeURIComponent(
     keyword
   )}&page=${page}&size=${size}`;

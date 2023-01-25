@@ -13,4 +13,7 @@ export interface productDataProps {
     address: string;
     memberId: number;
   };
+  handleDelete: () => void;
+  isWriter: boolean;
+  id: string;
 }

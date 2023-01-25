@@ -17,7 +17,7 @@ import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
 import { getCurrentLocation } from '../../api/location';
 
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 import axios from 'axios';
 
@@ -25,7 +25,7 @@ const AddNewPage = () => {
   const [token, setToken] = useState({ authorization: '', refresh: '' });
   const router = useRouter();
 
-  const [productImg, setProductImg] = useState<any>(base);
+  const [productImg, setProductImg] = useState(base);
   const [targetCoord, setTargetCoord] = useState({
     lat: 0,
     lng: 0,
@@ -37,8 +37,10 @@ const AddNewPage = () => {
 
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: (data) => {
+      axios.post(`https://ngether.site/chat/room/${data.data.boardId}`, token);
       router.push('/');
     },
+
     onError: (error) => {
       console.log(error);
       alert(error);
@@ -48,14 +50,28 @@ const AddNewPage = () => {
 
   const { inputValue, onChange } = useInput({
     title: '',
-    price: '',
+    price: 0,
     productsLink: '',
     category: 'product',
     maxNum: '1',
     content: '',
     deadLine: '',
   });
-
+  interface requestType {
+    title?: string;
+    price?: number;
+    productsLink: string;
+    category: string;
+    maxNum: string;
+    content: string;
+    deadLine: string;
+    searchOption: string;
+    latitude: any;
+    longitude: any;
+    accessToken: string;
+    refreshToken: string;
+    address: string;
+  }
   useEffect(() => {
     getCurrentLocation(setCenter, setLocationError);
     const authorization = cookie.get('access_token');
@@ -69,14 +85,16 @@ const AddNewPage = () => {
   }, [center]);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
-  const handleSearchAddress = (e) => {
+  const handleSearchAddress = (e: {
+    target: { value: SetStateAction<string> };
+  }) => {
     setSearchAddress(e.target.value);
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
-    const requestBody: uploadPostType = {
+    const requestBody: requestType = {
       ...inputValue,
       category: categoryValue,
       latitude: targetCoord.lat,
@@ -86,9 +104,14 @@ const AddNewPage = () => {
       refreshToken: token.refresh,
     };
 
-    mutate(requestBody, {onSuccess:(data) =>  {
-      axios.post(`https://ngether.site/chat/room/${data.data.boardId}`, token)
-    },});
+    mutate(requestBody, {
+      onSuccess: (data) => {
+        axios.post(
+          `https://ngether.site/chat/room/${data.data.boardId}`,
+          token
+        );
+      },
+    });
   };
 
   const fetchOgData = async (url: string) => {

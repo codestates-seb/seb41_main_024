@@ -1,6 +1,6 @@
 import React from 'react';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
-import { spotPropsType } from './spot';
+import { spotPropsType } from './spotType';
 
 const Spot = ({ spot }: spotPropsType) => {
   return (

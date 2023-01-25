@@ -3,8 +3,8 @@ export interface chatRowType {
   chatMessageId?: number;
   nickName: string | null;
   message: string;
-  time: string;
-  myChat: string;
+  time?: string;
+  myChat?: string;
   createDate: string;
   type: string;
   unreadCount: number;

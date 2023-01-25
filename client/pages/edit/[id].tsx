@@ -13,7 +13,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { getProductDetail } from '../../api/detail';
 import { editProductDetail } from '../../api/detail';
 
-export async function getServerSideProps(context: { params: { id: number } }) {
+export async function getServerSideProps(context: { params: { id: string } }) {
   const { id } = context.params;
   const { data } = await getProductDetail(id);
 
