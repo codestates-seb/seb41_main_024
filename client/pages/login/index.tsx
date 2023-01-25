@@ -5,15 +5,27 @@ import TextField from '../../components/molecules/passwordTextField/TextField';
 import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
-import { requestLogin } from '../../api/login';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
-
+import { signIn, useSession } from 'next-auth/react';
+import { getAllUsers } from '../../api/members';
+import axios from 'axios';
+import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
+import Image from 'next/image';
+import Divider from '@mui/material/Divider';
 
 const LoginPage = () => {
-  const router = useRouter();
+  const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
+  const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
 
+  const router = useRouter();
+  const session = useSession();
+
+  console.log(session);
+
+  const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [form, setForm] = useState({
     email: '',
     pw: '',
@@ -21,22 +33,67 @@ const LoginPage = () => {
 
   const { email, pw } = form;
 
-  const { data, isLoading, isError, refetch } = useQuery(
-    ['loginData'],
-    () => requestLogin(form),
-    {
-      enabled: false,
-    }
-  );
+  const emailRegexText = useRegexText({
+    state: email,
+    regex: emailRegex,
+    text: {
+      default: '',
+      match: '',
+      unMatch: '이메일 양식에 맞게 입력해주세요',
+    },
+  });
+  const passwordRegexText = useRegexText({
+    state: pw,
+    regex: passwordRegex,
+    text: {
+      default: '',
+      match: '',
+      unMatch: '소문자, 특수문자를 각 하나 포함한 8자리 이상이여야 합니다.',
+    },
+  });
 
-  if (data) {
-    Cookies.set('access_token', data.headers.authorization);
-    Cookies.set('refresh_token', data.headers.refresh);
-    Cookies.set('memberId', data.data.memberId);
-    Cookies.set('nickName', data.data.nickName);
-    Cookies.set('locationId', data.data.locationId);
-    router.push('/');
-  }
+  const { data, error, mutate } = useMutation(() => requestLogin(form), {
+    onSuccess: (data) => {
+      Cookies.set('access_token', data.headers.authorization);
+      Cookies.set('refresh_token', data.headers.refresh);
+      Cookies.set('memberId', data.data.memberId);
+      Cookies.set('nickName', data.data.nickName);
+      Cookies.set('locationId', data.data.locationId);
+      router.push('/');
+    },
+    onError: (error) => {
+      setLoginErrorMessage('정확하지 않은 이메일 또는 패스워드입니다');
+    },
+  });
+
+  const handleLogin = async () => {
+    await mutate();
+  };
+
+  const handleSocialLogin = async () => {
+    await signIn('google');
+    getAllUsers().then((res) => {
+      console.log('res.data', res.data);
+      const isNewUser = !res.data.filter(
+        (user: { email?: string }) => user.email === session?.data?.user?.email
+      );
+      console.log(isNewUser);
+      if (isNewUser) {
+        // DB에 해당 이메일 없으면
+        // 회원가입 시키고
+        requestSignUp({
+          pw: 'qqqqqq-123',
+          nickName: session?.data?.user?.name,
+          email: session?.data?.user?.email,
+          phoneNumber: '010-9601-1712',
+        });
+      }
+      // 자체 로그인 진행
+      setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
+      console.log(form);
+      mutate();
+    });
+  };
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -61,7 +118,7 @@ const LoginPage = () => {
             value={email}
             onChange={onChange}
           />
-          <Label htmlFor={'email-input'} labelText={''} />
+          <Label htmlFor={'email-input'} labelText={emailRegexText} />
           <TextField
             id={'password-input'}
             name="pw"
@@ -70,21 +127,33 @@ const LoginPage = () => {
             value={pw}
             onChange={onChange}
           />
-          <Label
-            htmlFor={'password-input'}
-            labelText={'소문자와 특수문자를 포함한 8글자'}
-          />
+          <Label htmlFor={'password-input'} labelText={passwordRegexText} />
+          <p className="text-[#dd3030]">{loginErrorMessage}</p>
           <Button
-            className="h-14 mt-4 bg-primary text-white rounded "
-            onClick={refetch}
+            className="h-14 mt-4 bg-primary text-white rounded"
+            onClick={handleLogin}
           >
             로그인
           </Button>
+
           <Button
-            className="h-14 mt-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
+            className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
             onClick={() => router.push('/signup')}
           >
             회원가입
+          </Button>
+          <Divider />
+          <Button className="h-14 mt-4" onClick={handleSocialLogin}>
+            <div
+              style={{ width: '100%', height: '100%', position: 'relative' }}
+            >
+              <Image
+                alt="google login"
+                src="/login/btn_google.png"
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
           </Button>
         </div>
       </div>

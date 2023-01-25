@@ -9,6 +9,7 @@ import DefaultLayout from '../components/container/defalutLayout/DefaultLayout';
 import { ReactElement } from 'react';
 import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayout';
 import { CookiesProvider } from 'react-cookie';
+import { SessionProvider } from 'next-auth/react';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -18,7 +19,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const renderWithLayout =
     Component.getLayout ||
     function (page: ReactElement) {
-      return <DefaultLayout>{page}</DefaultLayout>;
+      return (
+        <SessionProvider session={pageProps.session}>
+          <DefaultLayout>{page}</DefaultLayout>
+        </SessionProvider>
+      );
     };
 
   const queryClient = new QueryClient();
