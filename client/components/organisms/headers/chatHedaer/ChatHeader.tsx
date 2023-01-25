@@ -31,7 +31,7 @@ const ChatHeader = ({members, handleExitChat}: ChatHeaderType) => {
           <Button
             className="border-0 m-0 p-0 bg-inherit"
             type="button"
-            onClick={() => router.back()}
+            onClick={() => router.push('/chatlist')}
           >
             <ArrowbackIcon />
           </Button>
