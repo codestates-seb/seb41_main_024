@@ -70,7 +70,7 @@ public class SecurityConfiguration {
                 .logout()
                 .logoutUrl("/auth/logout") //logout 처리 url
                 .and()
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .oauth2Login()//OAuth2 로그인 시작
                 .userInfoEndpoint()//로그인 성공시 사용자 정보를 가져옴
                 .userService(customOAuth2UserService); //로그인 성공 후 oauth2userservice 호출
