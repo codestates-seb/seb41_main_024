@@ -22,7 +22,11 @@ public enum ExceptionCode {
     REPORT_NOT_FOUND(413, " Report not found"),
     RANGE_NOT_FOUND(414, "Range not found"),
     BAN(415, "Bye"),
-    QNA_NOT_FOUND(416,"Qna not found");
+    QNA_NOT_FOUND(416,"Qna not found"),
+    NICKNAME_EXIST(417,"NickName is exists"),
+    PHONE_NUMBER_EXIST(418,"phoneNumber is exists"),
+    EMAIL_EXIST(419,"email is exists");
+
 
 
 
