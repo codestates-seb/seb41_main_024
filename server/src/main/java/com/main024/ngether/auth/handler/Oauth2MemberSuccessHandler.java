@@ -101,9 +101,9 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("http")
+                .scheme("https")
                 //.path("/login/oauth2/code/google")
-                .host("localhost")
+                .host("b1aa-124-5-21-217.jp.ngrok.io")
                 //.port(80)
                 .path("/receive-token.html")
                 .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
