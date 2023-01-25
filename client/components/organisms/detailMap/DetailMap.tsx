@@ -11,10 +11,7 @@ export interface MapProps {
   longitude: number;
 }
 
-export default function DetailMap({
-  latitude = 37.4961,
-  longitude = 126.9891,
-}: MapProps) {
+export default function DetailMap({ latitude, longitude }: MapProps) {
   useEffect(() => {
     window.kakao.maps.load(() => {
       const container = document.getElementById('map');

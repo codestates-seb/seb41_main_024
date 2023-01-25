@@ -6,7 +6,13 @@ import ChatGroup from '../../components/organisms/chatGroup/ChatGroup';
 
 import { ReactElement } from 'react';
 import ChatRoomLayout from '../../components/layout/chatRoomLayout/ChatRoomLayout';
-const chatDummy: any = [
+interface chatMessageType {
+  thumbSrc: string | null;
+  nick: string | null;
+  message: string;
+  time: string;
+}
+const chatDummy: chatMessageType = [
   {
     thumbSrc: null,
     nick: null,

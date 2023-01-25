@@ -1,0 +1,42 @@
+spring:
+  freemarker:
+    cache: false
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: false
+    hibernate:
+      ddl-auto: none
+
+
+
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    #jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    #jdbc:mysql://localhost:3306/main?serverTimezone=Asia/Seoul
+    username: admin
+    password: qwer1234
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 40
+  refresh-token-expiration-minutes: 420
+logging.level:
+  org.hibernate.SQL: debug
+  org:
+    hibernate:
+      type:
+        descriptor:
+          sql:
+            org.hibernate.type.descriptor.sql.BasicBinder: trace
+    springframework:
+      web.servlet: debug
+server:
+ servlet:
+   encoding:
+     force-response: true

@@ -1,13 +1,30 @@
-export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
+import { setDefaultCoordsAndAddress } from './kakaoMap';
+
+interface getCurrentLocationPropsType {
+  setLocation: (item: {}) => void;
+  setLocationError: () => void;
+  center: { lat: number; lng: number };
+}
+export const getCurrentLocation = (
+  setLocation: getCurrentLocationPropsType['setLocation'],
+  setLocationError: getCurrentLocationPropsType['setLocationError']
+) => {
   const geoLocationOptions = { enableHighAccuracy: true };
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log(position);
-
         let lat = position.coords.latitude;
         let lng = position.coords.longitude;
-        setLocation({ lat, lng });
+        const center = { lat, lng };
+        // setLocation(center);
+        setDefaultCoordsAndAddress(center, (result, status) => {
+          if (status === kakao.maps.services.Status.OK) {
+            let detailAddr = !!result[0].address.address_name
+              ? result[0].address.address_name
+              : result[0].road_address.address_name;
+            setLocation({ ...center, address: detailAddr });
+          }
+        });
       },
       setLocationError,
       geoLocationOptions

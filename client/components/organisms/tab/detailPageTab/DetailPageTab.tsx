@@ -39,17 +39,16 @@ const DetailPageTab = ({ productData }: productDataProps) => {
             높으니 거래를 자제해 주시고 고객센터로 신고해주시기 바랍니다.
           </p>
           <main className="mt-6 text-base text-center">
-            {productData.content}
+            {productData?.content}
           </main>
         </div>
       </section>
       <section id="section-1" className="px-2 py-4">
         {/* 🍉 카카오 지도 */}
         <DetailMap
-          latitude={productData.latitude}
-          longitude={productData.longitude}
+          latitude={productData?.latitude}
+          longitude={productData?.longitude}
         />
-        {/* <Img src="/detail/map.svg" alt="지도" /> */}
       </section>
       <section id="section-2" className="px-2 py-4">
         <p className="text-base">주변 상품</p>

@@ -70,25 +70,13 @@ public class SecurityConfiguration {
                 .logout()
                 .logoutUrl("/auth/logout") //logout 처리 url
                 .and()
-                //.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
-                .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/**").permitAll()
-                        .antMatchers(HttpMethod.POST, "/api/members").permitAll()
-                        .antMatchers(HttpMethod.GET, "/auth/login").permitAll()
-                        .anyRequest().hasAnyRole("ADMIN", "USER"))
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
                 .oauth2Login()//OAuth2 로그인 시작
                 .userInfoEndpoint()//로그인 성공시 사용자 정보를 가져옴
                 .userService(customOAuth2UserService); //로그인 성공 후 oauth2userservice 호출
         http
                 .oauth2Login()
                 .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository));//oauth2 인증 성공 후처리 handler 호출
-                /*
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository))  // (1)
-                );
-
-                 */
-
         return http.build();
     }
     @Bean
@@ -100,8 +88,8 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE","OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "content-type", "x-auth-token", "Refresh"));
-        configuration.setExposedHeaders(Arrays.asList("x-auth-token","Authorization","Refresh"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("x-auth-token","Authorization","Refresh","heart-beat"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

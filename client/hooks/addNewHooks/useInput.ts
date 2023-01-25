@@ -1,12 +1,11 @@
 import { useMutation, UseMutateFunction } from '@tanstack/react-query';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { useState, useCallback, useRef } from 'react';
-import { inputType, uploadPostType } from './useInputType';
+import { inputType, uploadPostType, searchUseInputType } from './useInputType';
 
-function useInput(
-  initialValue: inputType,
-  mutate: UseMutateFunction<any, unknown, any, unknown>
-) {
+
+function useInput(initialValue: inputType & searchUseInputType) {
+
   const [inputValue, setInputValue] = useState(initialValue);
 
   /* const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,24 +21,8 @@ function useInput(
       [name]: value,
     });
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    //토큰 일단 하드코딩했습니다.
-    const refreshToken = process.env.NEXT_PUBLIC_REFRESH_TOKEN;
-    const accessToken = process.env.NEXT_PUBLIC_ACCESS_TOKEN;
 
-    const requestBody: uploadPostType = {
-      ...inputValue,
-      //아래 부분은 하드코딩했습니다.
-      latitude: '37.6213085353565',
-      longitude: '127.083296516416',
-      deadLine: '2023-01-23',
-      accessToken,
-      refreshToken,
-    };
-    mutate(requestBody);
-  };
-  return { inputValue, onChange, handleSubmit } as const;
+  return { inputValue, onChange } as const;
 }
 
 export default useInput;
