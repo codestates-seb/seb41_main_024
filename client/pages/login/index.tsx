@@ -23,6 +23,8 @@ const LoginPage = () => {
   const router = useRouter();
   const session = useSession();
 
+  console.log(session);
+
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [form, setForm] = useState({
     email: '',
@@ -75,6 +77,7 @@ const LoginPage = () => {
       const isNewUser = !res.data.filter(
         (user: { email?: string }) => user.email === session?.data?.user?.email
       );
+      console.log(isNewUser);
       if (isNewUser) {
         // DB에 해당 이메일 없으면
         // 회원가입 시키고
@@ -87,18 +90,10 @@ const LoginPage = () => {
       }
       // 자체 로그인 진행
       setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
-      handleLogin();
+      console.log(form);
+      mutate();
     });
   };
-
-  // if (data) {
-  //   Cookies.set('access_token', data.headers.authorization);
-  //   Cookies.set('refresh_token', data.headers.refresh);
-  //   Cookies.set('memberId', data.data.memberId);
-  //   Cookies.set('nickName', data.data.nickName);
-  //   Cookies.set('locationId', data.data.locationId);
-  //   router.push('/');
-  // }
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
