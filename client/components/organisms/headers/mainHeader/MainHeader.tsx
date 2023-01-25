@@ -7,7 +7,7 @@ import { ReactComponent as NavigatorIcon } from '../../../../public/header/navig
 import { ReactComponent as Logo } from '../../../../public/logos/logoRow.svg';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
-import { mainHeaderType } from './mainHeader';
+import { mainHeaderType } from './mainHeaderType';
 import { nextTick } from 'process';
 
 const MainHeader = ({
@@ -55,7 +55,7 @@ const MainHeader = ({
           <>
             <div className="flex flex-col items-center m-4">
               <span className="text-primary text-bold">
-                {nickName || session.data.user.name}
+                {nickName || session?.data?.user?.name}
               </span>
               <Button
                 variant="contained"

@@ -65,7 +65,6 @@ const Index = ({
   const [locationError, setLocationError] = useState('');
   const [currentTab, setCurrentTab] = useState(0);
 
-
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
     if (newCurrentTab === 2) {
       // const sortedByTime = [...sharingLists]?.sort((a,b)=>)

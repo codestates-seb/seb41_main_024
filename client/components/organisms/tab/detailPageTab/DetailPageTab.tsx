@@ -53,7 +53,7 @@ const DetailPageTab = ({ productData }: productDataProps) => {
       </section>
       <section id="section-2" className="px-2 py-4">
         <p className="text-base">주변 상품</p>
-        <NearByList />
+        <NearByList sharingLists={[]} />
       </section>
     </div>
   );
