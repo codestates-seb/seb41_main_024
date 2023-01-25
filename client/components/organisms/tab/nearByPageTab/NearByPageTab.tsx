@@ -4,7 +4,7 @@ import BasicTabs from '../../../molecules/tab/BasicTabs';
 import NearByList from '../../nearByList/NearByList';
 const LABEL = ['거리순', '최신순'];
 
-const NearByPageTab = ({ sharingLists }) => {
+const NearByPageTab = ({ sharingLists }: any) => {
   const [currentTab, seCurrentTab] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {

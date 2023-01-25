@@ -2,7 +2,7 @@ export interface mainHeaderType {
   isLogin: boolean;
   nickName: string | undefined;
   logOutHandler: () => void;
-  session: {
+  session?: {
     data: {
       user: {
         name: string;
