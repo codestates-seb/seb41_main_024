@@ -46,6 +46,10 @@ const Chatroom = () => {
       });
   }, [roomId]);
 
+  useEffect(() => {
+    messagesEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages])
+
   const onChangeInput =  (e: React.ChangeEvent<HTMLTextAreaElement>) => { 
     setInput(e.target.value);
   }
@@ -60,7 +64,6 @@ const Chatroom = () => {
       );
       setInput('');
     }
-    messagesEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   const handleExitChatRoom = (): void => {
@@ -79,7 +82,7 @@ const Chatroom = () => {
   return (
     <div>
       <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
-      <div className='left-2/4 mt-3 translate-x-[-50%] fixed max-w-[642px] min-w-[372px] w-[80%] px-[3rem] rounded'>
+      <div className='left-2/4 mt-3 translate-x-[-50%] fixed w-[604px] min-w-[372px] pl-[1.5rem] pr-[2.5rem] rounded'>
         <Link href={`/nearby/${roomId}`}>
           <ChatItem
             thumbnail={''}
@@ -91,9 +94,9 @@ const Chatroom = () => {
           />
         </Link>
       </div>
-      <div className="bg-primary pt-[90px] max-h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
+      <div className="bg-primary pt-[90px] h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
         <ChatGroup chatData={messages} />
-        <div className="h-[9rem]" ref={messagesEndRef} />
+        <div className="h-[5rem]" ref={messagesEndRef} />
       </div>
       <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
         <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
