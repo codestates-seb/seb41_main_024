@@ -115,7 +115,7 @@ const AddNewPage = () => {
       onSuccess: (data) => {
         axios({
           url: `https://ngether.site/chat/room/${data.data.boardId}`,
-          method: 'post',
+          method: 'get',
           headers: token
         });
       },
