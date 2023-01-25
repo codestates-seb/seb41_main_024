@@ -1,3 +1,4 @@
+import { SetStateAction } from 'react';
 import { kakaoMapItemType } from './../components/molecules/sharingListItem/sharingListItemType';
 
 interface getMapAndMarkerPropsType {
@@ -7,7 +8,7 @@ interface getMapAndMarkerPropsType {
     mapLevel?: number;
     address?: string;
   };
-  setTargetCoord: (item: {}) => void;
+  setTargetCoord: React.Dispatch<SetStateAction<{ lat: number; lng: number; address: string; }>>;
 }
 
 export const getMapAndMarker = async (

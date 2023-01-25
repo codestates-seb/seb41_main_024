@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import NearByPageTab from '../../components/organisms/tab/nearByPageTab/NearByPageTab';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import {
   getPostsInSpecifiedLocation,
@@ -30,7 +29,7 @@ const Index = ({
   const [mapCenter, setMapCenter] = useState({
     lat,
     lng,
-    address: argumentOfLocation?.address,
+    address: argumentOfLocation?.locationData?.address,
   });
   console.log('default', sharingLists);
   const [sharingListsSortedByTime, setSharingListsSortedByTime] = useState();
@@ -100,7 +99,7 @@ const Index = ({
 };
 export default Index;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: any) {
   const {
     range: defaultRange,
     category: defaultCategory,
