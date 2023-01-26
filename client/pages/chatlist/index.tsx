@@ -19,7 +19,7 @@ const ChatList = () => {
       {chatListData &&
         chatListData.map((chatItem: any) => {
           return (
-            <Link href={`/chat/${chatItem.roomId}`}>
+            <Link href={`/chatroom/${chatItem.roomId}`}>
               <ChatItem
                 key={chatItem.roomId}
                 thumbnail={ProductImg}

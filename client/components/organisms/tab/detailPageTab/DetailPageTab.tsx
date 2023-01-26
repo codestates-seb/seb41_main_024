@@ -4,7 +4,7 @@ import Img from '../../../atoms/image/Image';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
 import NearByList from '../../nearByList/NearByList';
 import DetailMap from '../../detailMap/DetailMap';
-import { productDataProps } from './detailPageTab';
+import { productDataProps } from './detailPageTabType';
 
 const LABEL = ['상세설명', '거래위치', '주변상품'];
 

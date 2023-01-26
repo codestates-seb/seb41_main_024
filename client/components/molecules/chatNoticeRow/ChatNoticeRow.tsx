@@ -1,5 +1,5 @@
 import React from 'react';
-import { chatNoticeRowType } from './chatNoticeRow';
+import { chatNoticeRowType } from './chatNoticeRowType';
 
 const ChatNoticeRow = ({message}: chatNoticeRowType ) => {
   return (
