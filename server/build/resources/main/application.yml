@@ -6,12 +6,10 @@ spring:
   freemarker:
     cache: false
   jpa:
-    properties:
-      hibernate:
-        format_sql: true
     defer-datasource-initialization: false
     hibernate:
       ddl-auto: none
+    open-in-view: false
   security:
     oauth2:
       client:
@@ -40,13 +38,7 @@ jwt:
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
 logging.level:
-  org.hibernate.SQL: debug
   org:
-    hibernate:
-      type:
-        descriptor:
-          sql:
-            org.hibernate.type.descriptor.sql.BasicBinder: trace
     springframework:
       web.servlet: debug
 server:
