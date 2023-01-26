@@ -115,7 +115,7 @@ public class ChatService {
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             boolean check = false;
             for (ChatMessage chatMessage : chatMessageList) {
-                if (!Objects.equals(chatMessage.getReadMember(), "")) {
+                if (chatMessage.getReadMember() != null) {
                     String[] name = chatMessage.getReadMember().split(",");
                     for (int i = 0; i < name.length; i++) {
                         if (Objects.equals(name[i], member.getNickName())) {
