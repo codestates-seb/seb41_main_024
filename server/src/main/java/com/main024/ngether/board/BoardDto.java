@@ -28,6 +28,7 @@ public class BoardDto {
         private String longitude;
         private LocalDate deadLine;
         private String productsLink;
+        private String imageLink;
     }
 
     @Getter
@@ -42,6 +43,7 @@ public class BoardDto {
         private String longitude;
         private LocalDate deadLine;
         private String productsLink;
+        private String imageLink;
 
 
         public void setBoardId(Long boardId) {
@@ -71,6 +73,7 @@ public class BoardDto {
         private LocalDate deadLine;
         private String productsLink;
         private Board.BoardStatus boardStatus;
+        private String imageLink;
     }
 
     @Getter
