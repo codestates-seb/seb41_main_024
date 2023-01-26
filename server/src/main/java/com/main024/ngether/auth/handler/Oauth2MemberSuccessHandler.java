@@ -113,12 +113,12 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("http")
+                .scheme("https")
                 //.path("/login/oauth2/code/google")
-                .host("localhost")
-                .port(3443)
+                .host("seb41-main-024.vercel.app")
+                //.port(3443)
                 .path("/google")
-                //.queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
+                .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
                 .build()
                 .toUri();
     }
