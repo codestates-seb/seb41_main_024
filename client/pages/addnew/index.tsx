@@ -113,10 +113,11 @@ const AddNewPage = () => {
 
     mutate(requestBody, {
       onSuccess: (data) => {
-        axios.post(
-          `https://ngether.site/chat/room/${data.data.boardId}`,
-          token
-        );
+        axios({
+          url: `https://ngether.site/chat/room/${data.data.boardId}`,
+          method: 'get',
+          headers: token
+        });
       },
     });
   };
@@ -124,7 +125,7 @@ const AddNewPage = () => {
   const fetchOgData = async (url: string) => {
     try {
       await axios
-        .get(`https://localhost:3443/api/fetch-og-data?url=${url}`)
+        .get(`/api/fetch-og-data?url=${url}`)
         .then((res) => setProductImg(res.data.image.url));
       console.log(productImg);
     } catch (error) {

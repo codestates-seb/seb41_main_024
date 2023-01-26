@@ -1,4 +1,8 @@
 spring:
+  mvc:
+    hidden-method:
+      filter:
+        enabled: true
   freemarker:
     cache: false
   jpa:
