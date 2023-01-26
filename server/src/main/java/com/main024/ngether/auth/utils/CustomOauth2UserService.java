@@ -79,7 +79,7 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
         member.setNickName(attributes.getName());
         member.setPw(getPasswordEncoder().encode("oauth2member!"));
         List<String> roles = List.of("USER");
-        //member.setRoles(roles);
+        member.setRoles(roles);
         return memberRepository.save(member);
     }
 }
