@@ -10,7 +10,7 @@ export type inputType = TextFieldProps & {
   children?: React.ReactNode;
   select?: boolean;
   defaultValue?: string;
-  selectProps?: {
+  selectprops?: {
     native: boolean;
   };
   rows?: number;
