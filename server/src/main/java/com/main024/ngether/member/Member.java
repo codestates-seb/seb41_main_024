@@ -37,7 +37,7 @@ public class Member {
     @Column(unique = true)
     private String phoneNumber;
     @JsonIgnore
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
     @JsonIgnore
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
