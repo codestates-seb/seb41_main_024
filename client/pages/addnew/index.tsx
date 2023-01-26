@@ -43,8 +43,17 @@ const AddNewPage = () => {
   const [searchAddress, setSearchAddress] = useState('');
 
   const { isLoading, error, mutate } = useMutation(uploadPost, {
-    onSuccess: (data) => {
-      axios.post(`https://ngether.site/chat/room/${data.data.boardId}`, token);
+    onSuccess: async (data) => {
+      await axios({
+        url: `https://ngether.site/chat/room/${data.data.boardId}`,
+        method: 'get',
+        headers: token
+      });
+      await axios({
+        url: `https://ngether.site/chat/room/enter/${data.data.boardId}`,
+        method: 'get',
+        headers: token
+      });
       router.push('/');
     },
 
@@ -111,15 +120,7 @@ const AddNewPage = () => {
       refreshToken: token.refresh,
     };
 
-    mutate(requestBody, {
-      onSuccess: (data) => {
-        axios({
-          url: `https://ngether.site/chat/room/${data.data.boardId}`,
-          method: 'get',
-          headers: token
-        });
-      },
-    });
+    mutate(requestBody);
   };
 
   const fetchOgData = async (url: string) => {

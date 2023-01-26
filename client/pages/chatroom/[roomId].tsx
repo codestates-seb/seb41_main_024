@@ -34,6 +34,8 @@ const Chatroom = () => {
   const {stompClient, messages, members, roomId} = useWebSocketClient(HEADER_TOKEN);
   const router = useRouter();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const isMemeber = members.includes(Cookies.get('nickName'))
   
   useEffect(() => {
     if(roomId)
@@ -83,8 +85,8 @@ const Chatroom = () => {
   return (
     <div>
       <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
-      {!messages[0] && <ForbiddenMessage />}
-      {messages[0] && (
+      {!isMemeber && <ForbiddenMessage />}
+      {isMemeber && (
         <>
           <div className='left-2/4 mt-3 translate-x-[-50%] fixed w-[604px] min-w-[372px] pl-[1.5rem] pr-[2rem] rounded'>
             <Link href={`/nearby/${roomId}`}>
