@@ -118,6 +118,11 @@ const AddNewPage = () => {
           method: 'get',
           headers: token
         });
+        axios({
+          url: `https://ngether.site/chat/room/enter/${roomId}`,
+          method: 'get',
+          headers: token
+        });
       },
     });
   };
