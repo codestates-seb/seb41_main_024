@@ -17,10 +17,11 @@ import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMe
 // 따라서 게시물 작성 시 리턴되는 게시물 아이디를 이용해 바로 채팅방 생성 api로 호출해주시면 될 것 같습니다.
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
 
-let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
-let IS_ROOM_OWER = false
 
 const Chatroom = () => { 
+  let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
+  let IS_ROOM_OWER = false;
+  
   const [input, setInput] = useState('')
   const [sharingData, setSharingData] = useState({
     thumbnail: '',
