@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
-import { signIn, useSession } from 'next-auth/react';
 import { getAllUsers } from '../../api/members';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
@@ -20,7 +19,6 @@ const LoginPage = () => {
   const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
 
   const router = useRouter();
-  const session = useSession();
 
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [form, setForm] = useState({
@@ -71,26 +69,6 @@ const LoginPage = () => {
 
   const handleSocialLogin = async () => {
     router.push('https://ngether.site/oauth2/authorization/google');
-    // await signIn('google', { callbackUrl: '/google' });
-    // getAllUsers().then((res) => {
-    //   const isNewUser = !res.data.filter(
-    //     (user: { email?: string }) => user.email === session?.data?.user?.email
-    //   );
-    //   if (isNewUser) {
-    //     // DB에 해당 이메일 없으면
-    //     // 회원가입 시키고
-    //     requestSignUp({
-    //       pw: 'qqqqqq-123',
-    //       nickName: session?.data?.user?.name,
-    //       email: session?.data?.user?.email,
-    //       phoneNumber: '010-9601-1712',
-    //     });
-    //   }
-    //   // 자체 로그인 진행
-    //   session?.data?.user?.email &&
-    //     setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
-    //   mutate();
-    // });
   };
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -133,7 +111,6 @@ const LoginPage = () => {
           >
             로그인
           </Button>
-
           <Button
             className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
             onClick={() => router.push('/signup')}
