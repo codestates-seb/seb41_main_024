@@ -14,6 +14,7 @@ import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
 import Divider from '@mui/material/Divider';
+import axios from 'axios';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -49,7 +50,7 @@ const LoginPage = () => {
     },
   });
 
-  const { data, error, mutate } = useMutation(() => requestLogin(form), {
+  const { data, error, mutate } = useMutation(requestLogin, {
     onSuccess: (data) => {
       data.headers.authorization &&
         Cookies.set('access_token', data.headers.authorization);
@@ -66,6 +67,13 @@ const LoginPage = () => {
   });
 
   const handleLogin = async () => {
+    const data = await axios({
+      method: 'post',
+      data: { pw },
+      url: '/api/passwordHash',
+    });
+    console.log(data);
+
     await mutate();
   };
 
