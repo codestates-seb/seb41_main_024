@@ -20,13 +20,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -246,27 +244,22 @@ public class ChatService {
                 count++;
             }
         }
+
         chatRoomMembersRepository.saveAll(chatRoomMembersList);
 
         return count;
     }
-//    @Async
-//    public boolean checkNewMessages() throws InterruptedException {
-//        try {
-//            while (true) {
-//                List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
-//                for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
-//                    if (chatRoomMember.getUnreadMessageCount() > 0) {
-//                        break;
-//                    }
-//                }
-//                return true;
-//                Thread.sleep(1000L);
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//
-//
-//        }
-//    }
+    @Async
+    public Boolean checkNewMessages(Member member) throws InterruptedException {
+            while (true) {
+                List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+                for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
+                    if (chatRoomMember.getUnreadMessageCount() > 0) {
+                           return true;
+                    }
+                }
+                Thread.sleep(1000L);
+            }
+
+    }
 }

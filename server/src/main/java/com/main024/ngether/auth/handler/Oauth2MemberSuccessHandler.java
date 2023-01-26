@@ -101,11 +101,11 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("https")
+                .scheme("http")
                 //.path("/login/oauth2/code/google")
-                .host("b1aa-124-5-21-217.jp.ngrok.io")
-                //.port(80)
-                .path("/receive-token.html")
+                .host("localhost")
+                .port(3443)
+                .path("/google")
                 .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
                 .build()
                 .toUri();

@@ -12,6 +12,7 @@ spring:
     defer-datasource-initialization: false
     hibernate:
       ddl-auto: none
+    open-in-view: false
   security:
     oauth2:
       client:

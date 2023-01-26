@@ -52,7 +52,7 @@ public class MemberService {
         if(getLoginMember() == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
 
-        ;
+
 
         Member findMember = findVerifiedMember(getLoginMember().getMemberId());
         String name = findMember.getNickName();
