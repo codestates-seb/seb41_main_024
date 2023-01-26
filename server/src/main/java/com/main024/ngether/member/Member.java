@@ -99,8 +99,9 @@ public class Member {
     }
 
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<String> roles = new ArrayList<>();
+
 
     public Member update(String email, String name){
         this.email = email;
