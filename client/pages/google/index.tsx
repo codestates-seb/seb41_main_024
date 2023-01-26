@@ -119,7 +119,7 @@ const GoogleLoginPage = () => {
             value={nickname}
             onChange={onChange}
           />
-          <Label htmlFor={'nickname-input'} />
+          <Label htmlFor={'nickname-input'} labelText={''} />
           <Input
             id="phonenumber-input"
             name="phonenumber"
@@ -128,7 +128,7 @@ const GoogleLoginPage = () => {
             value={phonenumber}
             onChange={onChange}
           />
-          <Label htmlFor={'phonenumber-input'} />
+          <Label htmlFor={'phonenumber-input'} labelText={''} />
 
           <p className="text-[#dd3030]"></p>
 
