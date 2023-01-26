@@ -126,9 +126,10 @@ public class ChatService {
                 if (chatMessage.getUnreadCount() != 0 && !check) {
                     chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
                     chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
+                    chatMessageRepository.save(chatMessage);
                 }
             }
-            chatMessageRepository.saveAll(chatMessageList);
+
             sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
                     .message("")
                     .type(ChatMessage.MessageType.REENTER)
