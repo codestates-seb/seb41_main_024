@@ -9,7 +9,7 @@ interface sharingListsType {
 const NearByList = ({ sharingLists }: sharingListsType) => {
   return (
     <div className="grid grid-cols-2 gap-4 m-5 w-fit">
-      {sharingLists.length === 0 && <NoContent />}
+      {sharingLists?.length === 0 && <NoContent />}
       {sharingLists?.map((sharingItem: ListItemPropsType) => (
         <SharingListItem
           src={sharingItem?.imageLink || base}
