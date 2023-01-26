@@ -1,11 +1,11 @@
 export interface inputType {
-  title?: string;
+  title: string;
   price?: number;
-  productsLink?: string;
-  category?: string;
-  maxNum?: string;
-  content?: string;
-  deadLine?: string;
+  productsLink: string;
+  category: string;
+  maxNum: number;
+  content: string;
+  deadLine: string | number | Date;
   searchOption?: string;
 }
 export interface searchUseInputType {
