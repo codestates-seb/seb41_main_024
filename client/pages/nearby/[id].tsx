@@ -84,7 +84,6 @@ export default function ProductDetail({ id }: any) {
   };
 
   const handleGether = () => {
-    axios.get(`https://ngether.site/chat/room/enter/${id}`, {headers: {Authorization: Cookies.get('access_token')}});
     goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
   };
 
