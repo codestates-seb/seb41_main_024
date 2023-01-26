@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@mui/material';
 import { Fragment } from 'react';
-import {reportChatDetailType} from './reportChatDetail'
+import {reportChatDetailType} from './reportChatDetailType'
 
 const ReportChatDetail = ({handleGetChatLog, chatLog}:reportChatDetailType) => {
   console.log(chatLog)

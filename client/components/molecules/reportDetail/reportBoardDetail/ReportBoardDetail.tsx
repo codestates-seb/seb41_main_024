@@ -1,5 +1,5 @@
 import React from 'react';
-import {reportBoardDetailType} from './reportBoardDetail'
+import {reportBoardDetailType} from './reportBoardDetailType'
 import { Button } from '@mui/material';
 
 const ReportBoardDetail = ({handleNavigate}:reportBoardDetailType) => {
