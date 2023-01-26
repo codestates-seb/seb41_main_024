@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
@@ -64,8 +65,8 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .orElse(attributes.toEntity());
         return memberRepository.save(member);
     }
-
-    private Member saveMember(OauthAttributes attributes){
+    @Transactional
+    Member saveMember(OauthAttributes attributes){
         /*
         Member member = Member.builder()
                 .email(attributes.getEmail())
