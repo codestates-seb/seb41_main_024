@@ -118,7 +118,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .host("localhost")
                 .port(3443)
                 .path("/google")
-                .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
+                //.queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
                 .build()
                 .toUri();
     }
