@@ -1,4 +1,5 @@
 export interface reportChatDetailType {
-  chatLog: {}[] | undefined
-  handleGetChatLog: ()=>void
+  id: number;
+  token: {Authorization : string | undefined};
+  handleGetChatLog: Function;
 }

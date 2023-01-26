@@ -15,21 +15,29 @@ import Cookies from 'js-cookie';
 
 const DUMMY_REPORT = [
   {type: '게시글', reportId: 1, id: 1, title: '주식 리빙방 운영합니다'},
-  {type: '채팅방', reportId: 2, id: 22, title: '채팅 사기 치려고 합니다'}
+  {type: '채팅방', reportId: 2, id: 7, title: '채팅 사기 치려고 합니다'}
 ];
 
 
 const ReportWork = () => {
-  const token = Cookies.get('access_token')
+  const token = Cookies.get('access_token');
   const router = useRouter();
-  const [chatLog, setChatLog] = useState();
-  
+
   const handleNavigate = (id:number) => {
     router.push(`/nearby/${id}`)
   }
+
   const handleGetChatLog = (id: number, token: {Authorization : string | undefined}) => {
+    const CHAT_DATA = {
+      chatLog: [],
+      chatMembers: []
+    }
     axios.get(`https://ngether.site/chat/room/messages/${id}`, {headers : token})
-    .then(res => setChatLog(res.data.map(transDateFormChatMessage)));
+    .then(res => CHAT_DATA.chatLog = res.data)
+    axios.get(`https://ngether.site/chat/room/${id}/memberList`, {headers : token})
+    .then(res => CHAT_DATA.chatMembers = res.data.map((member: { memberId: number, nickName: string; }) => member.nickName))
+
+    return CHAT_DATA
   }
 
   return (
@@ -49,7 +57,12 @@ const ReportWork = () => {
                   </AccordionSummary>
                   <AccordionDetails>
                     {report.type === '게시글' && <ReportBoardDetail handleNavigate={()=>handleNavigate(report.reportId)}/>} 
-                    {report.type === '채팅방' && <ReportChatDetail handleGetChatLog={() => handleGetChatLog(report.reportId, {Authorization : token})} chatLog={chatLog}/>} 
+                    {report.type === '채팅방' 
+                    && <ReportChatDetail
+                        id={report.id}
+                        token={{Authorization: token}}
+                        handleGetChatLog={handleGetChatLog}
+                    />} 
                   </AccordionDetails>
                 </Accordion>
               </li>
