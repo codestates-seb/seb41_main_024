@@ -20,10 +20,10 @@ interface getPostType {
   category: string;
 }
 interface searchPostsByTitleType {
-    type: string;
-    keyword: string;
-    page: number;
-    size: number;
+  type: string;
+  keyword: string;
+  page: number;
+  size: number;
 }
 
 const REQUEST_URL = 'https://ngether.site';
@@ -55,7 +55,7 @@ export const getPosts = async ({
 export const getPostsInSpecifiedLocation = async ({
   locationData,
   range = 1,
-  category,
+  category = 'product',
   page = 1,
   size = 300,
 }: any) => {
@@ -75,7 +75,7 @@ export const searchPostsByTitle = async ({
   keyword,
   page = 1,
   size = 10,
-}:searchPostsByTitleType) => {
+}: searchPostsByTitleType) => {
   const url = `${REQUEST_URL}/api/boards/search?type=${type}&keyword=${encodeURIComponent(
     keyword
   )}&page=${page}&size=${size}`;
