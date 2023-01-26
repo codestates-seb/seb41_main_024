@@ -70,7 +70,8 @@ const LoginPage = () => {
   };
 
   const handleSocialLogin = async () => {
-    await signIn('google', { callbackUrl: '/google' });
+    router.push('https://ngether.site/oauth2/authorization/google');
+    // await signIn('google', { callbackUrl: '/google' });
     // getAllUsers().then((res) => {
     //   const isNewUser = !res.data.filter(
     //     (user: { email?: string }) => user.email === session?.data?.user?.email
@@ -140,7 +141,7 @@ const LoginPage = () => {
             회원가입
           </Button>
           <Divider />
-          <Button className="h-14 mt-4" onClick={handleSocialLogin}>
+          <Button className="h-14 mt-4" onClick={() => handleSocialLogin()}>
             <div
               style={{ width: '100%', height: '100%', position: 'relative' }}
             >
