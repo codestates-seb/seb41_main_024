@@ -4,7 +4,7 @@ import Label from '../../components/atoms/label/Label';
 import TextField from '../../components/molecules/passwordTextField/TextField';
 import { useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
@@ -17,83 +17,49 @@ import Divider from '@mui/material/Divider';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-// export async function getServerSideProps(context: any) {
-//   const { id } = context.params;
-//   console.log(context.query);
-//   return {
-//     props: {
-//       id,
-//     },
-//   };
-// }
-
 const GoogleLoginPage = () => {
   const REQUEST_URL = 'https://ngether.site';
   const router = useRouter();
   const session = useSession();
 
+
   console.log(router);
   console.log(router.query);
-  // console.log('session', session.data);
 
   useEffect(() => {
     console.log(window.location);
   });
-  // function isFirstSocialLogin() {
-  //   return axios.post(
-  //     `${REQUEST_URL}/api/어쩌구`,
-  //     {
-  //       email: session.user.email,
-  //     },
-  //     {
-  //       headers: {
-  //         Authorization: Cookies.get('access_token'),
-  //       },
-  //     }
-  //   );
-  // }
 
-  function requestSocialLogin(form: object) {
-    return axios.post(`${REQUEST_URL}/api/reports`, form, {
-      headers: {
-        Authorization: Cookies.get('access_token'),
-        Refresh: Cookies.get('refresh_token'),
-      },
-    });
-  }
 
-  useEffect(() => {
-    // 최초 로그인인지 판별하는 요청 (T/F)
-    // axios
-    //   .get(`${REQUEST_URL}/api/어쩌구`, {
-    //     headers: {
-    //       Authorization: Cookies.get('access_token'),
-    //       Refresh: Cookies.get('refresh_token'),
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     // 최초 로그인이 아닐 경우 =>
-    //     // if (!res.data.isFirstSocialLogin) {
-    //     //   data.headers.authorization &&
-    //     //     Cookies.set('access_token', data.headers.authorization);
-    //     //   data.headers.refresh &&
-    //     //     Cookies.set('refresh_token', data.headers.refresh);
-    //     //   Cookies.set('memberId', data.data.memberId);
-    //     //   Cookies.set('nickName', data.data.nickName);
-    //     //   Cookies.set('locationId', data.data.locationId);
-    //     //   router.push('/');
-    //     // }
-    //   });
-  });
+Cookies.set('access_token', router.query.access_token)
+Cookies.set('refresh_token', router.query.access_token);
+
+  // 두 번째 소셜 로그인일 경우
+  if (!router.query.initial) {
+    axios.get(`${REQUEST_URL}/api/uuuser`).then((res) => {
+        Cookies.set('memberId', res.data.memberId);
+        Cookies.set('nickName', res.data.nickName);
+        Cookies.set('locationId', res.data.locationId);
+        router.push('/');
+      })
+    }
+  
 
   const [form, setForm] = useState({
-    nickname: session?.data?.user?.name,
+    nickname: '',
     phonenumber: '',
   });
 
   // console.log(form);
   const { nickname, phonenumber } = form;
+
+  const handleSocialEdit = () => {
+    axios.patch(`${REQUEST_URL}/api/firstuuuser`, form).then((res) => {
+      Cookies.set('memberId', res.data.memberId);
+      Cookies.set('nickName', res.data.nickName);
+      Cookies.set('locationId', res.data.locationId);
+      router.push('/');
+    })
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -129,43 +95,13 @@ const GoogleLoginPage = () => {
             onChange={onChange}
           />
           <Label htmlFor={'phonenumber-input'} labelText={''} />
-
           <p className="text-[#dd3030]"></p>
-
           <Button
             className="h-14 mt-4 bg-primary text-white rounded"
-            onClick={() => router.push('/')}
+            onClick={handleSocialEdit}
           >
             수정하기
           </Button>
-
-          {/* <Input
-          id="email-input"
-          name="email"
-          type={'text'}
-          label="이메일"
-          value={email}
-          onChange={onChange}
-        />
-        <Label htmlFor={'email-input'} labelText={emailRegexText} />
-        <TextField
-          id="password-input"
-          name="pw"
-          label="패스워드"
-          value={pw}
-          onChange={onChange}
-        />
-        <Label htmlFor={'password-input'} labelText={passwordRegexText} />
-        <p className="text-[#dd3030]">{loginErrorMessage}</p>
-        <Button className="h-14 mt-4 bg-primary text-white rounded" onClick={}>
-          로그인
-        </Button>
-        <Button
-          className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
-          onClick={() => router.push('/signup')}
-        >
-          회원가입
-        </Button> */}
         </div>
       </div>
     </div>
