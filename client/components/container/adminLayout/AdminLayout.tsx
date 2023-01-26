@@ -1,5 +1,5 @@
 import MainHeader from '../../organisms/headers/mainHeader/MainHeader';
-import { defaultLayoutPropsType } from './defaultLayout';
+import { defaultLayoutPropsType } from '../defalutLayout/defaultLayoutType';
 import Navigation from '../../organisms/bottomNav/BottomNav';
 import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import basicTheme from '../../../theme/basic';
