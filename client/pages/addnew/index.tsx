@@ -10,7 +10,7 @@ import Select from '@mui/material/Select';
 import { uploadPost } from '../../api/post';
 import { useMutation } from '@tanstack/react-query';
 import useInput from '../../hooks/addNewHooks/useInput';
-import { Box } from '@mui/material';
+import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 import { uploadPostType } from '../../hooks/addNewHooks/useInputType';
 import { Cookies } from 'react-cookie';
 import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
@@ -28,6 +28,7 @@ import {
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 import axios from 'axios';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
+import { validatePostInput } from '../../utils/uploadPost/postInputValidation';
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
   { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
@@ -42,12 +43,18 @@ const AddNewPage = () => {
     lng: 0,
     address: '',
   });
-  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const [center, setCenter] = useState({ lat: 0, lng: 0, address: '' });
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
-
+  const [open, setOpen] = useState(false);
+  const [alertOption, setAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'error', value: '' });
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: async (data) => {
+      setOpen(true);
+      setAlertOption({ severity: 'success', value: '게시글이 등록되었습니다' });
       await axios({
         url: `https://ngether.site/chat/room/${data.data.boardId}`,
         method: 'get',
@@ -58,22 +65,23 @@ const AddNewPage = () => {
         method: 'get',
         headers: token,
       });
-      router.push('/');
+      console.log(data);
+
+      router.push(`/nearby/${data.data.boardId}`);
     },
 
     onError: (error) => {
       console.log(error);
-      alert(error);
+      alert('게시글 등록에 실패했습니다.');
     },
   });
   const cookie = new Cookies();
-  const [imgSrc, setImgSrc] = useState<string | undefined>('');
+  const [imageLink, setImageLink] = useState<string | undefined>(base);
   const { inputValue, onChange } = useInput({
     title: '',
-    price: 0,
     productsLink: '',
     category: 'product',
-    maxNum: '1',
+    maxNum: 2,
     content: '',
     deadLine: '',
   });
@@ -82,7 +90,7 @@ const AddNewPage = () => {
     price?: number;
     productsLink: string;
     category: string;
-    maxNum: string;
+    maxNum: number;
     content: string;
     deadLine: string;
     searchOption: string;
@@ -100,9 +108,10 @@ const AddNewPage = () => {
       ? setToken({ authorization, refresh })
       : router.push('/login');
   }, []);
+
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center]);
+  }, [center.lat, center.lng]);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
   const handleSearchAddress = (e: {
@@ -123,11 +132,30 @@ const AddNewPage = () => {
       address: targetCoord.address,
       accessToken: token.authorization,
       refreshToken: token.refresh,
-      imgSrc,
+      imageLink,
     };
-    // if(maxNum <1){}
-
+    const validation = validatePostInput({
+      title,
+      address: targetCoord?.address,
+      productsLink: encodeURIComponent(productsLink),
+      maxNum,
+      deadLine,
+      content,
+      setOpen,
+      setAlertOption,
+    });
+    if (!validation) return;
     mutate(requestBody);
+  };
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
 
   /* const fetchOgData = async (url: string) => {
@@ -167,7 +195,7 @@ const AddNewPage = () => {
           const value = $(el).attr('content');
           const checkUrl = value?.includes('https');
           if (key === 'image' && checkUrl) {
-            setProductImg(value);
+            setImageLink(value);
           }
         }
       });
@@ -182,7 +210,7 @@ const AddNewPage = () => {
             <Stack spacing={4}>
               <div id="map" className="w-[100%] h-[350px]"></div>
               <p>
-                <em>위치 검색 후 지도를 한 번 클릭해주세요!</em>
+                <em>상품을 나눌 위치를 지도에서 클릭해주세요</em>
               </p>
               <div className="flex width-[100%]">
                 <Input
@@ -204,7 +232,7 @@ const AddNewPage = () => {
                 name="address"
                 type="text"
                 label="쉐어링 위치"
-                value={targetCoord.address}
+                value={targetCoord.address || center.address}
                 disabled
               />
               <Label htmlFor={'title'} labelText={''} />
@@ -224,14 +252,16 @@ const AddNewPage = () => {
                 name="price"
                 type="number"
                 label="가격"
+                placeholder="총모집인원 x 상품가격"
                 value={price}
                 inputProps={{ min: 0 }}
                 onChange={onChange}
+                helperText="배송비를 포함한 가격을 입력해주세요"
               />
               <div className="flex items-center">
                 <img
                   className="h-40 w-40 mb-7 m-auto"
-                  src={productImg}
+                  src={imageLink}
                   alt={'상품이미지'}
                 />
                 <span>
@@ -291,6 +321,7 @@ const AddNewPage = () => {
                 id="content"
                 name="content"
                 label="내용"
+                placeholder="ex) 배송비 : 000원, 나눔 장소 : 00공원 "
                 value={content}
                 onChange={onChange}
                 rows={10}
@@ -305,6 +336,15 @@ const AddNewPage = () => {
               />
             </Stack>
           </FormControl>
+          <Snackbar
+            open={open}
+            autoHideDuration={4000}
+            onClose={handleClose}
+            className="bottom-[25%]"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+            <Alert severity={alertOption?.severity}>{alertOption?.value}</Alert>
+          </Snackbar>
         </div>
       </Box>
     </LoginChecker>
