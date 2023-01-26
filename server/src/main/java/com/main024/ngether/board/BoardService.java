@@ -65,6 +65,7 @@ public class BoardService {
         returnBoard.setProductsLink(board.getProductsLink());
         returnBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
         returnBoard.setCurNum(0);
+        returnBoard.setImageLink(board.getImageLink());
         member.addBoard(returnBoard);
         Board board1 = boardRepository.save(returnBoard);
 
@@ -123,6 +124,8 @@ public class BoardService {
                     .ifPresent(findBoard::setContent);
             Optional.ofNullable(board.getPrice())
                     .ifPresent(findBoard::setPrice);
+            Optional.ofNullable(board.getImageLink())
+                    .ifPresent(findBoard::setImageLink);
             if(board.getMaxNum() >= 2) {
                 Optional.ofNullable(board.getMaxNum())
                         .ifPresent(findBoard::setMaxNum);
