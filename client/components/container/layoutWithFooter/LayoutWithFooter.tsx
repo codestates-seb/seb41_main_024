@@ -6,12 +6,12 @@ import { StyledEngineProvider, ThemeProvider } from '@mui/material/styles';
 import basicTheme from '../../../theme/basic';
 import useLogin from '../../../hooks/common/useLogin';
 import Cookies from 'js-cookie';
-
-import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 //메인페이지, 마이페이지
 const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
   const { isLogin } = useLogin();
+  const router = useRouter();
   const nickName = Cookies.get('nickName');
 
   const handleLogOut = () => {
@@ -20,7 +20,7 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
     Cookies.remove('memberId');
     Cookies.remove('nickName');
     Cookies.remove('locationId');
-    signOut({ callbackUrl: '/' });
+    router.push('/');
   };
 
   return (

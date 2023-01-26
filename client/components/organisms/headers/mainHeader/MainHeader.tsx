@@ -9,9 +9,12 @@ import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import { mainHeaderType } from './mainHeaderType';
 import { nextTick } from 'process';
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
 
-const MainHeader = ({ isLogin, nickName, logOutHandler }: mainHeaderType) => {
+const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isLogin = Cookies.get('access_token');
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -46,20 +49,6 @@ const MainHeader = ({ isLogin, nickName, logOutHandler }: mainHeaderType) => {
         </div>
       </AppBar>
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        {isLogin && (
-          <>
-            <div className="flex flex-col items-center m-4">
-              <span className="text-primary text-bold">{nickName}</span>
-              <Button
-                variant="contained"
-                className="m-4"
-                onClick={logOutHandler}
-              >
-                로그아웃
-              </Button>
-            </div>
-          </>
-        )}
         {!isLogin && (
           <div className="flex justify-center items-center m-2">
             <Link href={'/login'}>
@@ -74,6 +63,21 @@ const MainHeader = ({ isLogin, nickName, logOutHandler }: mainHeaderType) => {
             </Link>
           </div>
         )}
+        {isLogin && (
+          <>
+            <div className="flex flex-col items-center m-4">
+              <span className="text-primary text-bold">{nickName}</span>
+              <Button
+                variant="contained"
+                className="m-4"
+                onClick={logOutHandler}
+              >
+                로그아웃
+              </Button>
+            </div>
+          </>
+        )}
+
         <DrawerListItem text={'마이페이지'} path={'/mypage'} />
       </DrawerList>
     </Fragment>
