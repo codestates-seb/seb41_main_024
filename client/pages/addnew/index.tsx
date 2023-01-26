@@ -119,7 +119,7 @@ const AddNewPage = () => {
           headers: token
         });
         axios({
-          url: `https://ngether.site/chat/room/enter/${roomId}`,
+          url: `https://ngether.site/chat/room/enter/${data.data.boardId}`,
           method: 'get',
           headers: token
         });
