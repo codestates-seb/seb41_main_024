@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
@@ -33,6 +34,7 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
         return new BCryptPasswordEncoder();
     }
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(request);
@@ -64,8 +66,8 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .orElse(attributes.toEntity());
         return memberRepository.save(member);
     }
-
-    private Member saveMember(OauthAttributes attributes){
+    @Transactional
+    Member saveMember(OauthAttributes attributes){
         /*
         Member member = Member.builder()
                 .email(attributes.getEmail())
@@ -79,7 +81,7 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
         member.setNickName(attributes.getName());
         member.setPw(getPasswordEncoder().encode("oauth2member!"));
         List<String> roles = List.of("USER");
-        //member.setRoles(roles);
+        member.setRoles(roles);
         return memberRepository.save(member);
     }
 }

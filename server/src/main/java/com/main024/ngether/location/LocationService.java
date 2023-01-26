@@ -65,7 +65,7 @@ public class LocationService {
 
 
     public List<Location> findLocations() {
-        return (List<Location>) locationRepository.findAll();
+        return locationRepository.findAll();
     }
 
 
