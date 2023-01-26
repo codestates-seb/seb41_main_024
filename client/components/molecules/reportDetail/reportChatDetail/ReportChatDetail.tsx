@@ -13,7 +13,7 @@ interface chatLogType {
   unreadCount : number;
 }
 
-const ReportChatDetail = ({id, token, handleGetChatLog}:reportChatDetailType) => {
+const ReportChatDetail = ({id, token, handleGetChatLog, handleBlockUser}:reportChatDetailType) => {
   const [chatDataSet, setChatDataSet] = useState({chatLog: [], chatMembers: []})
   const [isLookUp, setIsLookUp] = useState(false);
 
@@ -31,9 +31,13 @@ const ReportChatDetail = ({id, token, handleGetChatLog}:reportChatDetailType) =>
         <Button className='flex-1' onClick={handleRenderChatLog}>조회하기</Button>
       </div>
       <div>
-        {isLookUp && chatDataSet.chatMembers.map((nickName:string, index) => <Button key={index} className='flex-1'>{nickName}</Button>)}
+        {isLookUp && chatDataSet.chatMembers.map((nickName:string, index) => 
+          <Button key={index} className='flex-1' onClick={() => handleBlockUser(nickName)}>
+            {nickName}
+          </Button>
+        )}
       </div>
-      <ul className='flex flex-col'>
+      <ul className='flex flex-col mt-2'>
         {isLookUp && chatDataSet.chatLog.map((log:chatLogType) => 
           <li className='text-left text-s mb-2 border-b-2' key={log.chatMessageId}>
             <div><p>{log.nickName} : {log.message}</p></div>

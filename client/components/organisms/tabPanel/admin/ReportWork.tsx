@@ -14,8 +14,8 @@ import Cookies from 'js-cookie';
 
 
 const DUMMY_REPORT = [
-  {type: '게시글', reportId: 1, id: 1, title: '주식 리빙방 운영합니다'},
-  {type: '채팅방', reportId: 2, id: 7, title: '채팅 사기 치려고 합니다'}
+  {reportType: '게시글', reportId: 1, reportedId: 1, title: '주식 리빙방 운영합니다'},
+  {reportType: '채팅방', reportId: 2, reportedId: 7, title: '채팅 사기 치려고 합니다'}
 ];
 
 
@@ -23,8 +23,28 @@ const ReportWork = () => {
   const token = Cookies.get('access_token');
   const router = useRouter();
 
-  const handleNavigate = (id:number) => {
-    router.push(`/nearby/${id}`)
+  const handleNavigate = (reportedId:number) => {
+    router.push(`/nearby/${reportedId}`)
+  }
+
+  const handleDeleteReport = (reportId:number) => {
+    axios({
+      url: `https://ngether.site/api/reports/${reportId}`,
+      method: 'delete',
+      headers: {
+        Authorization : token
+      }
+    })
+  }
+
+  const handleBlockUser = (nickName:string) => {
+    axios({
+      url: `https://ngether.site/api/reports/admin/changeMemberNickNameRole?nickName=${nickName}`,
+      method: 'patch',
+      headers: {
+        Authorization : token
+      }
+    })
   }
 
   const handleGetChatLog = (id: number, token: {Authorization : string | undefined}) => {
@@ -53,15 +73,20 @@ const ReportWork = () => {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography>{`신고된 ${report.type} | ${report.title}`}</Typography>
+                    <Typography>{`신고된 ${report.reportType} | ${report.title}`}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    {report.type === '게시글' && <ReportBoardDetail handleNavigate={()=>handleNavigate(report.reportId)}/>} 
-                    {report.type === '채팅방' 
+                    {report.reportType === 'board' 
+                    && <ReportBoardDetail 
+                        handleNavigate={()=>handleNavigate(report.reportedId)}
+                        handleDeleteReport={()=>handleDeleteReport(report.reportId)}
+                    />} 
+                    {report.reportType === 'chat' 
                     && <ReportChatDetail
-                        id={report.id}
+                        id={report.reportedId}
                         token={{Authorization: token}}
                         handleGetChatLog={handleGetChatLog}
+                        handleBlockUser={handleBlockUser}
                     />} 
                   </AccordionDetails>
                 </Accordion>
