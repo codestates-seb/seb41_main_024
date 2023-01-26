@@ -7,9 +7,7 @@ import React from 'react';
 import useLogin from '../../../hooks/common/useLogin';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { signOut } from 'next-auth/react';
-
-import { signIn, useSession } from 'next-auth/react';
+import { signOut, useSession  } from 'next-auth/react';
 
 const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
   const router = useRouter();

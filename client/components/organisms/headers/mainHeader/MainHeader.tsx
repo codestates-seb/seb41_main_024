@@ -8,7 +8,6 @@ import { ReactComponent as Logo } from '../../../../public/logos/logoRow.svg';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import { mainHeaderType } from './mainHeaderType';
-import { nextTick } from 'process';
 
 const MainHeader = ({
   isLogin,
@@ -51,7 +50,7 @@ const MainHeader = ({
         </div>
       </AppBar>
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        {((isLogin && nickName) || session?.data?.user) && (
+        {((isLogin && nickName)) && (
           <>
             <div className="flex flex-col items-center m-4">
               <span className="text-primary text-bold">
@@ -64,10 +63,11 @@ const MainHeader = ({
               >
                 로그아웃
               </Button>
+              <DrawerListItem text={'마이페이지'} path={'/mypage'} />
             </div>
           </>
         )}
-        {!isLogin && !session?.data?.user && (
+        {!isLogin && (
           <div className="flex justify-center items-center m-2">
             <Link href={'/login'}>
               <Button variant="contained" className="m-2">
@@ -81,7 +81,7 @@ const MainHeader = ({
             </Link>
           </div>
         )}
-        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
+        
       </DrawerList>
     </Fragment>
   );
