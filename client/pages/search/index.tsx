@@ -39,6 +39,12 @@ const Search = () => {
     title: '',
     searchOption: '주소',
     category: '상품 쉐어링',
+    //타입 에러 떄문에 추가된 value들입니다.
+    //useInput을 addnew와 search가 같이 사용하다보니.. 아래 4개의 필드는 search에서는 필요 없습니다.
+    productsLink: '',
+    maxNum: 0,
+    content: '',
+    deadLine: '',
   });
   const [searchAddress, setSearchAddress] = useState('');
 
@@ -93,12 +99,13 @@ const Search = () => {
             id="location"
             name="location"
             type="text"
-            label="도로명주소 검색"
+            label="도로명•지번주소 검색"
             onChange={handleSearchAddress}
+            helperText="ex) OO시 OO구, 이문로"
           />
           <FormButton
             variant="contained"
-            className="bg-[#63A8DA] text-[white] ml-[10px]"
+            className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px]"
             content="주소검색"
             onClick={() => searchMap(searchAddress, setCenter)}
           ></FormButton>
@@ -149,8 +156,6 @@ const Search = () => {
           type="submit"
         />
       </form>
-      <NoContent />
-      <NearByPageTab />
     </div>
   );
 };
