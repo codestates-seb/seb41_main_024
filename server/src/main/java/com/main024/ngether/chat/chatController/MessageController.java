@@ -43,9 +43,8 @@ public class MessageController {
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
         message.setCreateDate(LocalDateTime.now());
+        message.setUnreadCount(chatService.setUnreadMessageCount(roomId));
         ChatMessage savedMessage = chatMessageRepository.save(message);
-        savedMessage.setUnreadCount(chatService.setUnreadMessageCount(roomId,savedMessage.getChatMessageId()));
-        chatMessageRepository.save(savedMessage);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         chatRoom.setLastMessage(savedMessage.getMessage());
         chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
