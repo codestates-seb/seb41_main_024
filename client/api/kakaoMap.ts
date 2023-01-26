@@ -166,6 +166,8 @@ export const setMarkerCluster = async (
   });
   let marker = new kakao.maps.Marker({ position: map.getCenter() }); // 클릭한 위치를 표시할 마커입니다
   marker.setMap(map);
+  marker.setOpacity(0.7);
+  marker.setTitle('지도 중심');
   // 마커 클러스터러를 생성합니다
   const clusterer = new kakao.maps.MarkerClusterer({
     map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
@@ -248,6 +250,14 @@ export const setMarkerCluster = async (
         customOverlay.setMap(null);
         isOverlayOpen = false;
       }
+    });
+    kakao.maps.event.addListener(sharingItemMarker, 'mouseover', function () {
+      sharingItemMarker.setOpacity(0.9);
+      customOverlay.setZIndex(5);
+    });
+    kakao.maps.event.addListener(sharingItemMarker, 'mouseout', function () {
+      sharingItemMarker.setOpacity(1);
+      customOverlay.setZIndex(3);
     });
   }
   clusterer.addMarkers(markers);
