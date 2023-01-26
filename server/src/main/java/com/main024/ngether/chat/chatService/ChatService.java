@@ -115,16 +115,17 @@ public class ChatService {
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             boolean check = false;
             for (ChatMessage chatMessage : chatMessageList) {
-                if(chatMessage.getReadMember()!= null){
-                String[] name = chatMessage.getReadMember().split(",");
-                for (int i = 0; i < name.length; i++) {
-                    if (Objects.equals(name[i], member.getNickName()))
-                        check = true;
-                }
+                if (!Objects.equals(chatMessage.getReadMember(), "")) {
+                    String[] name = chatMessage.getReadMember().split(",");
+                    for (int i = 0; i < name.length; i++) {
+                        if (Objects.equals(name[i], member.getNickName())) {
+                            check = true;
+                        }
+                    }
                 }
                 if (chatMessage.getUnreadCount() != 0 && !check) {
                     chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
-                    chatMessage.setReadMember(chatMessage.getReadMember() + ',' + member.getNickName());
+                    chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
                 }
             }
             chatMessageRepository.saveAll(chatMessageList);

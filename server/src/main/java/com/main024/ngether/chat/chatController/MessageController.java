@@ -41,7 +41,7 @@ public class MessageController {
     public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message,@Header("Authorization") String Authorization) {
         Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(Authorization.substring("Bearer ".length()))).get();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
-        StringBuilder nameList = new StringBuilder("");
+        String nameList = "";
         message.setNickName(member.getNickName());
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
@@ -49,13 +49,13 @@ public class MessageController {
         message.setUnreadCount(chatService.setUnreadMessageCount(roomId));
         for(int i = 0; i < chatRoomMembers.size(); i++){
             if(chatRoomMembers.get(i).getSessionId() != null){
-                nameList.append(chatRoomMembers.get(i).getMember().getNickName());
+                nameList = nameList + member.getNickName();
                 if(i < chatRoomMembers.size() - 1){
-                   nameList.append(',');
+                   nameList = nameList + ",";
                 }
             }
         }
-        message.setReadMember(nameList.toString());
+        message.setReadMember(nameList);
         ChatMessage savedMessage = chatMessageRepository.save(message);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         chatRoom.setLastMessage(savedMessage.getMessage());
