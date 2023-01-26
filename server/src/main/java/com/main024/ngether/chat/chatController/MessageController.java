@@ -49,7 +49,7 @@ public class MessageController {
         message.setUnreadCount(chatService.setUnreadMessageCount(roomId));
         for(int i = 0; i < chatRoomMembers.size(); i++){
             if(chatRoomMembers.get(i).getSessionId() != null){
-                nameList = nameList + member.getNickName();
+                nameList = nameList + chatRoomMembers.get(i).getMember().getNickName();
                 if(i < chatRoomMembers.size() - 1){
                    nameList = nameList + ",";
                 }
