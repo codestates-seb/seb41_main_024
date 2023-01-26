@@ -28,28 +28,30 @@ import axios from 'axios';
 // }
 
 const GoogleLoginPage = () => {
-  // console.log(window.location);
   const REQUEST_URL = 'https://ngether.site';
   const router = useRouter();
   const session = useSession();
 
   console.log(router);
   console.log(router.query);
-  console.log('session', session.data);
+  // console.log('session', session.data);
 
-  function isFirstSocialLogin() {
-    return axios.post(
-      `${REQUEST_URL}/api/어쩌구`,
-      {
-        email: session.user.email,
-      },
-      {
-        headers: {
-          Authorization: Cookies.get('access_token'),
-        },
-      }
-    );
-  }
+  useEffect(() => {
+    console.log(window.location);
+  });
+  // function isFirstSocialLogin() {
+  //   return axios.post(
+  //     `${REQUEST_URL}/api/어쩌구`,
+  //     {
+  //       email: session.user.email,
+  //     },
+  //     {
+  //       headers: {
+  //         Authorization: Cookies.get('access_token'),
+  //       },
+  //     }
+  //   );
+  // }
 
   function requestSocialLogin(form: object) {
     return axios.post(`${REQUEST_URL}/api/reports`, form, {
@@ -90,7 +92,7 @@ const GoogleLoginPage = () => {
     phonenumber: '',
   });
 
-  console.log(form);
+  // console.log(form);
   const { nickname, phonenumber } = form;
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
