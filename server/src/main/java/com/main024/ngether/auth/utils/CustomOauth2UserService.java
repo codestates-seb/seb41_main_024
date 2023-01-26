@@ -34,6 +34,7 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
         return new BCryptPasswordEncoder();
     }
     @Override
+    @Transactional
     public OAuth2User loadUser(OAuth2UserRequest request) throws OAuth2AuthenticationException {
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(request);
