@@ -78,7 +78,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     public String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("username", member.getNickName());
+        claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
         //claims.put("userId", member.getMemberId());
         //Payload에 username, roles, userId로 구성
