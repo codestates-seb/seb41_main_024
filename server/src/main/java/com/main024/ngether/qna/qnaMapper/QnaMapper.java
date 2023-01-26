@@ -1,6 +1,5 @@
 package com.main024.ngether.qna.qnaMapper;
 
-import com.main024.ngether.member.MemberService;
 import com.main024.ngether.qna.qnaDto.AnswerDto;
 import com.main024.ngether.qna.qnaDto.QnaDto;
 import com.main024.ngether.qna.qnaEntity.Answer;
@@ -9,7 +8,6 @@ import com.main024.ngether.qna.qnaRepository.AnswerRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
