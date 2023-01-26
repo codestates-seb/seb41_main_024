@@ -31,18 +31,6 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
             isLogin={isLogin}
             nickName={nickName}
             logOutHandler={handleLogOut}
-            session={{
-              data: {
-                user: {
-                  name: '',
-                  email: '',
-                  image: '',
-                },
-                accessToken: '',
-                expires: '',
-              },
-              status: '',
-            }}
           />
           {children}
           <div>
