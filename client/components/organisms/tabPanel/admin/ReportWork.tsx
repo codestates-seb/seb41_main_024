@@ -14,8 +14,8 @@ import Cookies from 'js-cookie';
 
 
 const DUMMY_REPORT = [
-  {reportType: '게시글', reportId: 1, reportedId: 1, title: '주식 리빙방 운영합니다'},
-  {reportType: '채팅방', reportId: 2, reportedId: 7, title: '채팅 사기 치려고 합니다'}
+  {reportType: 'board', reportId: 1, reportedId: 1, title: '주식 리빙방 운영합니다'},
+  {reportType: 'chat', reportId: 2, reportedId: 7, title: '채팅 사기 치려고 합니다'}
 ];
 
 
@@ -73,7 +73,7 @@ const ReportWork = () => {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography>{`신고된 ${report.reportType} | ${report.title}`}</Typography>
+                    <Typography>{`신고된 ${report.reportType === 'board' && '게시글' || '채팅방'} | ${report.title}`}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
                     {report.reportType === 'board' 
