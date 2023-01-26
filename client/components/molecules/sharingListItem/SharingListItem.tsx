@@ -25,7 +25,9 @@ const SharingListItem = ({
   return (
     <div className={`flex flex-col ${styles.flex_container}`}>
       <Link href={`/nearby/${boardId}`}>
-        <Img src={src} alt={alt} />
+        <div className="w-[100%]">
+          <img className="h-auto w-[100%]" src={src} alt={alt} />
+        </div>
       </Link>
       <div className="px-2 mt-2.5">
         <strong className={`${styles.title_ellipsis} font-normal`}>
