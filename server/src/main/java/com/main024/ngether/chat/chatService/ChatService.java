@@ -112,9 +112,11 @@ public class ChatService {
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
         } else {
+            //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             boolean check = false;
             for (ChatMessage chatMessage : chatMessageList) {
+
                 if (chatMessage.getReadMember() != null) {
                     String[] name = chatMessage.getReadMember().split(",");
                     for (int i = 0; i < name.length; i++) {
@@ -128,7 +130,9 @@ public class ChatService {
                     chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
                     chatMessageRepository.save(chatMessage);
                 }
+                check = false;
             }
+
 
             sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
                     .message("")
