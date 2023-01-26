@@ -78,7 +78,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     public String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("username", member.getNickName());
+        claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
         //claims.put("userId", member.getMemberId());
         //Payload에 username, roles, userId로 구성
@@ -116,8 +116,8 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .scheme("http")
                 //.path("/login/oauth2/code/google")
                 .host("localhost")
-                //.port(3443)
-                .path("/receive-token.html")
+                .port(3443)
+                .path("/google")
                 .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
                 .build()
                 .toUri();
