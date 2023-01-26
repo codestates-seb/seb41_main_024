@@ -3,9 +3,14 @@ package com.main024.ngether.chat.chatController;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.chat.chatService.ChatService;
+import com.main024.ngether.exception.BusinessLogicException;
+import com.main024.ngether.exception.ExceptionCode;
+import com.main024.ngether.member.Member;
+import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +26,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
 @RequestMapping("/chat")
 public class ChatRoomController {
-    Queue<DeferredResult<String>> results = new ConcurrentLinkedQueue<>();
+    public Queue<DeferredResult<Boolean>> results = new ConcurrentLinkedQueue<>();
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
+    private final MemberService memberService;
 
 
 
@@ -74,14 +80,15 @@ public class ChatRoomController {
         return new ResponseEntity<>(chatService.findMembersInChatRoom(roomId), HttpStatus.OK);
     }
 
-//    //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
-//    @GetMapping("/room/findNewMessages")
-//    public ResponseEntity<WebAsyncTask<Boolean>> messageAlarm() {
-//
-//
-//
-//       // return new ResponseEntity<>(new WebAsyncTask<Boolean>(5000L,"asyncThreadPoolTaskExecutor"), HttpStatus.OK);
-//
-//    }
+    //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
+    @GetMapping("/room/findNewMessages")
+    public ResponseEntity<Boolean> messageAlarm() throws InterruptedException {
+        Member member = memberService.getLoginMember();
+        if(member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+
+        return new ResponseEntity<>(chatService.checkNewMessages(member), HttpStatus.OK);
+
+    }
 
 }

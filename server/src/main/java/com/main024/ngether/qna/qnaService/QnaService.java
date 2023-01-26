@@ -66,8 +66,7 @@ public class QnaService {
     //Qna가 null이면 에러 발생
     private Qna findVerifyQna(long qnaId) {
         Optional<Qna> optionalQna = qnaRepository.findById(qnaId);
-        Qna findQna = optionalQna.orElseThrow(() ->
+        return optionalQna.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.QNA_NOT_FOUND));
-        return findQna;
     }
 }
