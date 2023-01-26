@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import SockJS from 'sockjs-client';
 import StompJS from 'stompjs';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 interface chatMessageType {
   chatMessageId: number,
@@ -18,46 +19,61 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
+  const nickName = Cookies.get('nickName')
 
-  useEffect( () => {
-      if(!isReady && HEADER_TOKEN !== undefined) return
+  useEffect(() => {
+    if(!isReady && HEADER_TOKEN !== undefined) return
 
-      const setChatWebsocket = async () => {
-        try {
-          await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
-          .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+    const defaultChatSetting = async () => {
+      await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: HEADER_TOKEN});
+      await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
+      .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+    } 
+    
+    const setChatWebsocket = async () => {
+      try {
+        const sockjs = new SockJS(`https://ngether.site/ws`);
+        const ws = StompJS.over(sockjs);
+        setStompClient(ws);
 
-          await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: HEADER_TOKEN})
-          .then(res => setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)));
-
-          const sockjs = new SockJS(`https://ngether.site/ws`);
-          const ws = StompJS.over(sockjs);
-          setStompClient(ws);
-
-          await ws.connect(
-            HEADER_TOKEN,
-            () => {
-              ws.subscribe(
-              `/receive/chat/${roomId}`, 
-              async (messages) => {
-                if((JSON.parse(messages.body).type) === 'REENTER') {
-                  await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
-                  .then(res => setMessages(res.data.map(transDateFormChatMessage)));
-                }
-                setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(JSON.parse(messages.body))])
-              }, 
-              HEADER_TOKEN);
+        await ws.connect(
+          HEADER_TOKEN,
+          () => {
+            ws.subscribe(
+            `/receive/chat/${roomId}`,
+            async (messages) => {
+              if((JSON.parse(messages.body).type) === 'REENTER') {
+                await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
+                .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+              }
+              setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(JSON.parse(messages.body))])
             }, 
-            (error) => {
-              console.log(error)
-            }
-          )
-        }
-        catch (error) {
-          console.log(error)
-        }
+            HEADER_TOKEN);
+          }, 
+          (error) => {
+            console.log(error)
+          }
+        )
       }
-      setChatWebsocket();
+      catch (error) {
+        console.log(error)
+      }
+    }
+
+    const checkChatMember = () => {
+      axios.get(`https://ngether.site/chat/room/${roomId}/memberList`)
+      .then(res => {
+          setMembers(res.data.map((member: { memberId: number, nickName: string; }) => member.nickName));
+          if(members.includes(nickName)) {
+            defaultChatSetting();
+            setChatWebsocket();
+          }
+          else return
+      })
+    }
+
+    checkChatMember()
+
   }, [roomId, HEADER_TOKEN])
   return {stompClient, messages, members, roomId}
 }

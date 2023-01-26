@@ -52,7 +52,7 @@ public class MemberService {
         if(getLoginMember() == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
 
-        ;
+
 
         Member findMember = findVerifiedMember(getLoginMember().getMemberId());
         String name = findMember.getNickName();
@@ -129,6 +129,18 @@ public class MemberService {
 
         return boards;
 
+    }
+    public Boolean check(MemberDto.Check check){
+        if(memberRepository.findByNickName(check.getNickName()).isPresent()){
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
+        }
+        if(memberRepository.findByEmail(check.getEmail()).isPresent()){
+            throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+        }
+        if(memberRepository.findMemberByPhoneNumber(check.getPhoneNumber()).isPresent()){
+            throw new BusinessLogicException(ExceptionCode.PHONE_NUMBER_EXIST);
+        }
+        return true;
     }
 
 }

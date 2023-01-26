@@ -2,7 +2,7 @@ import Badge from '../../atoms/badge/Badge';
 import SmallSpot from '../../molecules/spot/SmallSpot';
 import Alert from '../../atoms/alert/Alert';
 import styles from './chatItem.module.css';
-import { chatItemPropsType } from './chatItem';
+import { chatItemType } from './chatItemType';
 import React from 'react';
 
 const ChatItem = ({
@@ -11,7 +11,7 @@ const ChatItem = ({
   title,
   lastMessage,
   address,
-}: chatItemPropsType) => {
+}: chatItemType) => {
   return (
     <div className="flex items-center border-solid border-0 border-b border-slate-400 h-22 p-4 bg-[#ffffff]">
       <img src={thumbnail} className="w-16" />

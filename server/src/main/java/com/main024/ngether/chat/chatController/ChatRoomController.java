@@ -1,17 +1,21 @@
 package com.main024.ngether.chat.chatController;
 
-import com.main024.ngether.chat.chatService.AsyncService;
-import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
+import com.main024.ngether.chat.chatService.ChatService;
+import com.main024.ngether.exception.BusinessLogicException;
+import com.main024.ngether.exception.ExceptionCode;
+import com.main024.ngether.member.Member;
+import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ConditionalOnEnabledResourceChain;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
@@ -22,11 +26,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
 @RequestMapping("/chat")
 public class ChatRoomController {
-    Queue<DeferredResult<String>> results = new ConcurrentLinkedQueue<>();
+    public Queue<DeferredResult<Boolean>> results = new ConcurrentLinkedQueue<>();
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
-    @Autowired
-    AsyncService asyncService;
+    private final MemberService memberService;
+
 
 
     // 모든 채팅방 목록 반환
@@ -78,17 +82,12 @@ public class ChatRoomController {
 
     //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
     @GetMapping("/room/findNewMessages")
-    @ResponseBody
-    public ResponseEntity<DeferredResult<Boolean>> messageAlarm() throws InterruptedException {
-        DeferredResult<Boolean> result = new DeferredResult<>(1L);
-        asyncService.getBoolean(result);
-                result.onTimeout(() ->
-                        result.setErrorResult(
-                                ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT)
-                                        .body("Request timeout occurred.")));
-        asyncService.getBoolean(result);
+    public ResponseEntity<Boolean> messageAlarm() throws InterruptedException {
+        Member member = memberService.getLoginMember();
+        if(member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(chatService.checkNewMessages(member), HttpStatus.OK);
 
     }
 

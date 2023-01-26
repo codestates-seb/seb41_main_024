@@ -102,6 +102,7 @@ public class Member {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
+
     public Member update(String email, String name){
         this.email = email;
         this.nickName = name;

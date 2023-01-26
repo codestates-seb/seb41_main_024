@@ -45,6 +45,10 @@ public class MemberController {
 
         return ResponseEntity.ok(mapper.memberToMemberResponse(member));
     }
+    @GetMapping("/check")
+    public ResponseEntity checkDetail(@RequestBody MemberDto.Check requestBody){
+        return ResponseEntity.ok(memberService.check(requestBody));
+    }
 
     //회원정보 수정
     @PatchMapping("/patch")

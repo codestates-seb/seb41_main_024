@@ -10,6 +10,7 @@ import Link from 'next/link';
 import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 import { useRouter } from 'next/router';
+import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMessage';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -46,6 +47,10 @@ const Chatroom = () => {
       });
   }, [roomId]);
 
+  useEffect(() => {
+    messagesEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages])
+
   const onChangeInput =  (e: React.ChangeEvent<HTMLTextAreaElement>) => { 
     setInput(e.target.value);
   }
@@ -60,7 +65,6 @@ const Chatroom = () => {
       );
       setInput('');
     }
-    messagesEndRef?.current?.scrollIntoView({ behavior: 'smooth' });
   }
 
   const handleExitChatRoom = (): void => {
@@ -79,25 +83,30 @@ const Chatroom = () => {
   return (
     <div>
       <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
-      <div className='left-2/4 mt-3 translate-x-[-50%] fixed max-w-[642px] min-w-[372px] w-[80%] px-[3rem] rounded'>
-        <Link href={`/nearby/${roomId}`}>
-          <ChatItem
-            thumbnail={''}
-            isOpen={sharingData.isOpen}
-            title={sharingData.title}
-            price={sharingData.price}
-            address={sharingData.address}
-            alertNum={sharingData.alertNum}
-          />
-        </Link>
-      </div>
-      <div className="bg-primary pt-[90px] max-h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
-        <ChatGroup chatData={messages} />
-        <div className="h-[9rem]" ref={messagesEndRef} />
-      </div>
-      <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
-        <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
-      </div>
+      {!messages[0] && <ForbiddenMessage />}
+      {messages[0] && (
+        <>
+          <div className='left-2/4 mt-3 translate-x-[-50%] fixed w-[604px] min-w-[372px] pl-[1.5rem] pr-[2rem] rounded'>
+            <Link href={`/nearby/${roomId}`}>
+              <ChatItem
+                thumbnail={''}
+                isOpen={sharingData.isOpen}
+                title={sharingData.title}
+                price={sharingData.price}
+                address={sharingData.address}
+                alertNum={sharingData.alertNum}
+              />
+            </Link>
+          </div>
+          <div className="bg-primary pt-[90px] h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
+            <ChatGroup chatData={messages} />
+            <div className="h-[5rem]" ref={messagesEndRef} />
+          </div>
+          <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
+            <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
+          </div>
+        </>
+      )}
     </div>
   );
 };

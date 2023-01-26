@@ -1,4 +1,4 @@
-export interface chatItemPropsType {
+export interface chatItemType {
   thumbnail: string;
   declareStatus?: any;
   title: string;
