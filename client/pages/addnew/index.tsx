@@ -15,7 +15,7 @@ import { uploadPostType } from '../../hooks/addNewHooks/useInputType';
 import { Cookies } from 'react-cookie';
 import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
 import { getCurrentLocation } from '../../api/location';
-
+import * as cheerio from 'cheerio';
 import { useRouter } from 'next/router';
 import {
   ChangeEvent,
@@ -27,7 +27,11 @@ import {
 } from 'react';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 import axios from 'axios';
-
+import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
+const CATEGORY_OPTIONS = [
+  { label: '상품 쉐어링', value: '상품 쉐어링' },
+  { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
+];
 const AddNewPage = () => {
   const [token, setToken] = useState({ authorization: '', refresh: '' });
   const router = useRouter();
@@ -47,12 +51,12 @@ const AddNewPage = () => {
       await axios({
         url: `https://ngether.site/chat/room/${data.data.boardId}`,
         method: 'get',
-        headers: token
+        headers: token,
       });
       await axios({
         url: `https://ngether.site/chat/room/enter/${data.data.boardId}`,
         method: 'get',
-        headers: token
+        headers: token,
       });
       router.push('/');
     },
@@ -63,7 +67,7 @@ const AddNewPage = () => {
     },
   });
   const cookie = new Cookies();
-
+  const [imgSrc, setImgSrc] = useState<string | undefined>('');
   const { inputValue, onChange } = useInput({
     title: '',
     price: 0,
@@ -106,6 +110,7 @@ const AddNewPage = () => {
   }) => {
     setSearchAddress(e.target.value);
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -118,12 +123,14 @@ const AddNewPage = () => {
       address: targetCoord.address,
       accessToken: token.authorization,
       refreshToken: token.refresh,
+      imgSrc,
     };
+    // if(maxNum <1){}
 
     mutate(requestBody);
   };
 
-  const fetchOgData = async (url: string) => {
+  /* const fetchOgData = async (url: string) => {
     try {
       await axios
         .get(`/api/fetch-og-data?url=${url}`)
@@ -132,6 +139,39 @@ const AddNewPage = () => {
     } catch (error) {
       console.log(error);
     }
+  }; */
+  const getLinkMetaData = async (e: ChangeEvent<HTMLTextAreaElement>) => {
+    console.log(e.target.value);
+    if (
+      e.target.value.includes('www.coupang.com') ||
+      !e.target.value.includes('https')
+    )
+      return;
+    /* const data = await axios({
+      method: 'post',
+      url: '/api/getLinkMetaInfo',
+      data: { url: e.target.value },
+    });
+    console.log(data); */
+    return axios({
+      method: 'get',
+      url: e.target.value,
+    }).then(({ data, status }) => {
+      if (status !== 200) {
+        alert('이미지 정보를 불러오는데 실패했습니다.');
+      }
+      const $ = cheerio.load(data);
+      $('meta').each((_, el) => {
+        const key = $(el).attr('property')?.split(':')[1]; // ? 옵셔널 체이닝 앞에가 있으면 실행
+        if (key) {
+          const value = $(el).attr('content');
+          const checkUrl = value?.includes('https');
+          if (key === 'image' && checkUrl) {
+            setProductImg(value);
+          }
+        }
+      });
+    });
   };
 
   return (
@@ -140,14 +180,9 @@ const AddNewPage = () => {
         <div className="flex justify-center m-7 my-12">
           <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
             <Stack spacing={4}>
-              <img
-                className="h-40 w-40 mb-7 m-auto"
-                src={productImg}
-                alt={'유저이미지'}
-              />
               <div id="map" className="w-[100%] h-[350px]"></div>
               <p>
-                <em>지도를 클릭해주세요!</em>
+                <em>위치 검색 후 지도를 한 번 클릭해주세요!</em>
               </p>
               <div className="flex width-[100%]">
                 <Input
@@ -190,8 +225,19 @@ const AddNewPage = () => {
                 type="number"
                 label="가격"
                 value={price}
+                inputProps={{ min: 0 }}
                 onChange={onChange}
               />
+              <div className="flex items-center">
+                <img
+                  className="h-40 w-40 mb-7 m-auto"
+                  src={productImg}
+                  alt={'상품이미지'}
+                />
+                <span>
+                  상품 링크를 입력하면 자동으로 상품이미지가 등록됩니다
+                </span>
+              </div>
               <Label htmlFor={'productsLink'} labelText={''} />
               <Input
                 variant="outlined"
@@ -200,24 +246,21 @@ const AddNewPage = () => {
                 type="text"
                 label="상품 링크"
                 value={productsLink}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                  onChange(e);
-                  fetchOgData(e.target.value);
-                }}
+                onChange={onChange}
+                onBlur={getLinkMetaData}
+                helperText="쿠팡 상품은 이미지 자동 업로드 지원이 되지 않습니다."
               />
 
               <FormControl fullWidth>
-                <InputLabel id="category">카테고리</InputLabel>
-                <Select
-                  labelId="category"
+                <DropdownInput
+                  dropDownOptions={CATEGORY_OPTIONS}
+                  id="category"
                   name="category"
-                  value={category}
-                  label="category"
+                  label="카테고리"
                   onChange={onChange}
-                >
-                  <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                  <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
-                </Select>
+                  defaultValue="상품 쉐어링"
+                  value={category}
+                />
               </FormControl>
               <FormControl fullWidth>
                 <Input
@@ -226,6 +269,7 @@ const AddNewPage = () => {
                   name="maxNum"
                   value={maxNum}
                   label="모집 인원"
+                  inputProps={{ min: 0 }}
                   type="number"
                   onChange={onChange}
                 ></Input>
