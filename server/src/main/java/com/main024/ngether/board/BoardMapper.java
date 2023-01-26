@@ -33,6 +33,7 @@ public interface BoardMapper {
         response.setProductsLink(board.getProductsLink());
         response.setBoardStatus(board.getBoardStatus());
         response.setCurNum(board.getCurNum());
+        response.setImageLink(board.getImageLink());
 
         return response;
     }
@@ -61,6 +62,7 @@ public interface BoardMapper {
         board.setLongitude(requestBody.getLongitude());
         board.setDeadLine(requestBody.getDeadLine());
         board.setProductsLink(requestBody.getProductsLink());
+        board.setImageLink(requestBody.getImageLink());
 
         return board;
     }
@@ -83,6 +85,7 @@ public interface BoardMapper {
         board.setLongitude(boardPostDto.getLongitude());
         board.setDeadLine(boardPostDto.getDeadLine());
         board.setProductsLink(boardPostDto.getProductsLink());
+        board.setImageLink(boardPostDto.getImageLink());
 
         return board;
     }

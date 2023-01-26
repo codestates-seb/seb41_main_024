@@ -36,6 +36,8 @@ public class Member {
     private String email;
     @Column(unique = true)
     private String phoneNumber;
+    @Column()
+    private Long lastMessageId;
     @JsonIgnore
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
