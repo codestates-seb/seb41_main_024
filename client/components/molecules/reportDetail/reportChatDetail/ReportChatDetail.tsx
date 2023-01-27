@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from '@mui/material';
-import { Fragment } from 'react';
-import {reportChatDetailType} from './reportChatDetailType'
+import React, { Fragment, useEffect, useState } from 'react';
+import { Button, Divider } from '@mui/material';
+import { reportChatDetailType } from './reportChatDetailType'
 import { transDateFormatForAdmin } from '../../../../hooks/useWebSocketClient';
 
-interface chatLogType {
+interface ChatLogType {
   chatMessageId : number;
   chatRoomId : number;
   createDate : string;
@@ -14,8 +13,13 @@ interface chatLogType {
   unreadCount : number;
 }
 
-const ReportChatDetail = ({id, token, handleGetChatLog, handleBlockUser, handleDeleteReport}:reportChatDetailType) => {
-  const [chatDataSet, setChatDataSet] = useState({chatLog: [], chatMembers: []})
+interface ChatDataSetType {
+  chatLog: ChatLogType[];
+  chatMembers: string[];
+}
+
+const ReportChatDetail = ({id, token, handleGetChatLog, handleBlockUser, handleDeleteReport}: reportChatDetailType) => {
+  const [chatDataSet, setChatDataSet] = useState<ChatDataSetType>({ chatLog: [], chatMembers: [] });
   const [isLookUp, setIsLookUp] = useState(false);
 
   useEffect(() => {
@@ -33,21 +37,25 @@ const ReportChatDetail = ({id, token, handleGetChatLog, handleBlockUser, handleD
         <Button className='w-[100px]' onClick={handleDeleteReport}>신고 처리완료</Button>
         <Button className='w-[100px]' onClick={handleDeleteReport}>신고 반려</Button>
       </div>
+      {isLookUp && 
       <div>
-        {isLookUp && chatDataSet.chatMembers.map((nickName:string, index) => 
+        <p className='text-xs mt-2'>정지할 아이디</p>
+        {chatDataSet.chatMembers.map((nickName:string, index) => 
           <Button key={index} className='flex-1' onClick={() => handleBlockUser(nickName)}>
             {nickName}
           </Button>
         )}
+        <Divider />
+        <ul className='flex flex-col mt-2 max-h-[400px] overflow-auto'>
+          {chatDataSet.chatLog.map((log:ChatLogType) => 
+            <li className='text-left text-s mt-3 mb-2 border-b-2' key={log.chatMessageId}>
+              <div><p>{log.nickName} : {log.message}</p></div>
+              <p className='text-xs'>전송 시간:{transDateFormatForAdmin(log.createDate)}</p>
+            </li>
+          )}
+        </ul>
       </div>
-      <ul className='flex flex-col mt-2 max-h-[400px] overflow-auto'>
-        {isLookUp && chatDataSet.chatLog.map((log:chatLogType) => 
-          <li className='text-left text-s mb-2 border-b-2' key={log.chatMessageId}>
-            <div><p>{log.nickName} : {log.message}</p></div>
-            <p className='text-xs'>전송 시간:{transDateFormatForAdmin(log.createDate)}</p>
-          </li>
-        )}
-      </ul>
+      }
     </Fragment>
   )
 }
