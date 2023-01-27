@@ -8,12 +8,11 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
-import { getAllUsers } from '../../api/members';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
 import Divider from '@mui/material/Divider';
-import axios from 'axios';
+import { hashPassword } from '../../api/postSignup';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -69,14 +68,10 @@ const LoginPage = () => {
   });
 
   const handleLogin = async () => {
-    const data = await axios({
-      method: 'post',
-      data: { pw },
-      url: '/api/passwordHash',
-    });
-    console.log(data);
+    const { hashedPassword }: any = await hashPassword(pw);
+    const hashedForm = { ...form, pw: hashedPassword };
 
-    await mutate({ email, pw: data?.data?.hashedPassword });
+    await mutate(hashedForm);
   };
 
   const handleSocialLogin = async () => {
