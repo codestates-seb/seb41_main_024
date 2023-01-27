@@ -18,12 +18,12 @@ interface ChatDataSetType {
   chatMembers: string[];
 }
 
-const ReportChatDetail = ({id, token, handleGetChatLog, handleBlockUser, handleDeleteReport}: reportChatDetailType) => {
+const ReportChatDetail = ({id, handleGetChatLog, handleBlockUser, handleDeleteReport}: reportChatDetailType) => {
   const [chatDataSet, setChatDataSet] = useState<ChatDataSetType>({ chatLog: [], chatMembers: [] });
   const [isLookUp, setIsLookUp] = useState(false);
 
   useEffect(() => {
-    setChatDataSet(handleGetChatLog(id, token))
+    setChatDataSet(handleGetChatLog(id))
   },[])
 
   const handleRenderChatLog = () => {

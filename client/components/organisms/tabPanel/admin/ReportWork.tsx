@@ -7,10 +7,8 @@ import { useRouter } from 'next/router';
 
 import ReportBoardDetail from '../../../molecules/reportDetail/reportBoardDetail/ReportBoardDetail'
 import ReportChatDetail from '../../../molecules/reportDetail/reportChatDetail/ReportChatDetail'
-import axios from 'axios';
-import { transDateFormChatMessage } from '../../../../hooks/useWebSocketClient';
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import { handleBlockUser, handleDeleteReport } from '../../../../api/admin';
+import { getChatDataset } from '../../../../api/getChatDataset';
 
 
 const DUMMY_REPORT = [
@@ -20,45 +18,7 @@ const DUMMY_REPORT = [
 
 
 const ReportWork = () => {
-  const token = Cookies.get('access_token');
   const router = useRouter();
-
-  const handleNavigate = (reportedId:number) => {
-    router.push(`/nearby/${reportedId}`)
-  }
-
-  const handleDeleteReport = (reportId:number) => {
-    axios({
-      url: `https://ngether.site/api/reports/${reportId}`,
-      method: 'delete',
-      headers: {
-        Authorization : token
-      }
-    })
-  }
-
-  const handleBlockUser = (nickName:string) => {
-    axios({
-      url: `https://ngether.site/api/reports/admin/changeMemberNickNameRole?nickName=${nickName}`,
-      method: 'patch',
-      headers: {
-        Authorization : token
-      }
-    })
-  }
-
-  const handleGetChatLog = (id: number, token: {Authorization : string | undefined}) => {
-    const CHAT_DATA = {
-      chatLog: [],
-      chatMembers: []
-    }
-    axios.get(`https://ngether.site/chat/room/messages/${id}`, {headers : token})
-    .then(res => CHAT_DATA.chatLog = res.data)
-    axios.get(`https://ngether.site/chat/room/${id}/memberList`, {headers : token})
-    .then(res => CHAT_DATA.chatMembers = res.data.map((member: { memberId: number, nickName: string; }) => member.nickName))
-
-    return CHAT_DATA
-  }
 
   return (
     <div className='flex flex-col text-center'>
@@ -78,14 +38,13 @@ const ReportWork = () => {
                   <AccordionDetails>
                     {report.reportType === 'board' 
                     && <ReportBoardDetail 
-                        handleNavigate={()=>handleNavigate(report.reportedId)}
+                        handleNavigate={()=>router.push(`/nearby/${report.reportedId}`)}
                         handleDeleteReport={()=>handleDeleteReport(report.reportId)}
                     />} 
                     {report.reportType === 'chat' 
                     && <ReportChatDetail
                         id={report.reportedId}
-                        token={{Authorization: token}}
-                        handleGetChatLog={handleGetChatLog}
+                        handleGetChatLog={getChatDataset}
                         handleBlockUser={handleBlockUser}
                         handleDeleteReport={()=>handleDeleteReport(report.reportId)}
                     />} 
