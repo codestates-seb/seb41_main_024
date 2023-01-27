@@ -14,6 +14,7 @@ import React from 'react';
 import Image from 'next/image';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
+import hashPassword from '../api/passwordHash';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -65,14 +66,14 @@ const LoginPage = () => {
   });
 
   const handleLogin = async () => {
-    const data = await axios({
+    const { data }: any = await axios({
       method: 'post',
       data: { pw },
       url: '/api/passwordHash',
     });
-    console.log(data);
 
-    await mutate();
+    const hashedForm = { ...form, pw: data?.hashedPassword };
+    await mutate(hashedForm);
   };
 
   const handleSocialLogin = async () => {
