@@ -22,7 +22,7 @@ export const getReport = () => {
 }
 
 export const handleDeleteReport = (reportId:number) => {
-  axios({
+  return axios({
     url: `https://ngether.site/api/reports/${reportId}`,
     method: 'delete',
     headers: {

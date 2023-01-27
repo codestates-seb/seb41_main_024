@@ -9,7 +9,7 @@ import ReportBoardDetail from '../../../molecules/reportDetail/reportBoardDetail
 import ReportChatDetail from '../../../molecules/reportDetail/reportChatDetail/ReportChatDetail'
 import { getReport, handleBlockUser, handleDeleteReport } from '../../../../api/admin';
 import { getChatDataset } from '../../../../api/getChatDataset';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 interface reportType {
@@ -22,11 +22,23 @@ interface reportType {
 const ReportWork = () => {
   const router = useRouter();
   const [reports, setResports] = useState([])
-  const {data, isSuccess} = useQuery(['reports'], getReport);
+  const {data, isSuccess, refetch} = useQuery(['reports'], getReport);
 
+  
+  const reportMutation = useMutation(handleDeleteReport, {
+    onSuccess: () => {
+      refetch();
+    }
+  });
+  
   useEffect(()=>{
     setResports(data?.data?.data)
   }, [data])
+  
+  const handleDelete = async (reportId: number) => {
+    await reportMutation.mutate(reportId);
+  };
+
 
   return (
     <div className='flex flex-col text-center'>
@@ -48,14 +60,14 @@ const ReportWork = () => {
                     {report.reportType === 'board' 
                     && <ReportBoardDetail 
                         handleNavigate={()=>router.push(`/nearby/${report.reportedId}`)}
-                        handleDeleteReport={()=>handleDeleteReport(report.reportId)}
+                        handleDeleteReport={()=>handleDelete(report.reportId)}
                     />} 
                     {report.reportType === 'chat' 
                     && <ReportChatDetail
                         id={report.reportedId}
                         handleGetChatLog={getChatDataset}
                         handleBlockUser={handleBlockUser}
-                        handleDeleteReport={()=>handleDeleteReport(report.reportId)}
+                        handleDeleteReport={()=>handleDelete(report.reportId)}
                     />} 
                   </AccordionDetails>
                 </Accordion>

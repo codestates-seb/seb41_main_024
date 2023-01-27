@@ -8,8 +8,6 @@ import Input from '../../../atoms/input/Input';
 import useInput from '../../../../hooks/addNewHooks/useInput';
 import FormButton from '../../../molecules/formbutton/FormButton';
 import { Fragment, useEffect, useState } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import { useQuery } from '@tanstack/react-query';
 import { getQuestions } from '../../../../api/admin';
 
@@ -30,60 +28,6 @@ interface qnaType {
     content: string;
     createDate: string;
   }[]
-}
-
-const DUMMY_REPORT = {
-  data: [
-    {
-        "qnaId": 1,
-        "memberId": 1,
-        "nickName": "배고파",
-        "title": "qna test",
-        "content": "qna test content",
-        "createDate": "2023-01-27T23:33:47.446939",
-        "qnaStatus": "ANSWERED",
-        "answers": [
-            {
-                "answerId": 1,
-                "memberId": 3,
-                "qnaId": 1,
-                "nickName": "admin",
-                "title": "답변: qna test",
-                "content": "answer test 1",
-                "createDate": "2023-01-27T23:34:42.098385"
-            },
-            {
-                "answerId": 2,
-                "memberId": 3,
-                "qnaId": 1,
-                "nickName": "admin",
-                "title": "답변: qna test",
-                "content": "answer test 2",
-                "createDate": "2023-01-27T23:34:47.871833"
-            }
-        ]
-    },
-    {
-        "qnaId": 2,
-        "memberId": 36,
-        "nickName": "hahaha",
-        "title": "qna test hahaha",
-        "content": "qna test content",
-        "createDate": "2023-01-27T23:44:22.694474",
-        "qnaStatus": "NO_ANSWER",
-        "answers": []
-    },
-    {
-        "qnaId": 3,
-        "memberId": 36,
-        "nickName": "hahaha",
-        "title": "qna test hahaha 2",
-        "content": "qna test content",
-        "createDate": "2023-01-27T23:44:28.573644",
-        "qnaStatus": "NO_ANSWER",
-        "answers": []
-    }
-  ]
 }
 
 const AnswerWork = () => {
