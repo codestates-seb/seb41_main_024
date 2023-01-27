@@ -13,17 +13,17 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { getProductDetail } from '../../api/detail';
 import { editProductDetail } from '../../api/detail';
 
-export async function getServerSideProps(context: { params: { id: string } }) {
-  const { id } = context.params;
-  const { data } = await getProductDetail(id);
+// export async function getServerSideProps(context: { params: { id: string } }) {
+//   const { id } = context.params;
+//   const { data } = await getProductDetail(id);
 
-  return {
-    props: {
-      previousData: data,
-      id,
-    },
-  };
-}
+//   return {
+//     props: {
+//       previousData: data,
+//       id,
+//     },
+//   };
+// }
 
 interface previousDataProps {
   previousData: any;
@@ -63,7 +63,8 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
   const editMutation = useMutation(() => editProductDetail(id, form));
 
   const handleEdit = async () => {
-    await editMutation.mutate();
+    editMutation.mutate();
+    console.log(editMutation);
     router.push(`/nearby/${id}`);
   };
 
@@ -80,6 +81,8 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
     category: previousData?.category,
     quantity: '1',
   });
+
+  console.log(form);
 
   const { title, price, productsLink, category, quantity, address, content } =
     form;
@@ -130,8 +133,8 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
                 label="category"
                 onChange={onChange}
               >
-                <MenuItem value="product">product</MenuItem>
-                <MenuItem value="delivery">delivery</MenuItem>
+                <MenuItem value="product">상품 쉐어링</MenuItem>
+                <MenuItem value="delivery">배달 쉐어링</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>
