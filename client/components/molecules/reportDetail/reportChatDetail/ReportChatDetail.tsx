@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Button, Divider } from '@mui/material';
 import { reportChatDetailType } from './reportChatDetailType'
 import { transDateFormatForAdmin } from '../../../../hooks/useWebSocketClient';
+import DialogButton from '../../../organisms/DialogButton/DialogButton';
 
 interface ChatLogType {
   chatMessageId : number;
@@ -41,9 +42,13 @@ const ReportChatDetail = ({id, handleGetChatLog, handleBlockUser, handleDeleteRe
       <div>
         <p className='text-xs mt-2'>정지할 아이디</p>
         {chatDataSet.chatMembers.map((nickName:string, index) => 
-          <Button key={index} className='flex-1' onClick={() => handleBlockUser(nickName)}>
-            {nickName}
-          </Button>
+          <DialogButton 
+            key={index} 
+            name={nickName} 
+            title={`${nickName}을 정지시키겠습니까?`}
+            question={`네를 선택하시면 ${nickName} 유저를 정지합니다.`}
+            func={() => handleBlockUser(nickName)}
+          />
         )}
         <Divider />
         <ul className='flex flex-col mt-2 max-h-[400px] overflow-auto'>
