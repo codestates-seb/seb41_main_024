@@ -145,7 +145,7 @@ export const searchMap = (searchAddress: string, setCenter: any) => {
       setCenter({
         lat: newSearch.y,
         lng: newSearch.x,
-        address: searchAddress,
+        address: newSearch.address_name,
       });
     }
   };
