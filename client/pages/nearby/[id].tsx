@@ -54,8 +54,6 @@ export default function ProductDetail({ id }: any) {
     res[2].data?.data?.data.filter((item: any) => item.boardId === Number(id))
       .length > 0;
 
-  console.log(res);
-
   const reportForm = {
     reportedId: id,
     reportType: 'board',
@@ -67,12 +65,9 @@ export default function ProductDetail({ id }: any) {
   const deleteMutation = useMutation(() => deleteProductDetail(id));
   const likeMutation = useMutation(() => likeProduct(id));
 
-  console.log(likeMutation);
-
   const handleDelete = () => {
     deleteMutation.mutate();
     router.push('/');
-    console.log(deleteMutation);
   };
 
   const handleLike = () => {
@@ -97,15 +92,16 @@ export default function ProductDetail({ id }: any) {
         isWriter={isWriter}
         id={id}
       />
-      <PostMeta productData={productData} />
-      <DetailPageTab productData={productData} />
       <DetailBottom
         isLiked={isLiked}
+        isWriter={isWriter}
         handleLike={handleLike}
         handleReport={handleReport}
         handleGether={handleGether}
         id={id}
       />
+      <PostMeta productData={productData} />
+      <DetailPageTab productData={productData} />
     </div>
   );
 }

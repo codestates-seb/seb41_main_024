@@ -8,6 +8,7 @@ import { DetailBottomPropsType } from './detailBottomType';
 
 const DetailBottom = ({
   isLiked,
+  isWriter,
   handleLike,
   handleReport,
   handleGether,
@@ -44,6 +45,11 @@ const DetailBottom = ({
         <Button onClick={handleGether} variant="contained" className="m-2">
           참여하기
         </Button>
+        {isWriter && (
+          <Button variant="contained" className="bg-[red] m-2">
+            모집 마감하기
+          </Button>
+        )}
       </div>
     </div>
   );

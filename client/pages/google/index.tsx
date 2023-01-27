@@ -19,7 +19,6 @@ import axios from 'axios';
 
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
-  console.log(router.query.initial);
 
   const access_token: any = `Bearer ${router.query.access_token}`;
   const refresh_token: any = router.query.refresh_token;
@@ -42,7 +41,6 @@ const GoogleLoginPage = () => {
   });
 
   const { nickName, phoneNumber } = form;
-  console.log(form);
 
   const handleSocialEdit = () => {
     requestFirstGoogleLogin(form).then((res) => {
