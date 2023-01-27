@@ -76,10 +76,14 @@ const Index = ({
 
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
     if (newCurrentTab === 1) {
-      const sortedByTime: ListItemPropsType[] = [...sharingLists]?.sort(
-        (a, b) =>
-          new Date(b.createDate).valueOf() - new Date(a.createDate).valueOf()
-      );
+      const sortedByTime: ListItemPropsType[] =
+        sharingLists?.length > 0
+          ? [...sharingLists]?.sort(
+              (a, b) =>
+                new Date(b.createDate).valueOf() -
+                new Date(a.createDate).valueOf()
+            )
+          : [];
       setSharingListsSortedByTime(sortedByTime);
     }
     setCurrentTab(newCurrentTab);
@@ -158,6 +162,8 @@ export async function getServerSideProps(context: any) {
     type,
     keyword,
   } = context?.query;
+  console.log(context?.query);
+
   const requestData = {
     lat: Number(lat),
     lng: Number(lng),
