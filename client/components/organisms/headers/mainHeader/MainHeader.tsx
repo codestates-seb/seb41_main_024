@@ -74,11 +74,11 @@ const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
               >
                 로그아웃
               </Button>
+              <DrawerListItem text={'마이페이지'} path={'/mypage'} />
             </div>
           </>
         )}
 
-        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
       </DrawerList>
     </Fragment>
   );
