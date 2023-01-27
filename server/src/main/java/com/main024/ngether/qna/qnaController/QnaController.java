@@ -90,6 +90,6 @@ public class QnaController {
         Page<Qna> pageQnas = qnaRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size));
         List<Qna> qnaList = pageQnas.getContent();
         return new ResponseEntity<>(
-                new MultiResponseDto<>(qnaList, pageQnas), HttpStatus.OK);
+                new MultiResponseDto<>(mapper.QnasToQnaResponseDtos(qnaList, answerRepository), pageQnas), HttpStatus.OK);
     }
 }
