@@ -86,20 +86,20 @@ const Search = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <form
-        className="flex flex-col max-w-lg mt-3 w-[100%]"
-        onSubmit={handleSubmit}
-      >
+      <div className="flex flex-col max-w-lg mt-3 w-[100%]">
         <div id="map" className="w-[100%] h-[350px]"></div>
         <p className="mb-4">
           <em>지도를 클릭해주세요!</em>
         </p>
-        <div className="flex width-[100%] mb-4">
+        <div className="flex w-[100%] mb-4">
           <Input
             id="location"
             name="location"
             type="text"
             label="도로명•지번주소 검색"
+            onKeyDown={(e: KeyboardEvent) => {
+              if (e.key === 'Enter') return searchMap(searchAddress, setCenter);
+            }}
             onChange={handleSearchAddress}
             helperText="ex) OO시 OO구, 이문로"
           />
@@ -149,13 +149,15 @@ const Search = () => {
           defaultValue="상품 쉐어링"
           value={category}
         />
-        <FormButton
-          content="검색하기"
-          className="h-14 mt-4"
-          variant="contained"
-          type="submit"
-        />
-      </form>
+        <form onSubmit={handleSubmit}>
+          <FormButton
+            content="검색하기"
+            className="h-14 mt-4 w-[100%]"
+            variant="contained"
+            type="submit"
+          />
+        </form>
+      </div>
     </div>
   );
 };
