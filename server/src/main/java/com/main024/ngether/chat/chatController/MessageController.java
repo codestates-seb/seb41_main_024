@@ -34,16 +34,28 @@ public class MessageController {
     private final SimpMessageSendingOperations sendingOperations;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatService chatService;
+    private final ChatRoomMembersRepository chatRoomMembersRepository;
 
     @CrossOrigin
     @MessageMapping("/chat/{room-id}")//메세지를 발행하는 경로
     public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message,@Header("Authorization") String Authorization) {
         Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(Authorization.substring("Bearer ".length()))).get();
+        List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
+        String nameList = "";
         message.setNickName(member.getNickName());
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
         message.setCreateDate(LocalDateTime.now());
         message.setUnreadCount(chatService.setUnreadMessageCount(roomId));
+        for(int i = 0; i < chatRoomMembers.size(); i++){
+            if(chatRoomMembers.get(i).getSessionId() != null){
+                nameList = nameList + chatRoomMembers.get(i).getMember().getNickName();
+                if(i < chatRoomMembers.size() - 1){
+                   nameList = nameList + ",";
+                }
+            }
+        }
+        message.setReadMember(nameList);
         ChatMessage savedMessage = chatMessageRepository.save(message);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         chatRoom.setLastMessage(savedMessage.getMessage());

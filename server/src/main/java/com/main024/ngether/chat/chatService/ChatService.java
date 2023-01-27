@@ -103,7 +103,7 @@ public class ChatService {
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.ENTER)
                     .message("[알림] " + member.getNickName() + "님이 입장하셨습니다.")
-                    .unreadCount(setUnreadMessageCount(roomId) - 1)
+                    .unreadCount(setUnreadMessageCount(roomId))
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
             chatRoom.setLastMessage(savedMessage.getMessage());
@@ -112,12 +112,28 @@ public class ChatService {
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
         } else {
+            //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
+            boolean check = false;
             for (ChatMessage chatMessage : chatMessageList) {
-                if (chatMessage.getUnreadCount() != 0 && !Objects.equals(chatMessage.getNickName(), member.getNickName()))
+
+                if (chatMessage.getReadMember() != null) {
+                    String[] name = chatMessage.getReadMember().split(",");
+                    for (int i = 0; i < name.length; i++) {
+                        if (Objects.equals(name[i], member.getNickName())) {
+                            check = true;
+                        }
+                    }
+                }
+                if (chatMessage.getUnreadCount() != 0 && !check) {
                     chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
+                    chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
+                    chatMessageRepository.save(chatMessage);
+                }
+                check = false;
             }
-            chatMessageRepository.saveAll(chatMessageList);
+
+
             sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
                     .message("")
                     .type(ChatMessage.MessageType.REENTER)
@@ -224,7 +240,7 @@ public class ChatService {
 
     public List<ChatRoom> findMyChatRoom() {
         Member member = memberService.getLoginMember();
-        if(member == null)
+        if (member == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         List<ChatRoom> chatRoomList = new ArrayList<>();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
@@ -249,17 +265,18 @@ public class ChatService {
 
         return count;
     }
+
     @Async
     public Boolean checkNewMessages(Member member) throws InterruptedException {
-            while (true) {
-                List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
-                for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
-                    if (chatRoomMember.getUnreadMessageCount() > 0) {
-                           return true;
-                    }
+        while (true) {
+            List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+            for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
+                if (chatRoomMember.getUnreadMessageCount() > 0) {
+                    return true;
                 }
-                Thread.sleep(1000L);
             }
+            Thread.sleep(1000L);
+        }
 
     }
 }

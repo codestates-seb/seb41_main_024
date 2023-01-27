@@ -49,7 +49,7 @@ const ChatHeader = ({members, handleExitChat}: ChatHeaderType) => {
       </AppBar>
       <Divider />
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        {members.map((member) => <DrawerListItem text={member}/>)}
+        {members.map((member,index) => <DrawerListItem key={index} text={member}/>)}
         <div className='fixed bottom-0 w-[100%]'>
           <DrawerListItem text={'나가기'} onClick={handleExitChat}/>
         </div>

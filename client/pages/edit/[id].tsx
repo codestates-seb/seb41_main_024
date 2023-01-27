@@ -64,8 +64,7 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
 
   const handleEdit = async () => {
     await editMutation.mutate();
-    // router.push(`/nearby/${id}`);
-    console.log(editMutation.mutate());
+    router.push(`/nearby/${id}`);
   };
 
   const [form, setForm] = useState({

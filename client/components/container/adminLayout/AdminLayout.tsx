@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 
 const AdminLayout = ({ children }: defaultLayoutPropsType) => {
   const router = useRouter();
-  const {isLogin} = useLogin();
+  const { isLogin } = useLogin();
   const nickName = Cookies.get('nickName');
 
   const handleLogOut = () => {
@@ -18,6 +18,7 @@ const AdminLayout = ({ children }: defaultLayoutPropsType) => {
     Cookies.remove('refresh_token');
     Cookies.remove('memberId');
     Cookies.remove('nickName');
+    Cookies.remove('locationId');
     router.push('/');
   };
 
@@ -25,7 +26,11 @@ const AdminLayout = ({ children }: defaultLayoutPropsType) => {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={basicTheme}>
         <div className="max-w-2xl mx-auto min-h-[100vh]">
-          <MainHeader isLogin={isLogin} nickName={nickName} logOutHandler={handleLogOut}/>
+          <MainHeader
+            isLogin={isLogin}
+            nickName={nickName}
+            logOutHandler={handleLogOut}
+          />
           {children}
           <Navigation />
         </div>

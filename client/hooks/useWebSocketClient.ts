@@ -19,10 +19,11 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
   const nickName = Cookies.get('nickName')
-
+  
   useEffect(() => {
-    if(!isReady && HEADER_TOKEN !== undefined) return
+    if (!isReady || !HEADER_TOKEN || isConnected) return;
 
     const defaultChatSetting = async () => {
       await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: HEADER_TOKEN});
@@ -72,11 +73,23 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
         }
         else return
       })
-    }
+    } 
 
     checkChatMember()
+    setIsConnected(true);
+  }, [roomId, HEADER_TOKEN, isConnected])
 
-  }, [roomId, HEADER_TOKEN])
+  useEffect(() => {
+    return () => {
+      if (stompClient && stompClient.connected) {
+        stompClient.disconnect(() => {
+          stompClient.unsubscribe('sub-0');
+          setIsConnected(false);
+        });
+      }
+    };
+  }, [stompClient])
+
   return {stompClient, messages, members, roomId}
 }
 
