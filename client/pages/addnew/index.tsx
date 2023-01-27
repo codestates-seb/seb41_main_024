@@ -78,7 +78,7 @@ const AddNewPage = () => {
   const { inputValue, onChange } = useInput({
     title: '',
     productsLink: '',
-    category: 'product',
+    category: '상품 쉐어링',
     maxNum: 2,
     content: '',
     deadLine: '',
@@ -143,6 +143,7 @@ const AddNewPage = () => {
       setAlertOption,
     });
     if (!validation) return;
+
     mutate(requestBody);
   };
   const handleClose = (
@@ -167,7 +168,6 @@ const AddNewPage = () => {
     }
   }; */
   const getLinkMetaData = async (e: ChangeEvent<HTMLTextAreaElement>) => {
-    console.log(e.target.value);
     if (
       e.target.value.includes('www.coupang.com') ||
       !e.target.value.includes('https')
