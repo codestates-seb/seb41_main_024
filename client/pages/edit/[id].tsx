@@ -13,17 +13,17 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { getProductDetail } from '../../api/detail';
 import { editProductDetail } from '../../api/detail';
 
-// export async function getServerSideProps(context: { params: { id: string } }) {
-//   const { id } = context.params;
-//   const { data } = await getProductDetail(id);
+export async function getServerSideProps(context: { params: { id: string } }) {
+  const { id } = context.params;
+  const { data } = await getProductDetail(id);
 
-//   return {
-//     props: {
-//       previousData: data,
-//       id,
-//     },
-//   };
-// }
+  return {
+    props: {
+      previousData: data,
+      id,
+    },
+  };
+}
 
 interface previousDataProps {
   previousData: any;
@@ -67,6 +67,7 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
     router.push(`/nearby/${id}`);
   };
 
+  console.log(previousData);
   const [form, setForm] = useState({
     title: previousData?.title,
     content: previousData?.content,

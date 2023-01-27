@@ -5,8 +5,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Cookie } from '@mui/icons-material';
 import { DetailBottomPropsType } from './detailBottomType';
+import Cookies from 'js-cookie';
 
 const DetailBottom = ({
+  isOpen,
   isLiked,
   isWriter,
   handleLike,
@@ -35,6 +37,16 @@ const DetailBottom = ({
         )}
       </Button>
       <div>
+        {isOpen && (
+          <Button onClick={handleGether} variant="contained" className="m-2">
+            참여하기
+          </Button>
+        )}
+        {!isOpen && (
+          <Button disabled variant="contained" className="m-2">
+            참여하기
+          </Button>
+        )}
         <Button
           onClick={handleReport}
           variant="contained"
@@ -42,11 +54,8 @@ const DetailBottom = ({
         >
           신고하기
         </Button>
-        <Button onClick={handleGether} variant="contained" className="m-2">
-          참여하기
-        </Button>
         {isWriter && (
-          <Button variant="contained" className="bg-[red] m-2">
+          <Button variant="contained" className="m-2">
             모집 마감하기
           </Button>
         )}

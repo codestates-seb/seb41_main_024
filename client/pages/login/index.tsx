@@ -47,31 +47,40 @@ const LoginPage = () => {
     },
   });
 
-  const { data, error, mutate } = useMutation(requestLogin, {
-    onSuccess: (data) => {
-      data.headers.authorization &&
-        Cookies.set('access_token', data.headers.authorization);
-      data.headers.refresh &&
-        Cookies.set('refresh_token', data.headers.refresh);
-      Cookies.set('memberId', data.data.memberId);
-      Cookies.set('nickName', data.data.nickName);
-      Cookies.set('locationId', data.data.locationId);
-      router.push('/');
-    },
-    onError: (error: any) => {
+  const handleLogin = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+      // const { hashedPassword }: any = await hashPassword(pw);
+      // const hashedForm = { ...form, pw: hashedPassword };
+      await requestLogin(form).then((res) => {
+        console.log('requestLogin res', res);
+        res.headers.authorization &&
+          Cookies.set('access_token', res.headers.authorization, {
+            expires: 7,
+          });
+        res.headers.refresh &&
+          Cookies.set('refresh_token', res.headers.refresh, {
+            expires: 7,
+          });
+        Cookies.set('memberId', res.data.memberId, {
+          expires: 7,
+        });
+        Cookies.set('nickName', res.data.nickName, {
+          expires: 7,
+        });
+        Cookies.set('locationId', res.data.locationId, {
+          expires: 7,
+        });
+        router.push('/');
+      });
+    } catch (error: any) {
       setLoginErrorMessage(
         error.response.data.status !== 403
           ? '정확하지 않은 이메일 또는 패스워드입니다'
           : '신고로 이용이 정지된 사용자입니다'
       );
-    },
-  });
-
-  const handleLogin = async () => {
-    const { hashedPassword }: any = await hashPassword(pw);
-    const hashedForm = { ...form, pw: hashedPassword };
-
-    await mutate(hashedForm);
+    }
   };
 
   const handleSocialLogin = async () => {

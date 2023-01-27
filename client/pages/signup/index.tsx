@@ -64,13 +64,14 @@ const SignupPage = () => {
     try {
       const { hashedPassword } = await hashPassword(pw);
 
+      console.log(hashedPassword);
       const formValueWithHashedPassword = {
         ...formValue,
         pw: hashedPassword,
       };
       await postSignup(formValueWithHashedPassword);
       alert('회원가입 완료되었습니다.');
-      router.push('/login');
+      // router.push('/login');
     } catch (error) {
       console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
     }

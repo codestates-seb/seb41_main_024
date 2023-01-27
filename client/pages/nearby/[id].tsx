@@ -16,12 +16,12 @@ import {
   goChatroom,
 } from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
-import Cookies from 'js-cookie';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
+import Box from '@mui/material/Box';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
-  const { data } = await getProductDetail(id);
   return {
     props: {
       id,
@@ -30,62 +30,107 @@ export async function getServerSideProps(context: any) {
 }
 
 export default function ProductDetail({ id }: any) {
+  const loginChecker = () => {
+    if (Cookies.get('access_token')) {
+      return true;
+    }
+    return false;
+  };
+
+  const isLogin = loginChecker();
+  const [isLiked, setIsLiked] = useState<boolean>();
+  const [productData, setProductData] = useState<any>();
   const router = useRouter();
+
   const res = useQueries({
     queries: [
       {
         queryKey: ['productDetail'],
         queryFn: () => getProductDetail(id),
+        onSuccess: (res: { data: React.SetStateAction<undefined> }) => {
+          console.log(res);
+          setProductData(res.data);
+        },
+        retry: false,
       },
       {
         queryKey: ['isWriter'],
         queryFn: () => getIsWriter(id),
       },
-      {
-        queryKey: ['MyFavorites'],
-        queryFn: getMyFavorite,
-      },
     ],
   });
 
-  const productData = res[0].data?.data;
   const isWriter = res[1].data?.data;
-  const isMyFavorite =
-    res[2].data?.data?.data.filter((item: any) => item.boardId === Number(id))
-      .length > 0;
+
+  const isOpen = productData?.maxNum > productData?.curNum;
+
+  console.log(productData);
+
+  useEffect(() => {
+    if (isLogin) {
+      getMyFavorite().then((res) => {
+        const isMyFavorite: any =
+          res.data.data.filter((item: any) => item.boardId === Number(id))
+            .length > 0;
+
+        setIsLiked(isMyFavorite);
+      });
+    }
+  }, []);
 
   const reportForm = {
     reportedId: id,
     reportType: 'board',
   };
-  const reportutation = useMutation(() => reportProduct(reportForm));
 
-  const [isLiked, setIsLiked] = useState(isMyFavorite);
-
+  const reportMutation = useMutation(() => reportProduct(reportForm));
   const deleteMutation = useMutation(() => deleteProductDetail(id));
   const likeMutation = useMutation(() => likeProduct(id));
 
+  // 삭제하기
   const handleDelete = () => {
     deleteMutation.mutate();
     router.push('/');
   };
 
+  // 찜하기
   const handleLike = () => {
-    setIsLiked(!isLiked);
-    likeMutation.mutate();
+    if (!isLogin) {
+      alert('로그인 후 이용해주세요!');
+      router.push('/login');
+    } else {
+      setIsLiked(!isLiked);
+      likeMutation.mutate();
+    }
   };
 
+  // 신고하기
   const handleReport = () => {
-    reportutation.mutate();
+    if (!isLogin) {
+      alert('로그인 후 이용해주세요!');
+      router.push('/login');
+    } else {
+      reportMutation.mutate();
+      alert('신고가 접수되었습니다');
+    }
   };
 
+  // 참여하기
   const handleGether = () => {
-    goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
+    if (!isLogin) {
+      alert('로그인 후 이용해주세요!');
+      router.push('/login');
+    } else {
+      goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
+    }
   };
 
   return (
     <div>
-      <Img src="/chatItem/productImg05.svg" alt="메인사진" />
+      <div className="p-20">
+        <Img src="/chatItem/productImg05.svg" alt="메인사진" />
+      </div>
+
       <UserMetaInfo
         productData={productData}
         handleDelete={handleDelete}
@@ -93,6 +138,7 @@ export default function ProductDetail({ id }: any) {
         id={id}
       />
       <DetailBottom
+        isOpen={isOpen}
         isLiked={isLiked}
         isWriter={isWriter}
         handleLike={handleLike}

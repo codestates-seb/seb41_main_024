@@ -28,9 +28,15 @@ const GoogleLoginPage = () => {
   // 두 번째 소셜 로그인일 경우
   if (router.query.initial === 'false') {
     requestGoogleLogin().then((res) => {
-      Cookies.set('memberId', res.data.memberId);
-      Cookies.set('nickName', res.data.nickName);
-      Cookies.set('locationId', res.data.locationId);
+      Cookies.set('memberId', res.data.memberId, {
+        expires: 7,
+      });
+      Cookies.set('nickName', res.data.nickName, {
+        expires: 7,
+      });
+      Cookies.set('locationId', res.data.locationId, {
+        expires: 7,
+      });
       router.push('/');
     });
   }
@@ -44,9 +50,15 @@ const GoogleLoginPage = () => {
 
   const handleSocialEdit = () => {
     requestFirstGoogleLogin(form).then((res) => {
-      Cookies.set('memberId', res.data.memberId);
-      Cookies.set('nickName', res.data.nickName);
-      Cookies.set('locationId', res.data.locationId);
+      Cookies.set('memberId', res.data.memberId, {
+        expires: 7,
+      });
+      Cookies.set('nickName', res.data.nickName, {
+        expires: 7,
+      });
+      Cookies.set('locationId', res.data.locationId, {
+        expires: 7,
+      });
       router.push('/');
     });
   };
