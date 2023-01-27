@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
 
-import { getAllUsers } from '../../api/members';
+import { requestGoogleLogin, requestFirstGoogleLogin } from '../../api/members';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
@@ -18,22 +18,17 @@ import { useEffect } from 'react';
 import axios from 'axios';
 
 const GoogleLoginPage = () => {
-  const REQUEST_URL = 'https://ngether.site';
   const router: NextRouter = useRouter();
+  console.log(router.query.initial);
 
-  console.log(router);
-  console.log(router.query);
-
-  useEffect(() => {
-    console.log(window.location);
-  });
-
-  // Cookies.set('access_token', router.query.access_token);
-  // Cookies.set('refresh_token', router.query.access_token);
+  const access_token: any = `Bearer ${router.query.access_token}`;
+  const refresh_token: any = router.query.refresh_token;
+  Cookies.set('access_token', access_token);
+  Cookies.set('refresh_token', refresh_token);
 
   // 두 번째 소셜 로그인일 경우
-  if (!router.query.initial) {
-    axios.get(`${REQUEST_URL}/api/uuuser`).then((res) => {
+  if (router.query.initial === 'false') {
+    requestGoogleLogin().then((res) => {
       Cookies.set('memberId', res.data.memberId);
       Cookies.set('nickName', res.data.nickName);
       Cookies.set('locationId', res.data.locationId);
@@ -42,67 +37,67 @@ const GoogleLoginPage = () => {
   }
 
   const [form, setForm] = useState({
-    nickname: '',
-    phonenumber: '',
+    nickName: '',
+    phoneNumber: '',
   });
 
-  // console.log(form);
-  const { nickname, phonenumber } = form;
+  const { nickName, phoneNumber } = form;
+  console.log(form);
 
   const handleSocialEdit = () => {
-    axios.patch(`${REQUEST_URL}/api/firstuuuser`, form).then((res) => {
+    requestFirstGoogleLogin(form).then((res) => {
       Cookies.set('memberId', res.data.memberId);
       Cookies.set('nickName', res.data.nickName);
       Cookies.set('locationId', res.data.locationId);
       router.push('/');
     });
+  };
 
-    const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const { name, value } = event.target;
+  const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
 
-      setForm({
-        ...form,
-        [name]: value,
-      });
-    };
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
 
-    return (
-      <div>
-        <div className="mt-24">
-          <SocialLoginTitle />
-        </div>
-        <div className="login flex justify-center m-7 my-12">
-          <div className="flex flex-col w-10/12 max-w-lg">
-            <Input
-              id="nickname-input"
-              name="nickname"
-              type={'text'}
-              label="닉네임"
-              value={nickname}
-              onChange={onChange}
-            />
-            <Label htmlFor={'nickname-input'} labelText={''} />
-            <Input
-              id="phonenumber-input"
-              name="phonenumber"
-              type={'text'}
-              label="휴대전화"
-              value={phonenumber}
-              onChange={onChange}
-            />
-            <Label htmlFor={'phonenumber-input'} labelText={''} />
-            <p className="text-[#dd3030]"></p>
-            <Button
-              className="h-14 mt-4 bg-primary text-white rounded"
-              onClick={handleSocialEdit}
-            >
-              수정하기
-            </Button>
-          </div>
+  return (
+    <div>
+      <div className="mt-24">
+        <SocialLoginTitle />
+      </div>
+      <div className="login flex justify-center m-7 my-12">
+        <div className="flex flex-col w-10/12 max-w-lg">
+          <Input
+            id="nickName-input"
+            name="nickName"
+            type={'text'}
+            label="닉네임"
+            value={nickName}
+            onChange={onChange}
+          />
+          <Label htmlFor={'nickName-input'} labelText={''} />
+          <Input
+            id="phoneNumber-input"
+            name="phoneNumber"
+            type={'text'}
+            label="휴대전화"
+            value={phoneNumber}
+            onChange={onChange}
+          />
+          <Label htmlFor={'phoneNumber-input'} labelText={''} />
+          <p className="text-[#dd3030]"></p>
+          <Button
+            className="h-14 mt-4 bg-primary text-white rounded"
+            onClick={handleSocialEdit}
+          >
+            수정하기
+          </Button>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 };
 
 export default GoogleLoginPage;
