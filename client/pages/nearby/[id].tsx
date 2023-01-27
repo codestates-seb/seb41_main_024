@@ -72,6 +72,7 @@ export default function ProductDetail({ id }: any) {
   const handleDelete = () => {
     deleteMutation.mutate();
     router.push('/');
+    console.log(deleteMutation);
   };
 
   const handleLike = () => {

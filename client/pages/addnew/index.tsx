@@ -10,12 +10,12 @@ import Select from '@mui/material/Select';
 import { uploadPost } from '../../api/post';
 import { useMutation } from '@tanstack/react-query';
 import useInput from '../../hooks/addNewHooks/useInput';
-import { Box } from '@mui/material';
+import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 import { uploadPostType } from '../../hooks/addNewHooks/useInputType';
 import { Cookies } from 'react-cookie';
 import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
 import { getCurrentLocation } from '../../api/location';
-
+import * as cheerio from 'cheerio';
 import { useRouter } from 'next/router';
 import {
   ChangeEvent,
@@ -27,7 +27,12 @@ import {
 } from 'react';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 import axios from 'axios';
-
+import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
+import { validatePostInput } from '../../utils/uploadPost/postInputValidation';
+const CATEGORY_OPTIONS = [
+  { label: '상품 쉐어링', value: '상품 쉐어링' },
+  { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
+];
 const AddNewPage = () => {
   const [token, setToken] = useState({ authorization: '', refresh: '' });
   const router = useRouter();
@@ -38,38 +43,43 @@ const AddNewPage = () => {
     lng: 0,
     address: '',
   });
-  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const [center, setCenter] = useState({ lat: 0, lng: 0, address: '' });
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
-
+  const [open, setOpen] = useState(false);
+  const [alertOption, setAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'error', value: '' });
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: async (data) => {
+      setOpen(true);
+      setAlertOption({ severity: 'success', value: '게시글이 등록되었습니다' });
       await axios({
         url: `https://ngether.site/chat/room/${data.data.boardId}`,
         method: 'get',
-        headers: token
+        headers: token,
       });
       await axios({
         url: `https://ngether.site/chat/room/enter/${data.data.boardId}`,
         method: 'get',
-        headers: token
+        headers: token,
       });
-      router.push('/');
+
+      router.push(`/nearby/${data.data.boardId}`);
     },
 
     onError: (error) => {
-      console.log(error);
-      alert(error);
+      alert('게시물 등록에 실패했습니다. 잠시 후 다시 시도해주세요');
     },
   });
   const cookie = new Cookies();
-
+  const [imageLink, setImageLink] = useState<string | undefined>(base);
   const { inputValue, onChange } = useInput({
     title: '',
-    price: 0,
     productsLink: '',
-    category: 'product',
-    maxNum: '1',
+    category: '상품 쉐어링',
+    maxNum: 2,
     content: '',
     deadLine: '',
   });
@@ -78,7 +88,7 @@ const AddNewPage = () => {
     price?: number;
     productsLink: string;
     category: string;
-    maxNum: string;
+    maxNum: number;
     content: string;
     deadLine: string;
     searchOption: string;
@@ -96,9 +106,10 @@ const AddNewPage = () => {
       ? setToken({ authorization, refresh })
       : router.push('/login');
   }, []);
+
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center]);
+  }, [center.lat, center.lng]);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
   const handleSearchAddress = (e: {
@@ -106,6 +117,7 @@ const AddNewPage = () => {
   }) => {
     setSearchAddress(e.target.value);
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -118,12 +130,34 @@ const AddNewPage = () => {
       address: targetCoord.address,
       accessToken: token.authorization,
       refreshToken: token.refresh,
+      imageLink,
     };
+    const validation = validatePostInput({
+      title,
+      address: targetCoord?.address,
+      productsLink: encodeURIComponent(productsLink),
+      maxNum,
+      deadLine,
+      content,
+      setOpen,
+      setAlertOption,
+    });
+    if (!validation) return;
 
     mutate(requestBody);
   };
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
-  const fetchOgData = async (url: string) => {
+    setOpen(false);
+  };
+
+  /* const fetchOgData = async (url: string) => {
     try {
       await axios
         .get(`/api/fetch-og-data?url=${url}`)
@@ -132,6 +166,38 @@ const AddNewPage = () => {
     } catch (error) {
       console.log(error);
     }
+  }; */
+  const getLinkMetaData = async (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (
+      e.target.value.includes('www.coupang.com') ||
+      !e.target.value.includes('https')
+    )
+      return;
+    /* const data = await axios({
+      method: 'post',
+      url: '/api/getLinkMetaInfo',
+      data: { url: e.target.value },
+    });
+    console.log(data); */
+    return axios({
+      method: 'get',
+      url: e.target.value,
+    }).then(({ data, status }) => {
+      if (status !== 200) {
+        alert('이미지 정보를 불러오는데 실패했습니다.');
+      }
+      const $ = cheerio.load(data);
+      $('meta').each((_, el) => {
+        const key = $(el).attr('property')?.split(':')[1]; // ? 옵셔널 체이닝 앞에가 있으면 실행
+        if (key) {
+          const value = $(el).attr('content');
+          const checkUrl = value?.includes('https');
+          if (key === 'image' && checkUrl) {
+            setImageLink(value);
+          }
+        }
+      });
+    });
   };
 
   return (
@@ -140,14 +206,9 @@ const AddNewPage = () => {
         <div className="flex justify-center m-7 my-12">
           <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
             <Stack spacing={4}>
-              <img
-                className="h-40 w-40 mb-7 m-auto"
-                src={productImg}
-                alt={'유저이미지'}
-              />
               <div id="map" className="w-[100%] h-[350px]"></div>
               <p>
-                <em>지도를 클릭해주세요!</em>
+                <em>상품을 나눌 위치를 지도에서 클릭해주세요</em>
               </p>
               <div className="flex width-[100%]">
                 <Input
@@ -169,7 +230,7 @@ const AddNewPage = () => {
                 name="address"
                 type="text"
                 label="쉐어링 위치"
-                value={targetCoord.address}
+                value={targetCoord.address || center.address}
                 disabled
               />
               <Label htmlFor={'title'} labelText={''} />
@@ -189,9 +250,22 @@ const AddNewPage = () => {
                 name="price"
                 type="number"
                 label="가격"
+                placeholder="총모집인원 x 상품가격"
                 value={price}
+                inputProps={{ min: 0 }}
                 onChange={onChange}
+                helperText="배송비를 포함한 가격을 입력해주세요"
               />
+              <div className="flex items-center">
+                <img
+                  className="h-40 w-40 mb-7 m-auto"
+                  src={imageLink}
+                  alt={'상품이미지'}
+                />
+                <span>
+                  상품 링크를 입력하면 자동으로 상품이미지가 등록됩니다
+                </span>
+              </div>
               <Label htmlFor={'productsLink'} labelText={''} />
               <Input
                 variant="outlined"
@@ -200,24 +274,21 @@ const AddNewPage = () => {
                 type="text"
                 label="상품 링크"
                 value={productsLink}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => {
-                  onChange(e);
-                  fetchOgData(e.target.value);
-                }}
+                onChange={onChange}
+                onBlur={getLinkMetaData}
+                helperText="쿠팡 상품은 이미지 자동 업로드 지원이 되지 않습니다."
               />
 
               <FormControl fullWidth>
-                <InputLabel id="category">카테고리</InputLabel>
-                <Select
-                  labelId="category"
+                <DropdownInput
+                  dropDownOptions={CATEGORY_OPTIONS}
+                  id="category"
                   name="category"
-                  value={category}
-                  label="category"
+                  label="카테고리"
                   onChange={onChange}
-                >
-                  <MenuItem value="상품 쉐어링">상품 쉐어링</MenuItem>
-                  <MenuItem value="배달 쉐어링">배달 쉐어링</MenuItem>
-                </Select>
+                  defaultValue="상품 쉐어링"
+                  value={category}
+                />
               </FormControl>
               <FormControl fullWidth>
                 <Input
@@ -226,6 +297,7 @@ const AddNewPage = () => {
                   name="maxNum"
                   value={maxNum}
                   label="모집 인원"
+                  inputProps={{ min: 0 }}
                   type="number"
                   onChange={onChange}
                 ></Input>
@@ -247,6 +319,7 @@ const AddNewPage = () => {
                 id="content"
                 name="content"
                 label="내용"
+                placeholder="ex) 배송비 : 000원, 나눔 장소 : 00공원 "
                 value={content}
                 onChange={onChange}
                 rows={10}
@@ -261,6 +334,15 @@ const AddNewPage = () => {
               />
             </Stack>
           </FormControl>
+          <Snackbar
+            open={open}
+            autoHideDuration={4000}
+            onClose={handleClose}
+            className="bottom-[25%]"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+            <Alert severity={alertOption?.severity}>{alertOption?.value}</Alert>
+          </Snackbar>
         </div>
       </Box>
     </LoginChecker>
