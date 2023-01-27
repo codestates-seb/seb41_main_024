@@ -97,15 +97,16 @@ export default function ProductDetail({ id }: any) {
         isWriter={isWriter}
         id={id}
       />
-      <PostMeta productData={productData} />
-      <DetailPageTab productData={productData} />
       <DetailBottom
         isLiked={isLiked}
+        isWriter={isWriter}
         handleLike={handleLike}
         handleReport={handleReport}
         handleGether={handleGether}
         id={id}
       />
+      <PostMeta productData={productData} />
+      <DetailPageTab productData={productData} />
     </div>
   );
 }
