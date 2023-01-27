@@ -47,7 +47,7 @@ public class MemberController {
 
         return ResponseEntity.ok(mapper.memberToMemberResponse(member));
     }
-    @GetMapping("/check")
+    @PostMapping("/check")
     public ResponseEntity checkDetail(@RequestBody MemberDto.Check requestBody){
         return ResponseEntity.ok(memberService.check(requestBody));
     }
