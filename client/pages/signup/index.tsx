@@ -4,9 +4,11 @@ import FormButton from '../../components/molecules/formbutton/FormButton';
 import NTextField from '../../components/organisms/nTextField/NTextField';
 import useValidation from '../../hooks/common/useValidation';
 import validationInfo from '../../utils/validationInfo/validationInfo';
-import postSignup, { hashPassword } from '../../api/postSignup';
+import postSignup from '../../api/postSignup';
 import router from 'next/router';
+
 import axios, { AxiosResponse } from 'axios';
+import { hashPassword } from '../../utils/hashPassword/hashPassword';
 
 const SignupSlogan = () => {
   return (
@@ -62,22 +64,12 @@ const SignupPage = () => {
     event.preventDefault();
     //axios reponse에 hashedPasswrod가 존재하지 않는 property라고 출력됨.
     try {
-      const { hashedPassword } = await hashPassword(pw);
-
-      const formValueWithHashedPassword = {
-        ...formValue,
-        pw: hashedPassword,
-      };
-      await postSignup(formValueWithHashedPassword);
-      alert('회원가입 완료되었습니다.');
-      router.push('/login');
+      const message = '회원가입이 완료되었습니다';
+      await hashPassword(formValue, message);
     } catch (error) {
       console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
     }
-
-    console.log(formValue);
   };
-
   return (
     <div>
       <div className="mt-24">
