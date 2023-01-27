@@ -70,6 +70,10 @@ const Chatroom = () => {
     }
   }
 
+  const handleSendReport = (): void => {
+    axios.post('https://ngether.site/api/reports', {reportedId: roomId, reportType: "chat"}, {headers : HEADER_TOKEN})
+  }
+
   const handleExitChatRoom = (): void => {
     if (!stompClient) return;
     const confirmationMessage = IS_ROOM_OWER ? 
@@ -85,7 +89,7 @@ const Chatroom = () => {
 
   return (
     <div>
-      <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
+      <ChatHeader members={members} handleExitChat={handleExitChatRoom} handleSendReport={handleSendReport}/>
       {!isMemeber && <ForbiddenMessage />}
       {isMemeber && (
         <>

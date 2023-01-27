@@ -10,9 +10,10 @@ import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 interface ChatHeaderType {
   members: string[];
   handleExitChat: () => void;
+  handleSendReport: () => void;
 }
 
-const ChatHeader = ({members, handleExitChat}: ChatHeaderType) => {
+const ChatHeader = ({members, handleExitChat, handleSendReport}: ChatHeaderType) => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
@@ -51,6 +52,7 @@ const ChatHeader = ({members, handleExitChat}: ChatHeaderType) => {
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
         {members.map((member,index) => <DrawerListItem key={index} text={member}/>)}
         <div className='fixed bottom-0 w-[100%]'>
+          <DrawerListItem text={'채팅방 신고하기'} onClick={handleSendReport}/>
           <DrawerListItem text={'나가기'} onClick={handleExitChat}/>
         </div>
       </DrawerList>
