@@ -8,12 +8,10 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
-import { getAllUsers } from '../../api/members';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
 import Divider from '@mui/material/Divider';
-import axios from 'axios';
 import { hashPassword } from '../../api/postSignup';
 
 const LoginPage = () => {
@@ -72,6 +70,7 @@ const LoginPage = () => {
   const handleLogin = async () => {
     const { hashedPassword }: any = await hashPassword(pw);
     const hashedForm = { ...form, pw: hashedPassword };
+
     await mutate(hashedForm);
   };
 
