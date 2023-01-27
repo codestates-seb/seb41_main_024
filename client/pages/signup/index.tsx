@@ -4,8 +4,9 @@ import FormButton from '../../components/molecules/formbutton/FormButton';
 import NTextField from '../../components/organisms/nTextField/NTextField';
 import useValidation from '../../hooks/common/useValidation';
 import validationInfo from '../../utils/validationInfo/validationInfo';
-import postSignup from '../../api/postSignup';
+import postSignup, { hashPassword } from '../../api/postSignup';
 import router from 'next/router';
+import axios, { AxiosResponse } from 'axios';
 
 const SignupSlogan = () => {
   return (
@@ -59,8 +60,15 @@ const SignupPage = () => {
 
   const onSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    //axios reponse에 hashedPasswrod가 존재하지 않는 property라고 출력됨.
     try {
-      await postSignup(formValue);
+      const { hashedPassword } = await hashPassword(pw);
+
+      const formValueWithHashedPassword = {
+        ...formValue,
+        pw: hashedPassword,
+      };
+      await postSignup(formValueWithHashedPassword);
       alert('회원가입 완료되었습니다.');
       router.push('/login');
     } catch (error) {

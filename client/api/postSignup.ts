@@ -13,3 +13,12 @@ const postSignup = (formValue: {
 };
 
 export default postSignup;
+
+export const hashPassword = async (pw: string) => {
+  const { data }: any = await axios({
+    method: 'post',
+    data: { pw },
+    url: '/api/passwordHash',
+  });
+  return data;
+};

@@ -70,6 +70,7 @@ export default function BottomNav(): JSX.Element {
             maxWidth: '672px',
             transform: 'translateX(-50%)',
             bottom: '0',
+            zIndex: '10',
             // borderTop: '1px solid #475569',
           }}
         >
