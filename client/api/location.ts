@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import axios from 'axios';
 import { setDefaultCoordsAndAddress } from './kakaoMap';
 const kakao = typeof window !== 'undefined' ? (window as any).kakao : null;
 interface getCurrentLocationPropsType {
@@ -11,6 +11,7 @@ interface getCurrentLocationPropsType {
   >;
   setLocationError: React.Dispatch<React.SetStateAction<string>>;
 }
+const REQUEST_URL = 'https://ngether.site';
 export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
   const geoLocationOptions = { enableHighAccuracy: true };
   if (navigator.geolocation) {
@@ -33,4 +34,57 @@ export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
       geoLocationOptions
     );
   }
+};
+
+interface setAddressBooksType {
+  locationData?: {
+    address: string;
+    lat: string;
+    lng: string;
+    locationName: string;
+  };
+
+  Authorization: string;
+  Refresh: string;
+  locationId?: number;
+}
+
+export const setAddressBooks = async ({
+  locationData,
+  Authorization,
+  Refresh,
+}: setAddressBooksType) => {
+  const dataToRequest = {
+    ...locationData,
+    latitude: locationData?.lat,
+    longitude: locationData?.lng,
+  };
+  return axios({
+    method: 'post',
+    url: `${REQUEST_URL}/api/location`,
+    data: dataToRequest,
+    headers: { Authorization, Refresh },
+  }).then((res) => res.data);
+};
+export const getAddressBooks = async ({
+  Authorization,
+  Refresh,
+}: setAddressBooksType) => {
+  return axios({
+    method: 'get',
+    url: `${REQUEST_URL}/api/locations`,
+    headers: { Authorization, Refresh },
+  });
+};
+
+export const deleteAddressBook = async ({
+  Authorization,
+  Refresh,
+  locationId,
+}: setAddressBooksType) => {
+  return axios({
+    method: 'delete',
+    url: `${REQUEST_URL}/api/location/${locationId}`,
+    headers: { Authorization, Refresh },
+  });
 };
