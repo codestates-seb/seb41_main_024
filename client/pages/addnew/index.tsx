@@ -65,14 +65,12 @@ const AddNewPage = () => {
         method: 'get',
         headers: token,
       });
-      console.log(data);
 
       router.push(`/nearby/${data.data.boardId}`);
     },
 
     onError: (error) => {
-      console.log(error);
-      alert('게시글 등록에 실패했습니다.');
+      alert('게시물 등록에 실패했습니다. 잠시 후 다시 시도해주세요');
     },
   });
   const cookie = new Cookies();
