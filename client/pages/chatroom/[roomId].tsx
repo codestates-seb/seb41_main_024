@@ -86,12 +86,12 @@ const Chatroom = () => {
   }
 
   return (
-    <div>
+    <div className='flex flex-col w-[100%]'>
       <ChatHeader members={members} handleExitChat={handleExitChatRoom} handleSendReport={handleSendReport}/>
       {!isMemeber && <ForbiddenMessage />}
       {isMemeber && (
         <>
-          <div className='left-2/4 mt-3 translate-x-[-50%] fixed w-[604px] min-w-[372px] pl-[1.5rem] pr-[2rem] rounded'>
+          <div className='left-2/4 mt-16 translate-x-[-50%] w-auto fixed px-[1rem] rounded'>
             <Link href={`/nearby/${roomId}`}>
               <ChatItem
                 thumbnail={''}
