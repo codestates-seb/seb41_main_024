@@ -64,7 +64,6 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
 
   const handleEdit = async () => {
     editMutation.mutate();
-    console.log(editMutation);
     router.push(`/nearby/${id}`);
   };
 
@@ -81,8 +80,6 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
     category: previousData?.category,
     quantity: '1',
   });
-
-  console.log(form);
 
   const { title, price, productsLink, category, quantity, address, content } =
     form;
