@@ -60,6 +60,7 @@ const LoginPage = () => {
     },
     onError: (error) => {
       setLoginErrorMessage('정확하지 않은 이메일 또는 패스워드입니다');
+      // setLoginErrorMessage(error. : '정확하지 않은 이메일 또는 패스워드입니다' : '게시물 신고로 사용이 정지된 이용자입니다');
     },
   });
 
