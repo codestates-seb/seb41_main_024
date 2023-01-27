@@ -72,7 +72,7 @@ const LoginPage = () => {
     });
     console.log(data);
 
-    await mutate();
+    await mutate({ email, pw: data?.data?.hashedPassword });
   };
 
   const handleSocialLogin = async () => {
