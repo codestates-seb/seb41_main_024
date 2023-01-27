@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router';
-import { AppBar, Button, Divider, Menu, MenuItem } from '@mui/material';
+import { AppBar, Button, Divider } from '@mui/material';
 import { ReactComponent as ArrowbackIcon } from '../../../../public/header/arrowback.svg';
 import { ReactComponent as NavigatorIcon } from '../../../../public/header/navigator.svg';
 import { ReactComponent as Logo } from '../../../../public/logos/logoFooter.svg';
 import { useState } from 'react';
 import DrawerList from '../drawer/DrawerList';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
+import DialogButton from '../../DialogButton/DialogButton';
 
 interface ChatHeaderType {
   members: string[];
@@ -50,10 +51,25 @@ const ChatHeader = ({members, handleExitChat, handleSendReport}: ChatHeaderType)
       </AppBar>
       <Divider />
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
+        <p className='text-center my-3'>유저 목록</p>
         {members.map((member,index) => <DrawerListItem key={index} text={member}/>)}
+        <Divider className='mt-3'/>
         <div className='fixed bottom-0 w-[100%]'>
-          <DrawerListItem text={'채팅방 신고하기'} onClick={handleSendReport}/>
-          <DrawerListItem text={'나가기'} onClick={handleExitChat}/>
+          <DrawerListItem>
+            <DialogButton 
+              name="채팅방 신고하기" 
+              title="이 채팅방을 신고하시겠어요?"
+              func={handleSendReport}
+            />
+          </DrawerListItem>
+          <DrawerListItem>
+            <DialogButton 
+              name="채팅방 나가기" 
+              title="채팅방에서 나가시겠어요?"
+              question="채팅방에서 나가면 N게더에서도 불참하게되며, 방장이실 경우 게시물도 같이 삭제됩니다"
+              func={handleExitChat}
+            />
+          </DrawerListItem>
         </div>
       </DrawerList>
     </>

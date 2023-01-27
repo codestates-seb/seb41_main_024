@@ -21,7 +21,7 @@ import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMe
 const Chatroom = () => { 
   let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
   let IS_ROOM_OWER = false;
-  
+
   const [input, setInput] = useState('')
   const [sharingData, setSharingData] = useState({
     thumbnail: '',
@@ -76,10 +76,8 @@ const Chatroom = () => {
 
   const handleExitChatRoom = (): void => {
     if (!stompClient) return;
-    const confirmationMessage = IS_ROOM_OWER ? 
-      "방장님이 채팅에서 나가시면 N게더도 삭제되요" : 
-      "채팅에서 나가시면 N게더에서도 이탈해요"
-    if (stompClient && confirm(confirmationMessage)) {
+
+    if (stompClient) {
       stompClient.disconnect(() => {})
       axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
       router.push('/chatlist')
