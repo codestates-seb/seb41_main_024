@@ -57,6 +57,7 @@ public class MessageController {
                 }
             }
         }
+        chatRoomMembersRepository.saveAll(chatRoomMembersList);
         savedMessage.setReadMember(nameList);
         chatMessageRepository.save(savedMessage);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
