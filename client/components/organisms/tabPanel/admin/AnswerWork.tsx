@@ -6,48 +6,126 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Divider } from '@mui/material';
 import Input from '../../../atoms/input/Input';
 import useInput from '../../../../hooks/addNewHooks/useInput';
+import FormButton from '../../../molecules/formbutton/FormButton';
+import { Fragment, useEffect, useState } from 'react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useQuery } from '@tanstack/react-query';
+import { getQuestions } from '../../../../api/admin';
+
+interface qnaType {
+  qnaId: number;
+  memberId: number;
+  nickName: string;
+  title: string;
+  content: string;
+  createDate: string;
+  qnaStatus: string;
+  answers: {
+    answerId: number;
+    memberId: number;
+    qnaId: number;
+    nickName: string;
+    title: string;
+    content: string;
+    createDate: string;
+  }[]
+}
 
 const DUMMY_REPORT = {
   data: [
     {
-      "qnaId": 3,
-      "title": "이런거 이렇게 하면 어떨까요?",
-      "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      "createDate": "2023-01-25T05:58:11.464749",
-      "modifiedAt": "2023-01-25T06:09:05.434932",
-      "qnaStatus": "NO_ANSWER"
+        "qnaId": 1,
+        "memberId": 1,
+        "nickName": "배고파",
+        "title": "qna test",
+        "content": "qna test content",
+        "createDate": "2023-01-27T23:33:47.446939",
+        "qnaStatus": "ANSWERED",
+        "answers": [
+            {
+                "answerId": 1,
+                "memberId": 3,
+                "qnaId": 1,
+                "nickName": "admin",
+                "title": "답변: qna test",
+                "content": "answer test 1",
+                "createDate": "2023-01-27T23:34:42.098385"
+            },
+            {
+                "answerId": 2,
+                "memberId": 3,
+                "qnaId": 1,
+                "nickName": "admin",
+                "title": "답변: qna test",
+                "content": "answer test 2",
+                "createDate": "2023-01-27T23:34:47.871833"
+            }
+        ]
     },
     {
-      "qnaId": 5,
-      "title": "엔게더 너무 조아용~",
-      "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
-      "createDate": "2023-01-25T06:12:30.329162",
-      "modifiedAt": "2023-01-25T06:12:30.32917",
-      "qnaStatus": "NO_ANSWER"
+        "qnaId": 2,
+        "memberId": 36,
+        "nickName": "hahaha",
+        "title": "qna test hahaha",
+        "content": "qna test content",
+        "createDate": "2023-01-27T23:44:22.694474",
+        "qnaStatus": "NO_ANSWER",
+        "answers": []
+    },
+    {
+        "qnaId": 3,
+        "memberId": 36,
+        "nickName": "hahaha",
+        "title": "qna test hahaha 2",
+        "content": "qna test content",
+        "createDate": "2023-01-27T23:44:28.573644",
+        "qnaStatus": "NO_ANSWER",
+        "answers": []
     }
   ]
 }
 
 const AnswerWork = () => {
   const { inputValue, onChange } = useInput({content: ''});
+  const [questions, setQuestions] = useState([])
+  const {data, isSuccess} = useQuery(['questions'], getQuestions);
+
+  useEffect(()=>{
+    setQuestions(data?.data)
+  }, [data])
 
   return(
     <div className='flex flex-col text-center'>
       <ul>
-      {DUMMY_REPORT.data.map((qna) => {
-            return (
-              <li key={qna.qnaId} className='mb-2'>
-                <Accordion >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>{qna.title}</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <p className='text-left'>{qna.content}</p>
-                    <Divider className='my-5'/>
+        {isSuccess 
+        && questions?.map((qna:qnaType) => {
+          return (
+            <li key={qna.qnaId} className='mb-2'>
+              <Accordion >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>{qna.title}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Divider className='mb-5'/>
+                  <p className='mb-2 text-xs text-left'>문의 내용</p>
+                  <p className='text-left'>{qna.content}</p>
+                  <Divider className='my-5'/>
+                  
+                  {qna.qnaStatus === "ANSWERED" 
+                  &&
+                  <Fragment>
+                    <p className='mb-2 text-xs text-left'>답변 내용</p> 
+                    <p className='text-left'>{qna.answers[0].content}</p>
+                  </Fragment>
+                  }
+                  {qna.qnaStatus === "NO_ANSWER"
+                  &&
+                  <Fragment>
                     <Input
                       variant="outlined"
                       id="content"
@@ -59,11 +137,14 @@ const AnswerWork = () => {
                       multiline
                       className="w-[100%]"
                     />
-                  </AccordionDetails>
-                </Accordion>
-              </li>
-            )
-          })}
+                    <FormButton className='mt-2' content="작성하기" variant="contained"/>
+                  </Fragment> 
+                  }
+                </AccordionDetails>
+              </Accordion>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

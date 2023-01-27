@@ -7,24 +7,33 @@ import { useRouter } from 'next/router';
 
 import ReportBoardDetail from '../../../molecules/reportDetail/reportBoardDetail/ReportBoardDetail'
 import ReportChatDetail from '../../../molecules/reportDetail/reportChatDetail/ReportChatDetail'
-import { handleBlockUser, handleDeleteReport } from '../../../../api/admin';
+import { getReport, handleBlockUser, handleDeleteReport } from '../../../../api/admin';
 import { getChatDataset } from '../../../../api/getChatDataset';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
-
-const DUMMY_REPORT = [
-  {reportType: 'board', reportId: 1, reportedId: 24, title: '주식 리빙방 운영합니다'},
-  {reportType: 'chat', reportId: 2, reportedId: 24, title: '채팅 사기 치려고 합니다'}
-];
-
+interface reportType {
+  reportType: string;
+  reportId: number;
+  reportedId: number;
+  title: number
+}
 
 const ReportWork = () => {
   const router = useRouter();
+  const [reports, setResports] = useState([])
+  const {data, isSuccess} = useQuery(['reports'], getReport);
+
+  useEffect(()=>{
+    setResports(data?.data?.data)
+  }, [data])
 
   return (
     <div className='flex flex-col text-center'>
       <p className='mb-4 '>게시물은 해당 게시글로 이동하여 처리하실 수 있습니다.</p>
       <ul>
-          {DUMMY_REPORT.map((report) => {
+          {isSuccess 
+          && reports?.map((report:reportType) => {
             return (
               <li key={report.reportId} className='mb-2'>
                 <Accordion >
