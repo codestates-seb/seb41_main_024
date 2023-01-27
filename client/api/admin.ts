@@ -31,6 +31,17 @@ export const handleDeleteReport = (reportId:number) => {
   })
 }
 
+export const handleAnswerQuestion = (variables: {qnaId: number, content: string}) => {
+  return axios({
+    url: `https://ngether.site/api/answer/qna/${variables.qnaId}`,
+    method: 'post',
+    data: {content: variables.content},
+    headers: {
+      Authorization : Cookies.get('access_token')
+    }
+  })
+}
+
 export const handleBlockUser = (nickName:string) => {
   axios({
     url: `https://ngether.site/api/reports/admin/changeMemberNickNameRole?nickName=${nickName}`,

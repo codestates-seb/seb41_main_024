@@ -7,9 +7,9 @@ import { Divider } from '@mui/material';
 import Input from '../../../atoms/input/Input';
 import useInput from '../../../../hooks/addNewHooks/useInput';
 import FormButton from '../../../molecules/formbutton/FormButton';
-import { Fragment, useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getQuestions } from '../../../../api/admin';
+import { FormEvent, Fragment, MouseEvent, useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { getQuestions, handleAnswerQuestion } from '../../../../api/admin';
 
 interface qnaType {
   qnaId: number;
@@ -33,11 +33,22 @@ interface qnaType {
 const AnswerWork = () => {
   const { inputValue, onChange } = useInput({content: ''});
   const [questions, setQuestions] = useState([])
-  const {data, isSuccess} = useQuery(['questions'], getQuestions);
+  const {data, isSuccess, refetch} = useQuery(['questions'], getQuestions);
+
+  const answerMutation = useMutation(handleAnswerQuestion, {
+    onSuccess: () => {
+      refetch();
+    }
+  });
 
   useEffect(()=>{
     setQuestions(data?.data)
   }, [data])
+
+  const handleAnswer = async (qnaId: number, content:any, event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent> ) => {
+    event.preventDefault
+    await answerMutation.mutate({qnaId, content});
+  }
 
   return(
     <div className='flex flex-col text-center'>
@@ -70,18 +81,20 @@ const AnswerWork = () => {
                   {qna.qnaStatus === "NO_ANSWER"
                   &&
                   <Fragment>
-                    <Input
-                      variant="outlined"
-                      id="content"
-                      name="content"
-                      label="문의에 대한 답변을 작성해주세요"
-                      value={inputValue.content}
-                      onChange={onChange}
-                      rows={8}
-                      multiline
-                      className="w-[100%]"
-                    />
-                    <FormButton className='mt-2' content="작성하기" variant="contained"/>
+                    <form>
+                      <Input
+                        variant="outlined"
+                        id="content"
+                        name="content"
+                        label="문의에 대한 답변을 작성해주세요"
+                        value={inputValue.content}
+                        onChange={onChange}
+                        rows={4}
+                        multiline
+                        className="w-[100%]"
+                      />
+                      <FormButton className="mt-2" content="작성하기" variant="contained" onClick={(event) => handleAnswer(qna.qnaId, inputValue.content, event)}/>
+                    </form>
                   </Fragment> 
                   }
                 </AccordionDetails>
