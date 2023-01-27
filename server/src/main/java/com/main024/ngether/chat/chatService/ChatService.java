@@ -84,7 +84,8 @@ public class ChatService {
             //인원수 + 1 -> 지정된 인원 수가 가득 차면 게시물 상태 변경
             chatRoom.setMemberCount(chatRoom.getMemberCount() + 1);
             if (board.getMaxNum() == chatRoom.getMemberCount()) {
-                board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
+                board.setBoardStatus(Board.BoardStatus.FULL_MEMBER);
+                throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
             }
 
             board.setCurNum(board.getCurNum() + 1);
@@ -114,24 +115,27 @@ public class ChatService {
         } else {
             //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
+            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId);
             boolean check = false;
             for (ChatMessage chatMessage : chatMessageList) {
-
-                if (chatMessage.getReadMember() != null) {
-                    String[] name = chatMessage.getReadMember().split(",");
-                    for (int i = 0; i < name.length; i++) {
-                        if (Objects.equals(name[i], member.getNickName())) {
-                            check = true;
+                    if (chatMessage.getChatMessageId() > chatRoomMembers.getLastMessageId()) {
+                        if (chatMessage.getReadMember() != null) {
+                            String[] name = chatMessage.getReadMember().split(",");
+                            for (int i = 0; i < name.length; i++) {
+                                if (Objects.equals(name[i], member.getNickName())) {
+                                    check = true;
+                                }
+                            }
                         }
+                    if (chatMessage.getUnreadCount() != 0 && !check) {
+                        chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
+                        chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
+                        chatMessageRepository.save(chatMessage);
                     }
+                    check = false;
                 }
-                if (chatMessage.getUnreadCount() != 0 && !check) {
-                    chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
-                    chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
-                    chatMessageRepository.save(chatMessage);
-                }
-                check = false;
-            }
+
+        }
 
 
             sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()

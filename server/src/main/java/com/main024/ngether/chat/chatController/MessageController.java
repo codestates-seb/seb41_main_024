@@ -40,27 +40,30 @@ public class MessageController {
     @MessageMapping("/chat/{room-id}")//메세지를 발행하는 경로
     public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message,@Header("Authorization") String Authorization) {
         Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(Authorization.substring("Bearer ".length()))).get();
-        List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
+        List<ChatRoomMembers> chatRoomMembersList= chatRoomMembersRepository.findByChatRoomRoomId(roomId);
         String nameList = "";
         message.setNickName(member.getNickName());
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
         message.setCreateDate(LocalDateTime.now());
         message.setUnreadCount(chatService.setUnreadMessageCount(roomId));
-        for(int i = 0; i < chatRoomMembers.size(); i++){
-            if(chatRoomMembers.get(i).getSessionId() != null){
-                nameList = nameList + chatRoomMembers.get(i).getMember().getNickName();
-                if(i < chatRoomMembers.size() - 1){
+        ChatMessage savedMessage = chatMessageRepository.save(message);
+        for(int i = 0; i < chatRoomMembersList.size(); i++){
+            if(chatRoomMembersList.get(i).getSessionId() != null){
+                chatRoomMembersList.get(i).setLastMessageId(savedMessage.getChatMessageId());
+                nameList = nameList + chatRoomMembersList.get(i).getMember().getNickName();
+                if(i < chatRoomMembersList.size() - 1){
                    nameList = nameList + ",";
                 }
             }
         }
-        message.setReadMember(nameList);
-        ChatMessage savedMessage = chatMessageRepository.save(message);
+        savedMessage.setReadMember(nameList);
+        chatMessageRepository.save(savedMessage);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         chatRoom.setLastMessage(savedMessage.getMessage());
         chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
         chatRoomRepository.save(chatRoom);
+
 
 
 
