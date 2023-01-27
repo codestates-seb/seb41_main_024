@@ -15,7 +15,7 @@ import Cookies from 'js-cookie';
 
 const DUMMY_REPORT = [
   {reportType: 'board', reportId: 1, reportedId: 1, title: '주식 리빙방 운영합니다'},
-  {reportType: 'chat', reportId: 2, reportedId: 7, title: '채팅 사기 치려고 합니다'}
+  {reportType: 'chat', reportId: 2, reportedId: 35, title: '채팅 사기 치려고 합니다'}
 ];
 
 
@@ -87,6 +87,7 @@ const ReportWork = () => {
                         token={{Authorization: token}}
                         handleGetChatLog={handleGetChatLog}
                         handleBlockUser={handleBlockUser}
+                        handleDeleteReport={()=>handleDeleteReport(report.reportId)}
                     />} 
                   </AccordionDetails>
                 </Accordion>

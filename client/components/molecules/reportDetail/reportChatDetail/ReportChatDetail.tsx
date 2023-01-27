@@ -14,7 +14,7 @@ interface chatLogType {
   unreadCount : number;
 }
 
-const ReportChatDetail = ({id, token, handleGetChatLog, handleBlockUser}:reportChatDetailType) => {
+const ReportChatDetail = ({id, token, handleGetChatLog, handleBlockUser, handleDeleteReport}:reportChatDetailType) => {
   const [chatDataSet, setChatDataSet] = useState({chatLog: [], chatMembers: []})
   const [isLookUp, setIsLookUp] = useState(false);
 
@@ -30,6 +30,8 @@ const ReportChatDetail = ({id, token, handleGetChatLog, handleBlockUser}:reportC
     <Fragment>
       <div className='flex'>
         <Button className='flex-1' onClick={handleRenderChatLog}>조회하기</Button>
+        <Button className='w-[100px]' onClick={handleDeleteReport}>신고 처리완료</Button>
+        <Button className='w-[100px]' onClick={handleDeleteReport}>신고 반려</Button>
       </div>
       <div>
         {isLookUp && chatDataSet.chatMembers.map((nickName:string, index) => 
