@@ -117,8 +117,12 @@ public class ChatService {
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId);
             boolean check = false;
+            Long count;
+            if(chatRoomMembers.getLastMessageId() == null)
+                count = 0L;
+            else count = chatRoomMembers.getLastMessageId();
             for (ChatMessage chatMessage : chatMessageList) {
-                    if (chatMessage.getChatMessageId() > chatRoomMembers.getLastMessageId()) {
+                    if (chatMessage.getChatMessageId() > count) {
                         if (chatMessage.getReadMember() != null) {
                             String[] name = chatMessage.getReadMember().split(",");
                             for (int i = 0; i < name.length; i++) {
