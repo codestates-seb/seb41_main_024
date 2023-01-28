@@ -19,8 +19,9 @@ import {
 } from '../../../api/location';
 import Input from '../../atoms/input/Input';
 import FormButton from '../../molecules/formbutton/FormButton';
+import AddressBookList from '../../organisms/addressBookList/AddressBookList';
 
-interface locationDataType {
+export interface locationDataType {
   address: string;
   latitude: string;
   locationId: number;
@@ -30,7 +31,7 @@ interface locationDataType {
   nickName: string;
 }
 
-const STYLE = {
+const MODAL_STYLE = {
   position: 'absolute' as 'absolute',
   top: '50%',
   left: '50%',
@@ -39,7 +40,7 @@ const STYLE = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  p: 3,
 };
 const AddressBook = () => {
   const [center, setCenter] = useState<any>({ lat: 0, lng: 0, address: '' });
@@ -50,19 +51,25 @@ const AddressBook = () => {
     lng: 0,
     address: '',
   });
+  const [isSearch, setIsSearch] = useState(false);
+
   const [locationName, setLocationName] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
-  const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   //성공시 혹은 실패시에 띄워줄 토스트 설정
   const [toastOption, setToastOption] = useState<{
     severity: AlertColor;
     value: string;
   }>({ severity: 'error', value: '' });
+  const [willDeleteLocationId, setWillDeleteLocationId] = useState(0);
   const handleModalOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
-  const handleDeleteModalOpen = () => setModalDeleteOpen(true);
-  const handleDeleteModalClose = () => setModalDeleteOpen(false);
+  const handleDeleteModalOpen = (locationId: number) => {
+    setDeleteModalOpen(true);
+    setWillDeleteLocationId(locationId);
+  };
+  const handleDeleteModalClose = () => setDeleteModalOpen(false);
   const token = {
     Authorization: Cookies.get('access_token') || '',
     Refresh: Cookies.get('refresh_token') || '',
@@ -88,7 +95,7 @@ const AddressBook = () => {
   const { mutate: deleteMutate } = useMutation({
     mutationFn: deleteAddressBook,
     onSuccess: async (data) => {
-      setModalOpen(false);
+      setDeleteModalOpen(false);
       setToastOption({ severity: 'success', value: '주소록이 삭제되었습니다' });
       setToastOpen(true);
       return queryClient.invalidateQueries(['addressBooks']);
@@ -104,10 +111,11 @@ const AddressBook = () => {
 
   useEffect(() => {
     getCurrentLocation(setCenter, setError);
+    setIsSearch((prev) => !prev);
   }, []);
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center.lat, center.lng]);
+  }, [center.lat, center.lng, isSearch]);
   const addAddressHandler = () => {
     const locationData = targetCoord.address
       ? {
@@ -133,7 +141,9 @@ const AddressBook = () => {
 
     mutate({ locationData, Authorization, Refresh });
   };
-  const removeAddressHandler = () => {};
+  const removeAddressHandler = () => {
+    deleteMutate({ ...token, locationId: willDeleteLocationId });
+  };
   const handleToastClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -157,7 +167,8 @@ const AddressBook = () => {
           type="text"
           label="도로명•지번주소 검색"
           onKeyDown={(e: KeyboardEvent) => {
-            if (e.key === 'Enter') return searchMap(searchAddress, setCenter);
+            if (e.key === 'Enter') setIsSearch((prev) => !prev);
+            return searchMap(searchAddress, setCenter);
           }}
           onChange={handleSearchAddress}
           helperText="ex) 강남, 이문로"
@@ -166,7 +177,10 @@ const AddressBook = () => {
           variant="contained"
           className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px]"
           content="주소검색"
-          onClick={() => searchMap(searchAddress, setCenter)}
+          onClick={() => {
+            setIsSearch((prev) => !prev);
+            searchMap(searchAddress, setCenter);
+          }}
         ></FormButton>
       </div>
       <div className="flex w-[100%] justify-start">
@@ -203,7 +217,7 @@ const AddressBook = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={STYLE}>
+          <Box sx={MODAL_STYLE}>
             {`${locationName} : ${targetCoord.address || center.address}`}을(를)
             주소록에 추가하시겠습니까?
             <FormButton
@@ -221,12 +235,12 @@ const AddressBook = () => {
           </Box>
         </Modal>
         <Modal
-          open={modalDeleteOpen}
+          open={deleteModalOpen}
           onClose={handleDeleteModalClose}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={STYLE}>
+          <Box sx={MODAL_STYLE}>
             삭제하시겠습니까?
             <FormButton
               variant="contained"
@@ -250,33 +264,11 @@ const AddressBook = () => {
         ></FormButton> */}
       </div>
       <h2 className="my-4">저장된 주소록</h2>
-      {data?.data?.map((item: locationDataType) => (
-        <div className="flex w-[100%] my-4">
-          <Input
-            className="mr-4"
-            id="locationName-input"
-            name="locationName"
-            type="text"
-            label="장소명"
-            value={item.locationName}
-          />
-          <Input
-            className="flex-grow"
-            id="address-input"
-            name="address"
-            type="text"
-            label="주소"
-            disabled
-            value={item.address}
-          />
-          <FormButton
-            variant="contained"
-            className="bg-[red] text-[white] ml-[10px] h-[52px]"
-            content="삭제하기"
-            onClick={handleDeleteModalOpen}
-          ></FormButton>
-        </div>
-      ))}
+      <AddressBookList
+        addressBookList={data?.data}
+        handleDeleteModalOpen={handleDeleteModalOpen}
+      />
+
       <Snackbar
         open={toastOpen}
         autoHideDuration={4000}
