@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -63,11 +64,20 @@ public class QnaService {
         return findVerifyQna(qnaId);
     }
 
+    public List<Qna> findQnas(){
+        Member member = memberService.getLoginMember();
+        if (member == null) {
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        } else if (member.getRoles().get(0).equals("ADMIN")) {
+            return qnaRepository.findAll();
+        }
+        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+    }
+
     //Qna가 null이면 에러 발생
     private Qna findVerifyQna(long qnaId) {
         Optional<Qna> optionalQna = qnaRepository.findById(qnaId);
-        Qna findQna = optionalQna.orElseThrow(() ->
+        return optionalQna.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.QNA_NOT_FOUND));
-        return findQna;
     }
 }

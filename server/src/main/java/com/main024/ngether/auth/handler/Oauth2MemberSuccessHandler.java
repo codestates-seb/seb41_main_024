@@ -1,12 +1,17 @@
 package com.main024.ngether.auth.handler;
 
+import com.google.gson.Gson;
+import com.main024.ngether.auth.dto.LoginResponseDto;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
+import com.main024.ngether.location.Location;
+import com.main024.ngether.location.LocationRepository;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -30,7 +35,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     public Oauth2MemberSuccessHandler(JwtTokenizer jwtTokenizer,
                                       CustomAuthorityUtils customAuthorityUtils,
-                                      MemberRepository memberRepository) {
+                                      MemberRepository memberRepository){
         this.jwtTokenizer = jwtTokenizer;
         this.customAuthorityUtils = customAuthorityUtils;
         this.memberRepository = memberRepository;
@@ -55,9 +60,15 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("RefreshToken", refreshToken);
 
+        String initialStatus = "";
+        if(findMember.getPhoneNumber() == null)
+            initialStatus = "true";
+        else
+            initialStatus = "false";
+
+
         //최초 로그인일 경우와 아닌 경우를 구분
-        //URI newMemberUri = newMemberCreateURI(accessToken, findMember.getInitialLogin().toString());
-        URI newMemberUri = newMemberCreateURI(accessToken, refreshToken);
+        URI newMemberUri = newMemberCreateURI(accessToken, refreshToken, initialStatus);
 
         //users/info 에 토큰과 initialLogin을 쿼리로 담아 리다이렉트
         getRedirectStrategy().sendRedirect(request, response, newMemberUri.toString());
@@ -67,7 +78,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     public String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("username", member.getNickName());
+        claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
         //claims.put("userId", member.getMemberId());
         //Payload에 username, roles, userId로 구성
@@ -92,10 +103,11 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return refreshToken;
     }
 
-    private URI newMemberCreateURI(String accessToken, String refreshToken) {
+    private URI newMemberCreateURI(String accessToken, String refreshToken, String initialStatus) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken); //쿼리에 accessToken 전송
         queryParams.add("refresh_token", refreshToken); //쿼리에 refreshToken 전송
+        queryParams.add("initial", initialStatus);
 
 
 
@@ -103,9 +115,9 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .newInstance()
                 .scheme("https")
                 //.path("/login/oauth2/code/google")
-                .host("b1aa-124-5-21-217.jp.ngrok.io")
-                //.port(80)
-                .path("/receive-token.html")
+                .host("seb41-main-024.vercel.app")
+                //.port(3443)
+                .path("/google")
                 .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
                 .build()
                 .toUri();

@@ -20,13 +20,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -79,6 +77,8 @@ public class ChatService {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
             Board board = boardService.findBoard(roomId);
+            if(board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
+                throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
             //이미 채팅방 인원수가 가득 찼을 경우
             if (chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
                 throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
@@ -86,7 +86,8 @@ public class ChatService {
             //인원수 + 1 -> 지정된 인원 수가 가득 차면 게시물 상태 변경
             chatRoom.setMemberCount(chatRoom.getMemberCount() + 1);
             if (board.getMaxNum() == chatRoom.getMemberCount()) {
-                board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
+                board.setBoardStatus(Board.BoardStatus.FULL_MEMBER);
+                throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
             }
 
             board.setCurNum(board.getCurNum() + 1);
@@ -105,7 +106,7 @@ public class ChatService {
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.ENTER)
                     .message("[알림] " + member.getNickName() + "님이 입장하셨습니다.")
-                    .unreadCount(setUnreadMessageCount(roomId) - 1)
+                    .unreadCount(setUnreadMessageCount(roomId))
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
             chatRoom.setLastMessage(savedMessage.getMessage());
@@ -114,12 +115,24 @@ public class ChatService {
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
         } else {
+            //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
+            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId);
+            Long count;
+            if (chatRoomMembers.getLastMessageId() == null)
+                count = 0L;
+            else count = chatRoomMembers.getLastMessageId();
             for (ChatMessage chatMessage : chatMessageList) {
-                if (chatMessage.getUnreadCount() != 0 && !Objects.equals(chatMessage.getNickName(), member.getNickName()))
-                    chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
+                if (chatMessage.getChatMessageId() > count) {
+                    if (chatMessage.getUnreadCount() != 0) {
+                        chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
+                        chatMessageRepository.save(chatMessage);
+                    }
+                }
+
             }
-            chatMessageRepository.saveAll(chatMessageList);
+
+
             sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
                     .message("")
                     .type(ChatMessage.MessageType.REENTER)
@@ -175,6 +188,14 @@ public class ChatService {
         //채팅방 삭제
         chatRoomRepository.deleteAll(chatRoomRepository.findByMemberId(memberId));
         //채팅방 참여 멤버에서 삭제
+        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(memberId);
+        for (int i = 0; i < chatRoomMembersList.size(); i++) {
+            chatRoomMembersList.get(i).getChatRoom().setMemberCount(chatRoomMembersList.get(i).getChatRoom().getMemberCount() - 1);
+            chatRoomRepository.save(chatRoomMembersList.get(i).getChatRoom());
+            Board board = boardRepository.findByBoardId(chatRoomMembersList.get(i).getChatRoom().getRoomId()).get();
+            board.setCurNum(board.getCurNum() - 1);
+            boardRepository.save(board);
+        }
         chatRoomMembersRepository.deleteAll(chatRoomMembersRepository.findByMemberMemberId(memberId));
         //채팅방 메시지 삭제
         chatMessageRepository.deleteAll(chatMessageRepository.findByNickName(memberRepository.findById(memberId).get().getNickName()));
@@ -226,7 +247,7 @@ public class ChatService {
 
     public List<ChatRoom> findMyChatRoom() {
         Member member = memberService.getLoginMember();
-        if(member == null)
+        if (member == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         List<ChatRoom> chatRoomList = new ArrayList<>();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
@@ -246,27 +267,23 @@ public class ChatService {
                 count++;
             }
         }
+
         chatRoomMembersRepository.saveAll(chatRoomMembersList);
 
         return count;
     }
-//    @Async
-//    public boolean checkNewMessages() throws InterruptedException {
-//        try {
-//            while (true) {
-//                List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId());
-//                for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
-//                    if (chatRoomMember.getUnreadMessageCount() > 0) {
-//                        break;
-//                    }
-//                }
-//                return true;
-//                Thread.sleep(1000L);
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//
-//
-//        }
-//    }
+
+    @Async
+    public Boolean checkNewMessages(Member member) throws InterruptedException {
+        while (true) {
+            List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+            for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
+                if (chatRoomMember.getUnreadMessageCount() > 0) {
+                    return true;
+                }
+            }
+            Thread.sleep(1000L);
+        }
+
+    }
 }

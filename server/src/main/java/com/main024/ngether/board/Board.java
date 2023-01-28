@@ -54,12 +54,16 @@ public class Board {
     private String productsLink;
     @Column(nullable = false)
     private int curNum;
+    @Column
+    private String imageLink;
     public enum BoardStatus {
         BOARD_NOT_COMPLETE("모집 중"),
         BOARD_COMPLETE("모집 완료"),
 
         BOARD_TERM_EXPIRE("모집 기간 만료"),
-        BOARD_NOT_DELETE("삭제 불가능");
+        BOARD_NOT_DELETE("삭제 불가능"),
+
+        FULL_MEMBER("참여 인원이 가득 참");
 
         @Getter
         private String status;

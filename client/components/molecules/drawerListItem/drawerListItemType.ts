@@ -1,5 +1,6 @@
 export interface drawerListItemPropsType {
-  text: string;
+  text?: string;
   path?: string;
   onClick?: () => void;
+  children?: React.ReactNode;
 }

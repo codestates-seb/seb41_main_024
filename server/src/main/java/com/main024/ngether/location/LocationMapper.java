@@ -1,13 +1,10 @@
 package com.main024.ngether.location;
 
-import com.main024.ngether.board.Board;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberService;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface LocationMapper {

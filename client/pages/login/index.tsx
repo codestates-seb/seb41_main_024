@@ -8,19 +8,20 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
-import { signIn, useSession } from 'next-auth/react';
 import { getAllUsers } from '../../api/members';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
 import Divider from '@mui/material/Divider';
+import axios from 'axios';
+import { executionAsyncResource } from 'async_hooks';
+import { PictureAsPdf, Subscript } from '@mui/icons-material';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
   const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
 
   const router = useRouter();
-  const session = useSession();
 
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [form, setForm] = useState({
@@ -49,7 +50,7 @@ const LoginPage = () => {
     },
   });
 
-  const { data, error, mutate } = useMutation(() => requestLogin(form), {
+  const { data, error, mutate } = useMutation(requestLogin, {
     onSuccess: (data) => {
       data.headers.authorization &&
         Cookies.set('access_token', data.headers.authorization);
@@ -58,6 +59,7 @@ const LoginPage = () => {
       Cookies.set('memberId', data.data.memberId);
       Cookies.set('nickName', data.data.nickName);
       Cookies.set('locationId', data.data.locationId);
+      Cookies.set('role', data.data.role);
       router.push('/');
     },
     onError: (error) => {
@@ -66,30 +68,11 @@ const LoginPage = () => {
   });
 
   const handleLogin = async () => {
-    await mutate();
+    await mutate(form);
   };
 
   const handleSocialLogin = async () => {
-    await signIn('google');
-    getAllUsers().then((res) => {
-      const isNewUser = !res.data.filter(
-        (user: { email?: string }) => user.email === session?.data?.user?.email
-      );
-      if (isNewUser) {
-        // DB에 해당 이메일 없으면
-        // 회원가입 시키고
-        requestSignUp({
-          pw: 'qqqqqq-123',
-          nickName: session?.data?.user?.name,
-          email: session?.data?.user?.email,
-          phoneNumber: '010-9601-1712',
-        });
-      }
-      // 자체 로그인 진행
-      session?.data?.user?.email &&
-        setForm({ email: session?.data?.user?.email, pw: 'qqqqqq-123' });
-      mutate();
-    });
+    router.push('https://ngether.site/oauth2/authorization/google');
   };
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -132,7 +115,6 @@ const LoginPage = () => {
           >
             로그인
           </Button>
-
           <Button
             className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
             onClick={() => router.push('/signup')}
@@ -140,7 +122,7 @@ const LoginPage = () => {
             회원가입
           </Button>
           <Divider />
-          <Button className="h-14 mt-4" onClick={handleSocialLogin}>
+          <Button className="h-14 mt-4" onClick={() => handleSocialLogin()}>
             <div
               style={{ width: '100%', height: '100%', position: 'relative' }}
             >

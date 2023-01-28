@@ -1,6 +1,5 @@
 package com.main024.ngether.qna.qnaMapper;
 
-import com.main024.ngether.member.MemberService;
 import com.main024.ngether.qna.qnaDto.AnswerDto;
 import com.main024.ngether.qna.qnaDto.QnaDto;
 import com.main024.ngether.qna.qnaEntity.Answer;
@@ -9,7 +8,7 @@ import com.main024.ngether.qna.qnaRepository.AnswerRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,5 +45,17 @@ public interface QnaMapper {
                                         answer.getCreateDate())).collect(Collectors.toList());
         response.setAnswers(answerResponse);
         return response;
+    }
+
+    default List<QnaDto.Response> QnasToQnaResponseDtos(List<Qna> qnas, AnswerRepository answerRepository) {
+        if (qnas == null) {
+            return null;
+        }
+
+        List<QnaDto.Response> list = new ArrayList<>();
+        for ( Qna qna : qnas ) {
+            list.add( QnaToQnaResponseDto( qna, answerRepository ) );
+        }
+        return list;
     }
 }

@@ -65,6 +65,7 @@ public class BoardService {
         returnBoard.setProductsLink(board.getProductsLink());
         returnBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
         returnBoard.setCurNum(0);
+        returnBoard.setImageLink(board.getImageLink());
         member.addBoard(returnBoard);
         Board board1 = boardRepository.save(returnBoard);
 
@@ -123,6 +124,8 @@ public class BoardService {
                     .ifPresent(findBoard::setContent);
             Optional.ofNullable(board.getPrice())
                     .ifPresent(findBoard::setPrice);
+            Optional.ofNullable(board.getImageLink())
+                    .ifPresent(findBoard::setImageLink);
             if(board.getMaxNum() >= 2) {
                 Optional.ofNullable(board.getMaxNum())
                         .ifPresent(findBoard::setMaxNum);
@@ -225,6 +228,13 @@ public class BoardService {
         }
 
         return null;
+    }
+    public Board setComplete(Long boardId){
+        Board board = boardRepository.findByBoardId(boardId).get();
+        if(!Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId()))
+            throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
+        return boardRepository.save(board);
     }
 
 }

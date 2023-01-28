@@ -9,6 +9,7 @@ import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatService.ChatService;
+import com.main024.ngether.location.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -36,6 +37,7 @@ public class MemberController {
     private final ChatRoomMembersRepository chatRoomMembersRepository;
     private final ChatService chatService;
     private final BoardRepository boardRepository;
+    private final LocationRepository locationRepository;
 
 
     //회원가입
@@ -45,7 +47,7 @@ public class MemberController {
 
         return ResponseEntity.ok(mapper.memberToMemberResponse(member));
     }
-    @GetMapping("/check")
+    @PostMapping("/check")
     public ResponseEntity checkDetail(@RequestBody MemberDto.Check requestBody){
         return ResponseEntity.ok(memberService.check(requestBody));
     }
@@ -57,6 +59,22 @@ public class MemberController {
 
         return ResponseEntity.ok(mapper.memberToMemberResponse(member));
     }
+
+    //최초 구글 로그인 시 폰번호, 닉네임 기입 후 필요 정보 반환
+    @PatchMapping("/patchGoogleMember")
+    public ResponseEntity patchGoogleMember(@Valid @RequestBody MemberDto.Patch requestBody) {
+        Member member = memberService.updateMember(mapper.memberPatchToMember(requestBody));
+
+        return ResponseEntity.ok(mapper.googleMemberToGoogleMemberResponse(member, locationRepository));
+    }
+
+    //최초 구글 로그인 x -> 필요 정보 반환
+    @GetMapping("/getGoogleMember")
+    public ResponseEntity getGoogleMember() {
+        Member member = memberService.getLoginMember();
+        return ResponseEntity.ok(mapper.googleMemberToGoogleMemberResponse(member, locationRepository));
+    }
+
 
     //등록된 회원 전체 가져오기
     @GetMapping

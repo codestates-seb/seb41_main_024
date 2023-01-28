@@ -16,6 +16,7 @@ public class ChatRoomMembers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chatRoomMembersId;
     private int unreadMessageCount;
+    private Long lastMessageId;
     private String sessionId;
 
     @ManyToOne(optional = false)
