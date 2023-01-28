@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MemberDto {
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Post{
 
         @NotBlank(message = "패스워드를 입력해주세요.")
@@ -25,6 +25,7 @@ public class MemberDto {
         private String phoneNumber;
         @Email
         private String email;
+        private String imageLink;
     }
     @Getter
     @NoArgsConstructor
@@ -61,6 +62,7 @@ public class MemberDto {
         private String nickName;
         private String email;
         private String phoneNumber;
+        private String imageLink;
 
 
     }

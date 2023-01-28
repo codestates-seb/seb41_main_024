@@ -1,3 +1,3 @@
 export interface chatNoticeRowType {
-  message: string;
+  message: string | string[];
 }
