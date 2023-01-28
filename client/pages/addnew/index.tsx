@@ -51,6 +51,7 @@ const AddNewPage = () => {
     severity: AlertColor;
     value: string;
   }>({ severity: 'error', value: '' });
+
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: async (data) => {
       setOpen(true);

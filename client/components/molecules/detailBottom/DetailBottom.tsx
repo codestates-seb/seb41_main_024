@@ -37,12 +37,12 @@ const DetailBottom = ({
         )}
       </Button>
       <div>
-        {isOpen && (
+        {isOpen && !isWriter && (
           <Button onClick={handleGether} variant="contained" className="m-2">
             참여하기
           </Button>
         )}
-        {!isOpen && (
+        {!isOpen && !isWriter && (
           <Button disabled variant="contained" className="m-2">
             참여하기
           </Button>
