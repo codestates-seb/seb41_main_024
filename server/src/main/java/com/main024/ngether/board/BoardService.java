@@ -229,5 +229,12 @@ public class BoardService {
 
         return null;
     }
+    public Board setComplete(Long boardId){
+        Board board = boardRepository.findByBoardId(boardId).get();
+        if(!Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId()))
+            throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
+        return boardRepository.save(board);
+    }
 
 }

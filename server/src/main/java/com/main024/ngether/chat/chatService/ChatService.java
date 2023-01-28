@@ -77,6 +77,8 @@ public class ChatService {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
             Board board = boardService.findBoard(roomId);
+            if(board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
+                throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
             //이미 채팅방 인원수가 가득 찼을 경우
             if (chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
                 throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
@@ -118,19 +120,19 @@ public class ChatService {
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId);
             boolean check = false;
             Long count;
-            if(chatRoomMembers.getLastMessageId() == null)
+            if (chatRoomMembers.getLastMessageId() == null)
                 count = 0L;
             else count = chatRoomMembers.getLastMessageId();
             for (ChatMessage chatMessage : chatMessageList) {
-                    if (chatMessage.getChatMessageId() > count) {
-                        if (chatMessage.getReadMember() != null) {
-                            String[] name = chatMessage.getReadMember().split(",");
-                            for (int i = 0; i < name.length; i++) {
-                                if (Objects.equals(name[i], member.getNickName())) {
-                                    check = true;
-                                }
+                if (chatMessage.getChatMessageId() > count) {
+                    if (chatMessage.getReadMember() != null) {
+                        String[] name = chatMessage.getReadMember().split(",");
+                        for (int i = 0; i < name.length; i++) {
+                            if (Objects.equals(name[i], member.getNickName())) {
+                                check = true;
                             }
                         }
+                    }
                     if (chatMessage.getUnreadCount() != 0 && !check) {
                         chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
                         chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
@@ -139,7 +141,7 @@ public class ChatService {
                     check = false;
                 }
 
-        }
+            }
 
 
             sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
@@ -197,6 +199,14 @@ public class ChatService {
         //채팅방 삭제
         chatRoomRepository.deleteAll(chatRoomRepository.findByMemberId(memberId));
         //채팅방 참여 멤버에서 삭제
+        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByMemberMemberId(memberId);
+        for (int i = 0; i < chatRoomMembersList.size(); i++) {
+            chatRoomMembersList.get(i).getChatRoom().setMemberCount(chatRoomMembersList.get(i).getChatRoom().getMemberCount() - 1);
+            chatRoomRepository.save(chatRoomMembersList.get(i).getChatRoom());
+            Board board = boardRepository.findByBoardId(chatRoomMembersList.get(i).getChatRoom().getRoomId()).get();
+            board.setCurNum(board.getCurNum() - 1);
+            boardRepository.save(board);
+        }
         chatRoomMembersRepository.deleteAll(chatRoomMembersRepository.findByMemberMemberId(memberId));
         //채팅방 메시지 삭제
         chatMessageRepository.deleteAll(chatMessageRepository.findByNickName(memberRepository.findById(memberId).get().getNickName()));
