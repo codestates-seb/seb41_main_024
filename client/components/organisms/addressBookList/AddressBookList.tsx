@@ -5,9 +5,15 @@ import FormButton from '../../molecules/formbutton/FormButton';
 const AddressBookList = ({
   addressBookList,
   handleDeleteModalOpen,
+  selectAddress,
+  content,
+  buttonColor,
 }: {
   addressBookList: locationDataType[];
-  handleDeleteModalOpen: (id: number) => void;
+  handleDeleteModalOpen?: (id: number) => void;
+  selectAddress?: (locationData: locationDataType) => void;
+  content: string;
+  buttonColor: string;
 }) => {
   return (
     <>
@@ -32,9 +38,15 @@ const AddressBookList = ({
           />
           <FormButton
             variant="contained"
-            className="bg-[red] text-[white] ml-[10px] h-[52px]"
-            content="삭제하기"
-            onClick={() => handleDeleteModalOpen(item.locationId)}
+            className={`bg-[${buttonColor}] text-[white] ml-[10px] h-[52px]`}
+            content={content}
+            onClick={() => {
+              if (handleDeleteModalOpen) {
+                return handleDeleteModalOpen(item.locationId);
+              } else if (selectAddress) {
+                return selectAddress(item);
+              }
+            }}
           ></FormButton>
         </div>
       ))}
