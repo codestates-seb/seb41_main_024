@@ -41,7 +41,6 @@ public class MessageController {
     public void talk(@DestinationVariable(value = "room-id") Long roomId, ChatMessage message,@Header("Authorization") String Authorization) {
         Member member = memberRepository.findByEmail(jwtTokenizer.getEmailFromAccessToken(Authorization.substring("Bearer ".length()))).get();
         List<ChatRoomMembers> chatRoomMembersList= chatRoomMembersRepository.findByChatRoomRoomId(roomId);
-        String nameList = "";
         message.setNickName(member.getNickName());
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
@@ -51,14 +50,9 @@ public class MessageController {
         for(int i = 0; i < chatRoomMembersList.size(); i++){
             if(chatRoomMembersList.get(i).getSessionId() != null){
                 chatRoomMembersList.get(i).setLastMessageId(savedMessage.getChatMessageId());
-                nameList = nameList + chatRoomMembersList.get(i).getMember().getNickName();
-                if(i < chatRoomMembersList.size() - 1){
-                   nameList = nameList + ",";
-                }
             }
-        }
+            }
         chatRoomMembersRepository.saveAll(chatRoomMembersList);
-        savedMessage.setReadMember(nameList);
         chatMessageRepository.save(savedMessage);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         chatRoom.setLastMessage(savedMessage.getMessage());

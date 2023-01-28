@@ -118,27 +118,16 @@ public class ChatService {
             //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId);
-            boolean check = false;
             Long count;
             if (chatRoomMembers.getLastMessageId() == null)
                 count = 0L;
             else count = chatRoomMembers.getLastMessageId();
             for (ChatMessage chatMessage : chatMessageList) {
                 if (chatMessage.getChatMessageId() > count) {
-//                    if (chatMessage.getReadMember() != null) {
-//                        String[] name = chatMessage.getReadMember().split(",");
-//                        for (int i = 0; i < name.length; i++) {
-//                            if (Objects.equals(name[i], member.getNickName())) {
-//                                check = true;
-//                            }
-//                        }
-//                    }
                     if (chatMessage.getUnreadCount() != 0) {
                         chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
-                        chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
                         chatMessageRepository.save(chatMessage);
                     }
-                    //check = false;
                 }
 
             }
