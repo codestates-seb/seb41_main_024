@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
 import LayoutWithFooter from '../../components/container/layoutWithFooter/LayoutWithFooter';
-import UserInfoEdit from '../../components/organisms/tabPanel/myPage/UserInfoEdit';
-import MySharingTab from '../../components/organisms/tab/mySharingTab/MySharingTab';
-import UserInquiry from '../../components/organisms/tabPanel/myPage/UserInquiry';
+import UserInfoEdit from '../../components/container/userInfoEdit/UserInfoEdit';
+import MyAllSharing from '../../components/container/myAllSharing/MyAllSharing';
 import NTabs from '../../components/organisms/nTabs/NTabs';
+import MyInquiry from '../../components/container/myInquiry/MyInquiry';
 
 const Mypage = () => {
   return (
@@ -16,8 +16,8 @@ const Mypage = () => {
         tabLabels={['내정보', '쉐어링', '1:1문의']}
       >
         <UserInfoEdit />
-        <MySharingTab />
-        <UserInquiry />
+        <MyAllSharing />
+        <MyInquiry />
       </NTabs>
     </div>
   );
