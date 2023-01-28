@@ -241,7 +241,8 @@ public class BoardService {
                 .chatRoomId(boardId)
                 .type(ChatMessage.MessageType.NOTICE)
                 .message(String.format("[알림] N게더 모집이 완료되었습니다." +
-                        "\n    N게더 금액 : %d원",board.getPrice()/board.getCurNum()))
+                        "%n    모집 인원 : %d" +
+                        "%n    N게더 금액 : %d원",board.getCurNum(),board.getPrice()/board.getCurNum()))
                 .build();
         ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
         chatRoom.setLastMessage(savedMessage.getMessage());
