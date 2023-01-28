@@ -184,9 +184,15 @@ const Search = () => {
                   </div>
                   <Link
                     href="/mypage"
-                    className="bg-[skyblue] p-1 border-[1px] border-indigo-500/100 border-solid rounded-md"
+                    className="bg-[skyblue] py-1 px-2 border-[0] border-indigo-500/100 border-solid rounded-md"
                   >
                     등록하러 가기
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="bg-[orange] ml-3 py-1 px-2 border-[0] border-indigo-500/100 border-solid rounded-md"
+                  >
+                    로그인하러 가기
                   </Link>
                 </>
               )}
