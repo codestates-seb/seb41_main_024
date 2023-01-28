@@ -11,6 +11,7 @@ import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLa
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 import { useRouter } from 'next/router';
 import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMessage';
+import { getIsWriter } from '../../api/isWriter';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -20,8 +21,7 @@ import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMe
 
 const Chatroom = () => { 
   let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
-  let IS_ROOM_OWER = false;
-
+  const [isOwner, setIsOwner] = useState(false);
   const [input, setInput] = useState('')
   const [sharingData, setSharingData] = useState({
     thumbnail: '',
@@ -39,15 +39,18 @@ const Chatroom = () => {
   const isMemeber = members.includes(Cookies.get('nickName'))
   
   useEffect(() => {
-    if(roomId)
-    getChatSharing(roomId)
-    .then((response) => {
+    if(roomId) {
+      getChatSharing(roomId)
+      .then((response) => {
         setSharingData(response.data);
-        IS_ROOM_OWER = sharingData.nickName === Cookies.get('nickName')
       })
       .catch((error) => {
         console.error(error);
       });
+  
+      axios.get(`https://ngether.site/api/boards/${roomId}/checkMyBoard`, {headers: HEADER_TOKEN})
+      .then(res => setIsOwner(res.data))
+    }
   }, [roomId]);
 
   useEffect(() => {
@@ -74,6 +77,10 @@ const Chatroom = () => {
     axios.post('https://ngether.site/api/reports', {reportedId: roomId, reportType: "chat"}, {headers : HEADER_TOKEN})
   }
 
+  const handleCompleteRecrutment = (): void => {
+    axios.patch(`https://ngether.site/api/boards/complete/${roomId}`)
+  }
+
   const handleExitChatRoom = (): void => {
     if (!stompClient) return;
 
@@ -87,7 +94,13 @@ const Chatroom = () => {
 
   return (
     <div className='flex flex-col w-[100%]'>
-      <ChatHeader members={members} handleExitChat={handleExitChatRoom} handleSendReport={handleSendReport}/>
+      <ChatHeader
+        isOwner={isOwner}
+        members={members} 
+        handleExitChat={handleExitChatRoom} 
+        handleSendReport={handleSendReport} 
+        handleCompleteRecrutment={handleCompleteRecrutment}
+      />
       {!isMemeber && <ForbiddenMessage />}
       {isMemeber && (
         <>
