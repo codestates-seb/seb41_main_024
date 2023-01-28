@@ -72,9 +72,9 @@ export const getAddressBooks = async ({
 }: setAddressBooksType) => {
   return axios({
     method: 'get',
-    url: `${REQUEST_URL}/api/locations`,
+    url: `${REQUEST_URL}/api/myLocations?page=1&size=10`,
     headers: { Authorization, Refresh },
-  });
+  }).then((res) => res.data);
 };
 
 export const deleteAddressBook = async ({
