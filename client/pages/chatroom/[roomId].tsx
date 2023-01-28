@@ -78,7 +78,13 @@ const Chatroom = () => {
   }
 
   const handleCompleteRecrutment = (): void => {
-    axios.patch(`https://ngether.site/api/boards/complete/${roomId}`)
+    axios(
+      {
+        url: `https://ngether.site/api/boards/complete/${roomId}`,
+        method: 'patch',
+        headers: HEADER_TOKEN
+      }
+    )
   }
 
   const handleExitChatRoom = (): void => {
