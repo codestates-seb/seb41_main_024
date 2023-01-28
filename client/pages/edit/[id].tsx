@@ -22,6 +22,7 @@ import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import axios from 'axios';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import { validatePostInput } from '../../utils/uploadPost/postInputValidation';
+import { getIsWriter } from '../../api/isWriter';
 
 export async function getServerSideProps(context: { params: { id: string } }) {
   const { id } = context.params;
@@ -58,14 +59,6 @@ const CATEGORY_OPTIONS = [
 ];
 
 const EditPage = ({ previousData, id }: previousDataProps) => {
-  const loginChecker = () => {
-    if (Cookies.get('access_token') || Cookies.get('refresh_token')) {
-      return true;
-    }
-    return false;
-  };
-
-  const isLogin = loginChecker();
   const router = useRouter();
 
   const [productImg, setProductImg] = useState(base);
@@ -114,10 +107,12 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
   });
 
   useEffect(() => {
+    getIsWriter(id).then((res) => {
+      if (!res.data) {
+        router.push('/login');
+      }
+    });
     getCurrentLocation(setCenter, setLocationError);
-    if (!isLogin) {
-      router.push('/login');
-    }
   }, []);
 
   useEffect(() => {
