@@ -7,8 +7,6 @@ import org.springframework.security.web.firewall.HttpStatusRequestRejectedHandle
 import org.springframework.security.web.firewall.RequestRejectedHandler;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 
-import java.util.Arrays;
-
 @Configuration
 public class HttpFirewallConfiguration {
 
@@ -16,9 +14,7 @@ public class HttpFirewallConfiguration {
     @Bean
     public HttpFirewall configureFirewall() {
         StrictHttpFirewall strictHttpFirewall = new StrictHttpFirewall();
-        strictHttpFirewall.setAllowedHttpMethods(Arrays.asList("*"));
-        strictHttpFirewall.setAllowBackSlash(true);
-        strictHttpFirewall.setAllowSemicolon(true);
+        strictHttpFirewall.setAllowUrlEncodedSlash(true);
         return strictHttpFirewall;
     }
 
