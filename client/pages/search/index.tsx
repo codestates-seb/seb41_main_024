@@ -1,11 +1,17 @@
 import Input from '../../components/atoms/input/Input';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import NearByPageTab from '../../components/organisms/tab/nearByPageTab/NearByPageTab';
-import { FormControl, FormHelperText } from '@mui/material';
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  Popover,
+  Typography,
+} from '@mui/material';
 import NoContent from '../../components/molecules/noContent/NoContent';
 import React, { useEffect, useState } from 'react';
 import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
-import { getCurrentLocation } from '../../api/location';
+import { getAddressBooks, getCurrentLocation } from '../../api/location';
 import FormButton from '../../components/molecules/formbutton/FormButton';
 import useInput from '../../hooks/addNewHooks/useInput';
 import { useQuery } from '@tanstack/react-query';
@@ -15,6 +21,10 @@ import {
 } from '../../api/post';
 import { useRouter } from 'next/router';
 import useSearch from '../../hooks/search/useSearch';
+import AddressBookList from '../../components/organisms/addressBookList/AddressBookList';
+import Cookies from 'js-cookie';
+import { locationDataType } from '../../components/container/addressBook/AddressBook';
+import Link from 'next/link';
 
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
@@ -32,6 +42,10 @@ const Search = () => {
     lng: 0,
     address: '',
   });
+  const token = {
+    Authorization: Cookies.get('access_token') || '',
+    Refresh: Cookies.get('refresh_token') || '',
+  };
 
   const [center, setCenter] = useState<any>({ lat: 0, lng: 0, address: '' });
   const [error, setError] = useState('');
@@ -47,7 +61,7 @@ const Search = () => {
     deadLine: '',
   });
   const [searchAddress, setSearchAddress] = useState('');
-
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const handleSearchAddress = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
@@ -73,7 +87,7 @@ const Search = () => {
     size: 300,
   };
   const argumentOfTitle = { type, keyword: title, page: 1, size: 300 };
-  const { data, refetch } = useSearch({
+  const { refetch } = useSearch({
     searchOption,
     argumentOfLocation,
     argumentOfTitle,
@@ -83,6 +97,35 @@ const Search = () => {
     e.preventDefault();
     refetch();
   };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const selectAddress = (locationData: locationDataType) => {
+    const coordsAndAddress = {
+      lat: locationData.latitude,
+      lng: locationData.longitude,
+      address: locationData.address,
+    };
+
+    setTargetCoord(coordsAndAddress);
+    handleClose();
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+  const { data } = useQuery({
+    queryKey: ['addressBooks'],
+    queryFn: () => getAddressBooks({ ...token }),
+    refetchOnWindowFocus: false,
+    retry: 1,
+    staleTime: Infinity,
+    cacheTime: 1000 * 60 * 30,
+  });
 
   return (
     <div className="flex flex-col items-center">
@@ -109,6 +152,46 @@ const Search = () => {
             content="주소검색"
             onClick={() => searchMap(searchAddress, setCenter)}
           ></FormButton>
+          <FormButton
+            aria-describedby={id}
+            variant="contained"
+            onClick={handleClick}
+            content="나의 주소록"
+            className="bg-[skyblue] text-[white] ml-[10px] h-[52px]"
+          ></FormButton>
+          <Popover
+            id={id}
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+          >
+            <Typography sx={{ p: 2 }}>
+              {data?.data[0] ? (
+                <AddressBookList
+                  addressBookList={data?.data}
+                  content="선택"
+                  buttonColor="skyblue"
+                  selectAddress={selectAddress}
+                />
+              ) : (
+                <>
+                  <div className="mb-2">
+                    등록된 주소록이 없습니다. 등록하시겠습니까?
+                  </div>
+                  <Link
+                    href="/mypage"
+                    className="bg-[skyblue] p-1 border-[1px] border-indigo-500/100 border-solid rounded-md"
+                  >
+                    등록하러 가기
+                  </Link>
+                </>
+              )}
+            </Typography>
+          </Popover>
         </div>
         <FormControl
           fullWidth
