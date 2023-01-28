@@ -27,6 +27,7 @@ public class ChatRoom {
     private LocalDateTime lastMessageCreated;
     private String lastMessage;
     private String address;
+    private boolean recruitment;
 
     @JsonIgnore
     @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)

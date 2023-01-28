@@ -236,17 +236,20 @@ public class BoardService {
         Board board = boardRepository.findByBoardId(boardId).get();
         if(!Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId()))
             throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        if(board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
+            throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(boardId);
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatRoomId(boardId)
                 .type(ChatMessage.MessageType.NOTICE)
                 .message(String.format("[알림] N게더 모집이 완료되었습니다." +
-                        "%n    모집 인원 : %d" +
+                        "%n    모집 인원 : %d명" +
                         "%n    N게더 금액 : %d원",board.getCurNum(),board.getPrice()/board.getCurNum()))
                 .build();
         ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
         chatRoom.setLastMessage(savedMessage.getMessage());
         chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
+        chatRoom.setRecruitment(true);
         chatRoomRepository.save(chatRoom);
         sendingOperations.convertAndSend("/receive/chat/" + boardId, chatMessage);
         board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);

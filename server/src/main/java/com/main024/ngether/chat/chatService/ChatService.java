@@ -60,6 +60,7 @@ public class ChatService {
             chatRoom.setMemberCount(0);
             chatRoom.setDeclareStatus(false);
             chatRoom.setAddress(board.getAddress());
+            chatRoom.setRecruitment(false);
             chatRoomRepository.save(chatRoom);
 
             return chatRoom;
