@@ -11,13 +11,14 @@ import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLa
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 import { useRouter } from 'next/router';
 import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMessage';
+import { handleCompleteRecrutment } from '../../api/mySharing';
+import { reportChat } from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
 // 따라서 게시물 작성 시 리턴되는 게시물 아이디를 이용해 바로 채팅방 생성 api로 호출해주시면 될 것 같습니다.
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
-
 
 const Chatroom = () => { 
   let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
@@ -39,7 +40,7 @@ const Chatroom = () => {
   const isMemeber = members.includes(Cookies.get('nickName'))
   
   useEffect(() => {
-    if(roomId) {
+    if(roomId && typeof roomId === 'string') {
       getChatSharing(roomId)
       .then((response) => {
         setSharingData(response.data);
@@ -48,7 +49,7 @@ const Chatroom = () => {
         console.error(error);
       });
   
-      axios.get(`https://ngether.site/api/boards/${roomId}/checkMyBoard`, {headers: HEADER_TOKEN})
+      getIsWriter(roomId)
       .then(res => setIsOwner(res.data))
     }
   }, [roomId]);
@@ -73,20 +74,6 @@ const Chatroom = () => {
     }
   }
 
-  const handleSendReport = (): void => {
-    axios.post('https://ngether.site/api/reports', {reportedId: roomId, reportType: "chat"}, {headers : HEADER_TOKEN})
-  }
-
-  const handleCompleteRecrutment = (): void => {
-    axios(
-      {
-        url: `https://ngether.site/api/boards/complete/${roomId}`,
-        method: 'patch',
-        headers: HEADER_TOKEN
-      }
-    )
-  }
-
   const handleExitChatRoom = (): void => {
     if (!stompClient) return;
 
@@ -104,8 +91,8 @@ const Chatroom = () => {
         isOwner={isOwner}
         members={members} 
         handleExitChat={handleExitChatRoom} 
-        handleSendReport={handleSendReport} 
-        handleCompleteRecrutment={handleCompleteRecrutment}
+        handleSendReport={() => reportChat(roomId)} 
+        handleCompleteRecrutment={() => handleCompleteRecrutment(roomId)}
       />
       {!isMemeber && <ForbiddenMessage />}
       {isMemeber && (
