@@ -107,6 +107,8 @@ const AddressBook = () => {
     queryFn: () => getAddressBooks({ ...token }),
     refetchOnWindowFocus: false,
     retry: 1,
+    staleTime: Infinity,
+    cacheTime: 1000 * 60 * 30,
   });
 
   useEffect(() => {
@@ -158,7 +160,7 @@ const AddressBook = () => {
     <div className="flex flex-col items-center my-4">
       <div id="map" className="w-[100%] h-[350px]"></div>
       <p className="mb-4">
-        <em>지도를 클릭해주세요!</em>
+        <em>지도를 클릭하면 정확한 주소를 저장할 수 있습니다.</em>
       </p>
       <div className="flex w-[100%] mb-4">
         <Input
@@ -267,6 +269,8 @@ const AddressBook = () => {
       <AddressBookList
         addressBookList={data?.data}
         handleDeleteModalOpen={handleDeleteModalOpen}
+        content="삭제하기"
+        buttonColor="red"
       />
 
       <Snackbar
