@@ -182,14 +182,6 @@ public class BoardService {
     }
 
     public Page<Board> findBoards(int page, int size) {
-//        List<Board> boardList = boardRepository.
-//        for(int i = 0; i <boardList.size(); i++){
-//            if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
-//                boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
-//                boardRepository.save(boardList.get(i));
-//                chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
-//            }
-//        }
         return boardRepository.findAll(PageRequest.of(page, size,
                 Sort.by("createDate").descending()));
     }
