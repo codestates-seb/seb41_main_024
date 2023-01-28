@@ -9,12 +9,14 @@ import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import DialogButton from '../../DialogButton/DialogButton';
 
 interface ChatHeaderType {
+  isRoomOwner: boolean;
   members: string[];
   handleExitChat: () => void;
   handleSendReport: () => void;
+  handleCompleteRcruitment: () => void;
 }
 
-const ChatHeader = ({members, handleExitChat, handleSendReport}: ChatHeaderType) => {
+const ChatHeader = ({isRoomOwner, members, handleExitChat, handleSendReport, handleCompleteRcruitment}: ChatHeaderType) => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
@@ -55,7 +57,16 @@ const ChatHeader = ({members, handleExitChat, handleSendReport}: ChatHeaderType)
         <p className='text-center my-3'>유저 목록</p>
         {members.map((member,index) => <DrawerListItem key={index} text={member}/>)}
         <Divider className='mt-3'/>
-        <div className='fixed bottom-0 w-[100%]'>
+        <div className='fixed bottom-4 w-[100%]'>
+          {isRoomOwner 
+          && <DrawerListItem>
+              <DialogButton 
+                name="N게더 모집 완료하기"
+                title="N게더 모집을 완료하시겠어요?" 
+                question="N게더 모집을 완료하시면 다른 분들이 더 이상 참여하실 수 없어요"
+                func={handleCompleteRcruitment}
+              />
+            </DrawerListItem>}
           <DrawerListItem>
             <DialogButton 
               name="채팅방 신고하기" 

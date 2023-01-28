@@ -74,6 +74,10 @@ const Chatroom = () => {
     axios.post('https://ngether.site/api/reports', {reportedId: roomId, reportType: "chat"}, {headers : HEADER_TOKEN})
   }
 
+  const handleCompleteRcruitment = (): void => {
+    axios.patch(`https://ngether.site/api/boards/complete/${roomId}`)
+  }
+
   const handleExitChatRoom = (): void => {
     if (!stompClient) return;
 
@@ -87,7 +91,13 @@ const Chatroom = () => {
 
   return (
     <div className='flex flex-col w-[100%]'>
-      <ChatHeader members={members} handleExitChat={handleExitChatRoom} handleSendReport={handleSendReport}/>
+      <ChatHeader
+        isRoomOwner={IS_ROOM_OWER}
+        members={members} 
+        handleExitChat={handleExitChatRoom} 
+        handleSendReport={handleSendReport} 
+        handleCompleteRcruitment={handleCompleteRcruitment}
+      />
       {!isMemeber && <ForbiddenMessage />}
       {isMemeber && (
         <>
