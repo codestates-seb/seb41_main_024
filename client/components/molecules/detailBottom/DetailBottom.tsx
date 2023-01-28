@@ -14,7 +14,7 @@ const DetailBottom = ({
   handleLike,
   handleReport,
   handleGether,
-  id,
+  handleComplete,
 }: DetailBottomPropsType) => {
   return (
     <div className="flex justify-between items-center p-4 mb-4 border-y-1 px-2 py-4 border-x-0 border-solid border-[#475569]">
@@ -54,8 +54,13 @@ const DetailBottom = ({
         >
           신고하기
         </Button>
-        {isWriter && (
-          <Button variant="contained" className="m-2">
+        {isWriter && isOpen && (
+          <Button onClick={handleComplete} variant="contained" className="m-2">
+            모집 마감하기
+          </Button>
+        )}
+        {isWriter && !isOpen && (
+          <Button disabled variant="contained" className="m-2">
             모집 마감하기
           </Button>
         )}

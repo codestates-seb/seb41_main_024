@@ -14,11 +14,13 @@ import {
   reportProduct,
   getMyFavorite,
   goChatroom,
+  completeSharing,
 } from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import Box from '@mui/material/Box';
+import { AroundSpot } from '../../components/organisms/aroundSpot/AroundSpot';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -39,6 +41,8 @@ export default function ProductDetail({ id }: any) {
 
   const isLogin = loginChecker();
   const [isLiked, setIsLiked] = useState<boolean>();
+  const [isOpen, setIsOpen] = useState<boolean>();
+  const [isReported, setIsReported] = useState<boolean>();
   const [productData, setProductData] = useState<any>();
   const router = useRouter();
 
@@ -47,9 +51,18 @@ export default function ProductDetail({ id }: any) {
       {
         queryKey: ['productDetail'],
         queryFn: () => getProductDetail(id),
-        onSuccess: (res: { data: React.SetStateAction<undefined> }) => {
+        onSuccess: (res: any) => {
           console.log(res);
           setProductData(res.data);
+
+          const openStatus =
+            res?.data?.boardStatus === 'BOARD_COMPLETE' ? false : true;
+          setIsOpen(openStatus);
+
+          const reportStatus =
+            res?.data?.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
+          console.log();
+          setIsReported(reportStatus);
         },
         retry: false,
       },
@@ -62,9 +75,9 @@ export default function ProductDetail({ id }: any) {
 
   const isWriter = res[1].data?.data;
 
-  const isOpen = productData?.maxNum > productData?.curNum;
-
   console.log(productData);
+  console.log('isOpen', isOpen);
+  console.log('isReported', isReported);
 
   useEffect(() => {
     if (isLogin) {
@@ -125,29 +138,42 @@ export default function ProductDetail({ id }: any) {
     }
   };
 
+  // 모집 완료하기
+  const handleComplete = () => {
+    setIsOpen(false);
+    completeSharing(id).then((res) => {
+      console.log(res.data);
+    });
+  };
+
   return (
     <div>
-      <div className="p-20">
-        <Img src="/chatItem/productImg05.svg" alt="메인사진" />
-      </div>
-
-      <UserMetaInfo
-        productData={productData}
-        handleDelete={handleDelete}
-        isWriter={isWriter}
-        id={id}
-      />
-      <DetailBottom
-        isOpen={isOpen}
-        isLiked={isLiked}
-        isWriter={isWriter}
-        handleLike={handleLike}
-        handleReport={handleReport}
-        handleGether={handleGether}
-        id={id}
-      />
-      <PostMeta productData={productData} />
-      <DetailPageTab productData={productData} />
+      {isReported && <div>신고된 게시물입니다</div>}
+      {!isReported && (
+        <div>
+          <div className="p-10">
+            <Img src="/chatItem/productImg05.svg" alt="메인사진" />
+          </div>
+          <UserMetaInfo
+            productData={productData}
+            handleDelete={handleDelete}
+            isWriter={isWriter}
+            id={id}
+          />
+          <DetailBottom
+            isOpen={isOpen}
+            isLiked={isLiked}
+            isWriter={isWriter}
+            handleLike={handleLike}
+            handleReport={handleReport}
+            handleGether={handleGether}
+            handleComplete={handleComplete}
+          />
+          <PostMeta productData={productData} />
+          <DetailPageTab productData={productData} />
+          <AroundSpot />
+        </div>
+      )}
     </div>
   );
 }

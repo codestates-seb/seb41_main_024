@@ -1,9 +1,9 @@
 export interface DetailBottomPropsType {
-  isOpen: boolean;
+  isOpen?: boolean;
   isLiked?: boolean;
   isWriter: boolean;
   handleLike: () => void;
   handleReport: () => void;
   handleGether: () => void;
-  id: number;
+  handleComplete: () => void;
 }
