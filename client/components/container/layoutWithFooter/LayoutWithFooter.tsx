@@ -45,9 +45,7 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
             }}
           />
           {children}
-          <div>
-            <Footer />
-          </div>
+          <Footer />
           <Navigation />
         </div>
       </ThemeProvider>
