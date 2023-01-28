@@ -9,17 +9,21 @@ import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import DialogButton from '../../DialogButton/DialogButton';
 
 interface ChatHeaderType {
+  isOwner: boolean;
   members: string[];
   handleExitChat: () => void;
   handleSendReport: () => void;
+  handleCompleteRecrutment: () => void;
 }
 
-const ChatHeader = ({members, handleExitChat, handleSendReport}: ChatHeaderType) => {
+const ChatHeader = ({isOwner, members, handleExitChat, handleSendReport, handleCompleteRecrutment}: ChatHeaderType) => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
+
+
 
   return (
     <>
@@ -31,17 +35,18 @@ const ChatHeader = ({members, handleExitChat, handleSendReport}: ChatHeaderType)
       >
         <div className="flex fixed items-center max-w-[672px] w-[100%] h-[50px] border-b-1 border-x-0 border-t-0 border-solid border-[#0000001f] bg-[white] justify-center">
           <Button
-            className="border-0 m-0 p-0 bg-inherit"
+            className="w-[150px] border-0 m-0 p-0 bg-inherit"
             type="button"
             onClick={() => router.push('/chatlist')}
           >
             <ArrowbackIcon />
+            <p>채팅목록으로 이동</p>
           </Button>
           <div className="flex flex-1 justify-center">
             <Logo />
           </div>
           <Button
-            className="border-0 px-5 bg-inherit min-w-0"
+            className="w-[150px] border-0 px-5 bg-inherit min-w-0"
             type="button"
             onClick={handleDrawerToggle}
           >
@@ -54,7 +59,17 @@ const ChatHeader = ({members, handleExitChat, handleSendReport}: ChatHeaderType)
         <p className='text-center my-3'>유저 목록</p>
         {members.map((member,index) => <DrawerListItem key={index} text={member}/>)}
         <Divider className='mt-3'/>
-        <div className='fixed bottom-0 w-[100%]'>
+        <div className='fixed bottom-3 w-[100%]'>
+          {isOwner && (
+            <DrawerListItem>
+              <DialogButton 
+                name="N게더 모집 완료하기" 
+                title="N게더 모집을 완료하시겠어요?"
+                question="N게더 모집을 완료하면 더 이상 다른 분들이 참여하실 수 없습니다"
+                func={handleCompleteRecrutment}
+              />
+            </DrawerListItem>
+          )}
           <DrawerListItem>
             <DialogButton 
               name="채팅방 신고하기" 

@@ -65,3 +65,12 @@ export function goChatroom(id: string) {
     },
   });
 }
+
+export const reportChat = (roomId: string | string[] | undefined) => {
+  axios.post(`${REQUEST_URL}/api/reports`, {reportedId: roomId, reportType: "chat"}, {
+    headers: {
+      Authorization: Cookies.get('access_token'),
+      Refresh: Cookies.get('refresh_token'),
+    },
+  });
+}
