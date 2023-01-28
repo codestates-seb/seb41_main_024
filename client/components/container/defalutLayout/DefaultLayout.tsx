@@ -19,6 +19,7 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
     Cookies.remove('memberId');
     Cookies.remove('nickName');
     Cookies.remove('locationId');
+    Cookies.remove('role');
     router.push('/');
   };
 

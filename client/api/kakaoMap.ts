@@ -6,7 +6,7 @@ interface getMapAndMarkerPropsType {
     lat: number;
     lng: number;
     mapLevel?: number;
-    address?: string;
+    address: string;
   };
   setTargetCoord: React.Dispatch<
     SetStateAction<{ lat: number; lng: number; address: string }>
@@ -52,12 +52,6 @@ export const getMapAndMarker = async (
         lng: latlng.getLng(),
         address: '',
       });
-
-      let message = '클릭한 위치의 위도는 ' + latlng.getLat() + ' 이고, ';
-      message += '경도는 ' + latlng.getLng() + ' 입니다';
-
-      let resultDiv = document.getElementById('clickLatlng');
-      if (resultDiv !== null) resultDiv.innerText = message;
     }
   );
 };
@@ -88,7 +82,7 @@ export const exchangeCoordToAddress = async (
   let marker = new kakao.maps.Marker({ position: map.getCenter() }); // 클릭한 위치를 표시할 마커입니다
   marker.setMap(map);
   // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
-
+  setTargetCoord(center);
   // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
   kakao.maps.event.addListener(map, 'click', function (mouseEvent: any) {
     searchDetailAddrFromCoords(
@@ -130,7 +124,7 @@ export const exchangeCoordToAddress = async (
 };
 
 export const setDefaultCoordsAndAddress = (
-  center: getMapAndMarkerPropsType['center'],
+  center: { lat: number; lng: number },
   setCoordsAndAddress: (result: any, status: any) => void
 ) => {
   let geocoder = new kakao.maps.services.Geocoder();
@@ -145,7 +139,7 @@ export const searchMap = (searchAddress: string, setCenter: any) => {
       setCenter({
         lat: newSearch.y,
         lng: newSearch.x,
-        address: searchAddress,
+        address: newSearch.address_name,
       });
     }
   };

@@ -4,9 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 const Footer = () => {
   return (
-    <div
-      className={`flex flex-col bg-[#333333] text-[#999999] ${styles.center}`}
-    >
+    <footer className={`flex flex-col bg-[#333] text-[#999] ${styles.center}`}>
       <LogoFooter className={styles.logo} />
       <p>© 2023 · All Rights Reserved</p>
       <p>Team : 나누조, Team Leader : 김형진</p>
@@ -21,7 +19,7 @@ const Footer = () => {
           https://github.com/codestates-seb/seb41_main_024
         </Link>
       </p>
-    </div>
+    </footer>
   );
 };
 export default Footer;

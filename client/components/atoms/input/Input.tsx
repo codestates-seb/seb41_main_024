@@ -1,6 +1,5 @@
 import React from 'react';
 import { TextField } from '@mui/material';
-import { inputType } from './inputType';
 
 const Input = ({
   endAdornment,
@@ -10,6 +9,7 @@ const Input = ({
   className,
   value,
   onChange,
+  required,
   ...props
 }: any) => {
   return (
@@ -21,6 +21,7 @@ const Input = ({
       value={value}
       onChange={onChange}
       InputProps={{ endAdornment }}
+      required={required}
     >
       {children}
     </TextField>

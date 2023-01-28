@@ -1,4 +1,6 @@
 export interface reportChatDetailType {
-  chatLog: {}[] | undefined
-  handleGetChatLog: ()=>void
+  id: number;
+  handleGetChatLog: Function;
+  handleBlockUser: (nickName:string)=>void;
+  handleDeleteReport: ()=>void;
 }
