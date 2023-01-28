@@ -73,10 +73,6 @@ export default function ProductDetail({ id }: any) {
 
   const isWriter = res[1].data?.data;
 
-  console.log(productData);
-  console.log('isOpen', isOpen);
-  console.log('isReported', isReported);
-
   useEffect(() => {
     if (isLogin) {
       getMyFavorite().then((res) => {
