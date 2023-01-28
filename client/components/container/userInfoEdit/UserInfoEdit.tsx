@@ -1,8 +1,7 @@
 import React from 'react';
-import AddressBook from '../../../container/addressBook/AddressBook';
-import EditUserInfo from '../../../container/editUserInfo/editUserInfo';
-import NearByList from '../../nearByList/NearByList';
-import NTabs from '../../nTabs/NTabs';
+import NTabs from '../../organisms/nTabs/NTabs';
+import AddressBook from '../addressBook/AddressBook';
+import EditUserInfo from '../editUserInfo/editUserInfo';
 
 const UserInfoEdit = () => {
   return (

@@ -69,7 +69,7 @@ const EditUserInfo = () => {
   return (
     <div>
       {data && (
-        <div className="flex justify-center mt-7 mb-[3.75rem]">
+        <div className="flex justify-center mt-7 mb-[3.75rem] ani_fadeIn">
           <form
             className="flex flex-col justify-center w-10/12 max-w-lg"
             onSubmit={onSubmitHandler}

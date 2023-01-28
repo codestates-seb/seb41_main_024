@@ -34,9 +34,7 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
             logOutHandler={handleLogOut}
           />
           {children}
-          <div>
-            <Footer />
-          </div>
+          <Footer />
           <Navigation />
         </div>
       </ThemeProvider>
