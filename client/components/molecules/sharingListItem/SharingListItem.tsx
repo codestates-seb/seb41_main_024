@@ -33,7 +33,7 @@ const SharingListItem = ({
         </strong>
       </div>
       <div className={styles.flex_listItem}>
-        <strong className="font-normal">{`${curNum + 1} / ${maxNum}`}</strong>
+        <strong className="font-normal">{`${curNum} / ${maxNum}`}</strong>
         {/* <Button>
           <Image
             src="/sharingList/favorite_border.svg"

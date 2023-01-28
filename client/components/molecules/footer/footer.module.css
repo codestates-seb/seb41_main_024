@@ -8,6 +8,9 @@
   align-items: center;
   justify-content: center;
   padding: 35px 0 45px 0;
+  align-self: flex-end;
+  margin-top: auto;
+  width: 100%;
 }
 .logo {
   margin-bottom: 12px;

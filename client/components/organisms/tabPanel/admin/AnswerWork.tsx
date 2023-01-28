@@ -27,84 +27,100 @@ interface qnaType {
     title: string;
     content: string;
     createDate: string;
-  }[]
+  }[];
 }
 
 const AnswerWork = () => {
-  const { inputValue, onChange } = useInput({content: ''});
-  const [questions, setQuestions] = useState([])
-  const {data, isSuccess, refetch} = useQuery(['questions'], getQuestions);
+  const { inputValue, onChange } = useInput({
+    content: '',
+    title: '',
+    productsLink: '',
+    category: '',
+    maxNum: 0,
+    deadLine: '',
+  });
+  const [questions, setQuestions] = useState([]);
+  const { data, isSuccess, refetch } = useQuery(['questions'], getQuestions);
 
   const answerMutation = useMutation(handleAnswerQuestion, {
     onSuccess: () => {
       refetch();
-    }
+    },
   });
 
-  useEffect(()=>{
-    setQuestions(data?.data)
-  }, [data])
+  useEffect(() => {
+    setQuestions(data?.data);
+  }, [data]);
 
-  const handleAnswer = async (qnaId: number, content:any, event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent> ) => {
-    event.preventDefault
-    await answerMutation.mutate({qnaId, content});
-  }
+  const handleAnswer = async (
+    qnaId: number,
+    content: any,
+    event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    event.preventDefault;
+    await answerMutation.mutate({ qnaId, content });
+  };
 
-  return(
-    <div className='flex flex-col text-center'>
+  return (
+    <div className="flex flex-col text-center">
       <ul>
-        {isSuccess 
-        && questions?.map((qna:qnaType) => {
-          return (
-            <li key={qna.qnaId} className='mb-2'>
-              <Accordion >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>{qna.title}</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Divider className='mb-5'/>
-                  <p className='mb-2 text-xs text-left'>문의 내용</p>
-                  <p className='text-left'>{qna.content}</p>
-                  <Divider className='my-5'/>
-                  
-                  {qna.qnaStatus === "ANSWERED" 
-                  &&
-                  <Fragment>
-                    <p className='mb-2 text-xs text-left'>답변 내용</p> 
-                    <p className='text-left'>{qna.answers[0].content}</p>
-                  </Fragment>
-                  }
-                  {qna.qnaStatus === "NO_ANSWER"
-                  &&
-                  <Fragment>
-                    <form>
-                      <Input
-                        variant="outlined"
-                        id="content"
-                        name="content"
-                        label="문의에 대한 답변을 작성해주세요"
-                        value={inputValue.content}
-                        onChange={onChange}
-                        rows={4}
-                        multiline
-                        className="w-[100%]"
-                      />
-                      <FormButton className="mt-2" content="작성하기" variant="contained" onClick={(event) => handleAnswer(qna.qnaId, inputValue.content, event)}/>
-                    </form>
-                  </Fragment> 
-                  }
-                </AccordionDetails>
-              </Accordion>
-            </li>
-          )
-        })}
+        {isSuccess &&
+          questions?.map((qna: qnaType) => {
+            return (
+              <li key={qna.qnaId} className="mb-2">
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography>{qna.title}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Divider className="mb-5" />
+                    <p className="mb-2 text-xs text-left">문의 내용</p>
+                    <p className="text-left">{qna.content}</p>
+                    <Divider className="my-5" />
+
+                    {qna.qnaStatus === 'ANSWERED' && (
+                      <Fragment>
+                        <p className="mb-2 text-xs text-left">답변 내용</p>
+                        <p className="text-left">{qna.answers[0].content}</p>
+                      </Fragment>
+                    )}
+                    {qna.qnaStatus === 'NO_ANSWER' && (
+                      <Fragment>
+                        <form>
+                          <Input
+                            variant="outlined"
+                            id="content"
+                            name="content"
+                            label="문의에 대한 답변을 작성해주세요"
+                            value={inputValue.content}
+                            onChange={onChange}
+                            rows={4}
+                            multiline
+                            className="w-[100%]"
+                          />
+                          <FormButton
+                            className="mt-2"
+                            content="작성하기"
+                            variant="contained"
+                            onClick={(event) =>
+                              handleAnswer(qna.qnaId, inputValue.content, event)
+                            }
+                          />
+                        </form>
+                      </Fragment>
+                    )}
+                  </AccordionDetails>
+                </Accordion>
+              </li>
+            );
+          })}
       </ul>
     </div>
-  )
-}
+  );
+};
 
 export default AnswerWork;

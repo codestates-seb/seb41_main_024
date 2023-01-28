@@ -39,7 +39,6 @@ const Index = ({
     address: argumentOfLocation?.locationData?.address,
   });
   const [alignment, setAlignment] = useState<number>(1.5);
-  console.log('default', sharingLists);
 
   useEffect(() => {
     setMarkerCluster(mapCenter, sharingLists, setMapCenter);
@@ -57,14 +56,11 @@ const Index = ({
       });
     },
     onSuccess: (data) => {
-      console.log('query', data);
-
       setSharingLists(data.data);
     },
     enabled: false,
     retry: false,
   });
-  console.log(searchOption);
 
   useEffect(() => {
     if (searchOption !== '글 제목') {
