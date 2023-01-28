@@ -1,5 +1,6 @@
 package com.main024.ngether.board;
 
+import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatRepository.ChatMessageRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -39,6 +41,7 @@ public class BoardService {
     private final LocationService locationService;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final SimpMessageSendingOperations sendingOperations;
 
 
     public Board createBoard(Board board) {
@@ -233,6 +236,18 @@ public class BoardService {
         Board board = boardRepository.findByBoardId(boardId).get();
         if(!Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId()))
             throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(boardId);
+        ChatMessage chatMessage = ChatMessage.builder()
+                .chatRoomId(boardId)
+                .type(ChatMessage.MessageType.NOTICE)
+                .message(String.format("[알림] N게더 모집이 완료되었습니다." +
+                        "\n    N게더 금액 : %d원",board.getPrice()/board.getCurNum()))
+                .build();
+        ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+        chatRoom.setLastMessage(savedMessage.getMessage());
+        chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
+        chatRoomRepository.save(chatRoom);
+        sendingOperations.convertAndSend("/receive/chat/" + boardId, chatMessage);
         board.setBoardStatus(Board.BoardStatus.BOARD_COMPLETE);
         return boardRepository.save(board);
     }
