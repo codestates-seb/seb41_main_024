@@ -1,6 +1,6 @@
 package com.main024.ngether.qna.qnaController;
 
-import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.response.MultiResponseDto;
 import com.main024.ngether.member.MemberService;
 import com.main024.ngether.qna.qnaRepository.AnswerRepository;
 import com.main024.ngether.qna.qnaRepository.QnaRepository;

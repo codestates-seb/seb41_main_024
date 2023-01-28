@@ -2,6 +2,10 @@ package com.main024.ngether.member;
 
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
 import com.main024.ngether.board.Board;
+import com.main024.ngether.board.BoardRepository;
+import com.main024.ngether.chat.chatEntity.ChatRoom;
+import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
+import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.helper.event.MemberRegistrationApplicationEvent;
@@ -10,13 +14,17 @@ import com.main024.ngether.likes.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,7 +36,7 @@ public class MemberService {
     private final CustomAuthorityUtils authorityUtils;
 
     private final LikeRepository likeRepository;
-
+    private final BoardRepository boardRepository;
 
 
     public Member createMember(Member member){
@@ -141,6 +149,10 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.PHONE_NUMBER_EXIST);
         }
         return true;
+    }
+
+    public Page<Board> viewMyBoardList(int page, int size){
+        return boardRepository.findByMemberMemberId(getLoginMember().getMemberId(), PageRequest.of(page - 1, size));
     }
 
 }
