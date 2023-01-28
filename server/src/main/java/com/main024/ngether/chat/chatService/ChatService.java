@@ -125,20 +125,20 @@ public class ChatService {
             else count = chatRoomMembers.getLastMessageId();
             for (ChatMessage chatMessage : chatMessageList) {
                 if (chatMessage.getChatMessageId() > count) {
-                    if (chatMessage.getReadMember() != null) {
-                        String[] name = chatMessage.getReadMember().split(",");
-                        for (int i = 0; i < name.length; i++) {
-                            if (Objects.equals(name[i], member.getNickName())) {
-                                check = true;
-                            }
-                        }
-                    }
-                    if (chatMessage.getUnreadCount() != 0 && !check) {
+//                    if (chatMessage.getReadMember() != null) {
+//                        String[] name = chatMessage.getReadMember().split(",");
+//                        for (int i = 0; i < name.length; i++) {
+//                            if (Objects.equals(name[i], member.getNickName())) {
+//                                check = true;
+//                            }
+//                        }
+//                    }
+                    if (chatMessage.getUnreadCount() != 0) {
                         chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
                         chatMessage.setReadMember(chatMessage.getReadMember() + "," + member.getNickName());
                         chatMessageRepository.save(chatMessage);
                     }
-                    check = false;
+                    //check = false;
                 }
 
             }
