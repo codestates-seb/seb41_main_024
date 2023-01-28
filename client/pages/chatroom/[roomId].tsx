@@ -103,7 +103,7 @@ const Chatroom = () => {
               />
             </Link>
           </div>
-          <div className="bg-primary pt-[90px] h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
+          <div className="bg-primary pt-[90px] h-[calc(100vh-88px)] box-border overflow-scroll scroll-smooth max-w-[672px] w-full">
             <ChatGroup chatData={messages} />
             <div className="h-[5rem]" ref={messagesEndRef} />
           </div>
