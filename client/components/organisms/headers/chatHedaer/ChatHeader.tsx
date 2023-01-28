@@ -31,18 +31,18 @@ const ChatHeader = ({members, handleExitChat, handleSendReport}: ChatHeaderType)
       >
         <div className="flex fixed items-center max-w-[672px] w-[100%] h-[50px] border-b-1 border-x-0 border-t-0 border-solid border-[#0000001f] bg-[white] justify-center">
           <Button
-            className="w-[110px] border-0 m-0 p-0 bg-inherit"
+            className="w-[150px] border-0 m-0 p-0 bg-inherit"
             type="button"
             onClick={() => router.push('/chatlist')}
           >
             <ArrowbackIcon />
-            <p>채팅리스트</p>
+            <p>채팅목록으로 이동</p>
           </Button>
           <div className="flex flex-1 justify-center">
             <Logo />
           </div>
           <Button
-            className="w-[110px] border-0 px-5 bg-inherit min-w-0"
+            className="w-[150px] border-0 px-5 bg-inherit min-w-0"
             type="button"
             onClick={handleDrawerToggle}
           >
