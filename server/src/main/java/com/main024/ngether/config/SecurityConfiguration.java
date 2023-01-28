@@ -129,14 +129,6 @@ public class SecurityConfiguration {
         }
 
     }
-
-    @Bean
-    public HttpFirewall getHttpFirewall() {
-        StrictHttpFirewall strictHttpFirewall = new StrictHttpFirewall();
-        strictHttpFirewall.setAllowSemicolon(true);
-        strictHttpFirewall.setAllowBackSlash(true);
-        strictHttpFirewall.setAllowedHttpMethods(Arrays.asList("*"));
-        return strictHttpFirewall;
-    }
+    
 
 }
