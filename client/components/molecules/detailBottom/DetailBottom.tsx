@@ -47,13 +47,15 @@ const DetailBottom = ({
             참여하기
           </Button>
         )}
-        <Button
-          onClick={handleReport}
-          variant="contained"
-          className="bg-[red] m-2"
-        >
-          신고하기
-        </Button>
+        {!isWriter && (
+          <Button
+            onClick={handleReport}
+            variant="contained"
+            className="bg-[red] m-2"
+          >
+            신고하기
+          </Button>
+        )}
         {isWriter && isOpen && (
           <Button onClick={handleComplete} variant="contained" className="m-2">
             모집 마감하기

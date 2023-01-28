@@ -11,10 +11,12 @@ import { mainHeaderType } from './mainHeaderType';
 import { nextTick } from 'process';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
+import useAdminRole from '../../../../hooks/common/useAdminRole';
 
 const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const isLogin = Cookies.get('access_token');
+  const {isAdmin} = useAdminRole();
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
@@ -74,11 +76,11 @@ const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
               >
                 로그아웃
               </Button>
+              {isAdmin ? <DrawerListItem text={'관리자페이지'} path={'/admin'} /> : <DrawerListItem text={'마이페이지'} path={'/mypage'} />}
             </div>
           </>
         )}
 
-        <DrawerListItem text={'마이페이지'} path={'/mypage'} />
       </DrawerList>
     </Fragment>
   );

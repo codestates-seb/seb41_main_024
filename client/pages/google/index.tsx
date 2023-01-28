@@ -16,9 +16,18 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
+import { checkNickName, checkPhoneNumber } from '../../api/socialLogin';
 
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
+
+  const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
+    useState('');
+  const [
+    phoneNumberDuplicationCheckMessage,
+    setPhoneNumberDuplicationCheckMessage,
+  ] = useState('');
 
   const access_token: any = `Bearer ${router.query.access_token}`;
   const refresh_token: any = router.query.refresh_token;
@@ -28,15 +37,9 @@ const GoogleLoginPage = () => {
   // 두 번째 소셜 로그인일 경우
   if (router.query.initial === 'false') {
     requestGoogleLogin().then((res) => {
-      Cookies.set('memberId', res.data.memberId, {
-        expires: 7,
-      });
-      Cookies.set('nickName', res.data.nickName, {
-        expires: 7,
-      });
-      Cookies.set('locationId', res.data.locationId, {
-        expires: 7,
-      });
+      Cookies.set('memberId', res.data.memberId);
+      Cookies.set('nickName', res.data.nickName);
+      Cookies.set('locationId', res.data.locationId);
       router.push('/');
     });
   }
@@ -46,30 +49,65 @@ const GoogleLoginPage = () => {
     phoneNumber: '',
   });
 
+  const [nickNameForm, setNickNameForm] = useState({
+    nickName: '',
+  });
+
+  const [phoneNumberForm, setPhoneNumberFrom] = useState({
+    phoneNumber: '',
+  });
+
   const { nickName, phoneNumber } = form;
 
-  const handleSocialEdit = () => {
-    requestFirstGoogleLogin(form).then((res) => {
-      Cookies.set('memberId', res.data.memberId, {
-        expires: 7,
-      });
-      Cookies.set('nickName', res.data.nickName, {
-        expires: 7,
-      });
-      Cookies.set('locationId', res.data.locationId, {
-        expires: 7,
-      });
-      router.push('/');
-    });
+  const handleSocialEdit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+      await checkNickName(nickNameForm);
+    } catch (error: any) {
+      if (error.response.data.message === 'NickName is exists') {
+        setNickNameDuplicationCheckMessage('이미 존재하는 닉네임입니다.');
+      }
+    }
+
+    try {
+      await checkPhoneNumber(phoneNumberForm);
+    } catch (error: any) {
+      if (error.response.data.message === 'NickName is exists') {
+        setPhoneNumberDuplicationCheckMessage('이미 존재하는 전화번호입니다.');
+      }
+    } finally {
+      if (
+        nickNameDuplicationCheckMessage === '' &&
+        phoneNumberDuplicationCheckMessage === ''
+      ) {
+        requestFirstGoogleLogin(form).then((res) => {
+          Cookies.set('memberId', res.data.memberId);
+          Cookies.set('nickName', res.data.nickName);
+          Cookies.set('locationId', res.data.locationId);
+          router.push('/');
+        });
+      }
+    }
   };
 
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
 
-    setForm({
-      ...form,
-      [name]: value,
-    });
+    if (name === 'phoneNumber') {
+      setForm({
+        ...form,
+        [name]: value
+          .replace(/[^0-9]/g, '')
+          .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
+          .replace(/(\-{1,2})$/g, ''),
+      });
+    } else {
+      setForm({
+        ...form,
+        [name]: value,
+      });
+    }
   };
 
   const [open, setOpen] = useState(true);
@@ -93,7 +131,7 @@ const GoogleLoginPage = () => {
             <div className="mt-10">
               <SocialLoginTitle />
             </div>
-            <div className="login flex justify-center m-7 my-12">
+            <div className="login flex justify-center m-10 my-12">
               <div className="flex flex-col w-full max-w-lg">
                 <Input
                   id="nickName-input"
@@ -104,6 +142,9 @@ const GoogleLoginPage = () => {
                   onChange={onChange}
                 />
                 <Label htmlFor={'nickName-input'} labelText={''} />
+                <p className="text-[#dd3030]">
+                  {nickNameDuplicationCheckMessage}
+                </p>
                 <Input
                   id="phoneNumber-input"
                   name="phoneNumber"
@@ -113,7 +154,9 @@ const GoogleLoginPage = () => {
                   onChange={onChange}
                 />
                 <Label htmlFor={'phoneNumber-input'} labelText={''} />
-                <p className="text-[#dd3030]"></p>
+                <p className="text-[#dd3030]">
+                  {phoneNumberDuplicationCheckMessage}
+                </p>
                 <Button
                   className="h-14 mt-4 bg-primary text-white rounded"
                   onClick={handleSocialEdit}

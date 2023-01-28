@@ -26,7 +26,7 @@ public class ChatMessage {
     //메세지 내용
     @Column(nullable = false)
     private String message;
-    private String readMember;
+
     //메세지 작성 날짜
     private LocalDateTime createDate = LocalDateTime.now();
     //안 읽은 사람 수

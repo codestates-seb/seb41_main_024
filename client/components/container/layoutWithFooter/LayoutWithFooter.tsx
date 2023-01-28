@@ -20,6 +20,7 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
     Cookies.remove('memberId');
     Cookies.remove('nickName');
     Cookies.remove('locationId');
+    Cookies.remove('role');
     router.push('/');
   };
 
@@ -33,9 +34,7 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
             logOutHandler={handleLogOut}
           />
           {children}
-          <div>
-            <Footer />
-          </div>
+          <Footer />
           <Navigation />
         </div>
       </ThemeProvider>

@@ -7,49 +7,68 @@ import { useRouter } from 'next/router';
 
 import ReportBoardDetail from '../../../molecules/reportDetail/reportBoardDetail/ReportBoardDetail'
 import ReportChatDetail from '../../../molecules/reportDetail/reportChatDetail/ReportChatDetail'
-import axios from 'axios';
-import { transDateFormChatMessage } from '../../../../hooks/useWebSocketClient';
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import { getReport, handleBlockUser, handleDeleteReport } from '../../../../api/admin';
+import { getChatDataset } from '../../../../api/getChatDataset';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
-
-const DUMMY_REPORT = [
-  {type: '게시글', reportId: 1, id: 1, title: '주식 리빙방 운영합니다'},
-  {type: '채팅방', reportId: 2, id: 22, title: '채팅 사기 치려고 합니다'}
-];
-
+interface reportType {
+  reportType: string;
+  reportId: number;
+  reportedId: number;
+  title: number
+}
 
 const ReportWork = () => {
-  const token = Cookies.get('access_token')
   const router = useRouter();
-  const [chatLog, setChatLog] = useState();
+  const [reports, setResports] = useState([])
+  const {data, isSuccess, refetch} = useQuery(['reports'], getReport);
+
   
-  const handleNavigate = (id:number) => {
-    router.push(`/nearby/${id}`)
-  }
-  const handleGetChatLog = (id: number, token: {Authorization : string | undefined}) => {
-    axios.get(`https://ngether.site/chat/room/messages/${id}`, {headers : token})
-    .then(res => setChatLog(res.data.map(transDateFormChatMessage)));
-  }
+  const reportMutation = useMutation(handleDeleteReport, {
+    onSuccess: () => {
+      refetch();
+    }
+  });
+  
+  useEffect(()=>{
+    setResports(data?.data?.data)
+  }, [data])
+  
+  const handleDelete = async (reportId: number) => {
+    await reportMutation.mutate(reportId);
+  };
+
 
   return (
     <div className='flex flex-col text-center'>
       <p className='mb-4 '>게시물은 해당 게시글로 이동하여 처리하실 수 있습니다.</p>
       <ul>
-          {DUMMY_REPORT.map((report) => {
+          {isSuccess 
+          && reports?.map((report:reportType) => {
             return (
-              <li className='mb-3' key={report.reportId}>
+              <li key={report.reportId} className='mb-2'>
                 <Accordion >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                   >
-                    <Typography>{`신고된 ${report.type} | ${report.title}`}</Typography>
+                    <Typography>{`신고된 ${report.reportType === 'board' && '게시글' || '채팅방'} | ${report.title}`}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    {report.type === '게시글' && <ReportBoardDetail handleNavigate={()=>handleNavigate(report.reportId)}/>} 
-                    {report.type === '채팅방' && <ReportChatDetail handleGetChatLog={() => handleGetChatLog(report.reportId, {Authorization : token})} chatLog={chatLog}/>} 
+                    {report.reportType === 'board' 
+                    && <ReportBoardDetail 
+                        handleNavigate={()=>router.push(`/nearby/${report.reportedId}`)}
+                        handleDeleteReport={()=>handleDelete(report.reportId)}
+                    />} 
+                    {report.reportType === 'chat' 
+                    && <ReportChatDetail
+                        id={report.reportedId}
+                        handleGetChatLog={getChatDataset}
+                        handleBlockUser={handleBlockUser}
+                        handleDeleteReport={()=>handleDelete(report.reportId)}
+                    />} 
                   </AccordionDetails>
                 </Accordion>
               </li>
@@ -61,8 +80,3 @@ const ReportWork = () => {
 }
 
 export default ReportWork;
-
-
-
-
-

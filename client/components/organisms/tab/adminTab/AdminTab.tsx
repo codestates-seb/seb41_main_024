@@ -1,6 +1,7 @@
 import React from 'react';
 import TabPanel from '../../../atoms/tabPanel/TabPanel';
 import BasicTabs from '../../../molecules/tab/BasicTabs';
+import AnswerWork from '../../tabPanel/admin/AnswerWork';
 import ReportWork from '../../tabPanel/admin/ReportWork';
 
 const LABEL = ['신고 처리', '1:1 문의'];
@@ -11,6 +12,7 @@ const AdminTab = () => {
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
     setCurrentTab(newCurrentTab);
   };
+
   return (
     <>
       <BasicTabs
@@ -23,7 +25,7 @@ const AdminTab = () => {
         <ReportWork />
       </TabPanel>
       <TabPanel currentTab={currentTab} index={1}>
-        
+        <AnswerWork />
       </TabPanel>
     </>
   );

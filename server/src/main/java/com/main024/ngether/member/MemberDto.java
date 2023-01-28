@@ -29,7 +29,7 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor
     public static class Check{
-        
+
         @NotBlank(message = "별명을 입력해주세요.")
         private String nickName;
         @NotBlank(message = "전화번호를 입력해주세요.")

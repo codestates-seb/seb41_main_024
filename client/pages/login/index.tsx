@@ -8,11 +8,12 @@ import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { requestLogin, requestSignUp } from '../../api/members';
 import Cookies from 'js-cookie';
+import { getAllUsers } from '../../api/members';
 import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
 import Divider from '@mui/material/Divider';
-import { hashPassword } from '../../api/postSignup';
+import axios from 'axios';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -51,27 +52,15 @@ const LoginPage = () => {
     event.preventDefault();
 
     try {
-      // const { hashedPassword }: any = await hashPassword(pw);
-      // const hashedForm = { ...form, pw: hashedPassword };
       await requestLogin(form).then((res) => {
         console.log('requestLogin res', res);
         res.headers.authorization &&
-          Cookies.set('access_token', res.headers.authorization, {
-            expires: 7,
-          });
+          Cookies.set('access_token', res.headers.authorization);
         res.headers.refresh &&
-          Cookies.set('refresh_token', res.headers.refresh, {
-            expires: 7,
-          });
-        Cookies.set('memberId', res.data.memberId, {
-          expires: 7,
-        });
-        Cookies.set('nickName', res.data.nickName, {
-          expires: 7,
-        });
-        Cookies.set('locationId', res.data.locationId, {
-          expires: 7,
-        });
+          Cookies.set('refresh_token', res.headers.refresh);
+        Cookies.set('memberId', res.data.memberId);
+        Cookies.set('nickName', res.data.nickName);
+        Cookies.set('locationId', res.data.locationId);
         router.push('/');
       });
     } catch (error: any) {

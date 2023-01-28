@@ -74,7 +74,7 @@ const AddNewPage = () => {
     },
   });
   const cookie = new Cookies();
-  const [imageLink, setImageLink] = useState<string | undefined>(base);
+  const [imageLink, setImageLink] = useState<string | undefined>('');
   const { inputValue, onChange } = useInput({
     title: '',
     productsLink: '',
@@ -193,6 +193,9 @@ const AddNewPage = () => {
           const value = $(el).attr('content');
           const checkUrl = value?.includes('https');
           if (key === 'image' && checkUrl) {
+            if (value && value.length >= 2000) {
+              return;
+            }
             setImageLink(value);
           }
         }
@@ -259,7 +262,7 @@ const AddNewPage = () => {
               <div className="flex items-center">
                 <img
                   className="h-40 w-40 mb-7 m-auto"
-                  src={imageLink}
+                  src={imageLink || productImg}
                   alt={'상품이미지'}
                 />
                 <span>

@@ -4,7 +4,6 @@ import DetailBottom from '../../components/molecules/detailBottom/DetailBottom';
 import PostMeta from '../../components/molecules/postMeta/PostMeta';
 import UserMetaInfo from '../../components/molecules/userMetaInfo/UserMetaInfo';
 import DetailPageTab from '../../components/organisms/tab/detailPageTab/DetailPageTab';
-import axios from 'axios';
 import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import {
@@ -19,8 +18,6 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import Box from '@mui/material/Box';
-import { AroundSpot } from '../../components/organisms/aroundSpot/AroundSpot';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -46,6 +43,7 @@ export default function ProductDetail({ id }: any) {
   const [productData, setProductData] = useState<any>();
   const router = useRouter();
 
+  console.log(isLiked);
   const res = useQueries({
     queries: [
       {
@@ -171,7 +169,6 @@ export default function ProductDetail({ id }: any) {
           />
           <PostMeta productData={productData} />
           <DetailPageTab productData={productData} />
-          <AroundSpot />
         </div>
       )}
     </div>
