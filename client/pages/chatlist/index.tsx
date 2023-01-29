@@ -14,6 +14,7 @@ const ChatList = () => {
   const { data } = useQuery(['mySharing'], getMySharing);
   const chatListData = data?.data.data;
 
+  console.log(chatListData);
   return (
     <div>
       {chatListData &&
@@ -27,7 +28,8 @@ const ChatList = () => {
                 title={chatItem.roomName}
                 price={chatItem.price}
                 lastMessage={chatItem.lastMessage}
-                address={chatItem?.address || '서울 구로구'}
+                address={chatItem.address}
+                alertNum={chatItem.alertNum || 1}
               />
             </Link>
           );

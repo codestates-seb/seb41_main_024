@@ -1,5 +1,5 @@
 export interface productDataProps {
-  productData: {
+  productData?: {
     content: string;
     title: string;
     category: string;

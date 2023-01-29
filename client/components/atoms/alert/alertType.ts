@@ -1,3 +1,3 @@
 export interface alertType {
-  alertNum: string;
+  alertNum?: string | number;
 }

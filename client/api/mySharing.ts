@@ -13,4 +13,15 @@ export function getMySharing() {
   });
 }
 
-
+export const handleCompleteRecrutment = (roomId: string | string[] | undefined): void => {
+  axios(
+    {
+      url: `https://ngether.site/api/boards/complete/${roomId}`,
+      method: 'patch',
+      headers: {
+        Authorization: Cookies.get('access_token'),
+        Refresh: Cookies.get('refresh_token'),
+      }
+    }
+  )
+}

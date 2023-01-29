@@ -6,7 +6,6 @@ import com.main024.ngether.board.BoardMapper;
 import com.main024.ngether.board.BoardRepository;
 import com.main024.ngether.board.response.MultiResponseDto;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
-import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.location.LocationRepository;

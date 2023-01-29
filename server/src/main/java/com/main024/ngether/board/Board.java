@@ -23,9 +23,9 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long boardId;
-    @Column(length = 20, nullable = false)
+    @Column(length = 200, nullable = false)
     private String title;
-    @Column(nullable = false)
+    @Column(length = 1000,nullable = false)
     private String content;
     @Column(nullable = false)
     private LocalDateTime createDate = LocalDateTime.now();
@@ -50,11 +50,11 @@ public class Board {
     private String longitude;
     @Column(nullable = false)
     private LocalDate deadLine;
-    @Column(nullable = false)
+    @Column(length = 1000,nullable = false)
     private String productsLink;
     @Column(nullable = false)
     private int curNum;
-    @Column
+    @Column(length = 2000)
     private String imageLink;
     public enum BoardStatus {
         BOARD_NOT_COMPLETE("모집 중"),

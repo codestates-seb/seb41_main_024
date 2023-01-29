@@ -19,6 +19,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Controller
@@ -80,14 +81,17 @@ public class ChatRoomController {
     }
 
     //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
-    @GetMapping("/room/findNewMessages")
-    public ResponseEntity<Boolean> messageAlarm() throws InterruptedException {
-        Member member = memberService.getLoginMember();
-        if(member == null)
-            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-
-        return new ResponseEntity<>(chatService.checkNewMessages(member), HttpStatus.OK);
-
-    }
+//    @GetMapping("/room/findNewMessages")
+//    public ResponseEntity<CompletableFuture<Boolean>> messageAlarm() throws InterruptedException {
+//        Member member = memberService.getLoginMember();
+//        if(member == null)
+//            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+//            CompletableFuture<Boolean> future =
+//                    chatService.checkNewMessages(member)
+//                            .orTi
+//
+//        return new ResponseEntity<>(chatService.checkNewMessages(member), HttpStatus.OK);
+//
+//    }
 
 }
