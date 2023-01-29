@@ -27,7 +27,7 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={basicTheme}>
-        <div className="max-w-2xl mx-auto min-h-[100vh] flex flex-col">
+        <div className="max-w-2xl mx-auto min-h-[100vh] flex flex-col pcPageLine">
           <MainHeader
             isLogin={isLogin}
             nickName={nickName}
