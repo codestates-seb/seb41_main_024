@@ -255,7 +255,7 @@ export const setMarkerCluster = async (
   const map = new kakao.maps.Map(mapContainer, {
     // 지도를 표시할 div
     center: new kakao.maps.LatLng(coords.lat, coords.lng), // 지도의 중심좌표
-    level: coords.mapLevel || 4, // 지도의 확대 레벨
+    level: coords.mapLevel || 5, // 지도의 확대 레벨
   });
   let marker = new kakao.maps.Marker({ position: map.getCenter() }); // 클릭한 위치를 표시할 마커입니다
   marker.setMap(map);
@@ -269,10 +269,20 @@ export const setMarkerCluster = async (
   });
   let markers = [];
   let mapLevel: number;
-  kakao.maps.event.addListener(map, 'zoom_changed', function () {
-    mapLevel = map.getLevel();
-    setMapCenter((prev: any) => {
-      return { ...prev, mapLevel };
+  kakao.maps.event.addListener(map, 'dragend', function () {
+    let latlng: any = map.getCenter();
+
+    // latlng가 any가 아닐 때 Ma와 La 필드가 latlng에 존재하지 않는다고 오류뜸.
+    const mapCenter = { lat: latlng.Ma, lng: latlng.La };
+    setDefaultCoordsAndAddress(mapCenter, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        let detailAddr = !!result[0].address.address_name
+          ? result[0].address.address_name
+          : result[0].road_address.address_name;
+        setMapCenter((prev: any) => {
+          return { ...prev, ...mapCenter, address: detailAddr };
+        });
+      }
     });
   });
 
