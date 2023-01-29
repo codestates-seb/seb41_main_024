@@ -1,5 +1,5 @@
 export interface productDataProps {
-  productData: {
+  productData?: {
     content: string;
     latitude: number;
     longitude: number;

@@ -86,7 +86,6 @@ public class ChatService {
             chatRoom.setMemberCount(chatRoom.getMemberCount() + 1);
             if (board.getMaxNum() == chatRoom.getMemberCount()) {
                 board.setBoardStatus(Board.BoardStatus.FULL_MEMBER);
-                throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
             }
 
             board.setCurNum(board.getCurNum() + 1);

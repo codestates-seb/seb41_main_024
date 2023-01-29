@@ -36,6 +36,7 @@ public class Member {
     private String email;
     @Column(unique = true)
     private String phoneNumber;
+    @Column(length = 1000)
     private String imageLink;
     @JsonIgnore
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)

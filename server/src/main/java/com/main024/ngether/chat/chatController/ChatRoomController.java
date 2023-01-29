@@ -19,7 +19,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.*;
 
 @Controller
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
@@ -29,7 +29,6 @@ public class ChatRoomController {
     private final ChatService chatService;
     private final ChatRoomRepository chatRoomRepository;
     private final MemberService memberService;
-
 
 
     // 모든 채팅방 목록 반환
@@ -80,14 +79,20 @@ public class ChatRoomController {
     }
 
     //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
-    @GetMapping("/room/findNewMessages")
-    public ResponseEntity<Boolean> messageAlarm() throws InterruptedException {
-        Member member = memberService.getLoginMember();
-        if(member == null)
-            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-
-        return new ResponseEntity<>(chatService.checkNewMessages(member), HttpStatus.OK);
-
-    }
-
+//    @GetMapping("/room/findNewMessages")
+//    public ResponseEntity<Boolean> messageAlarm() throws InterruptedException, ExecutionException, TimeoutException {
+//        Member member = memberService.getLoginMember();
+//        if (member == null)
+//            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+//        ExecutorService threadPool = Executors.newCachedThreadPool();
+//
+//        FutureTask task = (FutureTask) new FutureTask(
+//                () -> {
+//                    chatService.checkNewMessages(member);
+//                    return true;
+//                }).get(2,TimeUnit.SECONDS);
+//        threadPool.execute(task);
+//        Boolean result = false;
+//
+//    }
 }

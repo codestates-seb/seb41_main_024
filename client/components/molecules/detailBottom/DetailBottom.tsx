@@ -5,19 +5,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Cookie } from '@mui/icons-material';
 import { DetailBottomPropsType } from './detailBottomType';
-import DialogMaker from '../../organisms/dialogMaker/DialogMaker';
 import ModalComponent from '../../organisms/modal/Modal';
+import Cookies from 'js-cookie';
 
 const DetailBottom = ({
+  isOpen,
   isLiked,
   isWriter,
   handleLike,
   handleReport,
   handleGether,
-  id,
   modalOpen,
   handleModalOpen,
   handleClose,
+  handleComplete,
 }: DetailBottomPropsType) => {
   return (
     <div className="flex justify-between items-center p-4 mb-4 border-y-1 px-2 py-4 border-x-0 border-solid border-[#475569]">
@@ -50,13 +51,6 @@ const DetailBottom = ({
           negativeResponse="취소"
           negativeColor={'black'}
         />
-        <Button
-          onClick={handleModalOpen}
-          variant="contained"
-          className="bg-[red] m-2"
-        >
-          신고하기
-        </Button>
         <ModalComponent
           modalOpen={modalOpen}
           handleClose={handleClose}
@@ -67,12 +61,33 @@ const DetailBottom = ({
           negativeResponse="취소"
           negativeColor={'red'}
         />
-        <Button onClick={handleModalOpen} variant="contained" className="m-2">
-          참여하기
-        </Button>
 
-        {isWriter && (
-          <Button variant="contained" className="bg-[red] m-2">
+        {isOpen && !isWriter && (
+          <Button onClick={handleModalOpen} variant="contained" className="m-2">
+            참여하기
+          </Button>
+        )}
+        {!isOpen && !isWriter && (
+          <Button disabled variant="contained" className="m-2">
+            참여하기
+          </Button>
+        )}
+        {!isWriter && (
+          <Button
+            onClick={handleModalOpen}
+            variant="contained"
+            className="bg-[red] m-2"
+          >
+            신고하기
+          </Button>
+        )}
+        {isWriter && isOpen && (
+          <Button onClick={handleComplete} variant="contained" className="m-2">
+            모집 마감하기
+          </Button>
+        )}
+        {isWriter && !isOpen && (
+          <Button disabled variant="contained" className="m-2">
             모집 마감하기
           </Button>
         )}

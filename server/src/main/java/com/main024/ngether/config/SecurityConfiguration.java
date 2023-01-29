@@ -7,6 +7,7 @@ import com.main024.ngether.auth.handler.*;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
 import com.main024.ngether.auth.utils.CustomOauth2UserService;
+import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.location.LocationRepository;
 import com.main024.ngether.member.MemberRepository;
 import org.springframework.context.annotation.Bean;
@@ -14,11 +15,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,22 +39,26 @@ public class SecurityConfiguration {
     private final CustomOauth2UserService customOAuth2UserService;
     private final Oauth2MemberSuccessHandler oauth2MemberSuccessHandler;
     private final MemberRepository memberRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     public SecurityConfiguration(JwtTokenizer jwtTokenizer,
                                  CustomAuthorityUtils authorityUtils,
                                  LocationRepository locationRepository,
                                  CustomOauth2UserService customOAuth2UserService,
                                  Oauth2MemberSuccessHandler oauth2MemberSuccessHandler,
-                                 MemberRepository memberRepository) {
+                                 MemberRepository memberRepository,
+                                 ChatRoomRepository chatRoomRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.locationRepository = locationRepository;
         this.customOAuth2UserService = customOAuth2UserService;
         this.oauth2MemberSuccessHandler = oauth2MemberSuccessHandler;
         this.memberRepository = memberRepository;
+        this.chatRoomRepository = chatRoomRepository;
     }
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .headers().frameOptions().sameOrigin()
                 .and()
@@ -60,7 +69,6 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .csrf().disable()
                 .exceptionHandling()  // 추가
                 .authenticationEntryPoint(new MemberAuthenticationEntryPoint())  // 추가
                 .accessDeniedHandler(new MemberAccessDeniedHandler())            // 추가
@@ -79,21 +87,23 @@ public class SecurityConfiguration {
                 .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository));//oauth2 인증 성공 후처리 handler 호출
         return http.build();
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
+
     @Bean
-    CorsConfigurationSource corsConfigurationSource(){
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PATCH","DELETE","OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList("x-auth-token","Authorization","Refresh","heart-beat"));
+        configuration.setExposedHeaders(Arrays.asList("x-auth-token", "Authorization", "Refresh", "heart-beat"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }
@@ -114,8 +124,10 @@ public class SecurityConfiguration {
             builder
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
-                    //.addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
+            //.addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
+
     }
+
 
 }

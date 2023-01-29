@@ -1,11 +1,12 @@
 export interface DetailBottomPropsType {
-  isLiked: boolean;
+  isOpen?: boolean;
+  isLiked?: boolean;
   isWriter: boolean;
   handleLike: () => void;
   handleReport: () => void;
   handleGether: () => void;
-  id: number;
   handleModalOpen: () => void;
   handleClose: () => void;
   modalOpen: boolean;
+  handleComplete: () => void;
 }

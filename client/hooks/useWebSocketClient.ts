@@ -43,11 +43,19 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
             ws.subscribe(
             `/receive/chat/${roomId}`,
             async (messages) => {
-              if((JSON.parse(messages.body).type) === 'REENTER') {
+              const message = JSON.parse(messages.body)
+              if (message.type === 'REENTER') {
                 await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
                 .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+              } 
+              else if (message.type === 'ENTER' || message.type === 'LEAVE') {
+                await axios.get(`https://ngether.site/chat/room/${roomId}/memberList`, {headers : HEADER_TOKEN})
+                .then(res => {        
+                  const members = res.data.map((member: { memberId: number, nickName: string; }) => member.nickName);
+                  setMembers(members);
+                });
               }
-              setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(JSON.parse(messages.body))])
+              setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(message)])
             }, 
             HEADER_TOKEN);
           }, 
