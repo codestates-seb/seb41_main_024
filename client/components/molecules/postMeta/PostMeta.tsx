@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import ElapsedTime from '../elapsedTime/ElapsedTime';
 import { productDataProps } from './postMetaType';
 
@@ -8,12 +9,12 @@ const PostMeta = ({ productData }: productDataProps) => {
         <strong className="text-xl font-medium">{productData?.title}</strong>
       </div>
       <p className="text-sm text-[#475569] mb-4">
-        {productData?.category}•
-        <ElapsedTime createdAt={productData?.createDate} />
+        {productData?.category === 'product' ? '상품 쉐어링' : '배달 쉐어링'} •{' '}
+        <ElapsedTime createDate={productData?.createDate} />
       </p>
       <div className=" mb-2.5">
         <strong className="text-lg font-medium">
-          {productData?.price.toLocaleString()}원(배송비포함)
+          {productData?.price.toLocaleString()}원
         </strong>
       </div>
       <p className="text-sm text-[#475569] mb-4">
@@ -24,12 +25,18 @@ const PostMeta = ({ productData }: productDataProps) => {
         {productData?.maxNum}명
       </p>
       <p className="text-sm text-[#475569] mb-4">
-        참여시 예상금액:
-        {productData && (productData?.price / (productData?.curNum + 1)).toLocaleString()}원
+        참여시 예상금액 :{' '}
+        {productData &&
+          (productData?.price / (productData?.curNum + 1)).toLocaleString()}
+        원
       </p>
-      <p className="truncate text-sm text-[#475569] mb-4">
+      <Link
+        href={productData?.productsLink || ''}
+        target="_blank"
+        className="truncate text-sm text-[#475569] mb-4 block"
+      >
         판매 제품 링크 : {productData?.productsLink}
-      </p>
+      </Link>
     </div>
   );
 };

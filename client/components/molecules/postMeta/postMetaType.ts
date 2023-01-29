@@ -3,7 +3,7 @@ export interface productDataProps {
     content: string;
     title: string;
     category: string;
-    createDate: Date;
+    createDate: any;
     price: number;
     maxNum: number;
     curNum: number;

@@ -1,11 +1,11 @@
 import { SetStateAction, useEffect, useState } from 'react';
 import { elapsedTimePropsType, timeType } from './elapsedTimeType';
 
-const ElapsedTime = ({ createdAt }: elapsedTimePropsType) => {
+const ElapsedTime = ({ createDate }: elapsedTimePropsType) => {
   const [elapsedTime, setElapsedTime] = useState('');
   useEffect(() => {
     function calculateElapsedTime() {
-      const uploadTime: Date = new Date(createdAt);
+      const uploadTime: Date = new Date(createDate);
       const currentTime: Date = new Date();
       const timeDiff = (currentTime.valueOf() - uploadTime.valueOf()) / 1000;
       const times = [
@@ -29,7 +29,7 @@ const ElapsedTime = ({ createdAt }: elapsedTimePropsType) => {
       return formattedTimeDiff || '방금 전';
     }
     setElapsedTime(calculateElapsedTime());
-  }, []);
+  }, [createDate]);
   return <span>{elapsedTime || 'now'}</span>;
 };
 
