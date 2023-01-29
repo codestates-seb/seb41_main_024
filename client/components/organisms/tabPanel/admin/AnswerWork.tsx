@@ -31,7 +31,14 @@ interface qnaType {
 }
 
 const AnswerWork = () => {
-  const { inputValue, onChange, setInputValue } = useInput({content: ''});
+  const { inputValue, onChange, setInputValue } = useInput({
+    content: '',
+    title: '',
+    productsLink: '',
+    category: '',
+    maxNum: 0,
+    deadLine: '',
+  });
   const [questions, setQuestions] = useState([])
   const {data, isSuccess, refetch} = useQuery(['questions'], getQuestions);
 
