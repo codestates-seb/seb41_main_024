@@ -8,4 +8,5 @@ export interface chatItemType {
   lastMessage?: string;
   isOpen?: any;
   spot?: any;
+  declareStatus: string;
 }

@@ -24,18 +24,6 @@ const Chatroom = () => {
   let HEADER_TOKEN = { Authorization: Cookies.get('access_token') };
   const [isOwner, setIsOwner] = useState(false);
   const [input, setInput] = useState('');
-  const [sharingData, setSharingData] = useState({
-    thumbnail: '',
-    isOpen: false,
-    title: '',
-    price: '',
-    alertNum: '',
-    address: '',
-    nickName: '',
-  });
-  const { stompClient, messages, members, roomId } =
-    useWebSocketClient(HEADER_TOKEN);
-  const [input, setInput] = useState('');
   const { stompClient, messages, members, roomId, sharingData } =
     useWebSocketClient(HEADER_TOKEN);
   const router = useRouter();
@@ -45,14 +33,6 @@ const Chatroom = () => {
 
   useEffect(() => {
     if (roomId && typeof roomId === 'string') {
-      getChatSharing(roomId)
-        .then((response) => {
-          setSharingData(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-
       getIsWriter(roomId).then((res) => setIsOwner(res.data));
     }
   }, [roomId]);
@@ -94,6 +74,7 @@ const Chatroom = () => {
       <ChatHeader
         isOwner={isOwner}
         members={members}
+        declareStatus={sharingData.boardStatus}
         handleExitChat={handleExitChatRoom}
         handleSendReport={() => reportChat(roomId)}
         handleCompleteRecrutment={() => handleCompleteRecrutment(roomId)}
