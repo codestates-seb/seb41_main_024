@@ -93,9 +93,9 @@ const Chatroom = () => {
               />
             </Link>
           </div>
-          <div className="bg-primary pt-[90px] h-[calc(100vh-88px)] box-border overflow-scroll scroll-smooth max-w-[672px] w-full">
+          <div className="bg-primary pt-[90px] h-[calc(100vh-138px)] box-border overflow-scroll overflow-x-hidden scroll-smooth max-w-[672px] w-full">
             <ChatGroup chatData={messages} />
-            <div className="h-[5rem]" ref={messagesEndRef} />
+            <div className="h-[32px]" ref={messagesEndRef} />
           </div>
           <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
             <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
