@@ -19,6 +19,8 @@ import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+import Image from 'next/image';
+// import base from '../../public/imageBox/base-box.svg';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -27,6 +29,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
+
+import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -103,7 +107,10 @@ export default function ProductDetail({ id }: any) {
       setIsReported(reportStatus);
     });
 
-    getIsWriter(id).then((res) => setIsWriter(res.data.data));
+    getIsWriter(id).then((res) => {
+      console.log(res.data);
+      setIsWriter(res.data);
+    });
 
     if (isLogin) {
       getMyFavorite().then((res) => {
@@ -177,13 +184,23 @@ export default function ProductDetail({ id }: any) {
   const handleGoEdit = (id: any) => {
     router.push(`/edit/${id}`);
   };
+
   return (
     <div>
       <div>
-        <div className="p-10">
-          <Img src="/chatItem/productImg05.svg" alt="메인사진" />
+        <div className="relative pb-[70%]">
+          <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[100%] h-[90%] pb-[59%]">
+            <Image
+              className="p-8"
+              src={productData.imageLink || '/chatItem/productImg.svg'}
+              alt={'물고기'}
+              fill
+            />
+            {!isOpen && (
+              <StateBadge stateText={'모집 완료'} usedDetail={true} />
+            )}
+          </div>
         </div>
-
         <DetailBottom
           isOpen={isOpen}
           isLiked={isLiked}
