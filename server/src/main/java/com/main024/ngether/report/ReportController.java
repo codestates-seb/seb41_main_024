@@ -1,7 +1,7 @@
 package com.main024.ngether.report;
 
 import com.main024.ngether.board.BoardRepository;
-import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.response.MultiResponseDto;
 import com.main024.ngether.member.MemberService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

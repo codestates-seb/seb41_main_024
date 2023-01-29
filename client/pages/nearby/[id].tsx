@@ -139,7 +139,18 @@ export default function ProductDetail({ id }: any) {
       console.log(res.data);
     });
   };
-
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const handleReportModalOpen = () => setIsReportModalOpen(true);
+  const handleReportModalClose = () => setIsReportModalOpen(false);
+  const [isGetherModalOpen, setGetherModalOpen] = useState(false);
+  const handleGetherModalOpen = () => setGetherModalOpen(true);
+  const handleGetherModalClose = () => setGetherModalOpen(false);
+  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
+  const handleIsCompleteModalOpen = () => setIsCompleteModalOpen(true);
+  const handleIsCompleteModalClose = () => setIsCompleteModalOpen(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const handleIsDeleteModalOpen = () => setIsDeleteModalOpen(true);
+  const handleIsDeleteModalClose = () => setIsDeleteModalOpen(false);
   return (
     <div>
       {isReported && <div>신고된 게시물입니다</div>}
@@ -153,6 +164,9 @@ export default function ProductDetail({ id }: any) {
             handleDelete={handleDelete}
             isWriter={isWriter}
             id={id}
+            isDeleteModalOpen={isDeleteModalOpen}
+            handleIsDeleteModalOpen={handleIsDeleteModalOpen}
+            handleIsDeleteModalClose={handleIsDeleteModalClose}
           />
           <DetailBottom
             isOpen={isOpen}
@@ -162,6 +176,15 @@ export default function ProductDetail({ id }: any) {
             handleReport={handleReport}
             handleGether={handleGether}
             handleComplete={handleComplete}
+            isReportModalOpen={isReportModalOpen}
+            handleReportModalOpen={handleReportModalOpen}
+            handleReportModalClose={handleReportModalClose}
+            isGetherModalOpen={isGetherModalOpen}
+            handleGetherModalOpen={handleGetherModalOpen}
+            handleGetherModalClose={handleGetherModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
           />
           <PostMeta productData={productData} />
           <DetailPageTab productData={productData} />

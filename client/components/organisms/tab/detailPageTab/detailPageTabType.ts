@@ -3,5 +3,7 @@ export interface productDataProps {
     content: string;
     latitude: number;
     longitude: number;
+    address: string;
+    boardId: number;
   };
 }

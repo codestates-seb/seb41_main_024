@@ -39,18 +39,15 @@ public class ReportService {
         if (report.getReportType().equals("board")) {
             board = boardRepository.findByBoardId(report.getReportedId()).get();
             report.setTitle(board.getTitle());
-            //report.setReportedMemberId(board.getMember().getMemberId());
             board.setBoardStatus(Board.BoardStatus.BOARD_NOT_DELETE);
             boardRepository.save(board);
-        } else {
-            //report.setReportedMemberId(null);
+        } else if (report.getReportType().equals("chat")){
             chatRoom = chatRoomRepository.findByRoomId(report.getReportedId());
             report.setTitle(chatRoom.getRoomName());
             chatRoom.setDeclareStatus(true);
             chatRoomRepository.save(chatRoom);
-        }
-
-        //report.setReportMemberId(memberService.getLoginMember().getMemberId());
+        }else
+            throw new BusinessLogicException(ExceptionCode.REPORT_TYPE_NOT_FOUND);
 
         return reportRepository.save(report);
     }

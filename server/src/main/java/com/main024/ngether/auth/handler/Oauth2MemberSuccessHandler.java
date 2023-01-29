@@ -68,20 +68,20 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
 
         //최초 로그인일 경우와 아닌 경우를 구분
-        URI newMemberUri = newMemberCreateURI(accessToken, refreshToken, initialStatus);
+        URI memberUri = memberCreateURI(accessToken, refreshToken, initialStatus);
 
-        //users/info 에 토큰과 initialLogin을 쿼리로 담아 리다이렉트
-        getRedirectStrategy().sendRedirect(request, response, newMemberUri.toString());
+        //users/info 에 토큰과 initial 여부를 쿼리로 담아 리다이렉트
+        getRedirectStrategy().sendRedirect(request, response, memberUri.toString());
 
     }
 
 
     public String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
+        //Payload에 username, roles 구성
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
-        //claims.put("userId", member.getMemberId());
-        //Payload에 username, roles, userId로 구성
+
         String subject = member.getEmail();
         //토큰 유지 시간으로 accessToken Expiration 설정
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
@@ -103,11 +103,11 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return refreshToken;
     }
 
-    private URI newMemberCreateURI(String accessToken, String refreshToken, String initialStatus) {
+    private URI memberCreateURI(String accessToken, String refreshToken, String initialStatus) {
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken); //쿼리에 accessToken 전송
         queryParams.add("refresh_token", refreshToken); //쿼리에 refreshToken 전송
-        queryParams.add("initial", initialStatus);
+        queryParams.add("initial", initialStatus); // 쿼리에 initial 전송
 
 
 
@@ -118,7 +118,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .host("seb41-main-024.vercel.app")
                 //.port(3443)
                 .path("/google")
-                .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token 전송.
+                .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token, initial 전송.
                 .build()
                 .toUri();
     }
