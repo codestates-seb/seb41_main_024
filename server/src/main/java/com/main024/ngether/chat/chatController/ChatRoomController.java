@@ -19,7 +19,10 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
+
 
 @Controller
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
@@ -79,20 +82,28 @@ public class ChatRoomController {
     }
 
     //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
-//    @GetMapping("/room/findNewMessages")
-//    public ResponseEntity<Boolean> messageAlarm() throws InterruptedException, ExecutionException, TimeoutException {
-//        Member member = memberService.getLoginMember();
-//        if (member == null)
-//            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-//        ExecutorService threadPool = Executors.newCachedThreadPool();
-//
-//        FutureTask task = (FutureTask) new FutureTask(
-//                () -> {
-//                    chatService.checkNewMessages(member);
-//                    return true;
-//                }).get(2,TimeUnit.SECONDS);
-//        threadPool.execute(task);
-//        Boolean result = false;
-//
-//    }
+    @GetMapping("/room/findNewMessages")
+    public ResponseEntity<Object> messageAlarm() {
+        Member member = memberService.getLoginMember();
+        if (member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+
+        CompletableFuture<Boolean> task = CompletableFuture.supplyAsync(() -> {
+            try {
+                return chatService.checkNewMessages(member);
+            } catch (Exception e) {
+                throw new BusinessLogicException(ExceptionCode.TIME_OUT);
+            }
+        });
+        Boolean check;
+        try {
+            check = task.orTimeout(10, TimeUnit.SECONDS).get();
+        } catch (Exception e) {
+            throw new BusinessLogicException(ExceptionCode.TIME_OUT);
+        }
+        return ResponseEntity.ok(check);
+
+    }
+
+
 }

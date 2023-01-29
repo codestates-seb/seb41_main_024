@@ -106,7 +106,6 @@ public class ChatService {
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.ENTER)
                     .message("[알림] " + member.getNickName() + "님이 입장하셨습니다.")
-                    .unreadCount(setUnreadMessageCount(roomId))
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
             chatRoom.setLastMessage(savedMessage.getMessage());
@@ -169,7 +168,6 @@ public class ChatService {
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.LEAVE)
                     .message("[알림] " + member.getNickName() + "님이 퇴장하셨습니다.")
-                    .unreadCount(setUnreadMessageCount(roomId))
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
             chatRoom.setLastMessage(savedMessage.getMessage());
@@ -177,9 +175,10 @@ public class ChatService {
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
-
+            return findMembersInChatRoom(roomId);
         }
-        return findMembersInChatRoom(roomId);
+        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+
     }
 
     public void removeChatRoomAndBoard(Long memberId) {
