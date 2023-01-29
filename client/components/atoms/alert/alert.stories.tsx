@@ -10,5 +10,5 @@ const Template: ComponentStory<typeof Alert> = (args) => <Alert {...args} />;
 
 export const alert = Template.bind({});
 alert.args = {
-  alertNum: '1',
+  unreadCount: 1,
 };
