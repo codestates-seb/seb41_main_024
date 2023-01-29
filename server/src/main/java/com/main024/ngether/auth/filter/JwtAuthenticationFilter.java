@@ -3,10 +3,13 @@ package com.main024.ngether.auth.filter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.main024.ngether.auth.dto.LoginDto;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
+import com.main024.ngether.auth.utils.ErrorResponder;
+import com.main024.ngether.dto.ErrorResponse;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,6 +52,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication authResult) throws ServletException, IOException {
         Member member = (Member) authResult.getPrincipal();
+        if(member.getRoles().get(0).equals("BAN")){
+            ErrorResponder.sendErrorResponse(response, HttpStatus.FORBIDDEN);
+        }
 
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
@@ -61,8 +67,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
-        if(member.getRoles().get(0).equals("BAN"))
-            throw new BusinessLogicException(ExceptionCode.BAN);
+
         claims.put("username", member.getEmail());
         claims.put("roles", member.getRoles());
 
@@ -77,8 +82,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     private String delegateRefreshToken(Member member) {
-        if(member.getRoles().get(0).equals("BAN"))
-            throw new BusinessLogicException(ExceptionCode.BAN);
+//        if(member.getRoles().get(0).equals("BAN"))
+//            throw new BusinessLogicException(ExceptionCode.BAN);
         String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());

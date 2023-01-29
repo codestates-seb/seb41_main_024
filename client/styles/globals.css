@@ -189,3 +189,51 @@ var {
   font-style: normal;
   font-weight: 400;
 }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ani_fadeIn {
+  animation: fadeIn 0.3s ease-in forwards;
+}
+
+.line_clamp2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-all;
+}
+
+.pcPageLine:before,
+.pcPageLine:after {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100vh;
+  background-color: #ddd;
+  content: '';
+}
+.pcPageLine:before {
+  -webkit-transform: translateX(-337px);
+  transform: translateX(-337px);
+}
+.pcPageLine:after {
+  -webkit-transform: translateX(336px);
+  transform: translateX(336px);
+}
+@media only screen and (max-width: 672px) {
+  .pcPageLine:before,
+  .pcPageLine:after {
+    content: none;
+  }
+}

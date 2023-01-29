@@ -69,6 +69,8 @@ public class MemberService {
             Optional.ofNullable(member.getPw())
                     .ifPresent(pw -> findMember.setPw(encryptedPassword));
         }
+        Optional.ofNullable(member.getImageLink())
+                .ifPresent(findMember::setImageLink);
         Optional.ofNullable(member.getNickName())
                 .ifPresent(findMember::setNickName);
         Optional.ofNullable(member.getPhoneNumber())

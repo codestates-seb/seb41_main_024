@@ -1,5 +1,5 @@
 export interface productDataProps {
-  productData: {
+  productData?: {
     content: string;
     title: string;
     category: string;
@@ -16,4 +16,7 @@ export interface productDataProps {
   handleDelete: () => void;
   isWriter: boolean;
   id: string;
+  isDeleteModalOpen: boolean;
+  handleIsDeleteModalOpen: () => void;
+  handleIsDeleteModalClose: () => void;
 }

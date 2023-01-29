@@ -19,6 +19,7 @@ public class ChatRoom {
 
     @Id
     private Long roomId;
+    @Column(length = 200)
     private String roomName;//채팅방 이름 =  게시판 이름
     private Long memberId;//채팅방 개설자 아이디
     private int memberCount;//채팅방에 있는 인원 수
@@ -27,6 +28,9 @@ public class ChatRoom {
     private LocalDateTime lastMessageCreated;
     private String lastMessage;
     private String address;
+    private boolean recruitment;
+    @Column(length = 2000)
+    private String imageLink;
 
     @JsonIgnore
     @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)

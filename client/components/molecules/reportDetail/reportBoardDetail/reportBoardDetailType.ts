@@ -1,3 +1,4 @@
 export interface reportBoardDetailType {
-  handleNavigate: ()=>void
+  handleNavigate: ()=>void;
+  handleDeleteReport: ()=>void;
 }

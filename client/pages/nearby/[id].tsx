@@ -4,7 +4,6 @@ import DetailBottom from '../../components/molecules/detailBottom/DetailBottom';
 import PostMeta from '../../components/molecules/postMeta/PostMeta';
 import UserMetaInfo from '../../components/molecules/userMetaInfo/UserMetaInfo';
 import DetailPageTab from '../../components/organisms/tab/detailPageTab/DetailPageTab';
-import axios from 'axios';
 import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import {
@@ -14,14 +13,14 @@ import {
   reportProduct,
   getMyFavorite,
   goChatroom,
+  completeSharing,
 } from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
-import Cookies from 'js-cookie';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
-  const { data } = await getProductDetail(id);
   return {
     props: {
       id,
@@ -30,82 +29,167 @@ export async function getServerSideProps(context: any) {
 }
 
 export default function ProductDetail({ id }: any) {
+  const loginChecker = () => {
+    if (Cookies.get('access_token')) {
+      return true;
+    }
+    return false;
+  };
+
+  const isLogin = loginChecker();
+  const [isLiked, setIsLiked] = useState<boolean>();
+  const [isOpen, setIsOpen] = useState<boolean>();
+  const [isReported, setIsReported] = useState<boolean>();
+  const [productData, setProductData] = useState<any>();
   const router = useRouter();
+
+  console.log(isLiked);
   const res = useQueries({
     queries: [
       {
         queryKey: ['productDetail'],
         queryFn: () => getProductDetail(id),
+        onSuccess: (res: any) => {
+          console.log(res);
+          setProductData(res.data);
+
+          const openStatus =
+            res?.data?.boardStatus === 'BOARD_COMPLETE' ? false : true;
+          setIsOpen(openStatus);
+
+          const reportStatus =
+            res?.data?.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
+          console.log();
+          setIsReported(reportStatus);
+        },
+        retry: false,
       },
       {
         queryKey: ['isWriter'],
         queryFn: () => getIsWriter(id),
       },
-      {
-        queryKey: ['MyFavorites'],
-        queryFn: getMyFavorite,
-      },
     ],
   });
 
-  const productData = res[0].data?.data;
   const isWriter = res[1].data?.data;
-  const isMyFavorite =
-    res[2].data?.data?.data.filter((item: any) => item.boardId === Number(id))
-      .length > 0;
 
-  console.log(res);
+  useEffect(() => {
+    if (isLogin) {
+      getMyFavorite().then((res) => {
+        const isMyFavorite: any =
+          res.data.data.filter((item: any) => item.boardId === Number(id))
+            .length > 0;
+
+        setIsLiked(isMyFavorite);
+      });
+    }
+  }, []);
 
   const reportForm = {
     reportedId: id,
     reportType: 'board',
   };
-  const reportutation = useMutation(() => reportProduct(reportForm));
 
-  const [isLiked, setIsLiked] = useState(isMyFavorite);
-
+  const reportMutation = useMutation(() => reportProduct(reportForm));
   const deleteMutation = useMutation(() => deleteProductDetail(id));
   const likeMutation = useMutation(() => likeProduct(id));
 
-  console.log(likeMutation);
-
+  // 삭제하기
   const handleDelete = () => {
     deleteMutation.mutate();
     router.push('/');
-    console.log(deleteMutation);
   };
 
+  // 찜하기
   const handleLike = () => {
-    setIsLiked(!isLiked);
-    likeMutation.mutate();
+    if (!isLogin) {
+      alert('로그인 후 이용해주세요!');
+      router.push('/login');
+    } else {
+      setIsLiked(!isLiked);
+      likeMutation.mutate();
+    }
   };
 
+  // 신고하기
   const handleReport = () => {
-    reportutation.mutate();
+    if (!isLogin) {
+      alert('로그인 후 이용해주세요!');
+      router.push('/login');
+    } else {
+      reportMutation.mutate();
+      alert('신고가 접수되었습니다');
+    }
   };
 
+  // 참여하기
   const handleGether = () => {
-    goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
+    if (!isLogin) {
+      alert('로그인 후 이용해주세요!');
+      router.push('/login');
+    } else {
+      goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
+    }
   };
 
+  // 모집 완료하기
+  const handleComplete = () => {
+    setIsOpen(false);
+    completeSharing(id).then((res) => {
+      console.log(res.data);
+    });
+  };
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const handleReportModalOpen = () => setIsReportModalOpen(true);
+  const handleReportModalClose = () => setIsReportModalOpen(false);
+  const [isGetherModalOpen, setGetherModalOpen] = useState(false);
+  const handleGetherModalOpen = () => setGetherModalOpen(true);
+  const handleGetherModalClose = () => setGetherModalOpen(false);
+  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
+  const handleIsCompleteModalOpen = () => setIsCompleteModalOpen(true);
+  const handleIsCompleteModalClose = () => setIsCompleteModalOpen(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const handleIsDeleteModalOpen = () => setIsDeleteModalOpen(true);
+  const handleIsDeleteModalClose = () => setIsDeleteModalOpen(false);
   return (
     <div>
-      <Img src="/chatItem/productImg05.svg" alt="메인사진" />
-      <UserMetaInfo
-        productData={productData}
-        handleDelete={handleDelete}
-        isWriter={isWriter}
-        id={id}
-      />
-      <PostMeta productData={productData} />
-      <DetailPageTab productData={productData} />
-      <DetailBottom
-        isLiked={isLiked}
-        handleLike={handleLike}
-        handleReport={handleReport}
-        handleGether={handleGether}
-        id={id}
-      />
+      {isReported && <div>신고된 게시물입니다</div>}
+      {!isReported && (
+        <div>
+          <div className="p-10">
+            <Img src="/chatItem/productImg05.svg" alt="메인사진" />
+          </div>
+          <UserMetaInfo
+            productData={productData}
+            handleDelete={handleDelete}
+            isWriter={isWriter}
+            id={id}
+            isDeleteModalOpen={isDeleteModalOpen}
+            handleIsDeleteModalOpen={handleIsDeleteModalOpen}
+            handleIsDeleteModalClose={handleIsDeleteModalClose}
+          />
+          <DetailBottom
+            isOpen={isOpen}
+            isLiked={isLiked}
+            isWriter={isWriter}
+            handleLike={handleLike}
+            handleReport={handleReport}
+            handleGether={handleGether}
+            handleComplete={handleComplete}
+            isReportModalOpen={isReportModalOpen}
+            handleReportModalOpen={handleReportModalOpen}
+            handleReportModalClose={handleReportModalClose}
+            isGetherModalOpen={isGetherModalOpen}
+            handleGetherModalOpen={handleGetherModalOpen}
+            handleGetherModalClose={handleGetherModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
+          />
+          <PostMeta productData={productData} />
+          <DetailPageTab productData={productData} />
+        </div>
+      )}
     </div>
   );
 }

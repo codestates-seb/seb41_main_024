@@ -1,5 +1,5 @@
 export interface elapsedTimePropsType {
-  createdAt: Date;
+  createDate: Date;
 }
 export interface timeType {
   times: { time: string; seconds: number }[];

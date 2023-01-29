@@ -7,15 +7,11 @@ import React from 'react';
 import useLogin from '../../../hooks/common/useLogin';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import { signOut } from 'next-auth/react';
-
-import { signIn, useSession } from 'next-auth/react';
 
 const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
   const router = useRouter();
   const { isLogin } = useLogin();
   const nickName = Cookies.get('nickName');
-  const session = useSession();
 
   const handleLogOut = () => {
     Cookies.remove('access_token');
@@ -23,21 +19,19 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
     Cookies.remove('memberId');
     Cookies.remove('nickName');
     Cookies.remove('locationId');
-    signOut({ callbackUrl: '/' });
+    Cookies.remove('role');
+    router.push('/');
   };
 
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={basicTheme}>
-        <div className="max-w-2xl mx-auto min-h-[100vh]">
-          {session && (
-            <MainHeader
-              isLogin={isLogin}
-              nickName={nickName}
-              logOutHandler={handleLogOut}
-              session={session}
-            />
-          )}
+        <div className="max-w-2xl mx-auto min-h-[100vh] pcPageLine">
+          <MainHeader
+            isLogin={isLogin}
+            nickName={nickName}
+            logOutHandler={handleLogOut}
+          />
           {children}
           <Navigation />
         </div>

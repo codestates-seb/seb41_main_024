@@ -19,10 +19,11 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
   const nickName = Cookies.get('nickName')
-
+  
   useEffect(() => {
-    if(!isReady && HEADER_TOKEN !== undefined) return
+    if (!isReady || !HEADER_TOKEN || isConnected) return;
 
     const defaultChatSetting = async () => {
       await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: HEADER_TOKEN});
@@ -42,11 +43,19 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
             ws.subscribe(
             `/receive/chat/${roomId}`,
             async (messages) => {
-              if((JSON.parse(messages.body).type) === 'REENTER') {
+              const message = JSON.parse(messages.body)
+              if (message.type === 'REENTER') {
                 await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
                 .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+              } 
+              else if (message.type === 'ENTER' || message.type === 'LEAVE') {
+                await axios.get(`https://ngether.site/chat/room/${roomId}/memberList`, {headers : HEADER_TOKEN})
+                .then(res => {        
+                  const members = res.data.map((member: { memberId: number, nickName: string; }) => member.nickName);
+                  setMembers(members);
+                });
               }
-              setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(JSON.parse(messages.body))])
+              setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(message)])
             }, 
             HEADER_TOKEN);
           }, 
@@ -72,11 +81,23 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
         }
         else return
       })
-    }
+    } 
 
     checkChatMember()
+    setIsConnected(true);
+  }, [roomId, HEADER_TOKEN, isConnected])
 
-  }, [roomId, HEADER_TOKEN])
+  useEffect(() => {
+    return () => {
+      if (stompClient && stompClient.connected) {
+        stompClient.disconnect(() => {
+          stompClient.unsubscribe('sub-0');
+          setIsConnected(false);
+        });
+      }
+    };
+  }, [stompClient])
+
   return {stompClient, messages, members, roomId}
 }
 
@@ -88,7 +109,7 @@ const transDateFormat = (date: string) => {
   return formattedDate
 }
 
-const transDateFormatForAdmin = (date: string) => {
+export const transDateFormatForAdmin = (date: string) => {
   const targetDate = new Date(date);
   const formattedDate = `${targetDate.getFullYear()}년 ${targetDate.getMonth() + 1}월 ${targetDate.getDate()}일 ${targetDate.getHours() >= 12 ? '오후' : '오전'} ${targetDate.getHours() % 12 || 12}시 ${targetDate.getMinutes()}분`;
   return formattedDate

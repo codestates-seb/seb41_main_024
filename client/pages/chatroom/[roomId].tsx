@@ -11,16 +11,18 @@ import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLa
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 import { useRouter } from 'next/router';
 import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMessage';
+import { handleCompleteRecrutment } from '../../api/mySharing';
+import { reportChat } from '../../api/detail';
+import { getIsWriter } from '../../api/isWriter';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
 // 따라서 게시물 작성 시 리턴되는 게시물 아이디를 이용해 바로 채팅방 생성 api로 호출해주시면 될 것 같습니다.
 // 그 후 /chatroom으로 이동하게 된다면 해당 id를 통해 웹소켓 연결을 시도합니다.
 
-let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
-let IS_ROOM_OWER = false
-
 const Chatroom = () => { 
+  let HEADER_TOKEN = {Authorization : Cookies.get('access_token')};
+  const [isOwner, setIsOwner] = useState(false);
   const [input, setInput] = useState('')
   const [sharingData, setSharingData] = useState({
     thumbnail: '',
@@ -38,15 +40,18 @@ const Chatroom = () => {
   const isMemeber = members.includes(Cookies.get('nickName'))
   
   useEffect(() => {
-    if(roomId)
-    getChatSharing(roomId)
-    .then((response) => {
+    if(roomId && typeof roomId === 'string') {
+      getChatSharing(roomId)
+      .then((response) => {
         setSharingData(response.data);
-        IS_ROOM_OWER = sharingData.nickName === Cookies.get('nickName')
       })
       .catch((error) => {
         console.error(error);
       });
+  
+      getIsWriter(roomId)
+      .then(res => setIsOwner(res.data))
+    }
   }, [roomId]);
 
   useEffect(() => {
@@ -71,10 +76,8 @@ const Chatroom = () => {
 
   const handleExitChatRoom = (): void => {
     if (!stompClient) return;
-    const confirmationMessage = IS_ROOM_OWER ? 
-      "방장님이 채팅에서 나가시면 N게더도 삭제되요" : 
-      "채팅에서 나가시면 N게더에서도 이탈해요"
-    if (stompClient && confirm(confirmationMessage)) {
+
+    if (stompClient) {
       stompClient.disconnect(() => {})
       axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
       router.push('/chatlist')
@@ -83,12 +86,18 @@ const Chatroom = () => {
   }
 
   return (
-    <div>
-      <ChatHeader members={members} handleExitChat={handleExitChatRoom} />
+    <div className='flex flex-col w-[100%]'>
+      <ChatHeader
+        isOwner={isOwner}
+        members={members} 
+        handleExitChat={handleExitChatRoom} 
+        handleSendReport={() => reportChat(roomId)} 
+        handleCompleteRecrutment={() => handleCompleteRecrutment(roomId)}
+      />
       {!isMemeber && <ForbiddenMessage />}
       {isMemeber && (
         <>
-          <div className='left-2/4 mt-3 translate-x-[-50%] fixed w-[604px] min-w-[372px] pl-[1.5rem] pr-[2rem] rounded'>
+          <div className='left-2/4 mt-16 translate-x-[-50%] w-auto fixed px-[1rem] rounded'>
             <Link href={`/nearby/${roomId}`}>
               <ChatItem
                 thumbnail={''}
@@ -100,7 +109,7 @@ const Chatroom = () => {
               />
             </Link>
           </div>
-          <div className="bg-primary pt-[90px] h-[850px] overflow-scroll scroll-smooth max-w-[672px] w-full">
+          <div className="bg-primary pt-[90px] h-[calc(100vh-88px)] box-border overflow-scroll scroll-smooth max-w-[672px] w-full">
             <ChatGroup chatData={messages} />
             <div className="h-[5rem]" ref={messagesEndRef} />
           </div>

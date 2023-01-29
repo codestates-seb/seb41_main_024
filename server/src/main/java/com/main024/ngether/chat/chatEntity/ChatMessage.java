@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 public class ChatMessage {
     public enum MessageType {
-        ENTER, TALK, LEAVE, REENTER
+        ENTER, TALK, LEAVE, REENTER, NOTICE
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,7 @@ public class ChatMessage {
     //메세지 내용
     @Column(nullable = false)
     private String message;
+
     //메세지 작성 날짜
     private LocalDateTime createDate = LocalDateTime.now();
     //안 읽은 사람 수

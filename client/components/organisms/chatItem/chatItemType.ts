@@ -3,7 +3,7 @@ export interface chatItemType {
   declareStatus?: any;
   title: string;
   price: string;
-  alertNum?: string;
+  alertNum?: string | number;
   address?: string;
   lastMessage?: string;
   isOpen?: any;
