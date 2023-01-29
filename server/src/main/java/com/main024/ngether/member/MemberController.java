@@ -13,6 +13,7 @@ import com.main024.ngether.response.MultiResponseDto;
 import com.main024.ngether.response.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/members")
@@ -127,13 +130,10 @@ public class MemberController {
                 .sorted(Comparator.comparing(ChatDto.myChatting::getLastMessageCreated)
                         .reversed())
                 .collect(Collectors.toList());
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
-        int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), chatRoomList.size());
-        Page<ChatDto.myChatting> chatRoomMembersPage = new PageImpl<>(chatRoomList.subList(start, end), pageRequest, chatRoomList.size());
+        Page<ChatDto.myChatting> myChattingPage = new Pagination<ChatDto.myChatting>().MadePagination(chatRoomList, page, size);
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(chatRoomPage.getContent(), chatRoomPage), HttpStatus.OK);
+                new MultiResponseDto<>(myChattingPage.getContent(), myChattingPage), HttpStatus.OK);
     }
 
     //내가 참여하고 있는 쉐어링 게시물 목록

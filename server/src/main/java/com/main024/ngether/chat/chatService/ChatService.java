@@ -284,11 +284,4 @@ public class ChatService {
         }
 
     }
-    public List<ChatRoom> viewMyChattingRoom(){
-        return findMyChatRoom()
-                .stream()
-                .sorted(Comparator.comparing(ChatRoom::getLastMessageCreated)
-                        .reversed())
-                .collect(Collectors.toList());
-    }
 }
