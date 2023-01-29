@@ -18,6 +18,7 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -52,11 +53,11 @@ export default function ProductDetail({ id }: any) {
   };
 
   const isLogin = loginChecker();
-  const [isLiked, setIsLiked] = useState<boolean>();
-  const [isOpen, setIsOpen] = useState<boolean>();
-  const [isReported, setIsReported] = useState<boolean>();
-  const [productData, setProductData] = useState<any>();
-  const [isWriter, setIsWriter] = useState<any>();
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isReported, setIsReported] = useState<boolean>(false);
+  const [productData, setProductData] = useState<any>([]);
+  const [isWriter, setIsWriter] = useState<any>(false);
   const router = useRouter();
 
   console.log('isLiked', isReported);
@@ -119,10 +120,6 @@ export default function ProductDetail({ id }: any) {
     reportedId: id,
     reportType: 'board',
   };
-
-  // const reportMutation = useMutation(() => reportProduct(reportForm));
-  // const deleteMutation = useMutation(() => deleteProductDetail(id));
-  // const likeMutation = useMutation(() => likeProduct(id));
 
   // 삭제하기
   const handleDelete = () => {

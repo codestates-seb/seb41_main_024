@@ -31,7 +31,7 @@ const PostMeta = ({ productData, isLiked, handleLike }: PostMetaType) => {
               <ElapsedTime createDate={productData?.createDate} />
             </p>
             <strong className="text-lg font-medium">
-              {productData?.price.toLocaleString()}원 (배송비포함)
+              {productData?.price?.toLocaleString()}원 (배송비포함)
             </strong>
           </Stack>
           <Stack>
@@ -77,7 +77,7 @@ const PostMeta = ({ productData, isLiked, handleLike }: PostMetaType) => {
                 (
                   productData?.price /
                   (productData?.curNum + 1)
-                ).toLocaleString()}
+                )?.toLocaleString()}
               원
             </p>
             <Link

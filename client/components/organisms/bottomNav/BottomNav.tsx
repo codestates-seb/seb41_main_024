@@ -13,10 +13,16 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import LoginIcon from '@mui/icons-material/Login';
 import { bottomNavPropsType } from './bottomNavType';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
-  const isLogin = Cookies.get('access_token');
+  const [isLogin, setIsLogin] = useState<undefined | string>();
+
+  useEffect(() => {
+    const token = Cookies.get('access_token');
+    setIsLogin(token);
+  }, []);
 
   const NAVIGATION_LIST: Array<object> = [
     {
