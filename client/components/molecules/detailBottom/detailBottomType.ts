@@ -5,4 +5,7 @@ export interface DetailBottomPropsType {
   handleReport: () => void;
   handleGether: () => void;
   id: number;
+  handleModalOpen: () => void;
+  handleClose: () => void;
+  modalOpen: boolean;
 }
