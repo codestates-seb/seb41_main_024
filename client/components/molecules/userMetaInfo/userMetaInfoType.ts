@@ -16,4 +16,7 @@ export interface productDataProps {
   handleDelete: () => void;
   isWriter: boolean;
   id: string;
+  isDeleteModalOpen: boolean;
+  handleIsDeleteModalOpen: () => void;
+  handleIsDeleteModalClose: () => void;
 }

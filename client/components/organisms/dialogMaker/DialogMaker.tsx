@@ -5,9 +5,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { dialogButtonType } from './dialogButtonType';
+import { dialogMakerType } from './dialogMakerType';
 
-const DialogButton = ({ name, title, question, func }: dialogButtonType) => {
+const DialogMaker = ({ name, title, question, func }: dialogMakerType) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -49,6 +49,6 @@ const DialogButton = ({ name, title, question, func }: dialogButtonType) => {
       </Dialog>
     </>
   );
-}
+};
 
-export default  DialogButton;
+export default DialogMaker;
