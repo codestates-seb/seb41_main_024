@@ -25,7 +25,8 @@ public enum ExceptionCode {
     QNA_NOT_FOUND(416,"Qna not found"),
     NICKNAME_EXIST(417,"NickName is exists"),
     PHONE_NUMBER_EXIST(418,"phoneNumber is exists"),
-    EMAIL_EXIST(419,"email is exists");
+    EMAIL_EXIST(419,"email is exists"),
+    REPORT_TYPE_NOT_FOUND(420, "ReportType not found");
 
 
 

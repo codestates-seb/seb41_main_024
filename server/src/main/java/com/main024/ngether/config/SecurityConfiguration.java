@@ -69,7 +69,6 @@ public class SecurityConfiguration {
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
-                .csrf().disable()
                 .exceptionHandling()  // 추가
                 .authenticationEntryPoint(new MemberAuthenticationEntryPoint())  // 추가
                 .accessDeniedHandler(new MemberAccessDeniedHandler())            // 추가

@@ -1,6 +1,6 @@
 package com.main024.ngether.board;
 
-import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.response.MultiResponseDto;
 import com.main024.ngether.likes.Like;
 import com.main024.ngether.likes.LikeService;
 import com.main024.ngether.member.MemberService;

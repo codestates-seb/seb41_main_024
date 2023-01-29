@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Cookie } from '@mui/icons-material';
 import { DetailBottomPropsType } from './detailBottomType';
+import ModalComponent from '../../organisms/modal/Modal';
 import Cookies from 'js-cookie';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -14,99 +15,75 @@ const DetailBottom = ({
   isWriter,
   handleReport,
   handleGether,
+  isReportModalOpen,
+  handleReportModalOpen,
+  handleReportModalClose,
   handleComplete,
+  isGetherModalOpen,
+  handleGetherModalOpen,
+  handleGetherModalClose,
+  isCompleteModalOpen,
+  handleIsCompleteModalOpen,
+  handleIsCompleteModalClose,
+  isLiked,
+  handleLike,
 }: DetailBottomPropsType) => {
   return (
-    <Box sx={{ my: 0, mx: 0 }}>
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="flex-center"
-        spacing={2}
-      >
-        {isOpen && !isWriter && (
-          <Button onClick={handleGether} variant="contained" className="">
-            참여하기
-          </Button>
-        )}
-        {!isOpen && !isWriter && (
-          <Button disabled variant="contained" className="">
-            참여하기
-          </Button>
-        )}
-        {!isWriter && (
-          <Button
-            onClick={handleReport}
-            variant="contained"
-            className="bg-[red]"
-          >
-            신고하기
-          </Button>
-        )}
-        {/* {isWriter && isOpen && (
-          <Button onClick={handleComplete} variant="contained" className="m-2">
-            모집 마감하기
-          </Button>
-        )}
-        {isWriter && !isOpen && (
-          <Button disabled variant="contained" className="m-2">
-            모집 마감하기
-          </Button>
-        )} */}
-      </Stack>
-    </Box>
+    <div>
+      <ModalComponent
+        modalOpen={isReportModalOpen}
+        handleClose={handleReportModalClose}
+        title="해당 게시물을 신고하시겠습니까? 신고 즉시 게시물이 노출되지 않습니다."
+        onClick={handleReport}
+        positiveResponse="예 신고하겠습니다"
+        positiveColor={'red'}
+        negativeResponse="취소"
+        negativeColor={'black'}
+      />
+      <ModalComponent
+        modalOpen={isGetherModalOpen}
+        handleClose={handleGetherModalClose}
+        title="공동 구매에 참여하시면 공동구매 채팅방으로 이동됩니다. 이웃들과 함께 세부사항을 논의해보세요! "
+        onClick={handleGether}
+        positiveResponse="예 참여하겠습니다"
+        positiveColor={'#63A8DA'}
+        negativeResponse="취소"
+        negativeColor={'red'}
+      />
 
-    // <div className="flex justify-between items-center p-4 mb-4 px-2 py-2 ">
-    //   <Button onClick={handleLike}>
-    //     {isLiked && (
-    //       <Image
-    //         src="/sharingList/favorite.svg"
-    //         width={30}
-    //         height={30}
-    //         alt="좋아요"
-    //       />
-    //     )}
-    //     {!isLiked && (
-    //       <Image
-    //         src="/sharingList/favorite_border.svg"
-    //         width={30}
-    //         height={30}
-    //         alt="좋아요"
-    //       />
-    //     )}
-    //   </Button>
-    //   <div>
-    //     {isOpen && !isWriter && (
-    //       <Button onClick={handleGether} variant="contained" className="m-2">
-    //         참여하기
-    //       </Button>
-    //     )}
-    //     {!isOpen && !isWriter && (
-    //       <Button disabled variant="contained" className="m-2">
-    //         참여하기
-    //       </Button>
-    //     )}
-    //     {!isWriter && (
-    //       <Button
-    //         onClick={handleReport}
-    //         variant="contained"
-    //         className="bg-[red] m-2"
-    //       >
-    //         신고하기
-    //       </Button>
-    //     )}
-    //     {/* {isWriter && isOpen && (
-    //       <Button onClick={handleComplete} variant="contained" className="m-2">
-    //         모집 마감하기
-    //       </Button>
-    //     )}
-    //     {isWriter && !isOpen && (
-    //       <Button disabled variant="contained" className="m-2">
-    //         모집 마감하기
-    //       </Button>
-    //     )} */}
-    //   </div>
-    // </div>
+      <Box sx={{ my: 0, mx: 0 }}>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="flex-center"
+          spacing={2}
+        >
+          {isOpen && !isWriter && (
+            <Button
+              onClick={handleGetherModalOpen}
+              variant="contained"
+              className=""
+            >
+              참여하기
+            </Button>
+          )}
+          {!isOpen && !isWriter && (
+            <Button disabled variant="contained" className="">
+              참여하기
+            </Button>
+          )}
+          {!isWriter && (
+            <Button
+              onClick={handleReportModalOpen}
+              variant="contained"
+              className="bg-[red]"
+            >
+              신고하기
+            </Button>
+          )}
+        </Stack>
+      </Box>
+    </div>
   );
 };
 

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Button, Divider } from '@mui/material';
 import { reportChatDetailType } from './reportChatDetailType';
 import { transDateFormatForAdmin } from '../../../../hooks/useWebSocketClient';
-import DialogButton from '../../../organisms/DialogButton/DialogButton';
+import DialogMaker from '../../../organisms/dialogMaker/DialogMaker';
 
 interface ChatLogType {
   chatMessageId: number;
@@ -56,7 +56,7 @@ const ReportChatDetail = ({
         <div>
           <p className="text-xs mt-2">정지할 아이디</p>
           {chatDataSet.chatMembers.map((nickName: string, index) => (
-            <DialogButton
+            <DialogMaker
               key={index}
               name={nickName}
               title={`${nickName}을 정지시키겠습니까?`}

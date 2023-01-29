@@ -18,7 +18,6 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import DialogButton from '../../components/organisms/DialogButton/DialogButton';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -153,7 +152,18 @@ export default function ProductDetail({ id }: any) {
       console.log(res.data);
     });
   };
-
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const handleReportModalOpen = () => setIsReportModalOpen(true);
+  const handleReportModalClose = () => setIsReportModalOpen(false);
+  const [isGetherModalOpen, setGetherModalOpen] = useState(false);
+  const handleGetherModalOpen = () => setGetherModalOpen(true);
+  const handleGetherModalClose = () => setGetherModalOpen(false);
+  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
+  const handleIsCompleteModalOpen = () => setIsCompleteModalOpen(true);
+  const handleIsCompleteModalClose = () => setIsCompleteModalOpen(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const handleIsDeleteModalOpen = () => setIsDeleteModalOpen(true);
+  const handleIsDeleteModalClose = () => setIsDeleteModalOpen(false);
   const handleGoEdit = (id: any) => {
     router.push(`/edit/${id}`);
   };
@@ -174,8 +184,17 @@ export default function ProductDetail({ id }: any) {
             handleReport={handleReport}
             handleGether={handleGether}
             handleComplete={handleComplete}
+            isReportModalOpen={isReportModalOpen}
+            handleReportModalOpen={handleReportModalOpen}
+            handleReportModalClose={handleReportModalClose}
+            isGetherModalOpen={isGetherModalOpen}
+            handleGetherModalOpen={handleGetherModalOpen}
+            handleGetherModalClose={handleGetherModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
           />
-          <Divider sx={{ my: 4 }} />
+
           <UserMetaInfo
             isOpen={isOpen}
             productData={productData}
@@ -184,16 +203,20 @@ export default function ProductDetail({ id }: any) {
             id={id}
             handleComplete={handleComplete}
             handleGoEdit={handleGoEdit}
+            isDeleteModalOpen={isDeleteModalOpen}
+            handleIsDeleteModalOpen={handleIsDeleteModalOpen}
+            handleIsDeleteModalClose={handleIsDeleteModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
           />
 
-          <Divider sx={{ my: 2 }} />
-
+          <Divider variant="middle" sx={{ my: 1 }} />
           <PostMeta
             productData={productData}
             isLiked={isLiked}
             handleLike={handleLike}
           />
-          <Divider sx={{ my: 4 }} />
           <DetailPageTab productData={productData} />
           <LoginAlert
             isLoginAlertOpen={isLoginAlertOpen}
