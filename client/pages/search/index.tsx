@@ -129,8 +129,19 @@ const Search = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-col max-w-lg mt-3 w-[100%]">
+      <div className="flex flex-col max-w-lg mt-3 w-[100%] relative">
         <div id="map" className="w-[100%] h-[350px]"></div>
+        <div
+          className={`${
+            searchOption === '글 제목'
+              ? 'bg-[gray] bg-none w-[100%] h-[350px] absolute left-0 z-[6] flex items-center justify-center ani_fadeIn'
+              : ''
+          }`}
+        >
+          {searchOption === '글 제목'
+            ? '제목검색은 내 주변 검색 지원이 되지 않습니다'
+            : ''}
+        </div>
         <p className="mb-4">
           <em>지도를 클릭해주세요!</em>
         </p>
@@ -229,15 +240,6 @@ const Search = () => {
             }
           />
         </FormControl>
-        <DropdownInput
-          dropDownOptions={CATEGORY_OPTIONS}
-          id="category"
-          name="category"
-          label="카테고리"
-          onChange={onChange}
-          defaultValue="상품 쉐어링"
-          value={category}
-        />
         <form onSubmit={handleSubmit}>
           <FormButton
             content="검색하기"
