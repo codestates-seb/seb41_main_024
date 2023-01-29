@@ -1,3 +1,4 @@
+import { getChatSharing } from '../api/chatSharing';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import SockJS from 'sockjs-client';
@@ -18,6 +19,14 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
   const {query: {roomId}, isReady} = useRouter();
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
+  const [sharingData, setSharingData] = useState({
+    thumbnail: '',
+    isOpen: false,
+    title: '',
+    price: '',
+    address: '',
+    boardStatus: '',
+  })
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const nickName = Cookies.get('nickName')
@@ -29,6 +38,9 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
       await axios.get(`https://ngether.site/chat/room/enter/${roomId}`, {headers: HEADER_TOKEN});
       await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
       .then(res => setMessages(res.data.map(transDateFormChatMessage)));
+      await getChatSharing(roomId)
+      .then((response) => {setSharingData(response.data);
+      })
     } 
     
     const setChatWebsocket = async () => {
@@ -48,12 +60,17 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
                 await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
                 .then(res => setMessages(res.data.map(transDateFormChatMessage)));
               } 
-              else if (message.type === 'ENTER' || message.type === 'LEAVE') {
+              if (message.type === 'ENTER' || message.type === 'LEAVE') {
                 await axios.get(`https://ngether.site/chat/room/${roomId}/memberList`, {headers : HEADER_TOKEN})
                 .then(res => {        
                   const members = res.data.map((member: { memberId: number, nickName: string; }) => member.nickName);
                   setMembers(members);
                 });
+              }
+              if (message.type === 'NOTICE') {
+                await getChatSharing(roomId)
+                .then((response) => {setSharingData(response.data);
+                })
               }
               setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(message)])
             }, 
@@ -98,7 +115,7 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
     };
   }, [stompClient])
 
-  return {stompClient, messages, members, roomId}
+  return {stompClient, messages, members, roomId, sharingData}
 }
 
 export default useWebSocketClient;

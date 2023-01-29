@@ -11,12 +11,13 @@ import DialogButton from '../../DialogButton/DialogButton';
 interface ChatHeaderType {
   isOwner: boolean;
   members: string[];
+  declareStatus: string;
   handleExitChat: () => void;
   handleSendReport: () => void;
   handleCompleteRecrutment: () => void;
 }
 
-const ChatHeader = ({isOwner, members, handleExitChat, handleSendReport, handleCompleteRecrutment}: ChatHeaderType) => {
+const ChatHeader = ({isOwner, members, declareStatus, handleExitChat, handleSendReport, handleCompleteRecrutment}: ChatHeaderType) => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
@@ -60,7 +61,7 @@ const ChatHeader = ({isOwner, members, handleExitChat, handleSendReport, handleC
         {members.map((member,index) => <DrawerListItem key={index} text={member}/>)}
         <Divider className='mt-3'/>
         <div className='fixed bottom-3 w-[100%]'>
-          {isOwner && (
+          {isOwner && declareStatus !== "BOARD_COMPLETE" && (
             <DrawerListItem>
               <DialogButton 
                 name="N게더 모집 완료하기" 
