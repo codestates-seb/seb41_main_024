@@ -4,7 +4,6 @@ import { productDataProps } from './userMetaInfoType';
 import Link from 'next/link';
 import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
-import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 
 const UserMetaInfo = ({
@@ -74,7 +73,6 @@ const UserMetaInfo = ({
           )}
         </Stack>
       </Stack>
-      <Divider variant="middle" />
     </Box>
   );
 };

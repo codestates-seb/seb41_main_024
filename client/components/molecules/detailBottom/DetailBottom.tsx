@@ -6,44 +6,31 @@ import Link from 'next/link';
 import { Cookie } from '@mui/icons-material';
 import { DetailBottomPropsType } from './detailBottomType';
 import Cookies from 'js-cookie';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 
 const DetailBottom = ({
   isOpen,
-  isLiked,
   isWriter,
-  handleLike,
   handleReport,
   handleGether,
   handleComplete,
 }: DetailBottomPropsType) => {
   return (
-    <div className="flex justify-between items-center p-4 mb-4 border-y-1 px-2 py-4 border-x-0 border-solid border-[#475569]">
-      <Button onClick={handleLike}>
-        {isLiked && (
-          <Image
-            src="/sharingList/favorite.svg"
-            width={24}
-            height={24}
-            alt="좋아요"
-          />
-        )}
-        {!isLiked && (
-          <Image
-            src="/sharingList/favorite_border.svg"
-            width={24}
-            height={24}
-            alt="좋아요"
-          />
-        )}
-      </Button>
-      <div>
+    <Box sx={{ my: 0, mx: 0 }}>
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-center"
+        spacing={2}
+      >
         {isOpen && !isWriter && (
-          <Button onClick={handleGether} variant="contained" className="m-2">
+          <Button onClick={handleGether} variant="contained" className="">
             참여하기
           </Button>
         )}
         {!isOpen && !isWriter && (
-          <Button disabled variant="contained" className="m-2">
+          <Button disabled variant="contained" className="">
             참여하기
           </Button>
         )}
@@ -51,7 +38,7 @@ const DetailBottom = ({
           <Button
             onClick={handleReport}
             variant="contained"
-            className="bg-[red] m-2"
+            className="bg-[red]"
           >
             신고하기
           </Button>
@@ -66,8 +53,60 @@ const DetailBottom = ({
             모집 마감하기
           </Button>
         )} */}
-      </div>
-    </div>
+      </Stack>
+    </Box>
+
+    // <div className="flex justify-between items-center p-4 mb-4 px-2 py-2 ">
+    //   <Button onClick={handleLike}>
+    //     {isLiked && (
+    //       <Image
+    //         src="/sharingList/favorite.svg"
+    //         width={30}
+    //         height={30}
+    //         alt="좋아요"
+    //       />
+    //     )}
+    //     {!isLiked && (
+    //       <Image
+    //         src="/sharingList/favorite_border.svg"
+    //         width={30}
+    //         height={30}
+    //         alt="좋아요"
+    //       />
+    //     )}
+    //   </Button>
+    //   <div>
+    //     {isOpen && !isWriter && (
+    //       <Button onClick={handleGether} variant="contained" className="m-2">
+    //         참여하기
+    //       </Button>
+    //     )}
+    //     {!isOpen && !isWriter && (
+    //       <Button disabled variant="contained" className="m-2">
+    //         참여하기
+    //       </Button>
+    //     )}
+    //     {!isWriter && (
+    //       <Button
+    //         onClick={handleReport}
+    //         variant="contained"
+    //         className="bg-[red] m-2"
+    //       >
+    //         신고하기
+    //       </Button>
+    //     )}
+    //     {/* {isWriter && isOpen && (
+    //       <Button onClick={handleComplete} variant="contained" className="m-2">
+    //         모집 마감하기
+    //       </Button>
+    //     )}
+    //     {isWriter && !isOpen && (
+    //       <Button disabled variant="contained" className="m-2">
+    //         모집 마감하기
+    //       </Button>
+    //     )} */}
+    //   </div>
+    // </div>
   );
 };
 

@@ -26,6 +26,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -164,15 +165,7 @@ export default function ProductDetail({ id }: any) {
           <div className="p-10">
             <Img src="/chatItem/productImg05.svg" alt="메인사진" />
           </div>
-          <UserMetaInfo
-            isOpen={isOpen}
-            productData={productData}
-            handleDelete={handleDelete}
-            isWriter={isWriter}
-            id={id}
-            handleComplete={handleComplete}
-            handleGoEdit={handleGoEdit}
-          />
+
           <DetailBottom
             isOpen={isOpen}
             isLiked={isLiked}
@@ -182,7 +175,25 @@ export default function ProductDetail({ id }: any) {
             handleGether={handleGether}
             handleComplete={handleComplete}
           />
-          <PostMeta productData={productData} />
+          <Divider sx={{ my: 4 }} />
+          <UserMetaInfo
+            isOpen={isOpen}
+            productData={productData}
+            handleDelete={handleDelete}
+            isWriter={isWriter}
+            id={id}
+            handleComplete={handleComplete}
+            handleGoEdit={handleGoEdit}
+          />
+
+          <Divider sx={{ my: 2 }} />
+
+          <PostMeta
+            productData={productData}
+            isLiked={isLiked}
+            handleLike={handleLike}
+          />
+          <Divider sx={{ my: 4 }} />
           <DetailPageTab productData={productData} />
           <LoginAlert
             isLoginAlertOpen={isLoginAlertOpen}
