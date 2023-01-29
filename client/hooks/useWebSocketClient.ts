@@ -21,10 +21,8 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
   const [sharingData, setSharingData] = useState({
-    thumbnail: '',
-    isOpen: false,
+    imageLink: '',
     title: '',
-    price: '',
     address: '',
     boardStatus: '',
   })

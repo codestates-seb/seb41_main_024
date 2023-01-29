@@ -4,8 +4,7 @@ import ChatForm from '../../components/organisms/chatForm/ChatForm';;
 import useWebSocketClient from '../../hooks/useWebSocketClient';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import ChatItem from '../../components/organisms/chatItem/ChatItem'
-import { getChatSharing } from '../../api/chatSharing';
+import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 import Link from 'next/link';
 import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
@@ -14,6 +13,7 @@ import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMe
 import { handleCompleteRecrutment } from '../../api/mySharing';
 import { reportChat } from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
+import ChatItemFC from '../../components/organisms/chatItemForChatroom/ChatItemFC';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -27,6 +27,12 @@ const Chatroom = () => {
   const {stompClient, messages, members, roomId, sharingData} = useWebSocketClient(HEADER_TOKEN);
   const router = useRouter();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [alertOption, setAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'error', value: '' });
+  const [open, setOpen] = useState(false);
 
   const isMemeber = members.includes(Cookies.get('nickName'))
   
@@ -54,18 +60,43 @@ const Chatroom = () => {
         JSON.stringify({type:'TALK', message:input})
       );
       setInput('');
+      console.log(sharingData)
     }
+  }
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
+  const checkDeclareStatus = async () => {
+      const response = await axios.get(`https://ngether.site/chat/room/search/${roomId}`);
+      const declareStatus = response.data.declareStatus;
+      return declareStatus
   }
 
   const handleExitChatRoom = (): void => {
     if (!stompClient) return;
 
-    if (stompClient) {
+    if (stompClient && !checkDeclareStatus) {
+      setOpen(true)
+      setAlertOption({ severity: 'success', value: 'N게더 모집에서 퇴장하셨습니다' });
       stompClient.disconnect(() => {})
       axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
       router.push('/chatlist')
     }
-    else return
+    else {
+      setOpen(true)
+      setAlertOption({ severity: 'error', value: '해당 N게더는 현재 신고된 상태로 퇴장하실 수 없습니다.' });
+    }
+    return
   }
 
   return (
@@ -83,13 +114,10 @@ const Chatroom = () => {
         <>
           <div className='left-2/4 mt-16 translate-x-[-50%] w-auto fixed px-[1rem] rounded'>
             <Link href={`/nearby/${roomId}`}>
-              <ChatItem
-                thumbnail={''}
-                isOpen={sharingData.isOpen}
-                title={sharingData.title}
-                price={sharingData.price}
-                address={sharingData.address}
-                declareStatus={sharingData.boardStatus}
+              <ChatItemFC 
+                thumbnail = {sharingData.imageLink}
+                title = {sharingData.title}
+                address = {sharingData.address}
               />
             </Link>
           </div>
@@ -97,6 +125,15 @@ const Chatroom = () => {
             <ChatGroup chatData={messages} />
             <div className="h-[32px]" ref={messagesEndRef} />
           </div>
+          <Snackbar
+            open={open}
+            autoHideDuration={4000}
+            onClose={handleClose}
+            className="bottom-[25%]"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+            <Alert severity={alertOption?.severity}>{alertOption?.value}</Alert>
+          </Snackbar>
           <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
             <ChatForm onSubmit={handleSubmit} onChange={onChangeInput} value={input}/>
           </div>
