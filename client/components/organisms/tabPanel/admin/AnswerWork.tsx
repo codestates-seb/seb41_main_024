@@ -31,7 +31,7 @@ interface qnaType {
 }
 
 const AnswerWork = () => {
-  const { inputValue, onChange } = useInput({content: ''});
+  const { inputValue, onChange, setInputValue } = useInput({content: ''});
   const [questions, setQuestions] = useState([])
   const {data, isSuccess, refetch} = useQuery(['questions'], getQuestions);
 
@@ -46,8 +46,9 @@ const AnswerWork = () => {
   }, [data])
 
   const handleAnswer = async (qnaId: number, content:any, event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent> ) => {
-    event.preventDefault
+    event.preventDefault();
     await answerMutation.mutate({qnaId, content});
+    setInputValue({content: ''})
   }
 
   return(
