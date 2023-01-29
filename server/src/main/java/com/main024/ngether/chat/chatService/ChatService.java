@@ -233,22 +233,21 @@ public class ChatService {
         if (member == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         List<ChatDto.myChatting> chatRoomList = new ArrayList<>();
-        ChatDto.myChatting myChatting = new ChatDto.myChatting();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
         for (int i = 0; i < chatRoomMembers.size(); i++) {
-            ChatRoom chatRoom = chatRoomMembers.get(i).getChatRoom();
-            myChatting.setRoomId(chatRoom.getRoomId());
-            myChatting.setDeclareStatus(chatRoom.isDeclareStatus());
-            myChatting.setAddress(chatRoom.getAddress());
-            myChatting.setMaxNum(chatRoom.getMaxNum());
-            myChatting.setRoomName(chatRoom.getRoomName());
-            myChatting.setImageLink(chatRoom.getImageLink());
-            myChatting.setRecruitment(chatRoom.isRecruitment());
-            myChatting.setMemberCount(chatRoom.getMemberCount());
-            myChatting.setLastMessage(chatRoom.getLastMessage());
-            myChatting.setLastMessageCreated(chatRoom.getLastMessageCreated());
+            ChatDto.myChatting myChatting = new ChatDto.myChatting();
+            myChatting.setRoomId(chatRoomMembers.get(i).getChatRoom().getRoomId());
+            myChatting.setDeclareStatus(chatRoomMembers.get(i).getChatRoom().isDeclareStatus());
+            myChatting.setAddress(chatRoomMembers.get(i).getChatRoom().getAddress());
+            myChatting.setMaxNum(chatRoomMembers.get(i).getChatRoom().getMaxNum());
+            myChatting.setRoomName(chatRoomMembers.get(i).getChatRoom().getRoomName());
+            myChatting.setImageLink(chatRoomMembers.get(i).getChatRoom().getImageLink());
+            myChatting.setRecruitment(chatRoomMembers.get(i).getChatRoom().isRecruitment());
+            myChatting.setMemberCount(chatRoomMembers.get(i).getChatRoom().getMemberCount());
+            myChatting.setLastMessage(chatRoomMembers.get(i).getChatRoom().getLastMessage());
+            myChatting.setLastMessageCreated(chatRoomMembers.get(i).getChatRoom().getLastMessageCreated());
             myChatting.setUnreadCount(chatRoomMembers.get(i).getUnreadMessageCount());
-            myChatting.setMemberId(chatRoom.getMemberId());
+            myChatting.setMemberId(chatRoomMembers.get(i).getChatRoom().getMemberId());
             chatRoomList.add(myChatting);
         }
         return chatRoomList;
