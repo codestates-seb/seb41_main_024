@@ -15,6 +15,9 @@ module.exports = {
         red: '#FF0000',
         white: '#FFFFFF',
       },
+      screens: {
+        pcScreenWidth: '672px',
+      },
     },
     borderWidth: {
       DEFAULT: '1px',

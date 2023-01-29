@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Img from '../../components/atoms/image/Image';
+//import Img from '../../components/atoms/image/Image';
 import DetailBottom from '../../components/molecules/detailBottom/DetailBottom';
 import PostMeta from '../../components/molecules/postMeta/PostMeta';
 import UserMetaInfo from '../../components/molecules/userMetaInfo/UserMetaInfo';
@@ -18,6 +18,8 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
+import Image from 'next/image';
+import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -83,9 +85,18 @@ export default function ProductDetail({ id }: any) {
     goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
   };
 
+  const sharingComplete = true;
+
   return (
     <div>
-      <Img src="/chatItem/productImg05.svg" alt="메인사진" />
+      <div className="relative pb-[70%]">
+        <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
+          <Image src={'/chatItem/productImg05.svg'} alt={'물고기'} fill />
+          {sharingComplete && (
+            <StateBadge stateText={'모집 완료'} usedDetail={true} />
+          )}
+        </div>
+      </div>
       <UserMetaInfo
         productData={productData}
         handleDelete={handleDelete}
