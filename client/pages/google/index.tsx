@@ -161,7 +161,7 @@ const GoogleLoginPage = () => {
           <div className="mt-10">
             <SocialLoginTitle />
           </div>
-          <Box sx={{ width: 300, mt: 6, mb: 10, mx: 6 }}>
+          <Box sx={{ width: 260, mt: 6, mb: 10, mx: 6 }}>
             <Stack>
               <Input
                 id="nickName-input"
@@ -178,13 +178,13 @@ const GoogleLoginPage = () => {
               justifyContent="space-between"
               alignItems="center"
               spacing={1}
-              className="my-2"
+              className="mt-2 mb-4"
             >
               <p className="text-[#dd3030]">
                 {nickNameDuplicationCheckMessage}
               </p>
               <Button
-                variant="outlined"
+                variant="contained"
                 className="rounded"
                 onClick={handleCheckNickname}
                 size="small"
@@ -215,7 +215,7 @@ const GoogleLoginPage = () => {
                 {phoneNumberDuplicationCheckMessage}
               </p>
               <Button
-                variant="outlined"
+                variant="contained"
                 className="rounded"
                 onClick={handleCheckPhoneNumber}
                 size="small"

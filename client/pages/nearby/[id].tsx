@@ -31,6 +31,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 
 import StateBadge from '../../components/organisms/stateBadge/StateBadge';
+import { base } from '../../components/molecules/drawerListItem/DrawerListItem.stories';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -63,35 +64,6 @@ export default function ProductDetail({ id }: any) {
   const [productData, setProductData] = useState<any>([]);
   const [isWriter, setIsWriter] = useState<any>(false);
   const router = useRouter();
-
-  console.log('isLiked', isReported);
-  console.log('isReported', isReported);
-  // const res = useQueries({
-  //   queries: [
-  //     {
-  //       queryKey: ['productDetail'],
-  //       queryFn: () => getProductDetail(id),
-  //       onSuccess: (res: any) => {
-  //         console.log(res);
-  //         setProductData(res.data);
-
-  //         const openStatus =
-  //           res?.data?.boardStatus === 'BOARD_COMPLETE' ? false : true;
-  //         setIsOpen(openStatus);
-
-  //         const reportStatus =
-  //           res?.data?.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
-  //         console.log();
-  //         setIsReported(reportStatus);
-  //       },
-  //       retry: false,
-  //     },
-  //     {
-  //       queryKey: ['isWriter'],
-  //       queryFn: () => getIsWriter(id),
-  //     },
-  //   ],
-  // });
 
   useEffect(() => {
     getProductDetail(id).then((res) => {
@@ -148,7 +120,9 @@ export default function ProductDetail({ id }: any) {
     if (!isLogin) {
       setIsLoginAlertOpen(true);
     } else {
-      reportProduct(reportForm);
+      reportProduct(reportForm).then((res) => {
+        setIsReportModalOpen(false);
+      });
       alert('신고가 접수되었습니다');
     }
   };
@@ -166,6 +140,7 @@ export default function ProductDetail({ id }: any) {
   const handleComplete = () => {
     setIsOpen(false);
     completeSharing(id).then((res) => {
+      setIsCompleteModalOpen(false);
       console.log(res.data);
     });
   };
@@ -185,15 +160,22 @@ export default function ProductDetail({ id }: any) {
     router.push(`/edit/${id}`);
   };
 
+  console.log('imageLink', productData.imageLink);
+
+  if (productData?.imageLink === '') {
+    productData.imageLink =
+      'https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/pd/v2/8/6/5/9/9/1/jzHVA/4948865991_B.jpg';
+  }
+
   return (
     <div>
       <div>
         <div className="relative pb-[70%]">
-          <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[100%] h-[90%] pb-[59%]">
+          <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
             <Image
               className="p-8"
-              src={productData.imageLink || '/chatItem/productImg.svg'}
-              alt={'물고기'}
+              src={productData?.imageLink || base}
+              alt={'상품 이미지'}
               fill
             />
             {!isOpen && (
