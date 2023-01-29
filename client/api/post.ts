@@ -84,3 +84,11 @@ export const searchPostsByTitle = async ({
     url,
   }).then((res) => res.data);
 };
+
+export const getAllSharingPosts = async () => {
+  const url = `${REQUEST_URL}/api/boards?page=1&size=2000`;
+  return await axios({
+    method: 'get',
+    url,
+  }).then((res) => res.data);
+};
