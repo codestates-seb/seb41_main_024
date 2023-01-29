@@ -82,7 +82,7 @@ public class ChatRoomController {
 
     //로그인 한 유저가 참여중인 채팅방에서 새로운 메시지가 올 경우
     @GetMapping("/room/findNewMessages")
-    public ResponseEntity<Object> messageAlarm() throws ExecutionException, InterruptedException {
+    public ResponseEntity<Object> messageAlarm() {
         Member member = memberService.getLoginMember();
         if (member == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
@@ -91,13 +91,17 @@ public class ChatRoomController {
             try {
                 chatService.checkNewMessages(member);
                 return true;
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new BusinessLogicException(ExceptionCode.TIME_OUT);
             }
         });
-
-
-        return ResponseEntity.ok(task.orTimeout(10,TimeUnit.SECONDS).get());
+        Boolean check;
+        try {
+            check = task.orTimeout(10, TimeUnit.SECONDS).get();
+        } catch (Exception e) {
+            throw new BusinessLogicException(ExceptionCode.TIME_OUT);
+        }
+        return ResponseEntity.ok(check);
 
     }
 
