@@ -82,6 +82,9 @@ export default function ProductDetail({ id }: any) {
   const handleGether = () => {
     goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
   };
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleModalOpen = () => setModalOpen(true);
+  const handleClose = () => setModalOpen(false);
 
   return (
     <div>
@@ -99,6 +102,9 @@ export default function ProductDetail({ id }: any) {
         handleReport={handleReport}
         handleGether={handleGether}
         id={id}
+        modalOpen={modalOpen}
+        handleModalOpen={handleModalOpen}
+        handleClose={handleClose}
       />
       <PostMeta productData={productData} />
       <DetailPageTab productData={productData} />
