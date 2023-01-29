@@ -66,8 +66,7 @@ const AddNewPage = () => {
         method: 'get',
         headers: token,
       });
-
-      // router.push(`/nearby/${data.data.boardId}`);
+      router.push(`/nearby/${data.data.boardId}`);
     },
 
     onError: (error) => {
