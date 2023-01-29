@@ -42,7 +42,7 @@ export const handleAnswerQuestion = (variables: {qnaId: number, content: string}
   })
 }
 
-export const handleBlockUser = (nickName:string) => {
+export const handleBlockUser = (nickName:string | undefined) => {
   axios({
     url: `https://ngether.site/api/reports/admin/changeMemberNickNameRole?nickName=${nickName}`,
     method: 'patch',
