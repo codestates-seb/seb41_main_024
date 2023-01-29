@@ -59,7 +59,14 @@ const AnswerWork = () => {
   ) => {
     event.preventDefault;
     await answerMutation.mutate({ qnaId, content });
-    setInputValue({content: ''})
+    setInputValue({
+      content: '',
+      title: '',
+      productsLink: '',
+      category: '',
+      maxNum: 0,
+      deadLine: '',
+    })
   };
 
   return (
