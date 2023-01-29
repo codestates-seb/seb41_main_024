@@ -25,13 +25,15 @@ const PostMeta = ({ productData }: productDataProps) => {
         {productData?.maxNum}명
       </p>
       <p className="text-sm text-[#475569] mb-4">
-        참여시 예상금액:
-        {productData && (productData?.price / (productData?.curNum + 1)).toLocaleString()}원
+        참여시 예상금액 :{' '}
+        {productData &&
+          (productData?.price / (productData?.curNum + 1)).toLocaleString()}
+        원
       </p>
       <Link
         href={productData?.productsLink || ''}
         target="_blank"
-        className="truncate text-sm text-[#475569] mb-4"
+        className="truncate text-sm text-[#475569] mb-4 block"
       >
         판매 제품 링크 : {productData?.productsLink}
       </Link>
