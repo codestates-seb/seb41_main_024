@@ -77,7 +77,7 @@ const ReportChatDetail = ({
                   </p>
                 </div>
                 <p className="text-xs">
-                  전송 시간:{transDateFormatForAdmin(log.createDate)}
+                  전송 시간:{transDateFullFormat(log.createDate)}
                 </p>
               </li>
             ))}
