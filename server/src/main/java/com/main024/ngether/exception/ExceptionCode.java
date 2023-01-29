@@ -27,7 +27,8 @@ public enum ExceptionCode {
     PHONE_NUMBER_EXIST(418,"phoneNumber is exists"),
     EMAIL_EXIST(419,"email is exists"),
     REPORT_TYPE_NOT_FOUND(420, "ReportType not found"),
-    TIME_OUT(421,"Time Out!");
+    TIME_OUT(421,"Time Out!"),
+    JWT_EXPIRE(422,"Jwt expired");
 
 
 
