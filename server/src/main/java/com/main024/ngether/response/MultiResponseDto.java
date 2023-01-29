@@ -1,4 +1,4 @@
-package com.main024.ngether.board.response;
+package com.main024.ngether.response;
 
 import lombok.Getter;
 import org.springframework.data.domain.Page;

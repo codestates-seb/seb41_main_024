@@ -13,6 +13,7 @@ import useRegexText from '../../hooks/useRegexText';
 import React from 'react';
 import Image from 'next/image';
 import Divider from '@mui/material/Divider';
+import axios from 'axios';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -47,25 +48,28 @@ const LoginPage = () => {
     },
   });
 
-  const { data, error, mutate } = useMutation(() => requestLogin(form), {
-    onSuccess: (data) => {
-      data.headers.authorization &&
-        Cookies.set('access_token', data.headers.authorization);
-      data.headers.refresh &&
-        Cookies.set('refresh_token', data.headers.refresh);
-      Cookies.set('memberId', data.data.memberId);
-      Cookies.set('nickName', data.data.nickName);
-      Cookies.set('locationId', data.data.locationId);
-      Cookies.set('role', data.data.role);
-      router.push('/');
-    },
-    onError: (error) => {
-      setLoginErrorMessage('정확하지 않은 이메일 또는 패스워드입니다');
-    },
-  });
+  const handleLogin = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-  const handleLogin = async () => {
-    await mutate();
+    try {
+      await requestLogin(form).then((res) => {
+        console.log('requestLogin res', res);
+        res.headers.authorization &&
+          Cookies.set('access_token', res.headers.authorization);
+        res.headers.refresh &&
+          Cookies.set('refresh_token', res.headers.refresh);
+        Cookies.set('memberId', res.data.memberId);
+        Cookies.set('nickName', res.data.nickName);
+        Cookies.set('locationId', res.data.locationId);
+        router.push('/');
+      });
+    } catch (error: any) {
+      setLoginErrorMessage(
+        error.response.data.status !== 403
+          ? '정확하지 않은 이메일 또는 패스워드입니다'
+          : '신고로 이용이 정지된 사용자입니다'
+      );
+    }
   };
 
   const handleSocialLogin = async () => {

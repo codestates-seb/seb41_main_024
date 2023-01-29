@@ -10,11 +10,13 @@ import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import LoginIcon from '@mui/icons-material/Login';
 import { bottomNavPropsType } from './bottomNavType';
 import Cookies from 'js-cookie';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
+  const isLogin = Cookies.get('access_token');
 
   const NAVIGATION_LIST: Array<object> = [
     {
@@ -33,9 +35,9 @@ export default function BottomNav(): JSX.Element {
       path: '/chatlist',
     },
     {
-      label: '나의 N게더',
-      icon: <PersonOutlineOutlinedIcon />,
-      path: '/mypage',
+      label: isLogin ? '나의 N게더' : '로그인',
+      icon: isLogin ? <PersonOutlineOutlinedIcon /> : <LoginIcon />,
+      path: isLogin ? '/mypage' : '/login',
     },
     {
       label: 'N게더 모집',
@@ -45,7 +47,7 @@ export default function BottomNav(): JSX.Element {
   ];
 
   const handleOnClick = (path: string) => {
-    if (Cookies.get('access_token') || path === '/') {
+    if (isLogin || path === '/') {
       router.push(path);
     } else {
       router.push('/login');
@@ -70,6 +72,7 @@ export default function BottomNav(): JSX.Element {
             maxWidth: '672px',
             transform: 'translateX(-50%)',
             bottom: '0',
+            zIndex: '10',
             // borderTop: '1px solid #475569',
           }}
         >

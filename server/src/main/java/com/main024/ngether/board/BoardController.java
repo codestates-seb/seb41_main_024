@@ -1,6 +1,6 @@
 package com.main024.ngether.board;
 
-import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.response.MultiResponseDto;
 import com.main024.ngether.likes.Like;
 import com.main024.ngether.likes.LikeService;
 import com.main024.ngether.member.MemberService;
@@ -116,5 +116,9 @@ public class BoardController {
         if(boardService.findBoard(boardId).getMember().equals(memberService.getLoginMember()))
             return new ResponseEntity<>(true,HttpStatus.OK);
         else return new ResponseEntity<>(false,HttpStatus.OK);
+    }
+    @PatchMapping("/complete/{board-id}")
+    public ResponseEntity boardComplete(@PathVariable(value = "board-id") Long boardId){
+        return new ResponseEntity<>(boardService.setComplete(boardId),HttpStatus.OK);
     }
 }

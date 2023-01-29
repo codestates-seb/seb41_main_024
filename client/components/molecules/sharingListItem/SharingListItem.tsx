@@ -5,6 +5,7 @@ import { ListItemPropsType } from './sharingListItemType';
 import Button from '../../atoms/button/Button';
 import Link from 'next/link';
 import Image from 'next/image';
+import base from '../../../public/imageBox/base-box.svg';
 
 const SharingListItem = ({
   src,
@@ -25,7 +26,7 @@ const SharingListItem = ({
   return (
     <div className={`flex flex-col ${styles.flex_container}`}>
       <Link href={`/nearby/${boardId}`}>
-        <Img src={src} alt={alt} />
+        <img className="h-auto w-[100%]" src={src || base} alt={alt} />
       </Link>
       <div className="px-2 mt-2.5">
         <strong className={`${styles.title_ellipsis} font-normal`}>
@@ -33,7 +34,7 @@ const SharingListItem = ({
         </strong>
       </div>
       <div className={styles.flex_listItem}>
-        <strong className="font-normal">{`${curNum + 1} / ${maxNum}`}</strong>
+        <strong className="font-normal">{`${curNum} / ${maxNum}`}</strong>
         {/* <Button>
           <Image
             src="/sharingList/favorite_border.svg"

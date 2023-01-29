@@ -1,6 +1,6 @@
 package com.main024.ngether.qna.qnaController;
 
-import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.response.MultiResponseDto;
 import com.main024.ngether.member.MemberService;
 import com.main024.ngether.qna.qnaRepository.AnswerRepository;
 import com.main024.ngether.qna.qnaRepository.QnaRepository;
@@ -27,8 +27,6 @@ public class QnaController {
     private final QnaMapper mapper;
     private final MemberService memberService;
     private final QnaRepository qnaRepository;
-
-    private final AnswerController answerController;
     private final AnswerRepository answerRepository;
 
     //문의글 작성
@@ -85,11 +83,17 @@ public class QnaController {
 
     //내가 작성한 문의글 목록
     @GetMapping
-    public ResponseEntity qnaList(@RequestParam(value = "page") int page,
+    public ResponseEntity myQnaList(@RequestParam(value = "page") int page,
                                   @RequestParam(value = "size") int size){
         Page<Qna> pageQnas = qnaRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page-1, size));
         List<Qna> qnaList = pageQnas.getContent();
         return new ResponseEntity<>(
-                new MultiResponseDto<>(qnaList, pageQnas), HttpStatus.OK);
+                new MultiResponseDto<>(mapper.QnasToQnaResponseDtos(qnaList, answerRepository), pageQnas), HttpStatus.OK);
+    }
+
+    //모든 문의글 목록
+    @GetMapping("/questions")
+    public ResponseEntity qnaList() {
+        return ResponseEntity.ok(mapper.QnasToQnaResponseDtos(qnaService.findQnas(), answerRepository));
     }
 }

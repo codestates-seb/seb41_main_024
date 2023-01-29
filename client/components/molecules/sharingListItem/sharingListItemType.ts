@@ -18,6 +18,7 @@ export interface ListItemPropsType {
   src: string;
   alt: string;
   isFavorite?: boolean;
+  imageLink?: string;
 }
 export interface kakaoMapItemType {
   latitude: number;
