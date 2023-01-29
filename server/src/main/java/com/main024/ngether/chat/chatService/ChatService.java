@@ -177,9 +177,10 @@ public class ChatService {
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
-
+            return findMembersInChatRoom(roomId);
         }
-        return findMembersInChatRoom(roomId);
+        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+
     }
 
     public void removeChatRoomAndBoard(Long memberId) {
