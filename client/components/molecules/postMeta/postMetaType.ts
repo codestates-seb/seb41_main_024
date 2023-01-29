@@ -1,4 +1,4 @@
-export interface PostMetaPrposType {
+export interface PostMetaType {
   isLiked: boolean;
   handleLike: () => void;
   productData?: {

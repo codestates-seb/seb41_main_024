@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import ElapsedTime from '../elapsedTime/ElapsedTime';
-import { PostMetaPropsType } from './postMetaType';
+import { PostMetaType } from './postMetaType';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Divider from '@mui/material/Divider';
 import { bgcolor } from '@mui/system';
 
-const PostMeta = ({ productData, isLiked, handleLike }: PostMetaPropsType) => {
+const PostMeta = ({ productData, isLiked, handleLike }: PostMetaType) => {
   return (
     <Box sx={{ my: 3, mx: 2 }}>
       <Stack>
