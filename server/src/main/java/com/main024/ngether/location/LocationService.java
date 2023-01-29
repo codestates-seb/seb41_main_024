@@ -134,15 +134,13 @@ public class LocationService {
         return null;
     }
 
-    public Page<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category, int page,int size,String sortBy) {
+    public Page<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category, int page, int size, String sortBy) {
         List<Board> boardList = boardRepository.findByCategory(category).get();
-        for(int i = 0; i <boardList.size(); i++){
-            if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
+        for (int i = 0; i < boardList.size(); i++) {
+            if (boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0) {
                 boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
                 boardRepository.save(boardList.get(i));
-                if(chatRoomRepository.findById(boardList.get(i).getBoardId()).get() != null) {
-                    chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
-                }
+                chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
             }
         }
         String address1 = distanceCal.getAddress();
@@ -166,22 +164,20 @@ public class LocationService {
             }
         }
 
-        if(sortBy.equals("time")){
+        if (sortBy.equals("time")) {
             resultBoardList = resultBoardList.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
             Page<Board> boardPage = new Pagination<Board>().MadePagination(resultBoardList, page, size);
             return boardPage;
-        }
-        else if(sortBy.equals("distance")){
+        } else if (sortBy.equals("distance")) {
             Map<Double, Board> sortedMap = new TreeMap<>(map);
             List<Board> mapBoardList = new ArrayList<>(sortedMap.values());
             Page<Board> boardPage = new Pagination<Board>().MadePagination(mapBoardList, page, size);
             return boardPage;
-        }
-        else
+        } else
             throw new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
     }
 
-    public List<Board> getDistances(double range, String category, long locationId){
+    public List<Board> getDistances(double range, String category, long locationId) {
         List<Distance> distanceList = new ArrayList<>();
 
         if (range == 0.2)
@@ -210,13 +206,12 @@ public class LocationService {
         for (int i = 0; i < distanceList.size(); i++) {
             boardList.add(distanceList.get(i).getBoard());
         }
-        for(int i = 0; i <boardList.size(); i++){
-            if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
+        for (int i = 0; i < boardList.size(); i++) {
+            if (boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0) {
                 boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
                 boardRepository.save(boardList.get(i));
-                if(chatRoomRepository.findById(boardList.get(i).getBoardId()).get() != null) {
-                    chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
-                }
+                chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
+
             }
         }
         return boardList;
@@ -231,7 +226,7 @@ public class LocationService {
         return findLocation;
     }
 
-    public List<Location> getMemberLocations(){
+    public List<Location> getMemberLocations() {
         return locationRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()).get();
     }
 
