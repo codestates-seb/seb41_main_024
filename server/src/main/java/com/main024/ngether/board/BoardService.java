@@ -187,9 +187,12 @@ public class BoardService {
     }
 
     public Page<Board> findCompleteMySharing(int page, int size){
-        return boardRepository.findByBoardStatusAndMemberMemberId
+        Page<Board> boardList = boardRepository.findByBoardStatusAndMemberMemberId
                 (Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId(), PageRequest.of(page, size,
                         Sort.by("createDate").descending()));
+        if(boardList.isEmpty())
+            throw new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND);
+        return boardList;
 
     }
 

@@ -2,15 +2,21 @@ package com.main024.ngether.location;
 
 import com.main024.ngether.board.Board;
 import com.main024.ngether.board.BoardRepository;
+import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.MemberService;
+import com.main024.ngether.response.Pagination;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Positive;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,15 +27,18 @@ public class LocationService {
 
     private final DistanceRepository distanceRepository;
     private final MemberService memberService;
+    private final ChatRoomRepository chatRoomRepository;
 
     public LocationService(LocationRepository locationRepository,
                            BoardRepository boardRepository,
                            DistanceRepository distanceRepository,
-                           MemberService memberService) {
+                           MemberService memberService,
+                           ChatRoomRepository chatRoomRepository) {
         this.locationRepository = locationRepository;
         this.boardRepository = boardRepository;
         this.distanceRepository = distanceRepository;
         this.memberService = memberService;
+        this.chatRoomRepository = chatRoomRepository;
     }
 
     public Location createLocation(Location location) {
@@ -127,10 +136,17 @@ public class LocationService {
 
     public Page<Board> createCurDistance(LocationDto.DistanceCal distanceCal, double type, String category, int page,int size,String sortBy) {
         List<Board> boardList = boardRepository.findByCategory(category).get();
+        for(int i = 0; i <boardList.size(); i++){
+            if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
+                boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
+                boardRepository.save(boardList.get(i));
+                chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
+            }
+        }
         String address1 = distanceCal.getAddress();
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
         double lon1 = Double.parseDouble(distanceCal.getLongitude());
-        List<Board> boardList1 = new ArrayList<>();
+        List<Board> resultBoardList = new ArrayList<>();
         HashMap<Double, Board> map = new HashMap<>();
         for (int i = 0; i < boardList.size(); i++) {
             String address2 = boardList.get(i).getAddress();
@@ -142,33 +158,64 @@ public class LocationService {
                 double lon2 = Double.parseDouble(boardList.get(i).getLongitude());
                 double result = distance(lat1, lon1, lat2, lon2, "kilometer");
                 if (result < type) {
-                    boardList1.add(boardList.get(i));
+                    resultBoardList.add(boardList.get(i));
                     map.put(result, boardList.get(i));
                 }
-
             }
-
         }
 
         if(sortBy.equals("time")){
-            boardList1 = boardList1.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
-            PageRequest pageRequest = PageRequest.of(page, size);
-            int start = (int) pageRequest.getOffset();
-            int end = Math.min((start + pageRequest.getPageSize()), boardList1.size());
-            Page<Board> boardPage = new PageImpl<>(boardList1.subList(start, end), pageRequest, boardList1.size());
+            resultBoardList = resultBoardList.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
+            Page<Board> boardPage = new Pagination<Board>().MadePagination(resultBoardList, page, size);
             return boardPage;
         }
         else if(sortBy.equals("distance")){
             Map<Double, Board> sortedMap = new TreeMap<>(map);
-            List<Board> boardList2 = new ArrayList<>(sortedMap.values());
-            PageRequest pageRequest = PageRequest.of(page, size);
-            int start = (int) pageRequest.getOffset();
-            int end = Math.min((start + pageRequest.getPageSize()), boardList2.size());
-            Page<Board> boardPage = new PageImpl<>(boardList2.subList(start, end), pageRequest, boardList2.size());
+            List<Board> mapBoardList = new ArrayList<>(sortedMap.values());
+            Page<Board> boardPage = new Pagination<Board>().MadePagination(mapBoardList, page, size);
             return boardPage;
         }
         else
             throw new BusinessLogicException(ExceptionCode.SORTBY_NOT_FOUND);
+    }
+
+    public List<Board> getDistances(double range, String category, long locationId){
+        List<Distance> distanceList = new ArrayList<>();
+
+        if (range == 0.2)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
+        else if (range == 0.4)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_400, locationId, category, Sort.by("result")).get();
+        else if (range == 0.6)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_600, locationId, category, Sort.by("result")).get();
+        else if (range == 0.5)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_500, locationId, category, Sort.by("result")).get();
+        else if (range == 1)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_1000, locationId, category, Sort.by("result")).get();
+        else if (range == 1.5)
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_1500, locationId, category, Sort.by("result")).get();
+        else
+            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
+                    (Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category, Sort.by("result")).get();
+
+        List<Board> boardList = new ArrayList<>();
+        for (int i = 0; i < distanceList.size(); i++) {
+            boardList.add(distanceList.get(i).getBoard());
+        }
+        for(int i = 0; i <boardList.size(); i++){
+            if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
+                boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
+                boardRepository.save(boardList.get(i));
+                chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
+            }
+        }
+        return boardList;
     }
 
     public Location findVerifiedLocation(long locationId) {
@@ -178,6 +225,10 @@ public class LocationService {
                 optionalLocation.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.LOCATION_NOT_FOUND));
         return findLocation;
+    }
+
+    public List<Location> getMemberLocations(){
+        return locationRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()).get();
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {

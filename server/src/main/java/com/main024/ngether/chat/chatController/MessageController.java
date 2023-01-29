@@ -49,7 +49,8 @@ public class MessageController {
         for (int i = 0; i < chatRoomMembersList.size(); i++) {
             if (chatRoomMembersList.get(i).getSessionId() != null) {
                 chatRoomMembersList.get(i).setLastMessageId(savedMessage.getChatMessageId());
-            }
+            } else
+                chatRoomMembersList.get(i).setUnreadMessageCount(chatRoomMembersList.get(i).getUnreadMessageCount() + 1);
         }
         chatRoomMembersRepository.saveAll(chatRoomMembersList);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);

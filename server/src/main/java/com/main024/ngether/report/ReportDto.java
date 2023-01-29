@@ -11,7 +11,6 @@ public class ReportDto {
     @AllArgsConstructor
     public static class Post{
         private long reportedId;
-        //private Report.ReportType reportType;
         private String reportType;
     }
 
@@ -23,10 +22,7 @@ public class ReportDto {
     public static class Response{
         private long reportId;
         private long reportedId;
-        //private Report.ReportType reportType;
         private String reportType;
-        //private long reportMemberId;
-        //private long reportedMemberId;
         private String title;
     }
 }

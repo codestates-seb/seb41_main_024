@@ -212,3 +212,28 @@ var {
   -webkit-box-orient: vertical;
   word-break: break-all;
 }
+
+.pcPageLine:before,
+.pcPageLine:after {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100vh;
+  background-color: #ddd;
+  content: '';
+}
+.pcPageLine:before {
+  -webkit-transform: translateX(-337px);
+  transform: translateX(-337px);
+}
+.pcPageLine:after {
+  -webkit-transform: translateX(336px);
+  transform: translateX(336px);
+}
+@media only screen and (max-width: 672px) {
+  .pcPageLine:before,
+  .pcPageLine:after {
+    content: none;
+  }
+}

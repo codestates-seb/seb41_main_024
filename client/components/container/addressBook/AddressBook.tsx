@@ -20,6 +20,7 @@ import {
 import Input from '../../atoms/input/Input';
 import FormButton from '../../molecules/formbutton/FormButton';
 import AddressBookList from '../../organisms/addressBookList/AddressBookList';
+import ModalComponent from '../../organisms/modal/Modal';
 
 export interface locationDataType {
   address: string;
@@ -54,7 +55,6 @@ const AddressBook = () => {
   const [isSearch, setIsSearch] = useState(false);
 
   const [locationName, setLocationName] = useState('');
-  const [modalOpen, setModalOpen] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   //성공시 혹은 실패시에 띄워줄 토스트 설정
@@ -63,6 +63,7 @@ const AddressBook = () => {
     value: string;
   }>({ severity: 'error', value: '' });
   const [willDeleteLocationId, setWillDeleteLocationId] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
   const handleModalOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
   const handleDeleteModalOpen = (locationId: number) => {
@@ -213,51 +214,31 @@ const AddressBook = () => {
           content="주소록에 추가하기"
           onClick={handleModalOpen}
         ></FormButton>
-        <Modal
-          open={modalOpen}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={MODAL_STYLE}>
-            {`${locationName} : ${targetCoord.address || center.address}`}을(를)
-            주소록에 추가하시겠습니까?
-            <FormButton
-              variant="contained"
-              className="bg-[#63A8DA] text-[white] ml-[10px] h-[30px]"
-              content="추가"
-              onClick={addAddressHandler}
-            ></FormButton>
-            <FormButton
-              variant="contained"
-              className="bg-[red] text-[white] ml-[10px] h-[30px]"
-              content="취소"
-              onClick={handleClose}
-            ></FormButton>
-          </Box>
-        </Modal>
-        <Modal
-          open={deleteModalOpen}
-          onClose={handleDeleteModalClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={MODAL_STYLE}>
-            삭제하시겠습니까?
-            <FormButton
-              variant="contained"
-              className="bg-[red] text-[white] ml-[10px] h-[30px]"
-              content="예 삭제하겠습니다."
-              onClick={removeAddressHandler}
-            ></FormButton>
-            <FormButton
-              variant="contained"
-              className="bg-[black] text-[white] ml-[10px] h-[30px]"
-              content="취소"
-              onClick={handleDeleteModalClose}
-            ></FormButton>
-          </Box>
-        </Modal>
+
+        <ModalComponent
+          modalOpen={modalOpen}
+          handleClose={handleClose}
+          title={`${locationName} : ${
+            targetCoord.address || center.address
+          }을(를)
+            주소록에 추가하시겠습니까?`}
+          onClick={addAddressHandler}
+          positiveResponse="추가"
+          positiveColor={'#63A8DA'}
+          negativeResponse="취소"
+          negativeColor={'red'}
+        />
+        <ModalComponent
+          modalOpen={deleteModalOpen}
+          handleClose={handleDeleteModalClose}
+          title="삭제하시겠습니까"
+          onClick={removeAddressHandler}
+          positiveResponse="예 삭제하겠습니다"
+          positiveColor={'red'}
+          negativeResponse="취소"
+          negativeColor={'black'}
+        />
+
         {/* <FormButton
           variant="contained"
           className="bg-[red] text-[white] ml-[10px] h-[52px]"

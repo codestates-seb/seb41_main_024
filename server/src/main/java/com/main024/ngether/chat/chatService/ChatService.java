@@ -3,6 +3,7 @@ package com.main024.ngether.chat.chatService;
 import com.main024.ngether.board.Board;
 import com.main024.ngether.board.BoardRepository;
 import com.main024.ngether.board.BoardService;
+import com.main024.ngether.chat.chatEntity.ChatDto;
 import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
@@ -21,8 +22,10 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -61,6 +64,7 @@ public class ChatService {
             chatRoom.setDeclareStatus(false);
             chatRoom.setAddress(board.getAddress());
             chatRoom.setRecruitment(false);
+            chatRoom.setImageLink(board.getImageLink());
             chatRoomRepository.save(chatRoom);
 
             return chatRoom;
@@ -175,9 +179,10 @@ public class ChatService {
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
-
+            return findMembersInChatRoom(roomId);
         }
-        return findMembersInChatRoom(roomId);
+        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+
     }
 
     public void removeChatRoomAndBoard(Long memberId) {
@@ -226,14 +231,27 @@ public class ChatService {
     }
 
 
-    public List<ChatRoom> findMyChatRoom() {
+    public List<ChatDto.myChatting> findMyChatRoom() {
         Member member = memberService.getLoginMember();
         if (member == null)
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        List<ChatRoom> chatRoomList = new ArrayList<>();
+        List<ChatDto.myChatting> chatRoomList = new ArrayList<>();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
         for (int i = 0; i < chatRoomMembers.size(); i++) {
-            chatRoomList.add(chatRoomMembers.get(i).getChatRoom());
+            ChatDto.myChatting myChatting = new ChatDto.myChatting();
+            myChatting.setRoomId(chatRoomMembers.get(i).getChatRoom().getRoomId());
+            myChatting.setDeclareStatus(chatRoomMembers.get(i).getChatRoom().isDeclareStatus());
+            myChatting.setAddress(chatRoomMembers.get(i).getChatRoom().getAddress());
+            myChatting.setMaxNum(chatRoomMembers.get(i).getChatRoom().getMaxNum());
+            myChatting.setRoomName(chatRoomMembers.get(i).getChatRoom().getRoomName());
+            myChatting.setImageLink(chatRoomMembers.get(i).getChatRoom().getImageLink());
+            myChatting.setRecruitment(chatRoomMembers.get(i).getChatRoom().isRecruitment());
+            myChatting.setMemberCount(chatRoomMembers.get(i).getChatRoom().getMemberCount());
+            myChatting.setLastMessage(chatRoomMembers.get(i).getChatRoom().getLastMessage());
+            myChatting.setLastMessageCreated(chatRoomMembers.get(i).getChatRoom().getLastMessageCreated());
+            myChatting.setUnreadCount(chatRoomMembers.get(i).getUnreadMessageCount());
+            myChatting.setMemberId(chatRoomMembers.get(i).getChatRoom().getMemberId());
+            chatRoomList.add(myChatting);
         }
         return chatRoomList;
     }
