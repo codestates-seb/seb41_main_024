@@ -18,6 +18,14 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+import DialogButton from '../../components/organisms/DialogButton/DialogButton';
+
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -29,6 +37,13 @@ export async function getServerSideProps(context: any) {
 }
 
 export default function ProductDetail({ id }: any) {
+  const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
+
+  const handleClose = () => {
+    setIsLoginAlertOpen(false);
+    router.push('/login');
+  };
+
   const loginChecker = () => {
     if (Cookies.get('access_token')) {
       return true;
@@ -103,8 +118,7 @@ export default function ProductDetail({ id }: any) {
   // 찜하기
   const handleLike = () => {
     if (!isLogin) {
-      alert('로그인 후 이용해주세요!');
-      router.push('/login');
+      setIsLoginAlertOpen(true);
     } else {
       setIsLiked(!isLiked);
       likeMutation.mutate();
@@ -114,8 +128,7 @@ export default function ProductDetail({ id }: any) {
   // 신고하기
   const handleReport = () => {
     if (!isLogin) {
-      alert('로그인 후 이용해주세요!');
-      router.push('/login');
+      setIsLoginAlertOpen(true);
     } else {
       reportMutation.mutate();
       alert('신고가 접수되었습니다');
@@ -125,8 +138,7 @@ export default function ProductDetail({ id }: any) {
   // 참여하기
   const handleGether = () => {
     if (!isLogin) {
-      alert('로그인 후 이용해주세요!');
-      router.push('/login');
+      setIsLoginAlertOpen(true);
     } else {
       goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
     }
@@ -165,8 +177,44 @@ export default function ProductDetail({ id }: any) {
           />
           <PostMeta productData={productData} />
           <DetailPageTab productData={productData} />
+          <LoginAlert
+            isLoginAlertOpen={isLoginAlertOpen}
+            handleClose={handleClose}
+          />
         </div>
       )}
     </div>
   );
 }
+
+interface LoginAlertPropsType {
+  isLoginAlertOpen: boolean;
+  handleClose: () => void;
+}
+
+const LoginAlert = ({ isLoginAlertOpen, handleClose }: LoginAlertPropsType) => {
+  return (
+    <div>
+      <Dialog
+        open={isLoginAlertOpen}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle color="primary" id="alert-dialog-title">
+          {'N게더 회원만 가능한 기능입니다'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            로그인 후 이용해주세요😀
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+};
