@@ -3,7 +3,7 @@ import { StandardTextFieldProps, TextFieldProps } from '@mui/material';
 
 export interface dropDownInputType {
   id: string;
-  label: any;
+  label?: any;
   dropDownOptions: { label: any; value: any }[];
   width?: string;
   value: any;
