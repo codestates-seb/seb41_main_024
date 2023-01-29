@@ -55,9 +55,9 @@ const LoginPage = () => {
       await requestLogin(form).then((res) => {
         console.log('requestLogin res', res);
         res.headers.authorization &&
-          Cookies.set('access_token', res.headers.authorization);
+          Cookies.set('access_token', res.headers.authorization, {expires : 0.083});
         res.headers.refresh &&
-          Cookies.set('refresh_token', res.headers.refresh);
+          Cookies.set('refresh_token', res.headers.refresh, {expires : 0.16});
         Cookies.set('memberId', res.data.memberId);
         Cookies.set('nickName', res.data.nickName);
         Cookies.set('locationId', res.data.locationId);

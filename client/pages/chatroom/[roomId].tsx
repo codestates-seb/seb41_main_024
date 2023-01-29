@@ -35,6 +35,9 @@ const Chatroom = () => {
   });
   const { stompClient, messages, members, roomId } =
     useWebSocketClient(HEADER_TOKEN);
+  const [input, setInput] = useState('');
+  const { stompClient, messages, members, roomId, sharingData } =
+    useWebSocketClient(HEADER_TOKEN);
   const router = useRouter();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -106,13 +109,13 @@ const Chatroom = () => {
                 title={sharingData.title}
                 price={sharingData.price}
                 address={sharingData.address}
-                unreadCount={sharingData.alertNum}
+                declareStatus={sharingData.boardStatus}
               />
             </Link>
           </div>
-          <div className="bg-primary pt-[90px] h-[calc(100vh-88px)] box-border overflow-scroll scroll-smooth max-w-[672px] w-full">
+          <div className="bg-primary pt-[90px] h-[calc(100vh-138px)] box-border overflow-scroll overflow-x-hidden scroll-smooth max-w-[672px] w-full">
             <ChatGroup chatData={messages} />
-            <div className="h-[5rem]" ref={messagesEndRef} />
+            <div className="h-[32px]" ref={messagesEndRef} />
           </div>
           <div className="fixed bottom-0 left-2/4 translate-x-[-50%] max-w-2xl w-full bg-white">
             <ChatForm
