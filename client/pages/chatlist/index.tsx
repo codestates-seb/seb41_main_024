@@ -30,6 +30,7 @@ const ChatList = () => {
                 lastMessage={chatItem.lastMessage}
                 address={chatItem.address}
                 unreadCount={chatItem.unreadCount}
+                declareStatus={chatItem.declareStatus}
               />
             </Link>
           );
