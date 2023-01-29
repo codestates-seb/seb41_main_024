@@ -134,12 +134,14 @@ const Index = ({
           />
         </div>
       </div>
-      <TabPanel currentTab={currentTab} index={0}>
-        <NearByList sharingLists={sharingLists} />
-      </TabPanel>
-      <TabPanel currentTab={currentTab} index={1}>
-        <NearByList sharingLists={sharingListsSortedByTime || []} />
-      </TabPanel>
+      <div className="w-full">
+        <TabPanel currentTab={currentTab} index={0}>
+          <NearByList sharingLists={sharingLists} />
+        </TabPanel>
+        <TabPanel currentTab={currentTab} index={1}>
+          <NearByList sharingLists={sharingListsSortedByTime || []} />
+        </TabPanel>
+      </div>
     </div>
   );
 };
