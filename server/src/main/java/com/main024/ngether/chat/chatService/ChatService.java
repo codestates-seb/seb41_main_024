@@ -22,8 +22,10 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -281,5 +283,12 @@ public class ChatService {
             Thread.sleep(1000L);
         }
 
+    }
+    public List<ChatRoom> viewMyChattingRoom(){
+        return findMyChatRoom()
+                .stream()
+                .sorted(Comparator.comparing(ChatRoom::getLastMessageCreated)
+                        .reversed())
+                .collect(Collectors.toList());
     }
 }

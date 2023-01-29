@@ -4,15 +4,15 @@ import com.main024.ngether.board.Board;
 import com.main024.ngether.board.BoardDto;
 import com.main024.ngether.board.BoardMapper;
 import com.main024.ngether.board.BoardRepository;
-import com.main024.ngether.board.response.MultiResponseDto;
 import com.main024.ngether.chat.chatEntity.ChatDto;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.location.LocationRepository;
+import com.main024.ngether.response.MultiResponseDto;
+import com.main024.ngether.response.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/members")
@@ -114,14 +112,10 @@ public class MemberController {
     public ResponseEntity searchMyLike(@RequestParam(value = "page") int page,
                                        @RequestParam(value = "size") int size) {
         List<BoardDto.Response> boardList = boardMapper.boardsToBoardResponses(memberService.findMyLike());
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
-        int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
-        Page<BoardDto.Response> responsePage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
-        List<BoardDto.Response> responseList = responsePage.getContent();
+        Page<BoardDto.Response> responsePage = new Pagination<BoardDto.Response>().MadePagination(boardList, page, size);
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(responseList, responsePage), HttpStatus.OK);
+                new MultiResponseDto<>(responsePage.getContent(), responsePage), HttpStatus.OK);
     }
 
     //내가 참여하고 있는 채팅방 보기
@@ -139,7 +133,7 @@ public class MemberController {
         Page<ChatDto.myChatting> chatRoomMembersPage = new PageImpl<>(chatRoomList.subList(start, end), pageRequest, chatRoomList.size());
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(chatRoomMembersPage.getContent(), chatRoomMembersPage), HttpStatus.OK);
+                new MultiResponseDto<>(chatRoomPage.getContent(), chatRoomPage), HttpStatus.OK);
     }
 
     //내가 참여하고 있는 쉐어링 게시물 목록
@@ -148,21 +142,17 @@ public class MemberController {
                                             @RequestParam(value = "size") int size) {
         List<Board> boardList = chatService.findMySharingList
                 (chatRoomMembersRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId()));
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
-        int start = (int) pageRequest.getOffset();
-        int end = Math.min((start + pageRequest.getPageSize()), boardList.size());
-        Page<Board> boardPage = new PageImpl<>(boardList.subList(start, end), pageRequest, boardList.size());
-        List<Board> boardList1 = boardPage.getContent();
+        Page<Board> boardPage = new Pagination<Board>().MadePagination(boardList, page, size);
 
         return new ResponseEntity<>(
-                new MultiResponseDto<>(boardList1, boardPage), HttpStatus.OK);
+                new MultiResponseDto<>(boardPage.getContent(), boardPage), HttpStatus.OK);
     }
 
     //내가 개설한 게시물 목록
     @GetMapping("/myBoard")
     public ResponseEntity viewMyBoardList(@RequestParam(value = "page") int page,
                                           @RequestParam(value = "size") int size) {
-        Page<Board> pageBoards = boardRepository.findByMemberMemberId(memberService.getLoginMember().getMemberId(), PageRequest.of(page - 1, size));
+        Page<Board> pageBoards = memberService.viewMyBoardList(page, size);
         List<Board> boardList = pageBoards.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);

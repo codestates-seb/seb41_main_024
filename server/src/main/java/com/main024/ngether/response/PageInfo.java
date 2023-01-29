@@ -1,4 +1,4 @@
-package com.main024.ngether.board.response;
+package com.main024.ngether.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
