@@ -1,9 +1,9 @@
 export interface chatItemType {
   thumbnail: string;
-  declareStatus?: any;
+  recruitment?: any;
   title: string;
   price: string;
-  alertNum?: string | number;
+  unreadCount?: number;
   address?: string;
   lastMessage?: string;
   isOpen?: any;

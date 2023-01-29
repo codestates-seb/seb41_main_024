@@ -56,7 +56,7 @@ const DetailBottom = ({
             신고하기
           </Button>
         )}
-        {isWriter && isOpen && (
+        {/* {isWriter && isOpen && (
           <Button onClick={handleComplete} variant="contained" className="m-2">
             모집 마감하기
           </Button>
@@ -65,7 +65,7 @@ const DetailBottom = ({
           <Button disabled variant="contained" className="m-2">
             모집 마감하기
           </Button>
-        )}
+        )} */}
       </div>
     </div>
   );

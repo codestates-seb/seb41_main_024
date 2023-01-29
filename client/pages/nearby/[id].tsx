@@ -58,7 +58,8 @@ export default function ProductDetail({ id }: any) {
   const [productData, setProductData] = useState<any>();
   const router = useRouter();
 
-  console.log(isLiked);
+  console.log('isLiked', isReported);
+  console.log('isReported', isReported);
   const res = useQueries({
     queries: [
       {
@@ -152,6 +153,9 @@ export default function ProductDetail({ id }: any) {
     });
   };
 
+  const handleGoEdit = (id: any) => {
+    router.push(`/edit/${id}`);
+  };
   return (
     <div>
       {isReported && <div>신고된 게시물입니다</div>}
@@ -161,10 +165,13 @@ export default function ProductDetail({ id }: any) {
             <Img src="/chatItem/productImg05.svg" alt="메인사진" />
           </div>
           <UserMetaInfo
+            isOpen={isOpen}
             productData={productData}
             handleDelete={handleDelete}
             isWriter={isWriter}
             id={id}
+            handleComplete={handleComplete}
+            handleGoEdit={handleGoEdit}
           />
           <DetailBottom
             isOpen={isOpen}

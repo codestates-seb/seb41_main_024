@@ -24,12 +24,12 @@ const ChatList = () => {
               <ChatItem
                 key={chatItem.roomId}
                 thumbnail={ProductImg}
-                declareStatus={chatItem.declareStatus}
+                recruitment={chatItem.recruitment}
                 title={chatItem.roomName}
                 price={chatItem.price}
                 lastMessage={chatItem.lastMessage}
                 address={chatItem.address}
-                alertNum={chatItem.alertNum || 1}
+                unreadCount={chatItem.unreadCount}
               />
             </Link>
           );
