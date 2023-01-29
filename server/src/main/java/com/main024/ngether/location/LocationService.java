@@ -140,7 +140,9 @@ public class LocationService {
             if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
                 boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
                 boardRepository.save(boardList.get(i));
-                chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
+                if(chatRoomRepository.findById(boardList.get(i).getBoardId()).get() != null) {
+                    chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
+                }
             }
         }
         String address1 = distanceCal.getAddress();
@@ -212,7 +214,9 @@ public class LocationService {
             if(boardList.get(i).getDeadLine().compareTo(LocalDate.now()) == 0){
                 boardList.get(i).setBoardStatus(Board.BoardStatus.BOARD_TERM_EXPIRE);
                 boardRepository.save(boardList.get(i));
-                chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
+                if(chatRoomRepository.findById(boardList.get(i).getBoardId()).get() != null) {
+                    chatRoomRepository.delete(chatRoomRepository.findById(boardList.get(i).getBoardId()).get());
+                }
             }
         }
         return boardList;
