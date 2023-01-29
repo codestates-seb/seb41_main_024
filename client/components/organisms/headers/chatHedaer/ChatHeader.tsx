@@ -11,18 +11,21 @@ import DialogMaker from '../../dialogMaker/DialogMaker';
 interface ChatHeaderType {
   isOwner: boolean;
   members: string[];
+  declareStatus: string;
   handleExitChat: () => void;
   handleSendReport: () => void;
   handleCompleteRecrutment: () => void;
 }
 
 const ChatHeader = ({
-  isOwner,
-  members,
-  handleExitChat,
-  handleSendReport,
-  handleCompleteRecrutment,
-}: ChatHeaderType) => {
+    isOwner, 
+    members, 
+    declareStatus, 
+    handleExitChat, 
+    handleSendReport, 
+    handleCompleteRecrutment
+  }: ChatHeaderType) => {
+
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
@@ -60,13 +63,11 @@ const ChatHeader = ({
       </AppBar>
       <Divider />
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        <p className="text-center my-3">유저 목록</p>
-        {members.map((member, index) => (
-          <DrawerListItem key={index} text={member} />
-        ))}
-        <Divider className="mt-3" />
-        <div className="fixed bottom-3 w-[100%]">
-          {isOwner && (
+        <p className='text-center my-3'>유저 목록</p>
+        {members.map((member,index) => <DrawerListItem key={index} text={member}/>)}
+        <Divider className='mt-3'/>
+        <div className='fixed bottom-3 w-[100%]'>
+          {isOwner && declareStatus !== "BOARD_COMPLETE" && (
             <DrawerListItem>
               <DialogMaker
                 name="N게더 모집 완료하기"

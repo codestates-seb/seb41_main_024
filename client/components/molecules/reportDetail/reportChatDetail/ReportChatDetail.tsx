@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Button, Divider } from '@mui/material';
-import { reportChatDetailType } from './reportChatDetailType';
-import { transDateFormatForAdmin } from '../../../../hooks/useWebSocketClient';
+import { reportChatDetailType } from './reportChatDetailType'
 import DialogMaker from '../../../organisms/dialogMaker/DialogMaker';
+import { transDateFullFormat } from '../../../../utils/transDateFormat/transDateFormat';
 
 interface ChatLogType {
   chatMessageId: number;
@@ -77,7 +77,7 @@ const ReportChatDetail = ({
                   </p>
                 </div>
                 <p className="text-xs">
-                  전송 시간:{transDateFormatForAdmin(log.createDate)}
+                  전송 시간:{transDateFullFormat(log.createDate)}
                 </p>
               </li>
             ))}
