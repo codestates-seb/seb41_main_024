@@ -56,40 +56,54 @@ export default function ProductDetail({ id }: any) {
   const [isOpen, setIsOpen] = useState<boolean>();
   const [isReported, setIsReported] = useState<boolean>();
   const [productData, setProductData] = useState<any>();
+  const [isWriter, setIsWriter] = useState<any>();
   const router = useRouter();
 
   console.log('isLiked', isReported);
   console.log('isReported', isReported);
-  const res = useQueries({
-    queries: [
-      {
-        queryKey: ['productDetail'],
-        queryFn: () => getProductDetail(id),
-        onSuccess: (res: any) => {
-          console.log(res);
-          setProductData(res.data);
+  // const res = useQueries({
+  //   queries: [
+  //     {
+  //       queryKey: ['productDetail'],
+  //       queryFn: () => getProductDetail(id),
+  //       onSuccess: (res: any) => {
+  //         console.log(res);
+  //         setProductData(res.data);
 
-          const openStatus =
-            res?.data?.boardStatus === 'BOARD_COMPLETE' ? false : true;
-          setIsOpen(openStatus);
+  //         const openStatus =
+  //           res?.data?.boardStatus === 'BOARD_COMPLETE' ? false : true;
+  //         setIsOpen(openStatus);
 
-          const reportStatus =
-            res?.data?.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
-          console.log();
-          setIsReported(reportStatus);
-        },
-        retry: false,
-      },
-      {
-        queryKey: ['isWriter'],
-        queryFn: () => getIsWriter(id),
-      },
-    ],
-  });
-
-  const isWriter = res[1].data?.data;
+  //         const reportStatus =
+  //           res?.data?.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
+  //         console.log();
+  //         setIsReported(reportStatus);
+  //       },
+  //       retry: false,
+  //     },
+  //     {
+  //       queryKey: ['isWriter'],
+  //       queryFn: () => getIsWriter(id),
+  //     },
+  //   ],
+  // });
 
   useEffect(() => {
+    getProductDetail(id).then((res) => {
+      setProductData(res.data);
+
+      const openStatus =
+        res.data.boardStatus === 'BOARD_COMPLETE' ? false : true;
+      setIsOpen(openStatus);
+
+      const reportStatus =
+        res.data.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
+      console.log();
+      setIsReported(reportStatus);
+    });
+
+    getIsWriter(id).then((res) => setIsWriter(res.data.data));
+
     if (isLogin) {
       getMyFavorite().then((res) => {
         const isMyFavorite: any =
@@ -106,14 +120,13 @@ export default function ProductDetail({ id }: any) {
     reportType: 'board',
   };
 
-  const reportMutation = useMutation(() => reportProduct(reportForm));
-  const deleteMutation = useMutation(() => deleteProductDetail(id));
-  const likeMutation = useMutation(() => likeProduct(id));
+  // const reportMutation = useMutation(() => reportProduct(reportForm));
+  // const deleteMutation = useMutation(() => deleteProductDetail(id));
+  // const likeMutation = useMutation(() => likeProduct(id));
 
   // 삭제하기
   const handleDelete = () => {
-    deleteMutation.mutate();
-    router.push('/');
+    deleteProductDetail(id).then((res) => router.push('/'));
   };
 
   // 찜하기
@@ -122,7 +135,7 @@ export default function ProductDetail({ id }: any) {
       setIsLoginAlertOpen(true);
     } else {
       setIsLiked(!isLiked);
-      likeMutation.mutate();
+      likeProduct(id);
     }
   };
 
@@ -131,7 +144,7 @@ export default function ProductDetail({ id }: any) {
     if (!isLogin) {
       setIsLoginAlertOpen(true);
     } else {
-      reportMutation.mutate();
+      reportProduct(reportForm);
       alert('신고가 접수되었습니다');
     }
   };
@@ -169,61 +182,58 @@ export default function ProductDetail({ id }: any) {
   };
   return (
     <div>
-      {isReported && <div>신고된 게시물입니다</div>}
-      {!isReported && (
-        <div>
-          <div className="p-10">
-            <Img src="/chatItem/productImg05.svg" alt="메인사진" />
-          </div>
-
-          <DetailBottom
-            isOpen={isOpen}
-            isLiked={isLiked}
-            isWriter={isWriter}
-            handleLike={handleLike}
-            handleReport={handleReport}
-            handleGether={handleGether}
-            handleComplete={handleComplete}
-            isReportModalOpen={isReportModalOpen}
-            handleReportModalOpen={handleReportModalOpen}
-            handleReportModalClose={handleReportModalClose}
-            isGetherModalOpen={isGetherModalOpen}
-            handleGetherModalOpen={handleGetherModalOpen}
-            handleGetherModalClose={handleGetherModalClose}
-            isCompleteModalOpen={isCompleteModalOpen}
-            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
-            handleIsCompleteModalClose={handleIsCompleteModalClose}
-          />
-
-          <UserMetaInfo
-            isOpen={isOpen}
-            productData={productData}
-            handleDelete={handleDelete}
-            isWriter={isWriter}
-            id={id}
-            handleComplete={handleComplete}
-            handleGoEdit={handleGoEdit}
-            isDeleteModalOpen={isDeleteModalOpen}
-            handleIsDeleteModalOpen={handleIsDeleteModalOpen}
-            handleIsDeleteModalClose={handleIsDeleteModalClose}
-            isCompleteModalOpen={isCompleteModalOpen}
-            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
-            handleIsCompleteModalClose={handleIsCompleteModalClose}
-          />
-
-          <Divider variant="middle" sx={{ my: 1 }} />
-          <PostMeta
-            productData={productData}
-            isLiked={isLiked}
-            handleLike={handleLike}
-          />
-          <DetailPageTab productData={productData} />
-          <LoginAlert
-            isLoginAlertOpen={isLoginAlertOpen}
-            handleClose={handleClose}
-          />
+      <div>
+        <div className="p-10">
+          <Img src="/chatItem/productImg05.svg" alt="메인사진" />
         </div>
-      )}
+
+        <DetailBottom
+          isOpen={isOpen}
+          isLiked={isLiked}
+          isWriter={isWriter}
+          handleLike={handleLike}
+          handleReport={handleReport}
+          handleGether={handleGether}
+          handleComplete={handleComplete}
+          isReportModalOpen={isReportModalOpen}
+          handleReportModalOpen={handleReportModalOpen}
+          handleReportModalClose={handleReportModalClose}
+          isGetherModalOpen={isGetherModalOpen}
+          handleGetherModalOpen={handleGetherModalOpen}
+          handleGetherModalClose={handleGetherModalClose}
+          isCompleteModalOpen={isCompleteModalOpen}
+          handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+          handleIsCompleteModalClose={handleIsCompleteModalClose}
+        />
+
+        <UserMetaInfo
+          isOpen={isOpen}
+          productData={productData}
+          handleDelete={handleDelete}
+          isWriter={isWriter}
+          id={id}
+          handleComplete={handleComplete}
+          handleGoEdit={handleGoEdit}
+          isDeleteModalOpen={isDeleteModalOpen}
+          handleIsDeleteModalOpen={handleIsDeleteModalOpen}
+          handleIsDeleteModalClose={handleIsDeleteModalClose}
+          isCompleteModalOpen={isCompleteModalOpen}
+          handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+          handleIsCompleteModalClose={handleIsCompleteModalClose}
+        />
+
+        <Divider variant="middle" sx={{ my: 1 }} />
+        <PostMeta
+          productData={productData}
+          isLiked={isLiked}
+          handleLike={handleLike}
+        />
+        <DetailPageTab productData={productData} />
+        <LoginAlert
+          isLoginAlertOpen={isLoginAlertOpen}
+          handleClose={handleClose}
+        />
+      </div>
     </div>
   );
 }

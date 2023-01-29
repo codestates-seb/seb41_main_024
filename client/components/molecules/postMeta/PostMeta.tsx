@@ -64,12 +64,12 @@ const PostMeta = ({ productData, isLiked, handleLike }: PostMetaType) => {
           }}
         >
           <Stack spacing={2}>
-            <p className="text-sm text-[#475569">
+            <p className="text-sm text-[#475569]">
               [모집기간] ~ {productData?.deadLine}까지
             </p>
             <p className="text-sm text-[#475569]">
-              현재 모집인원 {productData?.curNum}명 / 총 모집인원
-              {productData?.maxNum}명
+              [모집인원] 현재 {productData?.curNum}명 / 총 {productData?.maxNum}
+              명
             </p>
             <p className="text-sm text-[#475569]">
               [참여시 예상금액]{' '}
@@ -85,7 +85,12 @@ const PostMeta = ({ productData, isLiked, handleLike }: PostMetaType) => {
               target="_blank"
               className="truncate text-sm text-[#475569] mb-4 block"
             >
-              [판매 제품 링크] {productData?.productsLink}
+              <p className="truncate text-sm text-[#475569] mb-4 block">
+                [판매 제품 링크]{' '}
+              </p>
+              <p className="truncate text-sm text-[#538ad7] mb-4 block">
+                {productData?.productsLink}
+              </p>
             </Link>
           </Stack>
         </Box>

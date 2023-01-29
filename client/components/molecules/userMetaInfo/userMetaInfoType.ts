@@ -16,7 +16,7 @@ export interface productDataProps {
   handleDelete: () => void;
   handleComplete: () => void;
   handleGoEdit: (id: string) => void;
-  isWriter: boolean;
+  isWriter?: boolean;
   id: string;
   isDeleteModalOpen: boolean;
   handleIsDeleteModalOpen: () => void;
