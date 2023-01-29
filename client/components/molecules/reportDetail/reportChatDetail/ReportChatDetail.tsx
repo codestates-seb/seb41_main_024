@@ -1,8 +1,8 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Button, Divider } from '@mui/material';
 import { reportChatDetailType } from './reportChatDetailType'
-import { transDateFormatForAdmin } from '../../../../hooks/useWebSocketClient';
 import DialogButton from '../../../organisms/DialogButton/DialogButton';
+import { transDateFullFormat } from '../../../../utils/transDateFormat/transDateFormat';
 
 interface ChatLogType {
   chatMessageId : number;
@@ -55,7 +55,7 @@ const ReportChatDetail = ({id, handleGetChatLog, handleBlockUser, handleDeleteRe
           {chatDataSet.chatLog.map((log:ChatLogType) => 
             <li className='text-left text-s mt-3 mb-2 border-b-2' key={log.chatMessageId}>
               <div><p>{log.nickName} : {log.message}</p></div>
-              <p className='text-xs'>전송 시간:{transDateFormatForAdmin(log.createDate)}</p>
+              <p className='text-xs'>전송 시간:{transDateFullFormat(log.createDate)}</p>
             </li>
           )}
         </ul>
