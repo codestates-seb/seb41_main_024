@@ -20,7 +20,7 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import Image from 'next/image';
-// import base from '../../public/imageBox/base-box.svg';
+import base from '../../public/imageBox/base-box.svg';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -31,7 +31,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 
 import StateBadge from '../../components/organisms/stateBadge/StateBadge';
-import { base } from '../../components/molecules/drawerListItem/DrawerListItem.stories';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -169,67 +168,71 @@ export default function ProductDetail({ id }: any) {
 
   return (
     <div>
-      <div>
-        <div className="relative pb-[70%]">
-          <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
-            <Image
-              className="p-8"
-              src={productData?.imageLink || base}
-              alt={'상품 이미지'}
-              fill
-            />
-            {!isOpen && (
-              <StateBadge stateText={'모집 완료'} usedDetail={true} />
-            )}
+      {isReported && <ReportedMessage />}
+      {!productData && <NoProductMessage />}
+      {!isReported && productData && (
+        <div>
+          <div className="relative pb-[70%]">
+            <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
+              <Image
+                className="p-8"
+                src={productData?.imageLink || base}
+                alt={'상품 이미지'}
+                fill
+              />
+              {!isOpen && (
+                <StateBadge stateText={'모집 완료'} usedDetail={true} />
+              )}
+            </div>
           </div>
+          <DetailBottom
+            isOpen={isOpen}
+            isLiked={isLiked}
+            isWriter={isWriter}
+            handleLike={handleLike}
+            handleReport={handleReport}
+            handleGether={handleGether}
+            handleComplete={handleComplete}
+            isReportModalOpen={isReportModalOpen}
+            handleReportModalOpen={handleReportModalOpen}
+            handleReportModalClose={handleReportModalClose}
+            isGetherModalOpen={isGetherModalOpen}
+            handleGetherModalOpen={handleGetherModalOpen}
+            handleGetherModalClose={handleGetherModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
+          />
+
+          <UserMetaInfo
+            isOpen={isOpen}
+            productData={productData}
+            handleDelete={handleDelete}
+            isWriter={isWriter}
+            id={id}
+            handleComplete={handleComplete}
+            handleGoEdit={handleGoEdit}
+            isDeleteModalOpen={isDeleteModalOpen}
+            handleIsDeleteModalOpen={handleIsDeleteModalOpen}
+            handleIsDeleteModalClose={handleIsDeleteModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
+          />
+
+          <Divider variant="middle" sx={{ my: 1 }} />
+          <PostMeta
+            productData={productData}
+            isLiked={isLiked}
+            handleLike={handleLike}
+          />
+          <DetailPageTab productData={productData} />
+          <LoginAlert
+            isLoginAlertOpen={isLoginAlertOpen}
+            handleClose={handleClose}
+          />
         </div>
-        <DetailBottom
-          isOpen={isOpen}
-          isLiked={isLiked}
-          isWriter={isWriter}
-          handleLike={handleLike}
-          handleReport={handleReport}
-          handleGether={handleGether}
-          handleComplete={handleComplete}
-          isReportModalOpen={isReportModalOpen}
-          handleReportModalOpen={handleReportModalOpen}
-          handleReportModalClose={handleReportModalClose}
-          isGetherModalOpen={isGetherModalOpen}
-          handleGetherModalOpen={handleGetherModalOpen}
-          handleGetherModalClose={handleGetherModalClose}
-          isCompleteModalOpen={isCompleteModalOpen}
-          handleIsCompleteModalOpen={handleIsCompleteModalOpen}
-          handleIsCompleteModalClose={handleIsCompleteModalClose}
-        />
-
-        <UserMetaInfo
-          isOpen={isOpen}
-          productData={productData}
-          handleDelete={handleDelete}
-          isWriter={isWriter}
-          id={id}
-          handleComplete={handleComplete}
-          handleGoEdit={handleGoEdit}
-          isDeleteModalOpen={isDeleteModalOpen}
-          handleIsDeleteModalOpen={handleIsDeleteModalOpen}
-          handleIsDeleteModalClose={handleIsDeleteModalClose}
-          isCompleteModalOpen={isCompleteModalOpen}
-          handleIsCompleteModalOpen={handleIsCompleteModalOpen}
-          handleIsCompleteModalClose={handleIsCompleteModalClose}
-        />
-
-        <Divider variant="middle" sx={{ my: 1 }} />
-        <PostMeta
-          productData={productData}
-          isLiked={isLiked}
-          handleLike={handleLike}
-        />
-        <DetailPageTab productData={productData} />
-        <LoginAlert
-          isLoginAlertOpen={isLoginAlertOpen}
-          handleClose={handleClose}
-        />
-      </div>
+      )}
     </div>
   );
 }
@@ -262,6 +265,22 @@ const LoginAlert = ({ isLoginAlertOpen, handleClose }: LoginAlertPropsType) => {
           </Button>
         </DialogActions>
       </Dialog>
+    </div>
+  );
+};
+
+const ReportedMessage = () => {
+  return (
+    <div className="w-[100%] text-5xl mt-[25rem] text-[#999]">
+      <p className="text-center">신고된 게시물입니다.</p>
+    </div>
+  );
+};
+
+const NoProductMessage = () => {
+  return (
+    <div className="w-[100%] text-5xl mt-[25rem] text-[#999]">
+      <p className="text-center">존재하지 않는 게시물입니다.</p>
     </div>
   );
 };
