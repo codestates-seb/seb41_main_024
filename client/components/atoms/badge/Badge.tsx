@@ -1,15 +1,16 @@
 import React from 'react';
 import { badgeType } from './badgeType';
 
-const Badge = ({ declareStatus }: badgeType) => {
+const Badge = ({ recruitment }: badgeType) => {
+  console.log('recruitment', recruitment);
   return (
     <>
-      {!declareStatus && (
+      {!recruitment && (
         <div className="flex justify-center items-center w-16 h-6 rounded-md bg-primary">
           <span className="text-xs text-white">모집 중</span>
         </div>
       )}
-      {declareStatus && (
+      {recruitment && (
         <div className="flex justify-center items-center w-16 h-6 rounded-md bg-slate-400">
           <span className="text-xs text-white">모집 완료</span>
         </div>
