@@ -25,7 +25,7 @@ const PostMeta = ({ productData }: productDataProps) => {
       </p>
       <p className="text-sm text-[#475569] mb-4">
         참여시 예상금액:
-        {(productData?.price / (productData?.curNum + 1)).toLocaleString()}원
+        {productData && (productData?.price / (productData?.curNum + 1)).toLocaleString()}원
       </p>
       <p className="truncate text-sm text-[#475569] mb-4">
         판매 제품 링크 : {productData?.productsLink}
