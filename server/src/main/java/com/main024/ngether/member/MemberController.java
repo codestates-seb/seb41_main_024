@@ -5,6 +5,7 @@ import com.main024.ngether.board.BoardDto;
 import com.main024.ngether.board.BoardMapper;
 import com.main024.ngether.board.BoardRepository;
 import com.main024.ngether.board.response.MultiResponseDto;
+import com.main024.ngether.chat.chatEntity.ChatDto;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatService.ChatService;
@@ -127,15 +128,15 @@ public class MemberController {
     @GetMapping("/myChatting")
     public ResponseEntity viewMyChattingRoom(@RequestParam(value = "page") int page,
                                              @RequestParam(value = "size") int size) {
-        List<ChatRoom> chatRoomList = chatService.findMyChatRoom()
+        List<ChatDto.myChatting> chatRoomList = chatService.findMyChatRoom()
                 .stream()
-                .sorted(Comparator.comparing(ChatRoom::getLastMessageCreated)
+                .sorted(Comparator.comparing(ChatDto.myChatting::getLastMessageCreated)
                         .reversed())
                 .collect(Collectors.toList());
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         int start = (int) pageRequest.getOffset();
         int end = Math.min((start + pageRequest.getPageSize()), chatRoomList.size());
-        Page<ChatRoom> chatRoomMembersPage = new PageImpl<>(chatRoomList.subList(start, end), pageRequest, chatRoomList.size());
+        Page<ChatDto.myChatting> chatRoomMembersPage = new PageImpl<>(chatRoomList.subList(start, end), pageRequest, chatRoomList.size());
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(chatRoomMembersPage.getContent(), chatRoomMembersPage), HttpStatus.OK);

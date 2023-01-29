@@ -29,6 +29,8 @@ public class ChatRoom {
     private String lastMessage;
     private String address;
     private boolean recruitment;
+    @Column(length = 2000)
+    private String imageLink;
 
     @JsonIgnore
     @OneToMany(mappedBy = "chatRoom",cascade = CascadeType.ALL)
