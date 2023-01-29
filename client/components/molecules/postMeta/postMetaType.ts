@@ -1,5 +1,5 @@
 export interface PostMetaType {
-  isLiked: boolean;
+  isLiked?: boolean;
   handleLike: () => void;
   productData?: {
     content: string;
