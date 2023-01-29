@@ -88,15 +88,35 @@ const Search = () => {
     size: 10,
   };
   const argumentOfTitle = { type, keyword: title, page: 1, size: 300 };
-  const { refetch } = useSearch({
+  /* const { refetch } = useSearch({
     searchOption,
     argumentOfLocation,
     argumentOfTitle,
-  });
+  }); */
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    refetch();
+    const {
+      range,
+      category,
+      page,
+      size,
+      locationData: { lat, lng, address },
+    } = argumentOfLocation;
+    const { type, keyword, page: titlePage, size: titleSize } = argumentOfTitle;
+    const query = {
+      searchOption,
+      type,
+      keyword,
+      page: page || titlePage,
+      size: size || titleSize,
+      lat,
+      lng,
+      address,
+      range,
+      category,
+    };
+    router.push({ pathname: '/nearby', query }, '/nearby');
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
