@@ -43,6 +43,7 @@ const Search = () => {
     lng: 127.047377408384,
     address: '서울 강남구',
   });
+  const [isSearch, setIsSearch] = useState(false);
 
   const [center, setCenter] = useState<any>({ lat: 0, lng: 0, address: '' });
   const [error, setError] = useState('');
@@ -70,10 +71,11 @@ const Search = () => {
       Refresh: Cookies.get('refresh_token') || '',
     });
     getCurrentLocation(setCenter, setError);
+    setIsSearch((prev) => !prev);
   }, []);
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center.lat, center.lng]);
+  }, [center.lat, center.lng, isSearch]);
   const { title, searchOption } = inputValue;
   const type = 1;
   const finalLocation = targetCoord.address ? targetCoord : center;
@@ -151,6 +153,7 @@ const Search = () => {
             type="text"
             label="도로명•지번주소 검색"
             onKeyDown={(e: KeyboardEvent) => {
+              setIsSearch((prev) => !prev);
               if (e.key === 'Enter') return searchMap(searchAddress, setCenter);
             }}
             onChange={handleSearchAddress}
@@ -160,7 +163,10 @@ const Search = () => {
             variant="contained"
             className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px]"
             content="주소검색"
-            onClick={() => searchMap(searchAddress, setCenter)}
+            onClick={() => {
+              setIsSearch((prev) => !prev);
+              searchMap(searchAddress, setCenter);
+            }}
           ></FormButton>
           <FormButton
             aria-describedby={id}
