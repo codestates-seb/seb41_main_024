@@ -37,15 +37,12 @@ const SEARCH_OPTIONS = [
 const Search = () => {
   // 이곳의 폼 데이터 관리도 useState, useRef, react-hook-form 등 기호에 맞게 사용하시면 됩니다
   const router = useRouter();
+  const [token, setToken] = useState({ Authorization: '', Refresh: '' });
   const [targetCoord, setTargetCoord] = useState<any>({
-    lat: 0,
-    lng: 0,
-    address: '',
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
   });
-  const token = {
-    Authorization: Cookies.get('access_token') || '',
-    Refresh: Cookies.get('refresh_token') || '',
-  };
 
   const [center, setCenter] = useState<any>({ lat: 0, lng: 0, address: '' });
   const [error, setError] = useState('');
@@ -68,23 +65,25 @@ const Search = () => {
     setSearchAddress(e.target.value);
   };
   useEffect(() => {
+    setToken({
+      Authorization: Cookies.get('access_token') || '',
+      Refresh: Cookies.get('refresh_token') || '',
+    });
     getCurrentLocation(setCenter, setError);
   }, []);
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
   }, [center.lat, center.lng]);
-  const { title, searchOption, category } = inputValue;
-  const categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
-  const range = category === '상품 쉐어링' ? 1.5 : 0.6;
+  const { title, searchOption } = inputValue;
   const type = 1;
   const finalLocation = targetCoord.address ? targetCoord : center;
 
   const argumentOfLocation = {
     locationData: finalLocation,
-    range,
-    category: categoryValue,
+    range: 1.5,
+    category: 'product',
     page: 1,
-    size: 300,
+    size: 10,
   };
   const argumentOfTitle = { type, keyword: title, page: 1, size: 300 };
   const { refetch } = useSearch({
@@ -199,12 +198,14 @@ const Search = () => {
                   >
                     등록하러 가기
                   </Link>
-                  <Link
-                    href="/login"
-                    className="bg-[orange] ml-3 py-1 px-2 border-[0] border-indigo-500/100 border-solid rounded-md"
-                  >
-                    로그인하러 가기
-                  </Link>
+                  {!token.Authorization && (
+                    <Link
+                      href="/login"
+                      className="bg-[orange] ml-3 py-1 px-2 border-[0] border-indigo-500/100 border-solid rounded-md"
+                    >
+                      로그인하러 가기
+                    </Link>
+                  )}
                 </>
               )}
             </Typography>
