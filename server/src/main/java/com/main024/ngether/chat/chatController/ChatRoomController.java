@@ -1,7 +1,6 @@
 package com.main024.ngether.chat.chatController;
 
 import com.main024.ngether.chat.chatEntity.ChatRoom;
-import com.main024.ngether.chat.chatEntity.ChatRoomMembers;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.exception.BusinessLogicException;
@@ -20,7 +19,9 @@ import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
 
 
 @Controller
@@ -89,8 +90,7 @@ public class ChatRoomController {
 
         CompletableFuture<Boolean> task = CompletableFuture.supplyAsync(() -> {
             try {
-                chatService.checkNewMessages(member);
-                return true;
+                return chatService.checkNewMessages(member);
             } catch (Exception e) {
                 throw new BusinessLogicException(ExceptionCode.TIME_OUT);
             }
