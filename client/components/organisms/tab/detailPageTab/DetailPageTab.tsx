@@ -22,13 +22,15 @@ const DetailPageTab = ({ productData }: productDataProps) => {
   };
   return (
     <div className="mx-2.5">
-      <BasicTabs
-        currentTab={currentTab}
-        handleChange={handleChange}
-        tabLabels={LABEL}
-        centered={true}
-        handleClick={handleClick}
-      />
+      <div className="sticky top-[3.125rem] zindex-1 bg-white">
+        <BasicTabs
+          currentTab={currentTab}
+          handleChange={handleChange}
+          tabLabels={LABEL}
+          centered={true}
+          handleClick={handleClick}
+        />
+      </div>
       <section id="section-0" className="mt-4">
         <div className="pt-3">
           <strong className="text-[#FF0000] font-medium flex items-center justify-center text-sm">
