@@ -31,7 +31,7 @@ interface qnaType {
 }
 
 const AnswerWork = () => {
-  const { inputValue, onChange } = useInput({
+  const { inputValue, onChange, setInputValue } = useInput({
     content: '',
     title: '',
     productsLink: '',
@@ -39,8 +39,8 @@ const AnswerWork = () => {
     maxNum: 0,
     deadLine: '',
   });
-  const [questions, setQuestions] = useState([]);
-  const { data, isSuccess, refetch } = useQuery(['questions'], getQuestions);
+  const [questions, setQuestions] = useState([])
+  const {data, isSuccess, refetch} = useQuery(['questions'], getQuestions);
 
   const answerMutation = useMutation(handleAnswerQuestion, {
     onSuccess: () => {
@@ -59,6 +59,14 @@ const AnswerWork = () => {
   ) => {
     event.preventDefault;
     await answerMutation.mutate({ qnaId, content });
+    setInputValue({
+      content: '',
+      title: '',
+      productsLink: '',
+      category: '',
+      maxNum: 0,
+      deadLine: '',
+    })
   };
 
   return (

@@ -19,7 +19,7 @@ function useInput(initialValue: inputType & searchUseInputType) {
     });
   };
 
-  return { inputValue, onChange } as const;
+  return { inputValue, onChange, setInputValue } as const;
 }
 
 export default useInput;
