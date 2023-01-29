@@ -14,9 +14,15 @@ export interface productDataProps {
     memberId: number;
   };
   handleDelete: () => void;
-  isWriter: boolean;
+  handleComplete: () => void;
+  handleGoEdit: (id: string) => void;
+  isWriter?: boolean;
   id: string;
   isDeleteModalOpen: boolean;
   handleIsDeleteModalOpen: () => void;
   handleIsDeleteModalClose: () => void;
+  isOpen?: boolean;
+  isCompleteModalOpen: boolean;
+  handleIsCompleteModalOpen: () => void;
+  handleIsCompleteModalClose: () => void;
 }
