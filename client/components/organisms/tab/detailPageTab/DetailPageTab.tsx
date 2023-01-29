@@ -45,7 +45,7 @@ const DetailPageTab = ({ productData }: productDataProps) => {
     onSuccess: (data) => {
       const nearByDetailSharingList = data?.data?.filter(
         (item: productDataProps['productData']) =>
-          item.boardId !== productData?.boardId
+          item?.boardId !== productData?.boardId
       );
       setSharingListExcludeThisPost(nearByDetailSharingList);
     },
