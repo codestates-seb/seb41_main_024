@@ -117,7 +117,7 @@ public class BoardController {
             return new ResponseEntity<>(true,HttpStatus.OK);
         else return new ResponseEntity<>(false,HttpStatus.OK);
     }
-    @GetMapping("/complete/{board-id}")
+    @PatchMapping("/complete/{board-id}")
     public ResponseEntity boardComplete(@PathVariable(value = "board-id") Long boardId){
         return new ResponseEntity<>(boardService.setComplete(boardId),HttpStatus.OK);
     }
