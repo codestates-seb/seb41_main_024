@@ -33,8 +33,6 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
-    private final LikeRepository likeRepository;
     private final ChatRoomRepository chatRoomRepository;
 
     private final LocationRepository locationRepository;
