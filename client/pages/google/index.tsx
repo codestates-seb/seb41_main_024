@@ -98,8 +98,8 @@ const GoogleLoginPage = () => {
     event.preventDefault();
 
     if (
-      nickNameDuplicationCheckMessage === '' &&
-      phoneNumberDuplicationCheckMessage === ''
+      nickNameDuplicationCheckMessage === 'OK' &&
+      phoneNumberDuplicationCheckMessage === 'OK'
     ) {
       requestFirstGoogleLogin(form).then((res) => {
         Cookies.set('memberId', res.data.memberId);
@@ -187,15 +187,11 @@ const GoogleLoginPage = () => {
               className="mt-2 mb-4"
             >
               <Stack>
-                {nickNameDuplicationCheckMessage === 'OK' && (
-                  <p className="text-[#dd3030]">
-                    {nickNameDuplicationCheckMessage}
-                  </p>
-                )}
                 {nickNameDuplicationCheckMessage === 'NO NO' && (
-                  <p className="text-[##2EB150]">
-                    {nickNameDuplicationCheckMessage}
-                  </p>
+                  <p className="text-[#dd3030]">이미 존재하는 닉네임입니다.</p>
+                )}
+                {nickNameDuplicationCheckMessage === 'OK' && (
+                  <p className="text-[#2EB150]">사용 가능한 닉네임입니다.</p>
                 )}
               </Stack>
               <Button
@@ -226,16 +222,16 @@ const GoogleLoginPage = () => {
               spacing={1}
               className="my-2"
             >
-              {phoneNumberDuplicationCheckMessage === 'OK' && (
-                <p className="text-[#dd3030]">
-                  {phoneNumberDuplicationCheckMessage}
-                </p>
-              )}
-              {phoneNumberDuplicationCheckMessage === 'NO NO' && (
-                <p className="text-[##2EB150]">
-                  {phoneNumberDuplicationCheckMessage}
-                </p>
-              )}
+              <Stack>
+                {phoneNumberDuplicationCheckMessage === 'NO NO' && (
+                  <p className="text-[#dd3030]">
+                    이미 존재하는 전화번호입니다.
+                  </p>
+                )}
+                {phoneNumberDuplicationCheckMessage === 'OK' && (
+                  <p className="text-[#2eb150]">사용 가능한 전화번호입니다.</p>
+                )}
+              </Stack>
               <Button
                 variant="contained"
                 className="rounded"
