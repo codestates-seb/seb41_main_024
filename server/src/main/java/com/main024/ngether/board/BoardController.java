@@ -21,7 +21,6 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardMapper mapper;
     private final MemberService memberService;
-    private final BoardRepository boardRepository;
     private final LikeService likeService;
 
 
