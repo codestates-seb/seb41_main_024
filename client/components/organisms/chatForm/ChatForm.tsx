@@ -13,6 +13,7 @@ const ChatForm = ({onSubmit, onChange, value}:chatFormType) => {
         <IconButton
           aria-label="send"
           className="rounded-full bg-primary w-[3.125rem] h-[3.125rem] text-white self-center hover:"
+          type='submit'
           sx={{
             '&:hover, &.Mui-focused': {
               bgcolor: (theme) => theme.palette.primary.main,
