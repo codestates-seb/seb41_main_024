@@ -18,9 +18,9 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+
 import Image from 'next/image';
-// import base from '../../public/imageBox/base-box.svg';
+import base from '../../public/imageBox/base-box.svg';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -33,6 +33,7 @@ import Divider from '@mui/material/Divider';
 import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -51,79 +52,75 @@ export default function ProductDetail({ id }: any) {
     router.push('/login');
   };
 
-  const loginChecker = () => {
-    if (Cookies.get('access_token')) {
-      return true;
-    }
-    return false;
-  };
+  // const loginChecker = () => {
+  //   if (Cookies.get('access_token')) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
-  const isLogin = loginChecker();
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [isReported, setIsReported] = useState<boolean>(false);
-  const [productData, setProductData] = useState<any>([]);
-  const [isWriter, setIsWriter] = useState<any>(false);
+  const [isLogin, setIsLogin] = useState<undefined | string>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLiked, setIsLiked] = useState<boolean>();
+  const [isOpen, setIsOpen] = useState<boolean>();
+  const [isReported, setIsReported] = useState<boolean>();
+  const [productData, setProductData] = useState<any>();
+  const [isWriter, setIsWriter] = useState<any>();
   const router = useRouter();
-  const {isAdmin} = useAdminRole();
+  const { isAdmin } = useAdminRole();
 
-  console.log('isLiked', isReported);
+  console.log('isLogin', isLogin);
+  console.log('isLoading', isLoading);
+  console.log('isLiked', isLiked);
+  console.log('isOpen', isOpen);
   console.log('isReported', isReported);
-  // const res = useQueries({
-  //   queries: [
-  //     {
-  //       queryKey: ['productDetail'],
-  //       queryFn: () => getProductDetail(id),
-  //       onSuccess: (res: any) => {
-  //         console.log(res);
-  //         setProductData(res.data);
-
-  //         const openStatus =
-  //           res?.data?.boardStatus === 'BOARD_COMPLETE' ? false : true;
-  //         setIsOpen(openStatus);
-
-  //         const reportStatus =
-  //           res?.data?.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
-  //         console.log();
-  //         setIsReported(reportStatus);
-  //       },
-  //       retry: false,
-  //     },
-  //     {
-  //       queryKey: ['isWriter'],
-  //       queryFn: () => getIsWriter(id),
-  //     },
-  //   ],
-  // });
+  console.log('productData', productData);
+  console.log('isWriter', isWriter);
 
   useEffect(() => {
-    getProductDetail(id).then((res) => {
-      setProductData(res.data);
+    getProductDetail(id)
+      .then((res) => {
+        setProductData(res.data);
 
-      const openStatus =
-        res.data.boardStatus === 'BOARD_COMPLETE' ? false : true;
-      setIsOpen(openStatus);
+        const openStatus =
+          res.data.boardStatus === 'BOARD_COMPLETE' ? false : true;
+        setIsOpen(openStatus);
 
-      const reportStatus =
-        res.data.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
-      console.log();
-      setIsReported(reportStatus);
-    });
+        const reportStatus =
+          res.data.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
+        setIsReported(reportStatus);
 
-    getIsWriter(id).then((res) => {
-      console.log(res.data);
-      setIsWriter(res.data);
-    });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+
+    const token = Cookies.get('access_token');
+    setIsLogin(token);
 
     if (isLogin) {
       getMyFavorite().then((res) => {
         const isMyFavorite: any =
           res.data.data.filter((item: any) => item.boardId === Number(id))
             .length > 0;
-
         setIsLiked(isMyFavorite);
       });
+
+      getIsWriter(id)
+        .then((res) => {
+          // console.log(res.data);
+          setIsWriter(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
+
+    // if (productData && isLogin) {
+    //   setIsLoading(false);
+    // }
   }, []);
 
   const reportForm = {
@@ -151,7 +148,9 @@ export default function ProductDetail({ id }: any) {
     if (!isLogin) {
       setIsLoginAlertOpen(true);
     } else {
-      reportProduct(reportForm);
+      reportProduct(reportForm).then((res) => {
+        setIsReportModalOpen(false);
+      });
       alert('신고가 접수되었습니다');
     }
   };
@@ -169,15 +168,16 @@ export default function ProductDetail({ id }: any) {
   const handleComplete = () => {
     setIsOpen(false);
     completeSharing(id).then((res) => {
-      console.log(res.data);
+      setIsCompleteModalOpen(false);
+      // console.log(res.data);
     });
   };
 
   // 유저 정지하기
   const handleUserBlock = () => {
     handleBlockUser(productData?.nickname);
-    router.push('/admin')
-  }
+    router.push('/admin');
+  };
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const handleReportModalOpen = () => setIsReportModalOpen(true);
   const handleReportModalClose = () => setIsReportModalOpen(false);
@@ -194,71 +194,81 @@ export default function ProductDetail({ id }: any) {
     router.push(`/edit/${id}`);
   };
 
+  if (productData?.imageLink === '') {
+    productData.imageLink =
+      'https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/pd/v2/8/6/5/9/9/1/jzHVA/4948865991_B.jpg';
+  }
+
   return (
     <div>
-      <div>
-        <div className="relative pb-[70%]">
-          <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[100%] h-[90%] pb-[59%]">
-            <Image
-              className="p-8"
-              src={productData.imageLink || '/chatItem/productImg.svg'}
-              alt={'물고기'}
-              fill
-            />
-            {!isOpen && (
-              <StateBadge stateText={'모집 완료'} usedDetail={true} />
-            )}
+      {isLoading && <CircleLoading />}
+      {!isLoading && isReported && <ReportedMessage />}
+      {!isLoading && !productData && <NoProductMessage />}
+      {!isLoading && !isReported && productData && (
+        <div>
+          <div className="relative pb-[70%]">
+            <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
+              <Image
+                className="p-8"
+                src={productData?.imageLink || base}
+                alt={'상품 이미지'}
+                fill
+              />
+              {!isOpen && (
+                <StateBadge stateText={'모집 완료'} usedDetail={true} />
+              )}
+            </div>
           </div>
+          <DetailBottom
+            isOpen={isOpen}
+            isLiked={isLiked}
+            isWriter={isWriter}
+            handleLike={handleLike}
+            handleReport={handleReport}
+            handleGether={handleGether}
+            handleComplete={handleComplete}
+            isReportModalOpen={isReportModalOpen}
+            handleReportModalOpen={handleReportModalOpen}
+            handleReportModalClose={handleReportModalClose}
+            isGetherModalOpen={isGetherModalOpen}
+            handleGetherModalOpen={handleGetherModalOpen}
+            handleGetherModalClose={handleGetherModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
+            isAdmin={isAdmin}
+            handleUserBlock={handleUserBlock}
+          />
+
+          <UserMetaInfo
+            isOpen={isOpen}
+            productData={productData}
+            handleDelete={handleDelete}
+            isWriter={isWriter}
+            id={id}
+            handleComplete={handleComplete}
+            handleGoEdit={handleGoEdit}
+            isDeleteModalOpen={isDeleteModalOpen}
+            handleIsDeleteModalOpen={handleIsDeleteModalOpen}
+            handleIsDeleteModalClose={handleIsDeleteModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
+          />
+
+          <Divider variant="middle" sx={{ my: 1 }} />
+          <PostMeta
+            productData={productData}
+            isLiked={isLiked}
+            handleLike={handleLike}
+          />
+          <DetailPageTab productData={productData} />
+          <LoginAlert
+            isLoginAlertOpen={isLoginAlertOpen}
+            handleClose={handleClose}
+          />
         </div>
-        <DetailBottom
-          isOpen={isOpen}
-          isLiked={isLiked}
-          isWriter={isWriter}
-          isAdmin={isAdmin}
-          handleUserBlock={handleUserBlock}
-          handleLike={handleLike}
-          handleReport={handleReport}
-          handleGether={handleGether}
-          handleComplete={handleComplete}
-          isReportModalOpen={isReportModalOpen}
-          handleReportModalOpen={handleReportModalOpen}
-          handleReportModalClose={handleReportModalClose}
-          isGetherModalOpen={isGetherModalOpen}
-          handleGetherModalOpen={handleGetherModalOpen}
-          handleGetherModalClose={handleGetherModalClose}
-          isCompleteModalOpen={isCompleteModalOpen}
-          handleIsCompleteModalOpen={handleIsCompleteModalOpen}
-          handleIsCompleteModalClose={handleIsCompleteModalClose}
-        />
-
-        <UserMetaInfo
-          isOpen={isOpen}
-          productData={productData}
-          handleDelete={handleDelete}
-          isWriter={isWriter}
-          id={id}
-          handleComplete={handleComplete}
-          handleGoEdit={handleGoEdit}
-          isDeleteModalOpen={isDeleteModalOpen}
-          handleIsDeleteModalOpen={handleIsDeleteModalOpen}
-          handleIsDeleteModalClose={handleIsDeleteModalClose}
-          isCompleteModalOpen={isCompleteModalOpen}
-          handleIsCompleteModalOpen={handleIsCompleteModalOpen}
-          handleIsCompleteModalClose={handleIsCompleteModalClose}
-        />
-
-        <Divider variant="middle" sx={{ my: 1 }} />
-        <PostMeta
-          productData={productData}
-          isLiked={isLiked}
-          handleLike={handleLike}
-        />
-        <DetailPageTab productData={productData} />
-        <LoginAlert
-          isLoginAlertOpen={isLoginAlertOpen}
-          handleClose={handleClose}
-        />
-      </div>
+      )}
     </div>
   );
 }
@@ -291,6 +301,34 @@ const LoginAlert = ({ isLoginAlertOpen, handleClose }: LoginAlertPropsType) => {
           </Button>
         </DialogActions>
       </Dialog>
+    </div>
+  );
+};
+
+const ReportedMessage = () => {
+  return (
+    <div className="w-[100%] text-5xl mt-[15rem] leading-normal text-[#999]">
+      <p className="text-center">신고된 게시물입니다.</p>
+    </div>
+  );
+};
+
+const NoProductMessage = () => {
+  return (
+    <div className="w-[100%] text-5xl mt-[15rem] leading-normal text-[#999]">
+      <p className="text-center">
+        존재하지 않는
+        <br />
+        게시물입니다.
+      </p>
+    </div>
+  );
+};
+
+const Loading = () => {
+  return (
+    <div className="w-[100%] text-5xl mt-[15rem] leading-normal text-[#999]">
+      <p className="text-center">로딩 중...</p>
     </div>
   );
 };

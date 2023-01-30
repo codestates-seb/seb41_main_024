@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 const REQUEST_URL = 'https://ngether.site';
 
 export function checkNickName(nickNameForm: object) {
+  console.log(nickNameForm);
   return axios.post(`${REQUEST_URL}/api/members/check`, nickNameForm, {
     headers: {
       Authorization: Cookies.get('access_token'),

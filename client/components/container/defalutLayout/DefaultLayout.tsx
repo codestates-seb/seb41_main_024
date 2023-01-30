@@ -12,38 +12,7 @@ import axios from 'axios';
 const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
   const router = useRouter();
   const { isLogin } = useLogin();
-  const [isUnReadMessage, setIsUnReadMessage] = useState(false);
   const nickName = Cookies.get('nickName');
-  const token = Cookies.get('access_token')
-  const [timeoutState, setTimeoutState] = useState<NodeJS.Timeout>();
-
-  const longPolling: Function = async (token: string) => {
-    if (token !== undefined) {
-      try {
-        const response = await axios.get('https://ngether.site/chat/room/findNewMessages', { headers: { Authorization: token } });
-        if (response.status === 200) {
-          setIsUnReadMessage(true);
-          setTimeoutState(setTimeout(async () => { return await longPolling(token) }, 5000));
-        }
-        if (response.status === 421) {
-          setIsUnReadMessage(false);
-          return await longPolling();
-        }
-      } catch (error) {
-        setTimeoutState(setTimeout(async () => { return await longPolling(token) }, 5000));
-      }
-    } else {
-      setTimeoutState(setTimeout(async () => { return await longPolling(token) }, 5000));
-    }
-  };
-  
-  useEffect(() => {
-    longPolling(token);
-    return () => {
-      clearTimeout(timeoutState);
-    };
-  }, []);
-
 
   const handleLogOut = () => {
     Cookies.remove('access_token');
@@ -65,7 +34,7 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
             logOutHandler={handleLogOut}
           />
           {children}
-          <Navigation isUnReadMessage={isUnReadMessage} setIsUnReadMessage={setIsUnReadMessage}/>
+          <Navigation />
         </div>
       </ThemeProvider>
     </StyledEngineProvider>

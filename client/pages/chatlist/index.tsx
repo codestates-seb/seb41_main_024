@@ -31,6 +31,7 @@ const ChatList = () => {
                 address={chatItem.address}
                 unreadCount={chatItem.unreadCount}
                 declareStatus={chatItem.declareStatus}
+                imageLink={chatItem.imageLink}
               />
             </Link>
           );
