@@ -202,9 +202,9 @@ export default function ProductDetail({ id }: any) {
   return (
     <div>
       {isLoading && <CircleLoading />}
-      {!isLoading && isReported && <ReportedMessage />}
+      {!isLoading && isReported && !isAdmin && <ReportedMessage />}
       {!isLoading && !productData && <NoProductMessage />}
-      {!isLoading && !isReported && productData && (
+      {!isLoading && productData && (
         <div>
           <div className="relative pb-[70%]">
             <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
