@@ -58,7 +58,7 @@ const LoginPage = () => {
     try {
       await requestLogin(form).then((res) => {
         setIsLoading(false);
-        console.log('requestLogin res', res);
+
         res.headers.authorization &&
           Cookies.set('access_token', res.headers.authorization, {
             expires: 0.083,

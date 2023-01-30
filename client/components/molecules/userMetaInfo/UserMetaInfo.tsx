@@ -22,7 +22,6 @@ const UserMetaInfo = ({
   handleIsCompleteModalOpen,
   handleIsCompleteModalClose,
 }: productDataProps) => {
-  console.log('isWriter', isWriter);
   return (
     <div>
       <ModalComponent

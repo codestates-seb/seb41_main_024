@@ -68,7 +68,6 @@ const GoogleLoginPage = () => {
     event.preventDefault();
     try {
       await checkNickName(nickNameForm).then((res) => {
-        console.log(res);
         if (res.data) {
           setNickNameDuplicationCheckMessage('OK');
         }
@@ -84,7 +83,6 @@ const GoogleLoginPage = () => {
     event.preventDefault();
     try {
       await checkPhoneNumber(phoneNumberForm).then((res) => {
-        console.log(res);
         if (res.data) {
           setPhoneNumberDuplicationCheckMessage('OK');
         }
@@ -140,15 +138,11 @@ const GoogleLoginPage = () => {
     }
   };
 
-  console.log('phoneNumberForm', phoneNumberForm);
-  console.log('nickNameForm', nickNameForm);
-
   const handleClose = (
     event: {},
     reason: 'backdropClick' | 'escapeKeyDown'
   ) => {
     if (reason === 'backdropClick') {
-      console.log(reason);
     } else {
       setOpen(false);
     }
