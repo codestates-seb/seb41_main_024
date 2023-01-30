@@ -12,11 +12,13 @@ import Link from 'next/link';
 import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
 import ChatHeader from '../../components/organisms/headers/chatHedaer/ChatHeader';
 import { useRouter } from 'next/router';
-import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMessage';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import { handleCompleteRecrutment } from '../../api/mySharing';
 import { reportChat } from '../../api/detail';
 import { getIsWriter } from '../../api/isWriter';
 import ChatItemFC from '../../components/organisms/chatItemForChatroom/ChatItemFC';
+import useLogin from '../../hooks/common/useLogin';
+import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMessage';
 
 // 채팅방 개설시 자동으로 채팅방 개설 및 닉네임 설정
 // 게시물 상세에서 n게더 참여하기 시 게시물 id와 채팅방 id가 똑같습니다.
@@ -25,20 +27,24 @@ import ChatItemFC from '../../components/organisms/chatItemForChatroom/ChatItemF
 
 const Chatroom = () => {
   let HEADER_TOKEN = { Authorization: Cookies.get('access_token') };
-  const [isOwner, setIsOwner] = useState(false);
-  const [input, setInput] = useState('');
+
   const { stompClient, messages, members, roomId, sharingData } =
     useWebSocketClient(HEADER_TOKEN);
-  const router = useRouter();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const isMemeber = members.includes(Cookies.get('nickName'));
 
+  const {isLogin} = useLogin();
+
+  const [isOwner, setIsOwner] = useState(false);
+  const [input, setInput] = useState('');
+  const router = useRouter();
   const [alertOption, setAlertOption] = useState<{
     severity: AlertColor;
     value: string;
   }>({ severity: 'error', value: '' });
   const [open, setOpen] = useState(false);
 
-  const isMemeber = members.includes(Cookies.get('nickName'))
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   
   useEffect(() => {
     if (roomId && typeof roomId === 'string') {
@@ -85,18 +91,22 @@ const Chatroom = () => {
   }
 
 
-  const handleExitChatRoom = (): void => {
+  const handleExitChatRoom = async (): Promise<void> => {
     if (!stompClient) return;
 
-    if (stompClient && !checkDeclareStatus) {
+    const isDeclare = await checkDeclareStatus();
+    console.log(isDeclare)
+
+    if (stompClient && !isDeclare ) {
       setOpen(true)
       setAlertOption({ severity: 'success', value: 'N게더 모집에서 퇴장하셨습니다' });
-      stompClient.disconnect(() => {})
-      axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
-      router.push('/chatlist')
+      stompClient.disconnect(() => {});
+      axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} );
+      router.push('/chatlist');
     }
     else {
-      setOpen(true)
+      setOpen(true);
+      console.log(isDeclare)
       setAlertOption({ severity: 'error', value: '해당 N게더는 현재 신고된 상태로 퇴장하실 수 없습니다.' });
     }
     return
@@ -113,15 +123,18 @@ const Chatroom = () => {
         handleSendReport={() => reportChat(roomId)}
         handleCompleteRecrutment={() => handleCompleteRecrutment(roomId)}
       />
-      {!isMemeber && <ForbiddenMessage />}
+      {!isLogin && <ForbiddenMessage />}
+      {!isMemeber && isLogin && (
+        <div className='mt-[45%]'>
+          <CircleLoading />
+        </div>
+      )}
       {isMemeber && (
         <>
-          <div className="left-2/4 mt-16 translate-x-[-50%] w-auto fixed px-[1rem] rounded">
+          <div className="left-2/4 mt-16 translate-x-[-50%] fixed">
             <Link href={`/nearby/${roomId}`}>
               <ChatItemFC 
-                thumbnail = {sharingData.imageLink}
-                title = {sharingData.title}
-                address = {sharingData.address}
+                sharingData={sharingData}
               />
             </Link>
           </div>

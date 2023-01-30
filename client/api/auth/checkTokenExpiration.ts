@@ -1,39 +1,30 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useRouter } from 'next/router';
 
 const REQUEST_URL = 'https://ngether.site';
-let willRefreshToken = false;
 
-const router = useRouter();
+const accessToken = Cookies.get('access_token');
+const refreshToken = Cookies.get('refresh_token');
 
-const checkTokenExpiration = () => {
-  if (willRefreshToken) {
+export const checkTokenExpiration = () => {
+  // 로그인 안했으면 리턴
+  if(accessToken === undefined && accessToken === undefined) {
     return;
   }
-
-  const accessToken = Cookies.get('access_token');
-  const refreshToken = Cookies.get('refresh_token');
-
-  // 둘 다 없으면 로그인도 안한거니까 로그인 창으로 보내버림
-  if (!accessToken || !refreshToken) {
-    router.push('/login')
-    return;
-  }
-
-  // 일단 로그인은 했으니까 토큰을 refresh 할 것으로 수정
-  if(accessToken) {
-    willRefreshToken = true;
-  
-    axios.post(`${REQUEST_URL}/api/refresh_token`, { refresh: refreshToken })
+  // 리프레쉬 토큰은 있지만 엑세스 토큰이 expires 옵션에 의해 만료됐다고 예상되는 경우
+  if(accessToken === undefined && refreshToken) {
+  // 헤더에 리프레쉬 토큰을 담아 api/reissue로 get req
+    axios.get(`${REQUEST_URL}/api/reissue`, { headers : {refresh: refreshToken} })
     .then(res => {
+      // res header에 authorization을 다시 엑세스 토큰 쿠키에 set
       res.headers.authorization &&
       Cookies.set('access_token', res.headers.authorization);
-      willRefreshToken = false;
+      // refresh 토큰 만료 예상시 res header에 refresh 토큰도 같이 오기 때문에, 만약 헤더에 있다면 같이 set
+      res.headers.refresh &&
+      Cookies.set('refresh', res.headers.refresh);
     })
     .catch(err => {
       console.error(err);
-      willRefreshToken = false;
     });
   }
 }

@@ -147,16 +147,22 @@ public class MemberService {
     }
 
     public Boolean check(MemberDto.Check check) {
-        if (memberRepository.findByNickName(check.getNickName()).isPresent() && check.getNickName() != null) {
-            throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
+        if (check.getNickName() != null) {
+            if (memberRepository.findByNickName(check.getNickName()).isPresent()) {
+                throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
+            }
         }
-        if (memberRepository.findByEmail(check.getEmail()).isPresent() && check.getEmail() != null) {
-            throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+        if (check.getEmail() != null) {
+            if (memberRepository.findByEmail(check.getEmail()).isPresent()) {
+                throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+            }
+        }
+        if (check.getPhoneNumber() != null) {
+            if (memberRepository.findMemberByPhoneNumber(check.getPhoneNumber()).isPresent() && check.getPhoneNumber() != null) {
+                throw new BusinessLogicException(ExceptionCode.PHONE_NUMBER_EXIST);
+            }
         }
 
-        if (memberRepository.findMemberByPhoneNumber(check.getPhoneNumber()).isPresent() && check.getPhoneNumber() != null) {
-            throw new BusinessLogicException(ExceptionCode.PHONE_NUMBER_EXIST);
-        }
         return true;
     }
 

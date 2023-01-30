@@ -8,7 +8,7 @@ public enum ExceptionCode {
     NOT_LOGIN(402,"login, please"),
     BOARD_NOT_FOUND(403,"not found board"),
     PERMISSION_DENIED(404,"check, please"),
-    FULL_MEMBER(405,"Recruitment complete"),
+    FULL_MEMBER(405,"Full member"),
 
     NOT_ALLOW(406,"MAX NUM must bigger than 2"),
     LOCATION_NOT_FOUND(407, "Location not found"),
@@ -30,8 +30,8 @@ public enum ExceptionCode {
     TIME_OUT(421,"Time Out!"),
     JWT_EXPIRE(422,"Jwt expired"),
     NOT_VALIDATE(423, "Not validate token"),
-    REFRESH_TOKEN_NOT_FOUND(424, "RefreshToken not found");
-
+    REFRESH_TOKEN_NOT_FOUND(424, "RefreshToken not found"),
+    RECRUITE_COMPLETE(425," Recruitment Complete");
 
     @Getter
     private int status;

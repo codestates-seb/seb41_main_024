@@ -33,8 +33,6 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
-    private final LikeRepository likeRepository;
     private final ChatRoomRepository chatRoomRepository;
 
     private final LocationRepository locationRepository;
@@ -240,7 +238,7 @@ public class BoardService {
         if(!Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId()))
             throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
         if(board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
-            throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
+            throw new BusinessLogicException(ExceptionCode.RECRUITE_COMPLETE);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(boardId);
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatRoomId(boardId)

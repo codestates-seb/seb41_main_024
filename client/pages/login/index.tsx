@@ -55,12 +55,13 @@ const LoginPage = () => {
       await requestLogin(form).then((res) => {
         console.log('requestLogin res', res);
         res.headers.authorization &&
-          Cookies.set('access_token', res.headers.authorization, {expires : 0.083});
+          Cookies.set('access_token', res.headers.authorization, {expires : 0.079});
         res.headers.refresh &&
-          Cookies.set('refresh_token', res.headers.refresh, {expires : 0.16});
+          Cookies.set('refresh_token', res.headers.refresh, {expires : 20});
         Cookies.set('memberId', res.data.memberId);
         Cookies.set('nickName', res.data.nickName);
         Cookies.set('locationId', res.data.locationId);
+        Cookies.set('role', res.data.role);
         router.push('/');
       });
     } catch (error: any) {

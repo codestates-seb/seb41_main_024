@@ -21,10 +21,24 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
   const [sharingData, setSharingData] = useState({
-    imageLink: '',
-    title: '',
-    address: '',
-    boardStatus: '',
+    address : '',
+    boardId : 0,
+    boardStatus : '',
+    category : '',
+    content : '',
+    createDate : '',
+    curNum : 0,
+    deadLine : 0,
+    imageLink : '',
+    latitude : '',
+    likeCount : 0,
+    longitude : '',
+    maxNum : 0,
+    memberId : 0,
+    nickname : '',
+    price : 0,
+    productsLink : '',
+    title : ''
   })
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -38,7 +52,9 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
       await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
       .then(res => setMessages(res.data.map(transDateFormChatMessage)));
       await getChatSharing(roomId)
-      .then((response) => {setSharingData(response.data);
+      .then((response) => {
+        console.log(response.data)
+        setSharingData(response.data);
       })
     } 
     
