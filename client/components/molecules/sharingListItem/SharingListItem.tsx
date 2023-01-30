@@ -34,22 +34,16 @@ const SharingListItem = ({
           alt={alt}
         />
         {boardStatus === 'BOARD_COMPLETE' && (
-          <StateBadge stateText="모집 완료" usedList={true} />
+          <StateBadge stateText="모집 확정" usedList={true} />
         )}
         {boardStatus === 'BOARD_NOT_DELETE' && (
-          <StateBadge stateText="신고된 게시물입니다" usedList={true} />
+          <StateBadge stateText="신고 완료" usedList={true} />
         )}
         {boardStatus === 'BOARD_TERM_EXPIRE' && (
-          <StateBadge
-            stateText="모집 기간이 만료된 게시물입니다"
-            usedList={true}
-          />
+          <StateBadge stateText="기간 만료" usedList={true} />
         )}
         {boardStatus === 'FULL_MEMBER' && (
-          <StateBadge
-            stateText="참여 인원이 가득찬 게시물입니다."
-            usedList={true}
-          />
+          <StateBadge stateText="참여 불가" usedList={true} />
         )}
       </Link>
       <div className="px-2 mt-2.5">
@@ -58,7 +52,7 @@ const SharingListItem = ({
         </strong>
       </div>
       <div className={styles.flex_listItem}>
-        <strong className="font-normal">{`${curNum} / ${maxNum}`}</strong>
+        <strong className="font-normal">{`${curNum}명 / ${maxNum}명`}</strong>
         {/* <Button>
           <Image
             src="/sharingList/favorite_border.svg"
