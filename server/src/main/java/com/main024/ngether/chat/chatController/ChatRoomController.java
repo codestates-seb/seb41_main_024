@@ -8,6 +8,7 @@ import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,12 +22,14 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 
 @Controller
 @RequiredArgsConstructor//자동으로 생성자 주입 해줌
 @RequestMapping("/chat")
+@Slf4j
 public class ChatRoomController {
     public Queue<DeferredResult<Boolean>> results = new ConcurrentLinkedQueue<>();
     private final ChatService chatService;
@@ -85,24 +88,25 @@ public class ChatRoomController {
     @GetMapping("/room/findNewMessages")
     public ResponseEntity<Object> messageAlarm() {
         Member member = memberService.getLoginMember();
-        if (member == null)
+        if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-
-        CompletableFuture<Boolean> task = CompletableFuture.supplyAsync(() -> {
-            try {
-                return chatService.checkNewMessages(member);
-            } catch (Exception e) {
-                throw new BusinessLogicException(ExceptionCode.TIME_OUT);
+        }
+        CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
+            while (!chatService.checkNewMessages(member)) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    log.warn("Interrupted", e);
+                }
             }
-        });
-        Boolean check;
+        }).orTimeout(10, TimeUnit.SECONDS);
         try {
-            check = task.orTimeout(10, TimeUnit.SECONDS).get();
-        } catch (Exception e) {
+            task.get();
+        } catch (InterruptedException | ExecutionException e) {
+
             throw new BusinessLogicException(ExceptionCode.TIME_OUT);
         }
-        return ResponseEntity.ok(check);
-
+        return ResponseEntity.ok(true);
     }
 
 
