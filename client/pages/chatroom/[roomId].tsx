@@ -131,12 +131,10 @@ const Chatroom = () => {
       )}
       {isMemeber && (
         <>
-          <div className="left-2/4 mt-16 translate-x-[-50%] w-auto fixed px-[1rem] rounded">
+          <div className="left-2/4 mt-16 translate-x-[-50%] fixed">
             <Link href={`/nearby/${roomId}`}>
               <ChatItemFC 
-                thumbnail = {sharingData.imageLink}
-                title = {sharingData.title}
-                address = {sharingData.address}
+                sharingData={sharingData}
               />
             </Link>
           </div>
