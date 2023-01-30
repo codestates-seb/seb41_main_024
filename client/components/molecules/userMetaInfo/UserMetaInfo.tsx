@@ -70,12 +70,12 @@ const UserMetaInfo = ({
                 variant="contained"
                 className="m-2"
               >
-                모집 마감하기
+                모집 확정하기
               </Button>
             )}
             {isWriter && !isOpen && (
               <Button disabled variant="contained" className="m-2">
-                모집 마감하기
+                모집 확정하기
               </Button>
             )}
             {isWriter && (
