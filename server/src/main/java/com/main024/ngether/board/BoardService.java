@@ -238,7 +238,7 @@ public class BoardService {
         if(!Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId()))
             throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
         if(board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
-            throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
+            throw new BusinessLogicException(ExceptionCode.RECRUITE_COMPLETE);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(boardId);
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatRoomId(boardId)
