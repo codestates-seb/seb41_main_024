@@ -70,12 +70,12 @@ const GoogleLoginPage = () => {
       await checkNickName(nickNameForm).then((res) => {
         console.log(res);
         if (res.data) {
-          setNickNameDuplicationCheckMessage('사용 가능한 닉네임입니다.');
+          setNickNameDuplicationCheckMessage('OK');
         }
       });
     } catch (error: any) {
       if (error.response.data.message === 'NickName is exists') {
-        setNickNameDuplicationCheckMessage('이미 존재하는 닉네임입니다.');
+        setNickNameDuplicationCheckMessage('NO NO');
       }
     }
   };
@@ -86,12 +86,12 @@ const GoogleLoginPage = () => {
       await checkPhoneNumber(phoneNumberForm).then((res) => {
         console.log(res);
         if (res.data) {
-          setPhoneNumberDuplicationCheckMessage('사용 가능한 전화번호입니다.');
+          setPhoneNumberDuplicationCheckMessage('OK');
         }
       });
     } catch (error: any) {
       if (error.response.data.message === 'phoneNumber is exists') {
-        setPhoneNumberDuplicationCheckMessage('이미 존재하는 전화번호입니다.');
+        setPhoneNumberDuplicationCheckMessage('NO NO');
       }
     }
   };
@@ -154,14 +154,26 @@ const GoogleLoginPage = () => {
     }
   };
 
+  const handleDeleteGoogleUser = () => {
+    // @@유저 정보 삭제 요청
+    router.push('/');
+  };
+
   return (
     <div>
       <div>
         <Dialog open={open} onClose={handleClose} disableEscapeKeyDown>
-          <div className="mt-10">
+          <div className="mt-16">
             <SocialLoginTitle />
           </div>
-          <Box sx={{ width: 260, mt: 6, mb: 10, mx: 6 }}>
+          <Stack>
+            <p className="text-center text-primary my-6">
+              닉네임과 휴대전화를 입력하지 않으시면
+              <br />
+              서비스 이용에 제한이 있습니다
+            </p>
+          </Stack>
+          <Box sx={{ width: 260, mt: 2, mb: 8, mx: 6 }}>
             <Stack>
               <Input
                 id="nickName-input"
@@ -180,9 +192,18 @@ const GoogleLoginPage = () => {
               spacing={1}
               className="mt-2 mb-4"
             >
-              <p className="text-[#dd3030]">
-                {nickNameDuplicationCheckMessage}
-              </p>
+              <Stack>
+                {nickNameDuplicationCheckMessage === 'OK' && (
+                  <p className="text-[#dd3030]">
+                    {nickNameDuplicationCheckMessage}
+                  </p>
+                )}
+                {nickNameDuplicationCheckMessage === 'NO NO' && (
+                  <p className="text-[##2EB150]">
+                    {nickNameDuplicationCheckMessage}
+                  </p>
+                )}
+              </Stack>
               <Button
                 variant="contained"
                 className="rounded"
@@ -192,7 +213,7 @@ const GoogleLoginPage = () => {
                 중복 체크
               </Button>
             </Stack>
-            {/* <Divider variant="middle" sx={{ my: 1 }} /> */}
+
             <Stack>
               <Input
                 id="phoneNumber-input"
@@ -211,9 +232,16 @@ const GoogleLoginPage = () => {
               spacing={1}
               className="my-2"
             >
-              <p className="text-[#dd3030]">
-                {phoneNumberDuplicationCheckMessage}
-              </p>
+              {phoneNumberDuplicationCheckMessage === 'OK' && (
+                <p className="text-[#dd3030]">
+                  {phoneNumberDuplicationCheckMessage}
+                </p>
+              )}
+              {phoneNumberDuplicationCheckMessage === 'NO NO' && (
+                <p className="text-[##2EB150]">
+                  {phoneNumberDuplicationCheckMessage}
+                </p>
+              )}
               <Button
                 variant="contained"
                 className="rounded"
@@ -223,13 +251,19 @@ const GoogleLoginPage = () => {
                 중복 체크
               </Button>
             </Stack>
-
             <Stack>
               <Button
                 className="h-14 mt-4 bg-primary text-white rounded"
                 onClick={handleSocialEdit}
               >
                 완료
+              </Button>
+              <Button
+                variant="text"
+                className="h-6 mt-4 text-sm"
+                onClick={handleDeleteGoogleUser}
+              >
+                홈으로 가기
               </Button>
             </Stack>
           </Box>
