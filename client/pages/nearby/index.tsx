@@ -23,6 +23,8 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import useInput from '../../hooks/addNewHooks/useInput';
+import Loading from '../../components/organisms/loading/Loading';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 const TOGGLE_VALUES = [
   { value: 0.5, label: '0.5Km' },
   { value: 1, label: '1Km' },
@@ -40,6 +42,8 @@ interface nearbyPropsType {
   argumentOfLocation: useSearchPropsType['argumentOfLocation'];
   searchOption: string;
   address: string;
+  keyword: string;
+  type: number;
 }
 const LABEL = ['거리순', '최신순'];
 const Index = ({
@@ -48,6 +52,8 @@ const Index = ({
   lng,
   address,
   searchOption,
+  keyword,
+  type,
 }: nearbyPropsType) => {
   const [mapCenter, setMapCenter] = useState({
     lat: lat || 37.517331925853,
@@ -92,11 +98,19 @@ const Index = ({
     setPage(page);
   };
 
-  const { status, data, error, isFetching, isPreviousData, refetch } = useQuery(
-    {
-      queryKey: ['projects', page],
-      queryFn: () =>
-        getPostsInSpecifiedLocation({
+  const {
+    status,
+    data,
+    error,
+    isFetching,
+    isPreviousData,
+    refetch,
+    isLoading,
+  } = useQuery({
+    queryKey: ['sharingLists', page],
+    queryFn: () => {
+      if (searchOption === '주소') {
+        return getPostsInSpecifiedLocation({
           locationData: currentMapCenter?.address
             ? currentMapCenter
             : mapCenter,
@@ -105,14 +119,22 @@ const Index = ({
           page: page || 1,
           size: 10,
           sortBy: currentTab === 0 ? 'distance' : 'time',
-        }),
-      keepPreviousData: true,
-      staleTime: 5000,
-      retry: false,
-      refetchOnWindowFocus: false,
-      onError: (data) => alert(data),
-    }
-  );
+        });
+      } else {
+        return searchPostsByTitle({
+          type,
+          keyword,
+          page: page || 1,
+          size: 10,
+        });
+      }
+    },
+    keepPreviousData: true,
+    staleTime: 5000,
+    retry: false,
+    refetchOnWindowFocus: false,
+    onError: (data) => alert('검색에 실패했습니다 잠시후 다시 시도해주세요'),
+  });
 
   useEffect(() => {
     refetch();
@@ -189,6 +211,7 @@ const Index = ({
           </div>
         </div>
       )}
+      {isLoading && <CircleLoading />}
       <TabPanel currentTab={currentTab} index={0}>
         <NearByList sharingLists={data?.data} />
       </TabPanel>
@@ -207,7 +230,7 @@ const Index = ({
 export default Index;
 
 export async function getServerSideProps(context: any) {
-  const { lat, lng, address, searchOption } = context?.query;
+  const { lat, lng, address, searchOption, keyword, type } = context?.query;
 
   const requestData = {
     lat: Number(lat),
@@ -225,6 +248,8 @@ export async function getServerSideProps(context: any) {
       lng: requestData.lng || 0,
       address: requestData.address || '',
       searchOption: searchOption || '주소',
+      keyword: keyword || '',
+      type: type || 1,
     },
   };
 }

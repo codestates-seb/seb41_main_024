@@ -33,6 +33,8 @@ const CATEGORY_OPTIONS = [
 const SEARCH_OPTIONS = [
   { label: '주소', value: '주소' },
   { label: '글 제목', value: '글 제목' },
+  { label: '글 내용', value: '글 내용' },
+  { label: '작성자', value: '작성자' },
 ];
 const Search = () => {
   // 이곳의 폼 데이터 관리도 useState, useRef, react-hook-form 등 기호에 맞게 사용하시면 됩니다
@@ -77,7 +79,6 @@ const Search = () => {
     exchangeCoordToAddress(center, setTargetCoord);
   }, [center.lat, center.lng, isSearch]);
   const { title, searchOption } = inputValue;
-  const type = 1;
   const finalLocation = targetCoord.address ? targetCoord : center;
 
   const argumentOfLocation = {
@@ -87,7 +88,8 @@ const Search = () => {
     page: 1,
     size: 10,
   };
-  const argumentOfTitle = { type, keyword: title, page: 1, size: 300 };
+
+  const argumentOfTitle = { keyword: title, page: 1, size: 300 };
   /* const { refetch } = useSearch({
     searchOption,
     argumentOfLocation,
@@ -103,7 +105,9 @@ const Search = () => {
       size,
       locationData: { lat, lng, address },
     } = argumentOfLocation;
-    const { type, keyword, page: titlePage, size: titleSize } = argumentOfTitle;
+    const { keyword, page: titlePage, size: titleSize } = argumentOfTitle;
+    const type =
+      searchOption === '글 제목' ? 1 : searchOption === '글 내용' ? 2 : 3;
     const query = {
       searchOption,
       type,
@@ -141,7 +145,11 @@ const Search = () => {
   const id = open ? 'simple-popover' : undefined;
   const { data } = useQuery({
     queryKey: ['addressBooks'],
-    queryFn: () => getAddressBooks({ ...token }),
+    queryFn: () =>
+      getAddressBooks({
+        Authorization: Cookies.get('access_token') || '',
+        Refresh: Cookies.get('refresh_token') || '',
+      }),
     refetchOnWindowFocus: false,
     retry: 1,
     staleTime: Infinity,
@@ -154,13 +162,13 @@ const Search = () => {
         <div id="map" className="w-[100%] h-[350px]"></div>
         <div
           className={`${
-            searchOption === '글 제목'
+            searchOption !== '주소'
               ? 'bg-[gray] bg-none w-[100%] h-[350px] absolute left-0 z-[6] flex items-center justify-center ani_fadeIn'
               : ''
           }`}
         >
-          {searchOption === '글 제목'
-            ? '제목검색은 내 주변 검색 지원이 되지 않습니다'
+          {searchOption !== '주소'
+            ? `${searchOption} 검색은 위치 검색 지원이 되지 않습니다. 자동으로 현재 위치로 이동합니다`
             : ''}
         </div>
         <p className="mb-4">
@@ -198,6 +206,7 @@ const Search = () => {
           <Popover
             id={id}
             open={open}
+            slot="div"
             anchorEl={anchorEl}
             onClose={handleClose}
             anchorOrigin={{
@@ -205,7 +214,7 @@ const Search = () => {
               horizontal: 'left',
             }}
           >
-            <Typography sx={{ p: 2 }}>
+            <Typography component="div" sx={{ p: 2 }}>
               {data?.data[0] ? (
                 <AddressBookList
                   addressBookList={data?.data}
