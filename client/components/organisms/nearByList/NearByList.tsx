@@ -21,6 +21,7 @@ const NearByList = ({ sharingLists }: sharingListsType) => {
           maxNum={sharingItem?.maxNum}
           address={sharingItem?.address}
           boardId={sharingItem?.boardId}
+          boardStatus={sharingItem?.boardStatus}
         />
       ))}
     </div>
