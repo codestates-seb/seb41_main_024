@@ -20,7 +20,7 @@ interface getPostType {
   category: string;
 }
 interface searchPostsByTitleType {
-  type: string;
+  type: number;
   keyword: string;
   page: number;
   size: number;
