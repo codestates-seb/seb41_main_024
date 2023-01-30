@@ -10,7 +10,6 @@ import { ReactElement, useEffect } from 'react';
 import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayoutType';
 import { CookiesProvider } from 'react-cookie';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { checkTokenExpiration } from '../api/auth/checkTokenExpiration';
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
@@ -21,10 +20,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     function (page: ReactElement) {
       return <DefaultLayout>{page}</DefaultLayout>;
     };
-
-  useEffect(() => {
-    checkTokenExpiration()
-  }, [])
 
   const queryClient = new QueryClient();
 
