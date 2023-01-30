@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -147,7 +149,7 @@ public class LocationService {
         double lat1 = Double.parseDouble(distanceCal.getLatitude());
         double lon1 = Double.parseDouble(distanceCal.getLongitude());
         List<Board> resultBoardList = new ArrayList<>();
-        HashMap<Double, Board> map = new HashMap<>();
+        HashMap<Board, Double> map = new HashMap<>();
         for (int i = 0; i < boardList.size(); i++) {
             String address2 = boardList.get(i).getAddress();
             String[] ArraysStr1 = address1.split(" ");
@@ -159,18 +161,20 @@ public class LocationService {
                 double result = distance(lat1, lon1, lat2, lon2, "kilometer");
                 if (result < type) {
                     resultBoardList.add(boardList.get(i));
-                    map.put(result, boardList.get(i));
+                    map.put(boardList.get(i), result);
                 }
             }
         }
-
+        
         if (sortBy.equals("time")) {
             resultBoardList = resultBoardList.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
             Page<Board> boardPage = new Pagination<Board>().MadePagination(resultBoardList, page, size);
             return boardPage;
         } else if (sortBy.equals("distance")) {
-            Map<Double, Board> sortedMap = new TreeMap<>(map);
-            List<Board> mapBoardList = new ArrayList<>(sortedMap.values());
+            Map<Board, Double> result = map.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+            List<Board> mapBoardList = new ArrayList<>(result.keySet());
             Page<Board> boardPage = new Pagination<Board>().MadePagination(mapBoardList, page, size);
             return boardPage;
         } else

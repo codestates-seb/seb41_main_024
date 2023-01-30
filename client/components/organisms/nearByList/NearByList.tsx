@@ -8,22 +8,25 @@ interface sharingListsType {
 }
 const NearByList = ({ sharingLists }: sharingListsType) => {
   return (
-    <div className="grid grid-cols-2 gap-4 w-full p-5">
+    <>
       {sharingLists?.length === 0 && <NoContent />}
-      {sharingLists?.map((sharingItem: ListItemPropsType) => (
-        <SharingListItem
-          src={sharingItem?.imageLink || base}
-          alt="상품이미지"
-          title={sharingItem?.title}
-          isFavorite={true}
-          key={sharingItem?.boardId}
-          curNum={sharingItem?.curNum}
-          maxNum={sharingItem?.maxNum}
-          address={sharingItem?.address}
-          boardId={sharingItem?.boardId}
-        />
-      ))}
-    </div>
+      <div className="grid grid-cols-2 gap-4 w-full p-5">
+        {sharingLists?.map((sharingItem: ListItemPropsType) => (
+          <SharingListItem
+            src={sharingItem?.imageLink || base}
+            alt="상품이미지"
+            title={sharingItem?.title}
+            isFavorite={true}
+            key={sharingItem?.boardId}
+            curNum={sharingItem?.curNum}
+            maxNum={sharingItem?.maxNum}
+            address={sharingItem?.address}
+            boardId={sharingItem?.boardId}
+            boardStatus={sharingItem?.boardStatus}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

@@ -6,7 +6,7 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query';
 import DefaultLayout from '../components/container/defalutLayout/DefaultLayout';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayoutType';
 import { CookiesProvider } from 'react-cookie';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
