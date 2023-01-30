@@ -1,3 +1,3 @@
 export interface badgeType {
-  declareStatus: boolean;
+  recruitment: boolean;
 }

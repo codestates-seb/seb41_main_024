@@ -18,9 +18,14 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { checkNickName, checkPhoneNumber } from '../../api/socialLogin';
+import Divider from '@mui/material/Divider';
+
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
+  const [open, setOpen] = useState(true);
 
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
     useState('');
@@ -59,35 +64,51 @@ const GoogleLoginPage = () => {
 
   const { nickName, phoneNumber } = form;
 
-  const handleSocialEdit = async (event: React.FormEvent) => {
+  const handleCheckNickname = async (event: React.FormEvent) => {
     event.preventDefault();
-
     try {
-      await checkNickName(nickNameForm);
+      await checkNickName(nickNameForm).then((res) => {
+        console.log(res);
+        if (res.data) {
+          setNickNameDuplicationCheckMessage('사용 가능한 닉네임입니다.');
+        }
+      });
     } catch (error: any) {
       if (error.response.data.message === 'NickName is exists') {
         setNickNameDuplicationCheckMessage('이미 존재하는 닉네임입니다.');
       }
     }
+  };
 
+  const handleCheckPhoneNumber = async (event: React.FormEvent) => {
+    event.preventDefault();
     try {
-      await checkPhoneNumber(phoneNumberForm);
+      await checkPhoneNumber(phoneNumberForm).then((res) => {
+        console.log(res);
+        if (res.data) {
+          setPhoneNumberDuplicationCheckMessage('사용 가능한 전화번호입니다.');
+        }
+      });
     } catch (error: any) {
-      if (error.response.data.message === 'NickName is exists') {
+      if (error.response.data.message === 'phoneNumber is exists') {
         setPhoneNumberDuplicationCheckMessage('이미 존재하는 전화번호입니다.');
       }
-    } finally {
-      if (
-        nickNameDuplicationCheckMessage === '' &&
-        phoneNumberDuplicationCheckMessage === ''
-      ) {
-        requestFirstGoogleLogin(form).then((res) => {
-          Cookies.set('memberId', res.data.memberId);
-          Cookies.set('nickName', res.data.nickName);
-          Cookies.set('locationId', res.data.locationId);
-          router.push('/');
-        });
-      }
+    }
+  };
+
+  const handleSocialEdit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (
+      nickNameDuplicationCheckMessage === '' &&
+      phoneNumberDuplicationCheckMessage === ''
+    ) {
+      requestFirstGoogleLogin(form).then((res) => {
+        Cookies.set('memberId', res.data.memberId);
+        Cookies.set('nickName', res.data.nickName);
+        Cookies.set('locationId', res.data.locationId);
+        router.push('/');
+      });
     }
   };
 
@@ -102,15 +123,25 @@ const GoogleLoginPage = () => {
           .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
           .replace(/(\-{1,2})$/g, ''),
       });
+      setPhoneNumberFrom({
+        phoneNumber: value
+          .replace(/[^0-9]/g, '')
+          .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
+          .replace(/(\-{1,2})$/g, ''),
+      });
     } else {
       setForm({
         ...form,
         [name]: value,
       });
+      setNickNameForm({
+        nickName: value,
+      });
     }
   };
 
-  const [open, setOpen] = useState(true);
+  console.log('phoneNumberForm', phoneNumberForm);
+  console.log('nickNameForm', nickNameForm);
 
   const handleClose = (
     event: {},
@@ -127,45 +158,81 @@ const GoogleLoginPage = () => {
     <div>
       <div>
         <Dialog open={open} onClose={handleClose} disableEscapeKeyDown>
-          <div>
-            <div className="mt-10">
-              <SocialLoginTitle />
-            </div>
-            <div className="login flex justify-center m-10 my-12">
-              <div className="flex flex-col w-full max-w-lg">
-                <Input
-                  id="nickName-input"
-                  name="nickName"
-                  type={'text'}
-                  label="닉네임"
-                  value={nickName}
-                  onChange={onChange}
-                />
-                <Label htmlFor={'nickName-input'} labelText={''} />
-                <p className="text-[#dd3030]">
-                  {nickNameDuplicationCheckMessage}
-                </p>
-                <Input
-                  id="phoneNumber-input"
-                  name="phoneNumber"
-                  type={'text'}
-                  label="휴대전화"
-                  value={phoneNumber}
-                  onChange={onChange}
-                />
-                <Label htmlFor={'phoneNumber-input'} labelText={''} />
-                <p className="text-[#dd3030]">
-                  {phoneNumberDuplicationCheckMessage}
-                </p>
-                <Button
-                  className="h-14 mt-4 bg-primary text-white rounded"
-                  onClick={handleSocialEdit}
-                >
-                  완료
-                </Button>
-              </div>
-            </div>
+          <div className="mt-10">
+            <SocialLoginTitle />
           </div>
+          <Box sx={{ width: 300, mt: 6, mb: 10, mx: 6 }}>
+            <Stack>
+              <Input
+                id="nickName-input"
+                name="nickName"
+                type={'text'}
+                label="닉네임"
+                value={nickName}
+                onChange={onChange}
+              />
+            </Stack>
+            <Label htmlFor={'nickName-input'} labelText={''} />
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={1}
+              className="my-2"
+            >
+              <p className="text-[#dd3030]">
+                {nickNameDuplicationCheckMessage}
+              </p>
+              <Button
+                variant="outlined"
+                className="rounded"
+                onClick={handleCheckNickname}
+                size="small"
+              >
+                중복 체크
+              </Button>
+            </Stack>
+            {/* <Divider variant="middle" sx={{ my: 1 }} /> */}
+            <Stack>
+              <Input
+                id="phoneNumber-input"
+                name="phoneNumber"
+                type={'text'}
+                label="휴대전화"
+                value={phoneNumber}
+                onChange={onChange}
+              />
+            </Stack>
+            <Label htmlFor={'phoneNumber-input'} labelText={''} />
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              spacing={1}
+              className="my-2"
+            >
+              <p className="text-[#dd3030]">
+                {phoneNumberDuplicationCheckMessage}
+              </p>
+              <Button
+                variant="outlined"
+                className="rounded"
+                onClick={handleCheckPhoneNumber}
+                size="small"
+              >
+                중복 체크
+              </Button>
+            </Stack>
+
+            <Stack>
+              <Button
+                className="h-14 mt-4 bg-primary text-white rounded"
+                onClick={handleSocialEdit}
+              >
+                완료
+              </Button>
+            </Stack>
+          </Box>
         </Dialog>
       </div>
     </div>

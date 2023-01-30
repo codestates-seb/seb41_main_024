@@ -27,10 +27,10 @@ public enum ExceptionCode {
     PHONE_NUMBER_EXIST(418,"phoneNumber is exists"),
     EMAIL_EXIST(419,"email is exists"),
     REPORT_TYPE_NOT_FOUND(420, "ReportType not found"),
+    TIME_OUT(421,"Time Out!"),
+    JWT_EXPIRE(422,"Jwt expired"),
     NOT_VALIDATE(423, "Not validate token"),
     REFRESH_TOKEN_NOT_FOUND(424, "RefreshToken not found");
-
-
 
 
     @Getter
