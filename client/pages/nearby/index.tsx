@@ -10,20 +10,10 @@ import { useSearchPropsType } from '../../hooks/search/useSearch';
 import BasicTabs from '../../components/molecules/tab/BasicTabs';
 import TabPanel from '../../components/atoms/tabPanel/TabPanel';
 import NearByList from '../../components/organisms/nearByList/NearByList';
-import { ListItemPropsType } from '../../components/molecules/sharingListItem/sharingListItemType';
 import ToggleButtons from '../../components/molecules/toggleButtonGroup/ToggleButtonGroup';
 import { getCurrentLocation } from '../../api/location';
 import Pagination from '@mui/material/Pagination';
-import {
-  Accordion,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
-import useInput from '../../hooks/addNewHooks/useInput';
-import Loading from '../../components/organisms/loading/Loading';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 const TOGGLE_VALUES = [
   { value: 0.5, label: '0.5Km' },
@@ -149,7 +139,7 @@ const Index = ({
   return (
     <div className="flex flex-col items-center">
       <div className="mx-auto w-full h-fit">
-        <div id="map" className="w-[100%] h-[350px]"></div>
+        <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
         <p>
           <em className="text-gray-400">
             마우스를 드래그해서 지도를 이동해보세요 등록된 게시물이 나타납니다
@@ -177,15 +167,39 @@ const Index = ({
               {data?.pageInfo.totalElements || 0}
             </strong>
           </p>
-          <button
+          {/* <button
             onClick={handleOpenOptions}
             className="bg-[gray] text-white p-1"
           >
             검색 상세 옵션
-          </button>
+          </button> */}
         </div>
       </div>
-      {isOpenOptions && (
+      <div className="flex w-[100%] items-center justify-around p-2 ">
+        <div className="flex items-center">
+          <span className="mr-4">카테고리</span>
+          <DropdownInput
+            dropDownOptions={CATEGORY_OPTIONS}
+            id="category"
+            name="category"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setCategory(e.target.value)
+            }
+            defaultValue="상품 쉐어링"
+            value={category}
+          />
+        </div>
+
+        <div>
+          <span className="mr-4">거리설정</span>
+          <ToggleButtons
+            alignment={alignment}
+            handleAlignment={handleAlignment}
+            toggleValues={TOGGLE_VALUES}
+          />
+        </div>
+      </div>
+      {/* {isOpenOptions && (
         <div className="flex flex-col w-[50%] items-start justify-end mt-4 p-2 border border-solid ">
           <div className="flex items-center">
             <span className="mr-4">카테고리</span>
@@ -210,7 +224,7 @@ const Index = ({
             />
           </div>
         </div>
-      )}
+      )} */}
       {isLoading && <CircleLoading />}
       <TabPanel currentTab={currentTab} index={0}>
         <NearByList sharingLists={data?.data} />
