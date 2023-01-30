@@ -150,13 +150,12 @@ public class ChatService {
         ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId());
 
 
-
         //채팅방 개설자가 나갈경우 채팅방 삭제, 채팅방 메시지 내역 삭제, 게시물 삭제
         if (!chatRoom.isDeclareStatus()) {
             chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
 
             board.setCurNum(board.getCurNum() - 1);
-            if(board.getBoardStatus() == Board.BoardStatus.FULL_MEMBER && board.getBoardStatus() != Board.BoardStatus.BOARD_NOT_DELETE){
+            if (board.getBoardStatus() == Board.BoardStatus.FULL_MEMBER && board.getBoardStatus() != Board.BoardStatus.BOARD_NOT_DELETE) {
                 board.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
             }
             boardRepository.save(board);
@@ -165,24 +164,25 @@ public class ChatService {
                 chatRoomMembersRepository.delete(chatRoomMembers);
                 chatRoomRepository.delete(chatRoom);
                 boardRepository.delete(board);
+                return null;
+            } else {
+                chatRoomMembersRepository.delete(chatRoomMembers);
+
+                ChatMessage chatMessage = ChatMessage.builder()
+                        .nickName(member.getNickName())
+                        .chatRoomId(roomId)
+                        .type(ChatMessage.MessageType.LEAVE)
+                        .message("[알림] " + member.getNickName() + "님이 퇴장하셨습니다.")
+                        .build();
+                ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+                chatRoom.setLastMessage(savedMessage.getMessage());
+                chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
+                chatRoomRepository.save(chatRoom);
+                sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
+
+                return findMembersInChatRoom(roomId);
             }
-            chatRoomMembersRepository.delete(chatRoomMembers);
-
-            ChatMessage chatMessage = ChatMessage.builder()
-                    .nickName(member.getNickName())
-                    .chatRoomId(roomId)
-                    .type(ChatMessage.MessageType.LEAVE)
-                    .message("[알림] " + member.getNickName() + "님이 퇴장하셨습니다.")
-                    .build();
-            ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
-            chatRoom.setLastMessage(savedMessage.getMessage());
-            chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
-            chatRoomRepository.save(chatRoom);
-            sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
-
-            return findMembersInChatRoom(roomId);
         } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
-
     }
 
     public void removeChatRoomAndBoard(Long memberId) {
