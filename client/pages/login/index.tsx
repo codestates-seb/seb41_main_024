@@ -56,7 +56,7 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      await requestLogin(form).then((res) => {
+      await requestLogin(form).then((res: any) => {
         setIsLoading(false);
 
         res.headers.authorization &&
