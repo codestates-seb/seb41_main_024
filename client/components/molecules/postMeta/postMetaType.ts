@@ -1,4 +1,6 @@
-export interface productDataProps {
+export interface PostMetaType {
+  isLiked?: boolean;
+  handleLike: () => void;
   productData?: {
     content: string;
     title: string;

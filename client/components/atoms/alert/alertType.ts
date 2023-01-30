@@ -1,3 +1,3 @@
 export interface alertType {
-  alertNum?: string | number;
+  unreadCount?: number;
 }

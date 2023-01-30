@@ -75,7 +75,9 @@ export function goChatroom(id: string) {
 
 // 모집 완료
 export function completeSharing(id: string) {
-  return axios.patch(`${REQUEST_URL}api/boards/complete/${id}`, {
+  return axios({
+    url: `${REQUEST_URL}/api/boards/complete/${id}`,
+    method: 'patch',
     headers: {
       Authorization: Cookies.get('access_token'),
       Refresh: Cookies.get('refresh_token'),
