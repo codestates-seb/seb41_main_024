@@ -257,7 +257,10 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
                 src={imageLink || productImg}
                 alt={'상품이미지'}
               />
-              <span>상품 링크를 입력하면 자동으로 상품이미지가 등록됩니다</span>
+              <span className="mx-2">
+                상품 링크를 입력하면
+                <br /> 자동으로 상품이미지가 등록됩니다
+              </span>
             </div>
             <Label htmlFor={'productsLink'} labelText={''} />
             <Input

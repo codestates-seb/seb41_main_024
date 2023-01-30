@@ -7,14 +7,13 @@ import { getMySharing } from '../../api/mySharing';
 import { useEffect } from 'react';
 
 const ChatList = () => {
-  const { data,refetch } = useQuery(['mySharing'], getMySharing);
+  const { data, refetch } = useQuery(['mySharing'], getMySharing);
   const chatListData = data?.data.data;
 
   useEffect(() => {
     refetch();
-  }, [])
+  }, []);
 
-  console.log(chatListData);
   return (
     <div>
       {chatListData &&
