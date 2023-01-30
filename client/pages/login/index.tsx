@@ -77,7 +77,7 @@ const LoginPage = () => {
       });
     } catch (error: any) {
       setLoginErrorMessage(
-        error.response.data.status !== 403
+        error.response?.data.status !== 403
           ? '정확하지 않은 이메일 또는 패스워드입니다'
           : '신고로 이용이 정지된 사용자입니다'
       );
