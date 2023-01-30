@@ -79,12 +79,12 @@ const InquiryListPanel = ({
       <div className="pb-[5rem]">
         {loading && <CircleLoading message="잠시만 기다려 주세요." />}
         {inquiryView.list && isItem && (
-          <div>
+          <div className="flex flex-col min-h-[calc(100vh - 606px)]">
             <MyQuestionList
               questionList={itemList}
               handleClickgoDetail={handleClickgoDetail}
             />
-            <div className="flex justify-center mt-[1.875rem] ani_fadeIn">
+            <div className="flex justify-center mt-auto pt-[1.875rem] ani_fadeIn">
               <Stack spacing={2}>
                 <Pagination
                   count={paging.totalPages}

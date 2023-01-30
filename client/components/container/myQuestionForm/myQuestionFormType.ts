@@ -8,4 +8,5 @@ export default interface myQuestionFormType {
   qnaId?: number;
   successText: string;
   btnSubmitValue: string;
+  writeView?: boolean;
 }
