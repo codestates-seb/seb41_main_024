@@ -14,15 +14,12 @@ import LoginIcon from '@mui/icons-material/Login';
 import { bottomNavPropsType } from './bottomNavType';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
-interface bottomNavType {
-  isUnReadMessage:boolean; 
-  setIsUnReadMessage:React.Dispatch<React.SetStateAction<boolean>>
-}
-
-export default function BottomNav({isUnReadMessage, setIsUnReadMessage}:bottomNavType): JSX.Element {
+export default function BottomNav(): JSX.Element {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<undefined | string>();
+  const [isUnReadMessage, setIsUnReadMessage] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get('access_token');
