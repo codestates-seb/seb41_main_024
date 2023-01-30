@@ -69,7 +69,6 @@ const Chatroom = () => {
         JSON.stringify({ type: 'TALK', message: input })
       );
       setInput('');
-      console.log(sharingData)
     }
   }
 

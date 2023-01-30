@@ -11,42 +11,46 @@ import { NextPageWithLayout } from '../components/container/defalutLayout/defaul
 import { CookiesProvider } from 'react-cookie';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import useLongPolling from '../hooks/useLongPolling';
+
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
-
 
 export interface UnreadMessageContextType {
   isUnReadMessage: boolean;
   setIsUnReadMessage: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const UnreadMessageContext = createContext<UnreadMessageContextType>({
-  isUnReadMessage: false,
-  setIsUnReadMessage: () => {},
-});
+export const UnreadMessageContext = createContext<UnreadMessageContextType>({} as UnreadMessageContextType);
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const renderWithLayout =
-    Component.getLayout ||
-    function (page: ReactElement) {
-      return <DefaultLayout>{page}</DefaultLayout>;
-    };
+  Component.getLayout ||
+  function (page: ReactElement) {
+    return <DefaultLayout>{page}</DefaultLayout>;
+  };
+
+  const {isUnReadMessage, setIsUnReadMessage} = useLongPolling();
+
+  const store = {
+    isUnReadMessage: isUnReadMessage,
+    setIsUnReadMessage: setIsUnReadMessage
+  }
 
   const queryClient = new QueryClient();
 
-  const {isUnReadMessage, setIsUnReadMessage} = useLongPolling()
-
-  return renderWithLayout(
-    <UnreadMessageContext.Provider  value={{ isUnReadMessage, setIsUnReadMessage}}>
-      <CookiesProvider>
-        <QueryClientProvider client={queryClient}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <ReactQueryDevtools initialIsOpen={false} />
-            <Component {...pageProps} />
-          </Hydrate>
-        </QueryClientProvider>
-      </CookiesProvider>
+  return (
+    <UnreadMessageContext.Provider value={store}>
+        <CookiesProvider>
+          <QueryClientProvider client={queryClient}>
+            <Hydrate state={pageProps.dehydratedState}>
+              <ReactQueryDevtools initialIsOpen={false} />
+              {renderWithLayout(
+                <Component {...pageProps} />
+              )}
+            </Hydrate>
+          </QueryClientProvider>
+        </CookiesProvider>
     </UnreadMessageContext.Provider>
-  );
+  )
 }

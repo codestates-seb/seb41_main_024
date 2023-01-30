@@ -15,26 +15,24 @@ const useLongPolling = () => {
         );
 
         if (response.status === 200) {
-          setIsUnReadMessage(true);
+          await setIsUnReadMessage(true);
           setTimeout(async () => {
             await longPoll(token);
           }, 5000);
         } 
 
         if (response.status === 421) {
-          setIsUnReadMessage(false);
-          setTimeout(async () => {
-            await longPoll(token);
-          }, 5000);
+          await setIsUnReadMessage(false);
+          await longPoll(token);
         }
       }
       catch (error) {
         setTimeout(async () => {
           await longPoll(token);
-        }, 5000);
+        }, 10000);
       }
     };
-
+    token &&
     longPoll(token);
   }, []);
 
