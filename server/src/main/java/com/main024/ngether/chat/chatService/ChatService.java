@@ -147,14 +147,19 @@ public class ChatService {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         Board board = boardService.findBoard(roomId);
-
-        chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
-
-        board.setCurNum(board.getCurNum() - 1);
-        boardRepository.save(board);
         ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId());
+
+
+
         //채팅방 개설자가 나갈경우 채팅방 삭제, 채팅방 메시지 내역 삭제, 게시물 삭제
         if (!chatRoom.isDeclareStatus()) {
+            chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
+
+            board.setCurNum(board.getCurNum() - 1);
+            if(board.getBoardStatus() == Board.BoardStatus.FULL_MEMBER && board.getBoardStatus() != Board.BoardStatus.BOARD_NOT_DELETE){
+                board.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
+            }
+            boardRepository.save(board);
             if (Objects.equals(memberService.getLoginMember().getMemberId(), chatRoom.getMemberId())) {
                 chatMessageRepository.deleteAll(chatMessageRepository.findByChatRoomId(chatRoom.getRoomId()));
                 chatRoomMembersRepository.delete(chatRoomMembers);
