@@ -51,6 +51,7 @@ public class MemberService {
         newMember.setNickName(member.getNickName());
         newMember.setPhoneNumber(member.getPhoneNumber());
         newMember.setEmail(member.getEmail());
+        newMember.setImageLink(member.getImageLink());
         Member savedMember = memberRepository.save(newMember);
 
         publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
@@ -75,10 +76,8 @@ public class MemberService {
                 .ifPresent(findMember::setNickName);
         Optional.ofNullable(member.getPhoneNumber())
                 .ifPresent(findMember::setPhoneNumber);
-        if (!name.equals(findMember.getNickName())) {
-            log.info(String.format("NickName : '%s'가 '%s'로 바뀌었습니다.", name, findMember.getNickName()));
-        }
-
+        Optional.ofNullable(member.getImageLink())
+                .ifPresent(findMember::setImageLink);
 
         return memberRepository.save(findMember);
     }

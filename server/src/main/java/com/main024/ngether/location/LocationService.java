@@ -165,14 +165,15 @@ public class LocationService {
                 }
             }
         }
-        Map<Board, Double> result = map.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+        
         if (sortBy.equals("time")) {
             resultBoardList = resultBoardList.stream().sorted(Comparator.comparing(Board::getBoardId).reversed()).collect(Collectors.toList());
             Page<Board> boardPage = new Pagination<Board>().MadePagination(resultBoardList, page, size);
             return boardPage;
         } else if (sortBy.equals("distance")) {
+            Map<Board, Double> result = map.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue())
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
             List<Board> mapBoardList = new ArrayList<>(result.keySet());
             Page<Board> boardPage = new Pagination<Board>().MadePagination(mapBoardList, page, size);
             return boardPage;

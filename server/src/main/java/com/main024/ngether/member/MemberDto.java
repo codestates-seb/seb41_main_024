@@ -50,6 +50,7 @@ public class MemberDto {
         private String nickName;
 
         private String phoneNumber;
+        private String imageLink;
 
     }
 

@@ -30,6 +30,8 @@ const DetailBottom = ({
   handleIsCompleteModalClose,
   isLiked,
   handleLike,
+  isReported,
+  isMySharing,
 }: DetailBottomPropsType) => {
   return (
     <div>
@@ -61,7 +63,16 @@ const DetailBottom = ({
           alignItems="flex-center"
           spacing={2}
         >
-          {isOpen && !isWriter && !isAdmin && (
+          {isOpen && isMySharing && !isWriter && !isAdmin && (
+            <Button
+              onClick={handleGetherModalOpen}
+              variant="contained"
+              className=""
+            >
+              채팅방 가기
+            </Button>
+          )}
+          {isOpen && !isMySharing && !isWriter && !isAdmin && (
             <Button
               onClick={handleGetherModalOpen}
               variant="contained"
@@ -70,12 +81,12 @@ const DetailBottom = ({
               참여하기
             </Button>
           )}
-          {!isOpen && !isWriter && !isAdmin && (
+          {!isOpen && !isMySharing && !isWriter && !isAdmin && (
             <Button disabled variant="contained" className="">
               참여하기
             </Button>
           )}
-          {!isWriter && !isAdmin && (
+          {!isReported && !isWriter && !isAdmin && (
             <Button
               onClick={handleReportModalOpen}
               variant="contained"
@@ -84,10 +95,15 @@ const DetailBottom = ({
               신고하기
             </Button>
           )}
+          {isReported && !isWriter && !isAdmin && (
+            <Button disabled variant="contained" className="bg-[red]">
+              신고하기
+            </Button>
+          )}
           {isAdmin && (
-            <DialogMaker 
-              name={"유저 정지하기"}
-              title={"이 유저를 정지하시겠습니까?"}
+            <DialogMaker
+              name={'유저 정지하기'}
+              title={'이 유저를 정지하시겠습니까?'}
               variant="contained"
               className="bg-[red]"
               func={handleUserBlock}
