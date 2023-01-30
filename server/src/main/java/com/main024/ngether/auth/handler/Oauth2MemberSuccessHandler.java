@@ -1,6 +1,8 @@
 package com.main024.ngether.auth.handler;
 
 import com.google.gson.Gson;
+import com.main024.ngether.auth.RefreshToken.RefreshToken;
+import com.main024.ngether.auth.RefreshToken.RefreshTokenRepository;
 import com.main024.ngether.auth.dto.LoginResponseDto;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
@@ -32,13 +34,16 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils customAuthorityUtils;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public Oauth2MemberSuccessHandler(JwtTokenizer jwtTokenizer,
                                       CustomAuthorityUtils customAuthorityUtils,
-                                      MemberRepository memberRepository){
+                                      MemberRepository memberRepository,
+                                      RefreshTokenRepository refreshTokenRepository){
         this.jwtTokenizer = jwtTokenizer;
         this.customAuthorityUtils = customAuthorityUtils;
         this.memberRepository = memberRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override
@@ -56,6 +61,10 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //사용자 생성 정보로 토큰 생성
         String accessToken = delegateAccessToken(findMember);
         String refreshToken = delegateRefreshToken(findMember);
+
+        RefreshToken savedRefreshToken = new RefreshToken();
+        savedRefreshToken.setRefreshToken(refreshToken);
+        refreshTokenRepository.save(savedRefreshToken);
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("RefreshToken", refreshToken);
@@ -113,11 +122,12 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("https")
+                .scheme("http")
                 //.path("/login/oauth2/code/google")
-                .host("seb41-main-024.vercel.app")
+                //.host("seb41-main-024.vercel.app")
+                .host("localhost")
                 //.port(3443)
-                .path("/google")
+                .path("/receive-token.html")
                 .queryParams(queryParams) //쿼리 파라미터로 access token, refresh token, initial 전송.
                 .build()
                 .toUri();
