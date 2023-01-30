@@ -152,7 +152,14 @@ const useValidation = (
     }
   }, [isValid, checkActiveValid]);
 
-  return { helperText, isValid, formValid } as const;
+  return {
+    helperText,
+    isValid,
+    checkActiveValid,
+    setIsValid,
+    setCheckActiveValid,
+    formValid,
+  } as const;
 };
 
 export default useValidation;

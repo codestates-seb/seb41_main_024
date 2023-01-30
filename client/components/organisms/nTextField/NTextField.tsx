@@ -28,7 +28,7 @@ const NInput = ({
     useShowPassword(false);
 
   return (
-    <div className="mb-[1.3rem] last:mb-0 min-h-[76px]">
+    <div className="min-h-[76px]">
       <FormControl className="w-full" variant="outlined">
         <InputLabel className="bg-white px-[0.125rem]" htmlFor={id}>
           {label}
