@@ -6,6 +6,9 @@ import { chatItemType } from './chatItemType';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getProductDetail } from '../../../api/detail';
+import Image from 'next/image';
+import base from '../../../public/imageBox/base-box.svg';
+import StateBadge from '../stateBadge/StateBadge';
 
 const ChatItem = ({
   thumbnail,
@@ -15,13 +18,19 @@ const ChatItem = ({
   address,
   unreadCount,
   declareStatus,
+  imageLink,
 }: chatItemType) => {
   console.log('unreadCount', unreadCount);
   const chatAddress = address?.split(' ').slice(1, 3).join(' ');
 
+  if (imageLink === '') {
+    imageLink =
+      'https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/pd/v2/8/6/5/9/9/1/jzHVA/4948865991_B.jpg';
+  }
+
   return (
     <div className="flex items-center border-solid border-0 border-b border-slate-400 h-22 p-4 bg-[#ffffff]">
-      <img src={thumbnail} className="w-16" />
+      <img src={imageLink || base} className="w-16" />
       <div className="flex-1 flex-col px-4">
         <Badge recruitment={recruitment} />
         <span className={`${styles.title_ellipsis} text-s font-medium`}>

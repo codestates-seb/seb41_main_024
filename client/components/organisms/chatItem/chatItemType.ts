@@ -9,4 +9,5 @@ export interface chatItemType {
   isOpen?: any;
   spot?: any;
   declareStatus: string;
+  imageLink?: string;
 }
