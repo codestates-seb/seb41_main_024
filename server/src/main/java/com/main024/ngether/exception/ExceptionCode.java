@@ -26,7 +26,9 @@ public enum ExceptionCode {
     NICKNAME_EXIST(417,"NickName is exists"),
     PHONE_NUMBER_EXIST(418,"phoneNumber is exists"),
     EMAIL_EXIST(419,"email is exists"),
-    REPORT_TYPE_NOT_FOUND(420, "ReportType not found");
+    REPORT_TYPE_NOT_FOUND(420, "ReportType not found"),
+    NOT_VALIDATE(423, "Not validate token"),
+    REFRESH_TOKEN_NOT_FOUND(424, "RefreshToken not found");
 
 
 
