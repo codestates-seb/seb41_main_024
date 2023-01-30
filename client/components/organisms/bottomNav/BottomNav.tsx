@@ -15,6 +15,7 @@ import { bottomNavPropsType } from './bottomNavType';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { checkTokenExpiration } from '../../../api/auth/checkTokenExpiration';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
@@ -25,6 +26,10 @@ export default function BottomNav(): JSX.Element {
     const token = Cookies.get('access_token');
     setIsLogin(token);
   }, []);
+
+  useEffect(() => {
+    checkTokenExpiration()
+  }, [])
 
   const NAVIGATION_LIST: Array<object> = [
     {
