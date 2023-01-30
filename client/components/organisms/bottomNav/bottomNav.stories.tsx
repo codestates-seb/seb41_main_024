@@ -6,6 +6,6 @@ export default {
   component: BottomNav,
 } as ComponentMeta<typeof BottomNav>;
 
-const Template: ComponentStory<typeof BottomNav> = (args) => <BottomNav />;
+const Template: ComponentStory<typeof BottomNav> = (args) => <BottomNav {...args} />;
 
 export const bottomNav = Template.bind({});
