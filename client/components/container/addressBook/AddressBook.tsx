@@ -20,6 +20,8 @@ import {
 import Input from '../../atoms/input/Input';
 import FormButton from '../../molecules/formbutton/FormButton';
 import AddressBookList from '../../organisms/addressBookList/AddressBookList';
+import CircleLoading from '../../organisms/circleLoading/CircleLoading';
+import Loading from '../../organisms/loading/Loading';
 import ModalComponent from '../../organisms/modal/Modal';
 
 export interface locationDataType {
@@ -81,10 +83,9 @@ const AddressBook = () => {
     setSearchAddress(e.target.value);
   };
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const { mutate, isLoading } = useMutation({
     mutationFn: setAddressBooks,
     onSuccess: async (data) => {
-      setModalOpen(false);
       setToastOption({ severity: 'success', value: '주소록이 등록되었습니다' });
       setToastOpen(true);
       return queryClient.invalidateQueries(['addressBooks']);
@@ -93,10 +94,9 @@ const AddressBook = () => {
       alert('주소록 등록에 실패했습니다. 잠시 후 다시 시도해주세요');
     },
   });
-  const { mutate: deleteMutate } = useMutation({
+  const { mutate: deleteMutate, isLoading: isDeleteLoading } = useMutation({
     mutationFn: deleteAddressBook,
     onSuccess: async (data) => {
-      setDeleteModalOpen(false);
       setToastOption({ severity: 'success', value: '주소록이 삭제되었습니다' });
       setToastOpen(true);
       return queryClient.invalidateQueries(['addressBooks']);
@@ -143,9 +143,11 @@ const AddressBook = () => {
     }
 
     mutate({ locationData, Authorization, Refresh });
+    setModalOpen(false);
   };
   const removeAddressHandler = () => {
     deleteMutate({ ...token, locationId: willDeleteLocationId });
+    setDeleteModalOpen(false);
   };
   const handleToastClose = (
     event?: React.SyntheticEvent | Event,
@@ -253,7 +255,7 @@ const AddressBook = () => {
         content="삭제하기"
         buttonColor="red"
       />
-
+      {(isLoading || isDeleteLoading) && <CircleLoading />}
       <Snackbar
         open={toastOpen}
         autoHideDuration={4000}
