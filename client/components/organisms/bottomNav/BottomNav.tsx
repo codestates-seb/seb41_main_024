@@ -20,36 +20,11 @@ export default function BottomNav(): JSX.Element {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<undefined | string>();
   const [isUnReadMessage, setIsUnReadMessage] = useState(false);
-  const token = Cookies.get('access_token')
-  
-  const longPolling:Function = async (token:string) => {
-    if (token !== undefined) {
-      try {
-        const response = await axios.get('https://ngether.site/chat/room/findNewMessages', { headers: { Authorization: token } });
-        if (response.status === 200) {
-          setIsUnReadMessage(true);
-          setTimeout(async () => {return await longPolling(token)}, 5000);
-        }
-        if (response.status === 421) {
-          setIsUnReadMessage(false);
-          return await longPolling();
-        }
-      } catch (error) {
-        setTimeout(async () => {return await longPolling(token)}, 5000);
-      }
-    } else {
-      setTimeout(async () => {return await longPolling(token)}, 5000);
-    }
-  };
 
   useEffect(() => {
     const token = Cookies.get('access_token');
     setIsLogin(token);
   }, []);
-
-  useEffect(()=>{
-    longPolling(token)
-  }, [token])
 
   const NAVIGATION_LIST: Array<object> = [
     {
