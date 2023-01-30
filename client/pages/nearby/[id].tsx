@@ -31,6 +31,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 
 import StateBadge from '../../components/organisms/stateBadge/StateBadge';
+import useAdminRole from '../../hooks/common/useAdminRole';
+import { handleBlockUser } from '../../api/admin';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -63,6 +65,7 @@ export default function ProductDetail({ id }: any) {
   const [productData, setProductData] = useState<any>([]);
   const [isWriter, setIsWriter] = useState<any>(false);
   const router = useRouter();
+  const {isAdmin} = useAdminRole();
 
   console.log('isLiked', isReported);
   console.log('isReported', isReported);
@@ -169,6 +172,12 @@ export default function ProductDetail({ id }: any) {
       console.log(res.data);
     });
   };
+
+  // 유저 정지하기
+  const handleUserBlock = () => {
+    handleBlockUser(productData?.nickname);
+    router.push('/admin')
+  }
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const handleReportModalOpen = () => setIsReportModalOpen(true);
   const handleReportModalClose = () => setIsReportModalOpen(false);
@@ -205,6 +214,8 @@ export default function ProductDetail({ id }: any) {
           isOpen={isOpen}
           isLiked={isLiked}
           isWriter={isWriter}
+          isAdmin={isAdmin}
+          handleUserBlock={handleUserBlock}
           handleLike={handleLike}
           handleReport={handleReport}
           handleGether={handleGether}
