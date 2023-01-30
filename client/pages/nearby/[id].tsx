@@ -18,7 +18,7 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+
 import Image from 'next/image';
 import base from '../../public/imageBox/base-box.svg';
 
@@ -31,6 +31,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 
 import StateBadge from '../../components/organisms/stateBadge/StateBadge';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -49,49 +50,74 @@ export default function ProductDetail({ id }: any) {
     router.push('/login');
   };
 
-  const loginChecker = () => {
-    if (Cookies.get('access_token')) {
-      return true;
-    }
-    return false;
-  };
+  // const loginChecker = () => {
+  //   if (Cookies.get('access_token')) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
-  const isLogin = loginChecker();
-  const [isLiked, setIsLiked] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [isReported, setIsReported] = useState<boolean>(false);
-  const [productData, setProductData] = useState<any>([]);
-  const [isWriter, setIsWriter] = useState<any>(false);
+  const [isLogin, setIsLogin] = useState<undefined | string>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLiked, setIsLiked] = useState<boolean>();
+  const [isOpen, setIsOpen] = useState<boolean>();
+  const [isReported, setIsReported] = useState<boolean>();
+  const [productData, setProductData] = useState<any>();
+  const [isWriter, setIsWriter] = useState<any>();
   const router = useRouter();
 
+  console.log('isLogin', isLogin);
+  console.log('isLoading', isLoading);
+  console.log('isLiked', isLiked);
+  console.log('isOpen', isOpen);
+  console.log('isReported', isReported);
+  console.log('productData', productData);
+  console.log('isWriter', isWriter);
+
   useEffect(() => {
-    getProductDetail(id).then((res) => {
-      setProductData(res.data);
+    getProductDetail(id)
+      .then((res) => {
+        setProductData(res.data);
 
-      const openStatus =
-        res.data.boardStatus === 'BOARD_COMPLETE' ? false : true;
-      setIsOpen(openStatus);
+        const openStatus =
+          res.data.boardStatus === 'BOARD_COMPLETE' ? false : true;
+        setIsOpen(openStatus);
 
-      const reportStatus =
-        res.data.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
-      console.log();
-      setIsReported(reportStatus);
-    });
+        const reportStatus =
+          res.data.boardStatus === 'BOARD_NOT_DELETE' ? true : false;
+        setIsReported(reportStatus);
 
-    getIsWriter(id).then((res) => {
-      console.log(res.data);
-      setIsWriter(res.data);
-    });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+
+    const token = Cookies.get('access_token');
+    setIsLogin(token);
 
     if (isLogin) {
       getMyFavorite().then((res) => {
         const isMyFavorite: any =
           res.data.data.filter((item: any) => item.boardId === Number(id))
             .length > 0;
-
         setIsLiked(isMyFavorite);
       });
+
+      getIsWriter(id)
+        .then((res) => {
+          // console.log(res.data);
+          setIsWriter(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
+
+    // if (productData && isLogin) {
+    //   setIsLoading(false);
+    // }
   }, []);
 
   const reportForm = {
@@ -140,7 +166,7 @@ export default function ProductDetail({ id }: any) {
     setIsOpen(false);
     completeSharing(id).then((res) => {
       setIsCompleteModalOpen(false);
-      console.log(res.data);
+      // console.log(res.data);
     });
   };
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -159,8 +185,6 @@ export default function ProductDetail({ id }: any) {
     router.push(`/edit/${id}`);
   };
 
-  console.log('imageLink', productData.imageLink);
-
   if (productData?.imageLink === '') {
     productData.imageLink =
       'https://cdn.011st.com/11dims/resize/600x600/quality/75/11src/pd/v2/8/6/5/9/9/1/jzHVA/4948865991_B.jpg';
@@ -168,9 +192,10 @@ export default function ProductDetail({ id }: any) {
 
   return (
     <div>
-      {isReported && <ReportedMessage />}
-      {!productData && <NoProductMessage />}
-      {!isReported && productData && (
+      {isLoading && <CircleLoading />}
+      {!isLoading && isReported && <ReportedMessage />}
+      {!isLoading && !productData && <NoProductMessage />}
+      {!isLoading && !isReported && productData && (
         <div>
           <div className="relative pb-[70%]">
             <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
@@ -271,7 +296,7 @@ const LoginAlert = ({ isLoginAlertOpen, handleClose }: LoginAlertPropsType) => {
 
 const ReportedMessage = () => {
   return (
-    <div className="w-[100%] text-5xl mt-[25rem] text-[#999]">
+    <div className="w-[100%] text-5xl mt-[15rem] leading-normal text-[#999]">
       <p className="text-center">신고된 게시물입니다.</p>
     </div>
   );
@@ -279,8 +304,20 @@ const ReportedMessage = () => {
 
 const NoProductMessage = () => {
   return (
-    <div className="w-[100%] text-5xl mt-[25rem] text-[#999]">
-      <p className="text-center">존재하지 않는 게시물입니다.</p>
+    <div className="w-[100%] text-5xl mt-[15rem] leading-normal text-[#999]">
+      <p className="text-center">
+        존재하지 않는
+        <br />
+        게시물입니다.
+      </p>
+    </div>
+  );
+};
+
+const Loading = () => {
+  return (
+    <div className="w-[100%] text-5xl mt-[15rem] leading-normal text-[#999]">
+      <p className="text-center">로딩 중...</p>
     </div>
   );
 };
