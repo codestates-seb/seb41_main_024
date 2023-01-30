@@ -13,7 +13,7 @@ export const getQuestions = () => {
 
 export const getReport = () => {
   return axios({
-    url: `https://ngether.site/api/reports/admin/list?page=1&size=10`,
+    url: `https://ngether.site/api/reports/admin/list?page=1&size=100`,
     method: 'get',
     headers: {
       Authorization : Cookies.get('access_token')
