@@ -14,6 +14,8 @@ import React from 'react';
 import Image from 'next/image';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -21,6 +23,7 @@ const LoginPage = () => {
 
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [form, setForm] = useState({
     email: '',
@@ -50,14 +53,18 @@ const LoginPage = () => {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
+    setIsLoading(true);
 
     try {
       await requestLogin(form).then((res) => {
+        setIsLoading(false);
         console.log('requestLogin res', res);
         res.headers.authorization &&
-          Cookies.set('access_token', res.headers.authorization, {expires : 0.083});
+          Cookies.set('access_token', res.headers.authorization, {
+            expires: 0.083,
+          });
         res.headers.refresh &&
-          Cookies.set('refresh_token', res.headers.refresh, {expires : 0.16});
+          Cookies.set('refresh_token', res.headers.refresh, { expires: 0.16 });
         Cookies.set('memberId', res.data.memberId);
         Cookies.set('nickName', res.data.nickName);
         Cookies.set('locationId', res.data.locationId);
@@ -110,6 +117,11 @@ const LoginPage = () => {
           />
           <Label htmlFor={'password-input'} labelText={passwordRegexText} />
           <p className="text-[#dd3030]">{loginErrorMessage}</p>
+          {isLoading && (
+            <LoadingButton loading variant="text" size="small">
+              Submit
+            </LoadingButton>
+          )}
           <Button
             className="h-14 mt-4 bg-primary text-white rounded"
             onClick={handleLogin}
