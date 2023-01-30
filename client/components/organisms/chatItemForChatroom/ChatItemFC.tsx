@@ -11,7 +11,7 @@ const ChatItemFC = ({
   const chatAddress = sharingData.address.split(' ').slice(1, 3).join(' ');
 
   return (
-    <div className="flex items-center p-4 bg-[#ffffff] w-[65vw]">
+    <div className="flex items-center p-4 bg-[#ffffff] w-[65vw] max-w-[30rem]">
       <img src={sharingData.imageLink} className="w-16" />
       <div className="flex-1 flex-col items-start px-4">
         <span className={`${styles.title_ellipsis} text-s font-medium`}>

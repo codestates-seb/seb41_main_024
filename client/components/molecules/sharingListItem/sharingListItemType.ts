@@ -25,4 +25,6 @@ export interface kakaoMapItemType {
   longitude: number;
   boardId: number;
   title: string;
+  maxNum: number;
+  curNum: number;
 }
