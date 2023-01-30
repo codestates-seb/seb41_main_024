@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import MainSlogan from '../components/molecules/slogan/mainSlogan/MainSlogan';
 import LayoutWithFooter from '../components/container/layoutWithFooter/LayoutWithFooter';
 import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayoutType';
+import Link from 'next/link';
 
 const MainPage: NextPageWithLayout = () => {
   const [nearBy, setNearBy] = useState('');
@@ -21,23 +22,23 @@ const MainPage: NextPageWithLayout = () => {
         <MainSlogan />
       </div>
       <div className="login flex justify-center m-7 my-12">
-        <form className="flex flex-col w-10/12 max-w-lg">
-          <Input
-            id="search"
-            type="text"
-            label="우리동네 N게더를 검색해보세요"
-            value={nearBy}
-            onChange={onChange}
-          />
-          <Label htmlFor="search" labelText="" />
-          <Button variant="contained" fullWidth className="h-14 mt-4">
+        <div className="flex flex-col w-[100%] items-center">
+          <p>
+            <strong className="font-normal text-lg">
+              <span className="text-[#63A8DA] font-bold">Ngether</span>는 위치
+              기반으로 주변 이웃들과{' '}
+              <span className="text-[#63A8DA] font-bold">공동구매</span>를 할 수
+              있는 플랫폼입니다.
+            </strong>
+          </p>
+          <Link
+            href="/search"
+            className="h-14 mt-[48px] w-10/12 max-w-lg bg-[#63A8DA] text-white flex items-center justify-center rounded"
+          >
             <SearchOutlinedIcon />
-            위치 검색
-          </Button>
-          <Button variant="outlined" fullWidth className="h-14 mt-4">
-            <SearchOutlinedIcon />내 위치로 검색
-          </Button>
-        </form>
+            지도에서 위치 검색하기
+          </Link>
+        </div>
       </div>
       {/* <div className="fixed w-[100%] bottom-[70px] left-0">
         <Footer />

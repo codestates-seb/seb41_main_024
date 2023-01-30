@@ -172,7 +172,7 @@ const Search = () => {
             : ''}
         </div>
         <p className="mb-4">
-          <em>지도를 클릭해주세요!</em>
+          <em>지도를 클릭하면 더 정확한 주소를 검색할 수 있습니다</em>
         </p>
         <div className="flex w-[100%] mb-4">
           <Input
