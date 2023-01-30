@@ -22,8 +22,6 @@ public class AuthController {
     public ResponseEntity<Map<String, String>> reIssueAccessToken(HttpServletRequest request, HttpServletResponse response) {
         String authorizationHeader = request.getHeader("Refresh");
         Map<String, String> tokens = authService.refresh(authorizationHeader);
-        String accessToken = tokens.get("Authorization");
-        String refreshToken = tokens.get("Refresh");
         response.setHeader("Authorization", tokens.get("Authorization"));
         if(tokens.get("Refresh") != null)
             response.setHeader("Refresh", tokens.get("Refresh"));

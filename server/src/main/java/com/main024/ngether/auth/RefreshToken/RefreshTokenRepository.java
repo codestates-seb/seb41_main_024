@@ -1,6 +1,5 @@
 package com.main024.ngether.auth.RefreshToken;
 
-import com.main024.ngether.board.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
