@@ -33,19 +33,19 @@ const CATEGORY_OPTIONS = [
 const SEARCH_OPTIONS = [
   { label: '주소', value: '주소' },
   { label: '글 제목', value: '글 제목' },
+  { label: '글 내용', value: '글 내용' },
+  { label: '작성자', value: '작성자' },
 ];
 const Search = () => {
   // 이곳의 폼 데이터 관리도 useState, useRef, react-hook-form 등 기호에 맞게 사용하시면 됩니다
   const router = useRouter();
+  const [token, setToken] = useState({ Authorization: '', Refresh: '' });
   const [targetCoord, setTargetCoord] = useState<any>({
-    lat: 0,
-    lng: 0,
-    address: '',
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
   });
-  const token = {
-    Authorization: Cookies.get('access_token') || '',
-    Refresh: Cookies.get('refresh_token') || '',
-  };
+  const [isSearch, setIsSearch] = useState(false);
 
   const [center, setCenter] = useState<any>({ lat: 0, lng: 0, address: '' });
   const [error, setError] = useState('');
@@ -68,34 +68,59 @@ const Search = () => {
     setSearchAddress(e.target.value);
   };
   useEffect(() => {
+    setToken({
+      Authorization: Cookies.get('access_token') || '',
+      Refresh: Cookies.get('refresh_token') || '',
+    });
     getCurrentLocation(setCenter, setError);
+    setIsSearch((prev) => !prev);
   }, []);
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center.lat, center.lng]);
-  const { title, searchOption, category } = inputValue;
-  const categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
-  const range = category === '상품 쉐어링' ? 1.5 : 0.6;
-  const type = 1;
+  }, [center.lat, center.lng, isSearch]);
+  const { title, searchOption } = inputValue;
   const finalLocation = targetCoord.address ? targetCoord : center;
 
   const argumentOfLocation = {
     locationData: finalLocation,
-    range,
-    category: categoryValue,
+    range: 1.5,
+    category: 'product',
     page: 1,
-    size: 300,
+    size: 10,
   };
-  const argumentOfTitle = { type, keyword: title, page: 1, size: 300 };
-  const { refetch } = useSearch({
+
+  const argumentOfTitle = { keyword: title, page: 1, size: 300 };
+  /* const { refetch } = useSearch({
     searchOption,
     argumentOfLocation,
     argumentOfTitle,
-  });
+  }); */
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    refetch();
+    const {
+      range,
+      category,
+      page,
+      size,
+      locationData: { lat, lng, address },
+    } = argumentOfLocation;
+    const { keyword, page: titlePage, size: titleSize } = argumentOfTitle;
+    const type =
+      searchOption === '글 제목' ? 1 : searchOption === '글 내용' ? 2 : 3;
+    const query = {
+      searchOption,
+      type,
+      keyword,
+      page: page || titlePage,
+      size: size || titleSize,
+      lat,
+      lng,
+      address,
+      range,
+      category,
+    };
+    router.push({ pathname: '/nearby', query }, '/nearby');
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -120,7 +145,11 @@ const Search = () => {
   const id = open ? 'simple-popover' : undefined;
   const { data } = useQuery({
     queryKey: ['addressBooks'],
-    queryFn: () => getAddressBooks({ ...token }),
+    queryFn: () =>
+      getAddressBooks({
+        Authorization: Cookies.get('access_token') || '',
+        Refresh: Cookies.get('refresh_token') || '',
+      }),
     refetchOnWindowFocus: false,
     retry: 1,
     staleTime: Infinity,
@@ -129,8 +158,19 @@ const Search = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-col max-w-lg mt-3 w-[100%]">
+      <div className="flex flex-col max-w-lg mt-3 w-[100%] relative">
         <div id="map" className="w-[100%] h-[350px]"></div>
+        <div
+          className={`${
+            searchOption !== '주소'
+              ? 'bg-[gray] bg-none w-[100%] h-[350px] absolute left-0 z-[6] flex items-center justify-center ani_fadeIn'
+              : ''
+          }`}
+        >
+          {searchOption !== '주소'
+            ? `${searchOption} 검색은 위치 검색 지원이 되지 않습니다. 자동으로 현재 위치로 이동합니다`
+            : ''}
+        </div>
         <p className="mb-4">
           <em>지도를 클릭해주세요!</em>
         </p>
@@ -141,6 +181,7 @@ const Search = () => {
             type="text"
             label="도로명•지번주소 검색"
             onKeyDown={(e: KeyboardEvent) => {
+              setIsSearch((prev) => !prev);
               if (e.key === 'Enter') return searchMap(searchAddress, setCenter);
             }}
             onChange={handleSearchAddress}
@@ -150,7 +191,10 @@ const Search = () => {
             variant="contained"
             className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px]"
             content="주소검색"
-            onClick={() => searchMap(searchAddress, setCenter)}
+            onClick={() => {
+              setIsSearch((prev) => !prev);
+              searchMap(searchAddress, setCenter);
+            }}
           ></FormButton>
           <FormButton
             aria-describedby={id}
@@ -162,6 +206,7 @@ const Search = () => {
           <Popover
             id={id}
             open={open}
+            slot="div"
             anchorEl={anchorEl}
             onClose={handleClose}
             anchorOrigin={{
@@ -169,7 +214,7 @@ const Search = () => {
               horizontal: 'left',
             }}
           >
-            <Typography sx={{ p: 2 }}>
+            <Typography component="div" sx={{ p: 2 }}>
               {data?.data[0] ? (
                 <AddressBookList
                   addressBookList={data?.data}
@@ -188,12 +233,14 @@ const Search = () => {
                   >
                     등록하러 가기
                   </Link>
-                  <Link
-                    href="/login"
-                    className="bg-[orange] ml-3 py-1 px-2 border-[0] border-indigo-500/100 border-solid rounded-md"
-                  >
-                    로그인하러 가기
-                  </Link>
+                  {!token.Authorization && (
+                    <Link
+                      href="/login"
+                      className="bg-[orange] ml-3 py-1 px-2 border-[0] border-indigo-500/100 border-solid rounded-md"
+                    >
+                      로그인하러 가기
+                    </Link>
+                  )}
                 </>
               )}
             </Typography>
@@ -229,15 +276,6 @@ const Search = () => {
             }
           />
         </FormControl>
-        <DropdownInput
-          dropDownOptions={CATEGORY_OPTIONS}
-          id="category"
-          name="category"
-          label="카테고리"
-          onChange={onChange}
-          defaultValue="상품 쉐어링"
-          value={category}
-        />
         <form onSubmit={handleSubmit}>
           <FormButton
             content="검색하기"

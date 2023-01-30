@@ -7,7 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { dialogMakerType } from './dialogMakerType';
 
-const DialogMaker = ({ name, title, question, func }: dialogMakerType) => {
+const DialogMaker = ({ name, title, question, className, variant, func }: dialogMakerType) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -25,7 +25,7 @@ const DialogMaker = ({ name, title, question, func }: dialogMakerType) => {
 
   return (
     <>
-      <Button onClick={handleClickOpen}>{name}</Button>
+      <Button className={className} variant={variant} onClick={handleClickOpen}>{name}</Button>
       <Dialog
         open={open}
         onClose={handleClose}

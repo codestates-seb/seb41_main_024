@@ -36,7 +36,7 @@ const CATEGORY_OPTIONS = [
 const AddNewPage = () => {
   const [token, setToken] = useState({ authorization: '', refresh: '' });
   const router = useRouter();
-
+  const [isSearch, setIsSearch] = useState(false);
   const [productImg, setProductImg] = useState(base);
   const [targetCoord, setTargetCoord] = useState({
     lat: 0,
@@ -66,7 +66,6 @@ const AddNewPage = () => {
         method: 'get',
         headers: token,
       });
-
       router.push(`/nearby/${data.data.boardId}`);
     },
 
@@ -101,6 +100,7 @@ const AddNewPage = () => {
   }
   useEffect(() => {
     getCurrentLocation(setCenter, setLocationError);
+    setIsSearch((prev) => !prev);
     const authorization = cookie.get('access_token');
     const refresh = cookie.get('refresh_token');
     authorization || refresh
@@ -110,7 +110,7 @@ const AddNewPage = () => {
 
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center.lat, center.lng]);
+  }, [center.lat, center.lng, isSearch]);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
   const handleSearchAddress = (e: {
@@ -180,28 +180,32 @@ const AddNewPage = () => {
       data: { url: e.target.value },
     });
     console.log(data); */
-    return axios({
-      method: 'get',
-      url: e.target.value,
-    }).then(({ data, status }) => {
-      if (status !== 200) {
-        alert('이미지 정보를 불러오는데 실패했습니다.');
-      }
-      const $ = cheerio.load(data);
-      $('meta').each((_, el) => {
-        const key = $(el).attr('property')?.split(':')[1]; // ? 옵셔널 체이닝 앞에가 있으면 실행
-        if (key) {
-          const value = $(el).attr('content');
-          const checkUrl = value?.includes('https');
-          if (key === 'image' && checkUrl) {
-            if (value && value.length >= 2000) {
-              return;
-            }
-            setImageLink(value);
-          }
+    try {
+      return axios({
+        method: 'get',
+        url: e.target.value,
+      }).then(({ data, status }) => {
+        if (status !== 200) {
+          alert('이미지 정보를 불러오는데 실패했습니다.');
         }
+        const $ = cheerio.load(data);
+        $('meta').each((_, el) => {
+          const key = $(el).attr('property')?.split(':')[1]; // ? 옵셔널 체이닝 앞에가 있으면 실행
+          if (key) {
+            const value = $(el).attr('content');
+            const checkUrl = value?.includes('https');
+            if (key === 'image' && checkUrl) {
+              if (value && value.length >= 2000) {
+                return;
+              }
+              setImageLink(value);
+            }
+          }
+        });
       });
-    });
+    } catch (error) {
+      alert('이미지 업로드에 실패했습니다');
+    }
   };
 
   return (
@@ -220,13 +224,22 @@ const AddNewPage = () => {
                   name="location"
                   type="text"
                   label="도로명주소 검색"
+                  onKeyDown={(e: KeyboardEvent) => {
+                    if (e.key === 'Enter') {
+                      setIsSearch((prev) => !prev);
+                      return searchMap(searchAddress, setCenter);
+                    }
+                  }}
                   onChange={handleSearchAddress}
                 />
                 <FormButton
                   variant="contained"
                   className="bg-[#63A8DA] text-[white] ml-[10px]"
                   content="검색"
-                  onClick={() => searchMap(searchAddress, setCenter)}
+                  onClick={() => {
+                    setIsSearch((prev) => !prev);
+                    searchMap(searchAddress, setCenter);
+                  }}
                 ></FormButton>
               </div>
               <Input

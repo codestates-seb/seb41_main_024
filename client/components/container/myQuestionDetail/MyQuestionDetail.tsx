@@ -1,4 +1,5 @@
 import { Button } from '@mui/material';
+import { transDateFullFormat } from '../../../utils/transDateFormat/transDateFormat';
 import MyQuestionListType from './MyQuestionDetailType';
 
 const MyQuestionDetail = ({
@@ -6,17 +7,19 @@ const MyQuestionDetail = ({
   handleClickEdit,
 }: MyQuestionListType) => {
   return (
-    <div className="flex flex-col justify-center ani_fadeIn py-[40px] px-[16px]">
+    <div className="flex flex-col justify-center ani_fadeIn py-[2.5rem] px-[1rem]">
       <div>
         <strong className="block font-normal text-2xl break-all">
           {question.title}
         </strong>
-        <span className="block text-gray-400 text-right text-xs mt-20px]">
-          <span>작성일 : 2023-01-25</span>
-          <span>수정일 : 2023-01-25</span>
+        <span className="flex flex-col w-full text-gray-400 text-right text-xs mt-[1.25rem]">
+          <span>작성일 : {transDateFullFormat(question.createDate)}</span>
+          {question.modifiedAt && (
+            <span>수정일 : {transDateFullFormat(question.modifiedAt)}</span>
+          )}
         </span>
-        <p className="break-all mt-[30px]">{question.content}</p>
-        <div className="mt-[40px] text-right">
+        <p className="break-all mt-[1.875rem]">{question.content}</p>
+        <div className="mt-[2.5rem] text-right">
           <Button
             variant="contained"
             onClick={() => handleClickEdit(question.qnaId)}
@@ -26,10 +29,29 @@ const MyQuestionDetail = ({
         </div>
       </div>
 
-      <div className="mt-[40px] pt-[40px] border-t border-b-0 border-r-0 border-l-0 border-solid border-stone-300">
-        <strong className="text-primary">관리자 답변</strong>
-        <p className="mt-[20px]">{question.qnaStatus}</p>
-      </div>
+      {question.qnaStatus === 'ANSWERED' && (
+        <div className="mt-[2.5rem] pt-[2.5rem] border-t border-b-0 border-r-0 border-l-0 border-solid border-stone-300">
+          <strong className="text-primary">관리자 답변</strong>
+          <ul>
+            {question.answers.map((answer) => {
+              return (
+                <li
+                  key={answer.answerId}
+                  className="mt-[1.25rem] pb-[1.25rem] border-t-0 border-b border-r-0 border-l-0 border-solid border-stone-200"
+                >
+                  <strong className="font-normal text-[1.125rem]">
+                    {answer.title}
+                  </strong>
+                  <p>{answer.content}</p>
+                  <span className="block text-gray-400 text-right text-xs">
+                    {transDateFullFormat(answer.createDate)}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

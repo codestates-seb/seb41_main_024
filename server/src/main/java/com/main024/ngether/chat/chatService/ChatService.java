@@ -78,7 +78,7 @@ public class ChatService {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
             Board board = boardService.findBoard(roomId);
-            if(board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
+            if (board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
                 throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
             //이미 채팅방 인원수가 가득 찼을 경우
             if (chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
@@ -176,8 +176,7 @@ public class ChatService {
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
             return findMembersInChatRoom(roomId);
-        }
-        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
 
     }
 
@@ -269,16 +268,15 @@ public class ChatService {
     }
 
 
-    public Boolean checkNewMessages(Member member) throws InterruptedException {
-        while (true) {
-            List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
-            for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
-                if (chatRoomMember.getUnreadMessageCount() > 0) {
-                    return true;
-                }
+    public Boolean checkNewMessages(Member member) {
+        List<ChatRoomMembers> chatRoomMembers =
+                chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+        for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
+            if (chatRoomMember.getUnreadMessageCount() > 0) {
+                return true;
             }
-            Thread.sleep(1000L);
         }
-
+        return false;
     }
+
 }

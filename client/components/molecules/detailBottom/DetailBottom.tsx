@@ -9,10 +9,13 @@ import ModalComponent from '../../organisms/modal/Modal';
 import Cookies from 'js-cookie';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import DialogMaker from '../../organisms/dialogMaker/DialogMaker';
 
 const DetailBottom = ({
   isOpen,
   isWriter,
+  isAdmin,
+  handleUserBlock,
   handleReport,
   handleGether,
   isReportModalOpen,
@@ -58,7 +61,7 @@ const DetailBottom = ({
           alignItems="flex-center"
           spacing={2}
         >
-          {isOpen && !isWriter && (
+          {isOpen && !isWriter && !isAdmin && (
             <Button
               onClick={handleGetherModalOpen}
               variant="contained"
@@ -67,12 +70,12 @@ const DetailBottom = ({
               참여하기
             </Button>
           )}
-          {!isOpen && !isWriter && (
+          {!isOpen && !isWriter && !isAdmin && (
             <Button disabled variant="contained" className="">
               참여하기
             </Button>
           )}
-          {!isWriter && (
+          {!isWriter && !isAdmin && (
             <Button
               onClick={handleReportModalOpen}
               variant="contained"
@@ -80,6 +83,15 @@ const DetailBottom = ({
             >
               신고하기
             </Button>
+          )}
+          {isAdmin && (
+            <DialogMaker 
+              name={"유저 정지하기"}
+              title={"이 유저를 정지하시겠습니까?"}
+              variant="contained"
+              className="bg-[red]"
+              func={handleUserBlock}
+            />
           )}
         </Stack>
       </Box>

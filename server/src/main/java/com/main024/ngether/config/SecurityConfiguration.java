@@ -1,6 +1,7 @@
 package com.main024.ngether.config;
 
 
+import com.main024.ngether.auth.RefreshToken.RefreshTokenRepository;
 import com.main024.ngether.auth.filter.JwtAuthenticationFilter;
 import com.main024.ngether.auth.filter.JwtVerificationFilter;
 import com.main024.ngether.auth.handler.*;
@@ -40,6 +41,7 @@ public class SecurityConfiguration {
     private final Oauth2MemberSuccessHandler oauth2MemberSuccessHandler;
     private final MemberRepository memberRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public SecurityConfiguration(JwtTokenizer jwtTokenizer,
                                  CustomAuthorityUtils authorityUtils,
@@ -47,7 +49,8 @@ public class SecurityConfiguration {
                                  CustomOauth2UserService customOAuth2UserService,
                                  Oauth2MemberSuccessHandler oauth2MemberSuccessHandler,
                                  MemberRepository memberRepository,
-                                 ChatRoomRepository chatRoomRepository) {
+                                 ChatRoomRepository chatRoomRepository,
+                                 RefreshTokenRepository refreshTokenRepository) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.locationRepository = locationRepository;
@@ -55,6 +58,7 @@ public class SecurityConfiguration {
         this.oauth2MemberSuccessHandler = oauth2MemberSuccessHandler;
         this.memberRepository = memberRepository;
         this.chatRoomRepository = chatRoomRepository;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Bean
@@ -84,7 +88,7 @@ public class SecurityConfiguration {
                 .userService(customOAuth2UserService); //로그인 성공 후 oauth2userservice 호출
         http
                 .oauth2Login()
-                .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository));//oauth2 인증 성공 후처리 handler 호출
+                .successHandler(new Oauth2MemberSuccessHandler(jwtTokenizer, authorityUtils, memberRepository, refreshTokenRepository));//oauth2 인증 성공 후처리 handler 호출
         return http.build();
     }
 
@@ -113,7 +117,7 @@ public class SecurityConfiguration {
         public void configure(HttpSecurity builder) throws Exception {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, refreshTokenRepository);
             jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");          // login url
 
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler(locationRepository));

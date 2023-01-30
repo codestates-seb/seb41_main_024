@@ -39,7 +39,7 @@ public class MemberService {
     private final BoardRepository boardRepository;
 
 
-    public Member createMember(Member member){
+    public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
 
         Member newMember = new Member();
@@ -53,18 +53,18 @@ public class MemberService {
         newMember.setEmail(member.getEmail());
         Member savedMember = memberRepository.save(newMember);
 
-        publisher.publishEvent(new MemberRegistrationApplicationEvent(this,savedMember));
+        publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
         return savedMember;
     }
-    public Member updateMember(Member member){
-        if(getLoginMember() == null)
-            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
 
+    public Member updateMember(Member member) {
+        if (getLoginMember() == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
 
 
         Member findMember = findVerifiedMember(getLoginMember().getMemberId());
         String name = findMember.getNickName();
-        if(member.getPw() != null){
+        if (member.getPw() != null) {
             String encryptedPassword = passwordEncoder.encode(member.getPw());
             Optional.ofNullable(member.getPw())
                     .ifPresent(pw -> findMember.setPw(encryptedPassword));
@@ -75,25 +75,29 @@ public class MemberService {
                 .ifPresent(findMember::setNickName);
         Optional.ofNullable(member.getPhoneNumber())
                 .ifPresent(findMember::setPhoneNumber);
-        if(!name.equals(findMember.getNickName())){
-            log.info(String.format("NickName : '%s'가 '%s'로 바뀌었습니다.",name,findMember.getNickName()));
+        if (!name.equals(findMember.getNickName())) {
+            log.info(String.format("NickName : '%s'가 '%s'로 바뀌었습니다.", name, findMember.getNickName()));
         }
 
 
         return memberRepository.save(findMember);
     }
-    public Member findMember(long memberId){
+
+    public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
     }
-    public List<Member> findMembers(){
+
+    public List<Member> findMembers() {
         return memberRepository.findAll();
     }
-    public void deleteMember(long memberId){
+
+    public void deleteMember(long memberId) {
         Member findMember = findVerifiedMember(memberId);
 
         memberRepository.delete(findMember);
     }
-    public Member findByNiceName(String name){
+
+    public Member findByNiceName(String name) {
         Optional<Member> optionalMembers =
                 memberRepository.findByNickName(name);
         return optionalMembers.orElseThrow(() ->
@@ -101,17 +105,18 @@ public class MemberService {
     }
 
     //로그인한 회원정보 가져오기
-    public Member getLoginMember(){
+    public Member getLoginMember() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();  //SecurityContextHolder에서 회원정보 가져오기
         Optional<Member> optionalMember;
 
-        if(principal.toString().contains("@"))
+        if (principal.toString().contains("@"))
             optionalMember = memberRepository.findByEmail(principal.toString());
         else
             optionalMember = memberRepository.findByNickName(principal.toString());
 
         return optionalMember.orElse(null);
     }
+
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
@@ -119,41 +124,43 @@ public class MemberService {
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 
-    private void verifyExistsEmail(String email){
+    private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
 
-    public List<Board> findMyLike(){
+    public List<Board> findMyLike() {
         Member member = getLoginMember(); //로그인 한 상태가 아닐 시 에러 메시지 출력
         if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
         List<Board> boards = new ArrayList<>();
         List<Like> likeList = likeRepository.findLikeByMemberMemberId(member.getMemberId()).get();
-        for(int i = 0; i < likeList.size(); i++){
-            if(likeList.get(i).isStatus())
-            boards.add(likeList.get(i).getBoard());
+        for (int i = 0; i < likeList.size(); i++) {
+            if (likeList.get(i).isStatus())
+                boards.add(likeList.get(i).getBoard());
         }
 
         return boards;
 
     }
-    public Boolean check(MemberDto.Check check){
-        if(memberRepository.findByNickName(check.getNickName()).isPresent()){
+
+    public Boolean check(MemberDto.Check check) {
+        if (memberRepository.findByNickName(check.getNickName()).isPresent() && check.getNickName() != null) {
             throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
         }
-        if(memberRepository.findByEmail(check.getEmail()).isPresent()){
+        if (memberRepository.findByEmail(check.getEmail()).isPresent() && check.getEmail() != null) {
             throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
         }
-        if(memberRepository.findMemberByPhoneNumber(check.getPhoneNumber()).isPresent()){
+
+        if (memberRepository.findMemberByPhoneNumber(check.getPhoneNumber()).isPresent() && check.getPhoneNumber() != null) {
             throw new BusinessLogicException(ExceptionCode.PHONE_NUMBER_EXIST);
         }
         return true;
     }
 
-    public Page<Board> viewMyBoardList(int page, int size){
+    public Page<Board> viewMyBoardList(int page, int size) {
         return boardRepository.findByMemberMemberId(getLoginMember().getMemberId(), PageRequest.of(page - 1, size));
     }
 

@@ -1,6 +1,8 @@
 package com.main024.ngether.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.main024.ngether.auth.RefreshToken.RefreshToken;
+import com.main024.ngether.auth.RefreshToken.RefreshTokenRepository;
 import com.main024.ngether.auth.dto.LoginDto;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.ErrorResponder;
@@ -27,10 +29,14 @@ import java.util.Map;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtTokenizer jwtTokenizer) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
+                                   JwtTokenizer jwtTokenizer,
+                                   RefreshTokenRepository refreshTokenRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenizer = jwtTokenizer;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @SneakyThrows
@@ -58,6 +64,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
+        RefreshToken savedRefreshToken = new RefreshToken();
+        savedRefreshToken.setRefreshToken(refreshToken);
+        refreshTokenRepository.save(savedRefreshToken);
+
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
