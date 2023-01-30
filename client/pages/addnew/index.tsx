@@ -39,11 +39,15 @@ const AddNewPage = () => {
   const [isSearch, setIsSearch] = useState(false);
   const [productImg, setProductImg] = useState(base);
   const [targetCoord, setTargetCoord] = useState({
-    lat: 0,
-    lng: 0,
-    address: '',
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
   });
-  const [center, setCenter] = useState({ lat: 0, lng: 0, address: '' });
+  const [center, setCenter] = useState({
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
+  });
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
   const [open, setOpen] = useState(false);
