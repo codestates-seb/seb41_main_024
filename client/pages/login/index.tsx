@@ -61,6 +61,7 @@ const LoginPage = () => {
         Cookies.set('memberId', res.data.memberId);
         Cookies.set('nickName', res.data.nickName);
         Cookies.set('locationId', res.data.locationId);
+        Cookies.set('role', res.data.role);
         router.push('/');
       });
     } catch (error: any) {
