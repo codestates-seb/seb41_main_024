@@ -21,6 +21,8 @@ export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
         let lng = position.coords.longitude;
         const center = { lat, lng };
         // setLocation(center);
+
+        if (lat === 0 || lng === 0) return;
         setDefaultCoordsAndAddress(center, (result, status) => {
           if (status === kakao.maps.services.Status.OK) {
             let detailAddr = !!result[0].address.address_name
