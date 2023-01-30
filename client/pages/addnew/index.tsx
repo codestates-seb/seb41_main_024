@@ -256,22 +256,24 @@ const AddNewPage = () => {
                 id="title"
                 name="title"
                 type="text"
-                label="상품명"
+                label="게시글 제목(상품 링크를 먼저 입력해주세요)"
                 value={title}
                 onChange={onChange}
+                {...(!productsLink && { disabled: true })}
               />
               <Label htmlFor={'price'} labelText={''} />
               <Input
                 variant="outlined"
                 id="price"
                 name="price"
-                type="number"
-                label="가격"
+                type="text"
+                label="상품 가격(상품 링크를 먼저 입력해주세요)"
                 placeholder="총모집인원 x 상품가격"
                 value={price}
                 inputProps={{ min: 0 }}
                 onChange={onChange}
                 helperText="배송비를 포함한 가격을 입력해주세요"
+                {...(!productsLink && { disabled: true })}
               />
               <div className="flex items-center">
                 <img
@@ -293,7 +295,7 @@ const AddNewPage = () => {
                 value={productsLink}
                 onChange={onChange}
                 onBlur={getLinkMetaData}
-                helperText="쿠팡 상품은 이미지 자동 업로드 지원이 되지 않습니다."
+                helperText="쿠팡, 네이버 상품은 이미지 자동 업로드가 지원되지 않습니다."
               />
 
               <FormControl fullWidth>
