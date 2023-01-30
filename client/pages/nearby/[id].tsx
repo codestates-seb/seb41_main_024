@@ -31,6 +31,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 
 import StateBadge from '../../components/organisms/stateBadge/StateBadge';
+import useAdminRole from '../../hooks/common/useAdminRole';
+import { handleBlockUser } from '../../api/admin';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 
 export async function getServerSideProps(context: any) {
@@ -65,6 +67,7 @@ export default function ProductDetail({ id }: any) {
   const [productData, setProductData] = useState<any>();
   const [isWriter, setIsWriter] = useState<any>();
   const router = useRouter();
+  const { isAdmin } = useAdminRole();
 
   console.log('isLogin', isLogin);
   console.log('isLoading', isLoading);
@@ -169,6 +172,12 @@ export default function ProductDetail({ id }: any) {
       // console.log(res.data);
     });
   };
+
+  // 유저 정지하기
+  const handleUserBlock = () => {
+    handleBlockUser(productData?.nickname);
+    router.push('/admin');
+  };
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const handleReportModalOpen = () => setIsReportModalOpen(true);
   const handleReportModalClose = () => setIsReportModalOpen(false);
@@ -227,6 +236,8 @@ export default function ProductDetail({ id }: any) {
             isCompleteModalOpen={isCompleteModalOpen}
             handleIsCompleteModalOpen={handleIsCompleteModalOpen}
             handleIsCompleteModalClose={handleIsCompleteModalClose}
+            isAdmin={isAdmin}
+            handleUserBlock={handleUserBlock}
           />
 
           <UserMetaInfo

@@ -15,6 +15,9 @@ module.exports = {
         red: '#FF0000',
         white: '#FFFFFF',
       },
+      screens: {
+        'screen-maxw530': { raw: '(max-width: 530px)' },
+      },
     },
     borderWidth: {
       DEFAULT: '1px',

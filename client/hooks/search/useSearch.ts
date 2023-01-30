@@ -59,7 +59,7 @@ const useSearch = ({
         };
         router.push({ pathname: '/nearby', query }, '/nearby');
       },
-      onError: (data) => console.log(data),
+      onError: (data) => alert(data),
       retry: false,
       cacheTime: 1000 * 60 * 60,
       staleTime: 1000 * 60 * 60,

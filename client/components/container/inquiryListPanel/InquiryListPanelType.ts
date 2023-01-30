@@ -22,6 +22,7 @@ export interface questionType {
   title: string;
   content: string;
   createDate: string;
+  modifiedAt?: string;
   qnaStatus: string;
   answers: answerType[] | [];
 }

@@ -22,10 +22,8 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -80,7 +78,7 @@ public class ChatService {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
             Board board = boardService.findBoard(roomId);
-            if(board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
+            if (board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
                 throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
             //이미 채팅방 인원수가 가득 찼을 경우
             if (chatRoomMembersRepository.findByChatRoomRoomId(roomId).size() == chatRoom.getMaxNum())
@@ -108,7 +106,6 @@ public class ChatService {
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.ENTER)
                     .message("[알림] " + member.getNickName() + "님이 입장하셨습니다.")
-                    .unreadCount(setUnreadMessageCount(roomId))
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
             chatRoom.setLastMessage(savedMessage.getMessage());
@@ -171,7 +168,6 @@ public class ChatService {
                     .chatRoomId(roomId)
                     .type(ChatMessage.MessageType.LEAVE)
                     .message("[알림] " + member.getNickName() + "님이 퇴장하셨습니다.")
-                    .unreadCount(setUnreadMessageCount(roomId))
                     .build();
             ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
             chatRoom.setLastMessage(savedMessage.getMessage());
@@ -180,8 +176,7 @@ public class ChatService {
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
             return findMembersInChatRoom(roomId);
-        }
-        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
 
     }
 
@@ -273,16 +268,15 @@ public class ChatService {
     }
 
 
-    public Boolean checkNewMessages(Member member) throws InterruptedException {
-        while (true) {
-            List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
-            for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
-                if (chatRoomMember.getUnreadMessageCount() > 0) {
-                    return true;
-                }
+    public Boolean checkNewMessages(Member member) {
+        List<ChatRoomMembers> chatRoomMembers =
+                chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+        for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
+            if (chatRoomMember.getUnreadMessageCount() > 0) {
+                return true;
             }
-            Thread.sleep(1000L);
         }
-
+        return false;
     }
+
 }

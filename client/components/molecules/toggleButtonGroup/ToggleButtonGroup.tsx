@@ -14,7 +14,11 @@ export default function ToggleButtons({
       aria-label="text alignment"
     >
       {toggleValues?.map((toggle) => (
-        <ToggleButton value={toggle.value} aria-label={toggle.label}>
+        <ToggleButton
+          value={toggle.value}
+          key={toggle.value}
+          aria-label={toggle.label}
+        >
           {toggle.label}
         </ToggleButton>
       ))}

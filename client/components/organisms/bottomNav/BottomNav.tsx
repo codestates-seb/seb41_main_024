@@ -1,8 +1,8 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import MarkChatUnreadOutlinedIcon from '@mui/icons-material/MarkChatUnreadOutlined';
 import { useRouter } from 'next/router';
 import Paper from '@mui/material/Paper';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
@@ -15,7 +15,12 @@ import { bottomNavPropsType } from './bottomNavType';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 
-export default function BottomNav(): JSX.Element {
+interface bottomNavType {
+  isUnReadMessage:boolean; 
+  setIsUnReadMessage:React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function BottomNav({isUnReadMessage, setIsUnReadMessage}:bottomNavType): JSX.Element {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<undefined | string>();
 
@@ -37,7 +42,7 @@ export default function BottomNav(): JSX.Element {
     },
     {
       label: '채팅',
-      icon: <ChatBubbleOutlineOutlinedIcon />,
+      icon: isUnReadMessage ? <MarkChatUnreadOutlinedIcon className="animate-bounce" fontSize="small" color="primary"/> : <ChatBubbleOutlineOutlinedIcon />,
       path: '/chatlist',
     },
     {
@@ -53,6 +58,10 @@ export default function BottomNav(): JSX.Element {
   ];
 
   const handleOnClick = (path: string) => {
+    if(path === '/chatlist') {
+      setIsUnReadMessage(false);
+      router.push(path);
+    }
     if (isLogin || path === '/') {
       router.push(path);
     } else {

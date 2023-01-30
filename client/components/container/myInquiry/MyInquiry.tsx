@@ -12,8 +12,10 @@ const defaultInquiryView: inquiryViewType = {
 
 const MyAllSharing = () => {
   const [inquiryView, setInquiryView] = useState(defaultInquiryView);
-  const handleClickResetInquiry = () => {
+  const [writeView, setWriteView] = useState(true);
+  const handleClickReset = () => {
     setInquiryView(defaultInquiryView);
+    setWriteView(!writeView);
   };
 
   return (
@@ -22,13 +24,13 @@ const MyAllSharing = () => {
         ariaLabel="내 문의사항"
         tabLabels={['문의 목록', '문의 등록']}
         themeSub={true}
-        handleClick={handleClickResetInquiry}
+        handleClick={handleClickReset}
       >
         <InquiryListPanel
           inquiryView={inquiryView}
           setInquiryView={setInquiryView}
         />
-        <MyQuestionWrite />
+        <MyQuestionWrite writeView={writeView} />
       </NTabs>
     </>
   );
