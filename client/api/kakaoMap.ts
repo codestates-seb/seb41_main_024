@@ -267,6 +267,8 @@ export const setMarkerCluster = async (
     averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
     minLevel: 4, // 클러스터 할 최소 지도 레벨
   });
+  const zoomControl = new kakao.maps.ZoomControl();
+  map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
   let markers = [];
   let mapLevel: number;
   kakao.maps.event.addListener(map, 'dragend', function () {
@@ -296,13 +298,18 @@ export const setMarkerCluster = async (
     });
     markers.push(sharingItemMarker);
 
-    const customOverlayContent = `<div class="absolute bg-white" style="bottom: 40px; transform: translateX(-50%); border-radius: 15px; border: 1px solid #63A8DA; padding: 0 10px;">
-    <a href=/nearby/${sharingLists[i]?.boardId} target=_blank>${sharingLists[i]?.title}</a>
+    const customOverlayContent = `<div class="absolute bg-white" style="bottom: 40px; max-width: 250px; transform: translateX(-50%); border-radius: 15px; border: 1px solid #63A8DA; padding: 0 10px;">
+    <a class="block" style="width: 100%" href=/nearby/${sharingLists[i]?.boardId} target=_blank>
+    <span class="text-lg truncate block">${sharingLists[i]?.title}</span>
+    <span>${sharingLists[i]?.curNum}명 / ${sharingLists[i]?.maxNum}명</span>
+    </a>
+
     </div>`;
     let customOverlay = new kakao.maps.CustomOverlay({
       content: customOverlayContent,
       position: sharingItemMarker.getPosition(),
       zIndex: 3,
+      clickable: true,
     });
     let isAllOverlayOpen = false;
     let isOverlayOpen = false;
