@@ -43,7 +43,7 @@ export default function BottomNav(): JSX.Element {
     },
     {
       label: '채팅',
-      icon: isUnReadMessage ? <MarkChatUnreadOutlinedIcon className="animate-bounce" fontSize="inherit" color="error"/> : <ChatBubbleOutlineOutlinedIcon />,
+      icon: isUnReadMessage ? <MarkChatUnreadOutlinedIcon className="animate-bounce" fontSize="medium" color="error" /> : <ChatBubbleOutlineOutlinedIcon />,
       path: '/chatlist',
     },
     {
