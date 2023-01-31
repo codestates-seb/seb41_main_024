@@ -51,6 +51,10 @@ interface productDetailType {
 }
 
 export default function ProductDetail({ id, datailData }: productDetailType) {
+  const { data } = useQuery(['productData'], () => getProductDetail(id), {
+    initialData: datailData,
+  });
+
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
   const handleClose = () => {
     setIsLoginAlertOpen(false);
@@ -64,10 +68,6 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const router = useRouter();
-
-  const { data } = useQuery(['productData'], () => getProductDetail(id), {
-    initialData: datailData,
-  });
 
   const productData = data?.data;
 
@@ -182,10 +182,6 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
   const handleGoEdit = (id: any) => {
     router.push(`/edit/${id}`);
   };
-
-  if (productData?.imageLink === '') {
-    productData.imageLink = '/imageBox/base-box.svg';
-  }
 
   return (
     <div>
