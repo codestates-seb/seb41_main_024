@@ -67,6 +67,11 @@ const SignupPage = () => {
     nickName: false,
     phoneNumber: false,
   });
+  const [isEqualsError, setIsEqualsError] = useState({
+    email: false,
+    nickName: false,
+    phoneNumber: false,
+  });
   const [isAllEquals, setIsAllEquals] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -95,6 +100,10 @@ const SignupPage = () => {
         ...formEqualCheck,
         email: false,
       });
+      setIsEqualsError({
+        ...isEqualsError,
+        email: false,
+      });
     } else if (id === 'nickName') {
       setFormValue({
         ...formValue,
@@ -106,6 +115,10 @@ const SignupPage = () => {
       });
       setEqualClickedCheck({
         ...formEqualCheck,
+        nickName: false,
+      });
+      setIsEqualsError({
+        ...isEqualsError,
         nickName: false,
       });
     } else if (id === 'phoneNumber') {
@@ -122,6 +135,10 @@ const SignupPage = () => {
       });
       setEqualClickedCheck({
         ...formEqualCheck,
+        phoneNumber: false,
+      });
+      setIsEqualsError({
+        ...isEqualsError,
         phoneNumber: false,
       });
     } else if (id === 'pwConfirm') {
@@ -144,8 +161,36 @@ const SignupPage = () => {
     });
   }, [profileUrl]);
 
+  const equalcheck = async (inpName: string) => {
+    const enteredData = {
+      [inpName]: formValue[inpName],
+    };
+    setEqualClickedCheck({
+      ...formEqualCheck,
+      [inpName]: true,
+    });
+    if (formValue[inpName] !== '') {
+      await postUserEqualCheck(enteredData)
+        .then((res) => {
+          setFormEqualCheck({
+            ...formEqualCheck,
+            [inpName]: res.data,
+          });
+        })
+        .catch((error) => {
+          if (error.response.status === 419) {
+            setIsEqualsError({
+              ...isEqualsError,
+              [inpName]: true,
+            });
+          }
+        });
+    }
+  };
+
   const onSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    console.log(formValue);
     setIsLoading(true);
     try {
       const result = await postSignup(formValue);
@@ -162,28 +207,6 @@ const SignupPage = () => {
         setIsLoading(false);
       }, 1000);
       console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
-    }
-  };
-
-  const equalcheck = async (inpName: string) => {
-    const enteredData = {
-      [inpName]: formValue[inpName],
-    };
-    setEqualClickedCheck({
-      ...formEqualCheck,
-      [inpName]: true,
-    });
-    if (formValue[inpName] !== '') {
-      try {
-        await postUserEqualCheck(enteredData).then((res) => {
-          setFormEqualCheck({
-            ...formEqualCheck,
-            [inpName]: res.data,
-          });
-        });
-      } catch (error) {
-        console.log(`다음과 같은 오류  ${error}가 발생했습니다:`);
-      }
     }
   };
 
@@ -222,7 +245,8 @@ const SignupPage = () => {
                       )}
                       {equalClickedCheck.email &&
                         !formEqualCheck.email &&
-                        formValue.email !== '' && (
+                        formValue.email !== '' &&
+                        isEqualsError.email && (
                           <span className="text-[#F8719D] ani_fadeIn">
                             사용중인 이메일 입니다.
                           </span>
@@ -261,7 +285,8 @@ const SignupPage = () => {
                       )}
                       {equalClickedCheck.nickName &&
                         !formEqualCheck.nickName &&
-                        formValue.nickName !== '' && (
+                        formValue.nickName !== '' &&
+                        isEqualsError.nickName && (
                           <span className="text-[#F8719D] ani_fadeIn">
                             사용중인 닉네임 입니다.
                           </span>
@@ -302,7 +327,8 @@ const SignupPage = () => {
                       )}
                       {equalClickedCheck.phoneNumber &&
                         !formEqualCheck.phoneNumber &&
-                        formValue.phoneNumber !== '' && (
+                        formValue.phoneNumber !== '' &&
+                        isEqualsError.phoneNumber && (
                           <span className="text-[#F8719D] ani_fadeIn">
                             사용중인 핸드폰 입니다.
                           </span>
