@@ -94,7 +94,7 @@ public class JwtTokenizer {
     }
 
     public Date getTokenExpiration(int expirationMinutes) {
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA);
+        Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, expirationMinutes);
         Date expiration = calendar.getTime();
 
