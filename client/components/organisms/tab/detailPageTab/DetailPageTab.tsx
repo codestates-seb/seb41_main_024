@@ -38,7 +38,8 @@ const DetailPageTab = ({ productData }: productDataProps) => {
         range: 1.5,
         category: 'product',
         page: 1,
-        size: 10,
+        size: 7,
+        sortBy: 'distance',
       });
     },
     refetchOnWindowFocus: false,

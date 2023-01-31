@@ -58,7 +58,7 @@ export const getPostsInSpecifiedLocation = async ({
   category = 'product',
   page = 1,
   size = 10,
-  sortBy,
+  sortBy = 'distance',
 }: any) => {
   const newData = {
     latitude: locationData?.lat,
