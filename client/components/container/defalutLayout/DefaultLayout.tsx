@@ -15,6 +15,14 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
   const nickName = Cookies.get('nickName');
 
   const handleLogOut = () => {
+    axios.delete('https://ngether.site/api/deleteRefreshToken', 
+      {
+        headers: {
+          Authorization: Cookies.get('access_token'),
+          Refresh: Cookies.get('refresh_token'),
+        },
+      }
+    )
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
     Cookies.remove('memberId');

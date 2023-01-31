@@ -53,7 +53,8 @@ const Search = () => {
     lng: 127.047377408384,
     address: '서울 강남구',
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState({ code: 0, message: '' });
+
   const { inputValue, onChange } = useInput({
     title: '',
     searchOption: '주소',
@@ -178,6 +179,11 @@ const Search = () => {
         </div>
         <p className="mb-4">
           <em>지도를 클릭하면 더 정확한 주소를 검색할 수 있습니다</em>
+          {error?.message && (
+            <em className="text-[red] block">
+              위치 권한 허용을 하지 않으신 경우 아래에서 주소 검색을 해주세요
+            </em>
+          )}
         </p>
         <div className="flex w-[100%] mb-4">
           <Input

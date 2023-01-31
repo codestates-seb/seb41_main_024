@@ -46,13 +46,17 @@ const MODAL_STYLE = {
   p: 3,
 };
 const AddressBook = () => {
-  const [center, setCenter] = useState<any>({ lat: 0, lng: 0, address: '' });
-  const [error, setError] = useState('');
+  const [center, setCenter] = useState<any>({
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
+  });
+  const [error, setError] = useState({ code: 0, message: '' });
   const [searchAddress, setSearchAddress] = useState('');
   const [targetCoord, setTargetCoord] = useState<any>({
-    lat: 0,
-    lng: 0,
-    address: '',
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
   });
   const [isSearch, setIsSearch] = useState(false);
 
@@ -161,9 +165,14 @@ const AddressBook = () => {
   };
   return (
     <div className="flex flex-col items-center my-4">
-      <div id="map" className="w-[100%] h-[350px]"></div>
+      <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
       <p className="mb-4">
         <em>지도를 클릭하면 정확한 주소를 저장할 수 있습니다.</em>
+        {error?.message && (
+          <em className="text-[red] block">
+            위치 권한 허용을 하지 않으신 경우 아래에서 주소 검색을 해주세요
+          </em>
+        )}
       </p>
       <div className="flex w-[100%] mb-4">
         <Input

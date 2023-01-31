@@ -7,6 +7,7 @@ import React from 'react';
 import useLogin from '../../../hooks/common/useLogin';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const AdminLayout = ({ children }: defaultLayoutPropsType) => {
   const router = useRouter();
@@ -14,6 +15,14 @@ const AdminLayout = ({ children }: defaultLayoutPropsType) => {
   const nickName = Cookies.get('nickName');
 
   const handleLogOut = () => {
+    axios.delete('https://ngether.site/api/deleteRefreshToken', 
+      {
+        headers: {
+          Authorization: Cookies.get('access_token'),
+          Refresh: Cookies.get('refresh_token'),
+        },
+      }
+    )
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
     Cookies.remove('memberId');

@@ -5,10 +5,12 @@ import { useEffect, useState } from 'react';
 import useValidation from '../../../hooks/common/useValidation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import getOneUserData from '../../../api/getOneUserData';
-import Loading from '../../organisms/loading/Loading';
 import patchOneUserInfo from '../../../utils/patchOneUserInfo/patchOneUserInfo';
 import { Button } from '@mui/material';
 import postUserEqualCheck from '../../../api/postUserEqualCheck';
+import createProfileRandomUrl from '../../../utils/createProfileRandomUrl/createProfileRandomUrl';
+import RandomProfile from '../../organisms/randomProfile/RandomProfile';
+import CircleLoading from '../../organisms/circleLoading/CircleLoading';
 
 type formValueType = {
   [name: string]: string;
@@ -31,9 +33,11 @@ const EditUserInfo = () => {
     nickName: '',
     phoneNumber: '',
     pw: '',
+    imageLink: '',
   });
   const [pwConfirm, setPwConfirm] = useState('');
   const { email, nickName, pw, phoneNumber } = formValue;
+  const [profileUrl, setProfileUrl] = useState('');
   const {
     helperText,
     isValid,
@@ -47,6 +51,10 @@ const EditUserInfo = () => {
     phoneNumber: false,
   });
   const [equalClickedCheck, setEqualClickedCheck] = useState({
+    nickName: false,
+    phoneNumber: false,
+  });
+  const [isEqualsError, setIsEqualsError] = useState({
     nickName: false,
     phoneNumber: false,
   });
@@ -71,6 +79,10 @@ const EditUserInfo = () => {
         ...formEqualCheck,
         nickName: false,
       });
+      setIsEqualsError({
+        ...isEqualsError,
+        nickName: false,
+      });
     } else if (id === 'phoneNumber') {
       setFormValue({
         ...formValue,
@@ -85,6 +97,10 @@ const EditUserInfo = () => {
       });
       setEqualClickedCheck({
         ...formEqualCheck,
+        phoneNumber: false,
+      });
+      setIsEqualsError({
+        ...isEqualsError,
         phoneNumber: false,
       });
     } else if (id === 'pwConfirm') {
@@ -102,8 +118,10 @@ const EditUserInfo = () => {
       email: data?.data.email,
       nickName: data?.data.nickName,
       phoneNumber: data?.data.phoneNumber,
+      imageLink: data?.data.imageLink,
       pw: '',
     });
+    setProfileUrl(data?.data.imageLink);
     setPwConfirm('');
     setIsValid({ ...isValid, isEmail: true }),
       setCheckActiveValid({ ...checkActiveValid, isEmail: true });
@@ -111,10 +129,15 @@ const EditUserInfo = () => {
 
   const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
 
-  const onSubmitHandler = (event: React.FormEvent) => {
-    event.preventDefault();
-    patchOneUserQuery.mutate();
+  const handleClickRandomProfile = () => {
+    setProfileUrl(createProfileRandomUrl(15));
   };
+  useEffect(() => {
+    setFormValue({
+      ...formValue,
+      imageLink: profileUrl,
+    });
+  }, [profileUrl]);
 
   const equalcheck = async (inpName: string) => {
     const enteredData = {
@@ -125,17 +148,27 @@ const EditUserInfo = () => {
       [inpName]: true,
     });
     if (formValue[inpName] !== '') {
-      try {
-        await postUserEqualCheck(enteredData).then((res) => {
+      await postUserEqualCheck(enteredData)
+        .then((res) => {
           setFormEqualCheck({
             ...formEqualCheck,
             [inpName]: res.data,
           });
+        })
+        .catch((error) => {
+          if (error.response.status === 419) {
+            setIsEqualsError({
+              ...isEqualsError,
+              [inpName]: true,
+            });
+          }
         });
-      } catch (error) {
-        console.log(`다음과 같은 오류  ${error}가 발생했습니다:`);
-      }
     }
+  };
+
+  const onSubmitHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    patchOneUserQuery.mutate();
   };
   return (
     <div>
@@ -145,10 +178,9 @@ const EditUserInfo = () => {
             className="flex flex-col justify-center w-10/12 max-w-lg"
             onSubmit={onSubmitHandler}
           >
-            <img
-              className="h-40 w-40 mb-7 m-auto"
-              src="/imageBox/base-box.svg"
-              alt=""
+            <RandomProfile
+              onClick={handleClickRandomProfile}
+              profileUrl={profileUrl}
             />
             <div className="mb-[1.3rem] last:mb-0">
               <NTextField
@@ -282,7 +314,7 @@ const EditUserInfo = () => {
           </form>
         </div>
       )}
-      {isLoading && <Loading />}
+      {isLoading && <CircleLoading message="잠시만 기다려 주세요." />}
     </div>
   );
 };
