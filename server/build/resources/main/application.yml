@@ -19,8 +19,17 @@ spring:
             scope:
               - email
               - profile
-
-
+  mail:
+    smtp:
+      auth: true
+      starttls:
+        required: true
+        enable: true
+      socketFactory:
+        class: javax.net.ssl.SSLSocketFactory
+        fallback: false
+        port: 465
+      port: 465
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -29,6 +38,14 @@ spring:
     #jdbc:mysql://localhost:3306/main?serverTimezone=Asia/Seoul
     username: admin
     password: qwer1234
+
+AdminMail:
+  id: ${G_MAIL}
+  password: ${G_PASSWORD}
+
+
+
+
 mail:
   address:
     admin: admin@gmail.com
