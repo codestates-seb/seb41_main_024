@@ -42,8 +42,11 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
   })
   const [stompClient, setStompClient] = useState<StompJS.Client | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const nickName = Cookies.get('nickName')
-  
+
+  const mapMembers = (arr: any[]) => {
+    return arr.map((member: { memberId: number, nickName: string; imageLink:string; }) => { return {nickName: member.nickName, imageLink: member.imageLink}})
+  }
+
   useEffect(() => {
     if (!isReady || !HEADER_TOKEN || isConnected) return;
 
@@ -78,7 +81,7 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
               if (message.type === 'ENTER' || message.type === 'LEAVE') {
                 await axios.get(`https://ngether.site/chat/room/${roomId}/memberList`, {headers : HEADER_TOKEN})
                 .then(res => {        
-                  const members = res.data.map((member: { memberId: number, nickName: string; }) => member.nickName);
+                  const members = mapMembers(res.data);
                   setMembers(members);
                 });
               }
@@ -104,9 +107,9 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
     const checkChatMember = () => {
       axios.get(`https://ngether.site/chat/room/${roomId}/memberList`)
       .then(res => {        
-        const members = res.data.map((member: { memberId: number, nickName: string; }) => member.nickName)
-        
-        if(members.includes(nickName)) {
+        const members = mapMembers(res.data)
+        const isMember = members.filter((member) => {return member.nickName === Cookies.get('nickName')});
+        if(isMember) {
           setMembers(members);
           defaultChatSetting();
           setChatWebsocket();

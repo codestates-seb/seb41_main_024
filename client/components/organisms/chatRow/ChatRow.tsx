@@ -18,7 +18,7 @@ const ChatRow = ({ imageLink, nickName, message, createDate, unreadCount }: chat
         })}
       >
         {OTHER_CHAT && imageLink && (
-          <span className="min-w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
+          <span className="min-w-[2.2125rem] h-[2.2125rem] rounded-full overflow-hidden bg-[white]">
             <img
               src={imageLink}
               alt=""

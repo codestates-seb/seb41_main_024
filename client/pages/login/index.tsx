@@ -15,7 +15,6 @@ import Image from 'next/image';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
-import LoadingButton from '@mui/lab/LoadingButton';
 
 const LoginPage = () => {
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
@@ -122,11 +121,6 @@ const LoginPage = () => {
           />
           <Label htmlFor={'password-input'} labelText={passwordRegexText} />
           <p className="text-[#dd3030]">{loginErrorMessage}</p>
-          {isLoading && (
-            <LoadingButton loading variant="text" size="small">
-              Submit
-            </LoadingButton>
-          )}
           <Button
             className="h-14 mt-4 bg-primary text-white rounded"
             onClick={handleLogin}

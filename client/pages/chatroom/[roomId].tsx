@@ -29,8 +29,8 @@ const Chatroom = () => {
   let HEADER_TOKEN = { Authorization: Cookies.get('access_token') };
 
   const { stompClient, messages, members, roomId, sharingData } = useWebSocketClient(HEADER_TOKEN);
-  const isMemeber = members.includes(Cookies.get('nickName'));
 
+  const isMember = members.filter((member) => {return member.nickName === Cookies.get('nickName')});
   const {isLogin} = useLogin();
 
   const [isOwner, setIsOwner] = useState(false);
@@ -147,12 +147,12 @@ const Chatroom = () => {
         handleCompleteRecrutment={handleCompleteRecrutmentWithToast}
       />
       {!isLogin && <ForbiddenMessage />}
-      {!isMemeber && isLogin && (
+      {!isMember && isLogin && (
         <div className='mt-[45%]'>
           <CircleLoading />
         </div>
       )}
-      {isMemeber && (
+      {isMember && (
         <>
           <div className="left-2/4 mt-16 translate-x-[-50%] fixed">
             <Link href={`/nearby/${roomId}`}>
