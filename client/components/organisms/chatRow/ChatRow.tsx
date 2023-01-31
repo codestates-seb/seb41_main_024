@@ -28,7 +28,7 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatR
         )}
 
         <span
-          className={classnames('inline-flex flex-col ml-[0.75rem]', {
+          className={classnames('inline-flex flex-col mx-[0.75rem]', {
             'mr-[0.75rem]': MY_CHAT,
           })}
         >
@@ -47,7 +47,7 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatR
             {message}
           </span>
         </span>
-        <span className="min-w-[3.25rem] text-[0.75rem] leading-[0.875rem] text-[#fff] self-end pb-[0.0625rem]">
+        <span className="min-w-[4rem] text-[0.75rem] leading-[0.875rem] text-[#fff] self-end pb-[0.0625rem]">
           {createDate}
         </span>
         {unreadCount !== 0 && 
