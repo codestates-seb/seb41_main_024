@@ -1,5 +1,5 @@
 export interface chatRowType {
-  thumbSrc?: string | null;
+  imageLink?: string | null;
   chatMessageId?: number;
   nickName: string | null;
   message: string;

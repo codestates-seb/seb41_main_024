@@ -28,8 +28,7 @@ import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMe
 const Chatroom = () => {
   let HEADER_TOKEN = { Authorization: Cookies.get('access_token') };
 
-  const { stompClient, messages, members, roomId, sharingData } =
-    useWebSocketClient(HEADER_TOKEN);
+  const { stompClient, messages, members, roomId, sharingData } = useWebSocketClient(HEADER_TOKEN);
   const isMemeber = members.includes(Cookies.get('nickName'));
 
   const {isLogin} = useLogin();
