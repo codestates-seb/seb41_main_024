@@ -4,12 +4,14 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Divider } from '@mui/material';
-import Input from '../../../atoms/input/Input';
-import useInput from '../../../../hooks/addNewHooks/useInput';
-import FormButton from '../../../molecules/formbutton/FormButton';
+
 import { FormEvent, Fragment, MouseEvent, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getQuestions, handleAnswerQuestion } from '../../../../api/admin';
+import { getQuestions, handleAnswerQuestion } from '../../../api/admin';
+import useInput from '../../../hooks/addNewHooks/useInput';
+import Input from '../../atoms/input/Input';
+import FormButton from '../../molecules/formbutton/FormButton';
+
 
 interface qnaType {
   qnaId: number;

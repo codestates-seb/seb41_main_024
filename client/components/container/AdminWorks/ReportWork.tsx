@@ -5,12 +5,13 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useRouter } from 'next/router';
 
-import ReportBoardDetail from '../../../molecules/reportDetail/reportBoardDetail/ReportBoardDetail'
-import ReportChatDetail from '../../../molecules/reportDetail/reportChatDetail/ReportChatDetail'
-import { getReport, handleBlockUser, handleDeleteReport } from '../../../../api/admin';
-import { getChatDataset } from '../../../../api/getChatDataset';
+
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { getReport, handleBlockUser, handleDeleteReport } from '../../../api/admin';
+import ReportBoardDetail from '../../molecules/reportDetail/reportBoardDetail/ReportBoardDetail';
+import ReportChatDetail from '../../molecules/reportDetail/reportChatDetail/ReportChatDetail';
+import { getChatDataset } from '../../../api/getChatDataset';
 
 interface reportType {
   reportType: string;
