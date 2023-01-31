@@ -86,7 +86,7 @@ export function completeSharing(id: string) {
 }
 
 export const reportChat = (roomId: string | string[] | undefined) => {
-  axios.post(
+  return axios.post(
     `${REQUEST_URL}/api/reports`,
     { reportedId: roomId, reportType: 'chat' },
     {

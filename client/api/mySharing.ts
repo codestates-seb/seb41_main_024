@@ -13,8 +13,8 @@ export function getMySharing() {
   });
 }
 
-export const handleCompleteRecrutment = (roomId: string | string[] | undefined): void => {
-  axios(
+export const handleCompleteRecrutment = (roomId: string | string[] | undefined): Promise<void> => {
+  return axios(
     {
       url: `https://ngether.site/api/boards/complete/${roomId}`,
       method: 'patch',
