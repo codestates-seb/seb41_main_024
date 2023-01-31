@@ -24,12 +24,12 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
         },
       }
     )
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
-    Cookies.remove('memberId');
-    Cookies.remove('nickName');
-    Cookies.remove('locationId');
-    Cookies.remove('role');
+    Cookies.remove('access_token' , { path: '' });
+    Cookies.remove('refresh_token', { path: '' });
+    Cookies.remove('memberId', { path: '' });
+    Cookies.remove('nickName', { path: '' });
+    Cookies.remove('locationId', { path: '' });
+    Cookies.remove('role', { path: '' });
     router.push('/');
   };
 

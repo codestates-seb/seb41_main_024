@@ -7,7 +7,7 @@ const useLongPolling = () => {
   const token = Cookies.get('access_token');
 
   useEffect(() => {
-    const longPoll = async (token: string | undefined) => {
+    const longPoll = async () => {
       try {
         const response = await axios.get(
           'https://ngether.site/chat/room/findNewMessages',
@@ -17,18 +17,20 @@ const useLongPolling = () => {
         if (response.status === 200) {
           await setIsUnReadMessage(true);
           setTimeout(async () => {
-            await longPoll(token);
+            await longPoll();
           }, 5000);
         } 
       }
       catch (error) {
-        await setIsUnReadMessage(false);
-        await longPoll(token);
+        const checkToken = Cookies.get('access_token');
+        if(checkToken) {
+          await setIsUnReadMessage(false);
+          await longPoll();
+        }
       }
     };
-    token &&
-    longPoll(token);
-  }, []);
+    token !== undefined && longPoll();
+  }, [token]);
 
   return {isUnReadMessage, setIsUnReadMessage};
 };
