@@ -20,16 +20,10 @@ const useLongPolling = () => {
             await longPoll(token);
           }, 5000);
         } 
-
-        if (response.status === 421) {
-          await setIsUnReadMessage(false);
-          await longPoll(token);
-        }
       }
       catch (error) {
-        setTimeout(async () => {
-          await longPoll(token);
-        }, 10000);
+        await setIsUnReadMessage(false);
+        await longPoll(token);
       }
     };
     token &&
