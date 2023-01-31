@@ -67,6 +67,7 @@ public class BoardService {
         returnBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
         returnBoard.setCurNum(0);
         returnBoard.setImageLink(board.getImageLink());
+        returnBoard.setUserImageLink(member.getImageLink());
         member.addBoard(returnBoard);
         Board board1 = boardRepository.save(returnBoard);
 
@@ -98,13 +99,18 @@ public class BoardService {
 
 
     public Board updateBoard(Board board) {
-        if (memberService.getLoginMember() == null) {
+        Member member = memberService.getLoginMember();
+        if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         } else if (Objects.equals(findVerifiedBoard(board.getBoardId()).getMember().getMemberId(), memberService.getLoginMember().getMemberId())) {
 
             Board findBoard = findVerifiedBoard(board.getBoardId());
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(board.getBoardId());
             findBoard.setModifiedAt(LocalDateTime.now());
+            if(!Objects.equals(board.getUserImageLink(), member.getImageLink())){
+                Optional.ofNullable(member.getImageLink())
+                        .ifPresent(findBoard::setUserImageLink);
+            }
             Optional.ofNullable(board.getTitle())
                     .ifPresent(findBoard::setTitle);
             Optional.ofNullable(board.getTitle())
