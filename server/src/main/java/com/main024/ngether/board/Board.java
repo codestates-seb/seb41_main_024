@@ -56,6 +56,8 @@ public class Board {
     private int curNum;
     @Column(length = 2000)
     private String imageLink;
+    @Column(length = 2000)
+    private String userImageLink;
     public enum BoardStatus {
         BOARD_NOT_COMPLETE("모집 중"),
         BOARD_COMPLETE("모집 완료"),

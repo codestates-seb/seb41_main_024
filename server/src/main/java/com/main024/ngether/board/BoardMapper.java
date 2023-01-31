@@ -34,6 +34,7 @@ public interface BoardMapper {
         response.setBoardStatus(board.getBoardStatus());
         response.setCurNum(board.getCurNum());
         response.setImageLink(board.getImageLink());
+        response.setUserImageLink(board.getUserImageLink());
 
         return response;
     }
