@@ -10,7 +10,7 @@ import DialogMaker from '../../dialogMaker/DialogMaker';
 
 interface ChatHeaderType {
   isOwner: boolean;
-  members: string[];
+  members: { nickName: string; imageLink:string; }[];
   declareStatus: string;
   handleExitChat: () => void;
   handleSendReport: () => void;
@@ -64,7 +64,22 @@ const ChatHeader = ({
       <Divider />
       <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
         <p className='text-center my-3'>유저 목록</p>
-        {members.map((member,index) => <DrawerListItem key={index} text={member}/>)}
+        {members.map((member,index) => (
+          <DrawerListItem key={index}>
+            <div className='flex pl-[0.35rem]'>
+              <span className="min-w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
+                <img
+                  src={member.imageLink}
+                  alt=""
+                  className="block w-full h-full object-cover"
+                />
+              </span>
+              <p className="text-s text-primary pl-[1rem] pt-[0.6rem]">
+                {member.nickName}
+              </p>
+            </div>
+          </DrawerListItem>
+        ))}
         <Divider className='mt-3'/>
         <div className='fixed bottom-3 w-[100%]'>
           {isOwner && declareStatus !== "BOARD_COMPLETE" && (
