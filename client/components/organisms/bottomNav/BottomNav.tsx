@@ -11,20 +11,24 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import LoginIcon from '@mui/icons-material/Login';
-import { bottomNavPropsType } from './bottomNavType';
 import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
+import { checkTokenExpiration } from '../../../api/auth/checkTokenExpiration';
+import { UnreadMessageContext } from '../../../pages/_app';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<undefined | string>();
-  const [isUnReadMessage, setIsUnReadMessage] = useState(false);
+  const {isUnReadMessage, setIsUnReadMessage} = useContext(UnreadMessageContext);
 
   useEffect(() => {
     const token = Cookies.get('access_token');
     setIsLogin(token);
   }, []);
+
+  useEffect(() => {
+    checkTokenExpiration()
+  }, [])
 
   const NAVIGATION_LIST: Array<object> = [
     {

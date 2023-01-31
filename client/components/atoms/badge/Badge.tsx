@@ -12,7 +12,7 @@ const Badge = ({ recruitment }: badgeType) => {
       )}
       {recruitment && (
         <div className="flex justify-center items-center w-16 h-6 rounded-md bg-slate-400">
-          <span className="text-xs text-white">모집 완료</span>
+          <span className="text-xs text-white">모집 확정</span>
         </div>
       )}
     </>

@@ -45,9 +45,14 @@ const Search = () => {
     lng: 127.047377408384,
     address: '서울 강남구',
   });
+
   const [isSearch, setIsSearch] = useState(false);
 
-  const [center, setCenter] = useState<any>({ lat: 0, lng: 0, address: '' });
+  const [center, setCenter] = useState<any>({
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
+  });
   const [error, setError] = useState('');
   const { inputValue, onChange } = useInput({
     title: '',
@@ -159,7 +164,7 @@ const Search = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-col max-w-lg mt-3 w-[100%] relative">
-        <div id="map" className="w-[100%] h-[350px]"></div>
+        <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
         <div
           className={`${
             searchOption !== '주소'
@@ -172,7 +177,7 @@ const Search = () => {
             : ''}
         </div>
         <p className="mb-4">
-          <em>지도를 클릭해주세요!</em>
+          <em>지도를 클릭하면 더 정확한 주소를 검색할 수 있습니다</em>
         </p>
         <div className="flex w-[100%] mb-4">
           <Input

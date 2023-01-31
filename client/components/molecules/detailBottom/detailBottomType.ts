@@ -1,8 +1,10 @@
 export interface DetailBottomPropsType {
-  isOpen?: boolean;
+  isOpen?: any;
   isLiked?: boolean;
   isWriter: boolean;
   isAdmin: boolean;
+  isReported: boolean;
+  isMySharing?: boolean;
   handleUserBlock: () => void;
   handleLike: () => void;
   handleReport: () => void;
