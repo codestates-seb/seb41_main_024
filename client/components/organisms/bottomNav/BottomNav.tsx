@@ -19,7 +19,7 @@ import { UnreadMessageContext } from '../../../pages/_app';
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<undefined | string>();
-  const {isUnReadMessage, setIsUnReadMessage} = useContext(UnreadMessageContext);
+  const {isUnReadMessage} = useContext(UnreadMessageContext);
 
   useEffect(() => {
     const token = Cookies.get('access_token');
@@ -43,7 +43,7 @@ export default function BottomNav(): JSX.Element {
     },
     {
       label: '채팅',
-      icon: isUnReadMessage ? <MarkChatUnreadOutlinedIcon className="animate-bounce" fontSize="small" color="primary"/> : <ChatBubbleOutlineOutlinedIcon />,
+      icon: isUnReadMessage ? <MarkChatUnreadOutlinedIcon className="animate-bounce" fontSize="medium" color="error" /> : <ChatBubbleOutlineOutlinedIcon />,
       path: '/chatlist',
     },
     {
@@ -60,7 +60,6 @@ export default function BottomNav(): JSX.Element {
 
   const handleOnClick = (path: string) => {
     if(path === '/chatlist') {
-      setIsUnReadMessage(false);
       router.push(path);
     }
     if (isLogin || path === '/') {
