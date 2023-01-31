@@ -76,11 +76,19 @@ const LoginPage = () => {
         router.push('/');
       });
     } catch (error: any) {
-      setLoginErrorMessage(
-        error?.response?.data?.status !== 403
-          ? '정확하지 않은 이메일 또는 패스워드입니다'
-          : '신고로 이용이 정지된 사용자입니다'
-      );
+      setIsLoading(false);
+
+      if (error?.response?.data?.status === 403) {
+        setLoginErrorMessage('신고로 이용이 정지된 사용자입니다');
+      } else if (error?.response?.data?.status === 400) {
+        setLoginErrorMessage('정확하지 않은 이메일 또는 패스워드입니다');
+      }
+    }
+  };
+
+  const onKeyPress = (event: any) => {
+    if (event.key === 'Enter') {
+      handleLogin(event);
     }
   };
 
@@ -119,6 +127,7 @@ const LoginPage = () => {
             label="패스워드"
             value={pw}
             onChange={onChange}
+            onKeyPress={onKeyPress}
           />
           <Label htmlFor={'password-input'} labelText={passwordRegexText} />
           <p className="text-[#dd3030]">{loginErrorMessage}</p>

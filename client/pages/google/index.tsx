@@ -69,12 +69,12 @@ const GoogleLoginPage = () => {
     try {
       await checkNickName(nickNameForm).then((res) => {
         if (res.data) {
-          setNickNameDuplicationCheckMessage('OK');
+          setNickNameDuplicationCheckMessage('checked');
         }
       });
     } catch (error: any) {
-      if (error.response.data.message === 'NickName is exists') {
-        setNickNameDuplicationCheckMessage('NO NO');
+      if (error.response.data.status === 417) {
+        setNickNameDuplicationCheckMessage('failed');
       }
     }
   };
@@ -84,12 +84,12 @@ const GoogleLoginPage = () => {
     try {
       await checkPhoneNumber(phoneNumberForm).then((res) => {
         if (res.data) {
-          setPhoneNumberDuplicationCheckMessage('OK');
+          setPhoneNumberDuplicationCheckMessage('checked');
         }
       });
     } catch (error: any) {
-      if (error.response.data.message === 'phoneNumber is exists') {
-        setPhoneNumberDuplicationCheckMessage('NO NO');
+      if (error.response.data.status === 418) {
+        setPhoneNumberDuplicationCheckMessage('failed');
       }
     }
   };
@@ -98,8 +98,8 @@ const GoogleLoginPage = () => {
     event.preventDefault();
 
     if (
-      nickNameDuplicationCheckMessage === 'OK' &&
-      phoneNumberDuplicationCheckMessage === 'OK'
+      nickNameDuplicationCheckMessage === 'checked' &&
+      phoneNumberDuplicationCheckMessage === 'checked'
     ) {
       requestFirstGoogleLogin(form).then((res) => {
         Cookies.set('memberId', res.data.memberId);
@@ -187,10 +187,10 @@ const GoogleLoginPage = () => {
               className="mt-2 mb-4"
             >
               <Stack>
-                {nickNameDuplicationCheckMessage === 'NO NO' && (
+                {nickNameDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">이미 존재하는 닉네임입니다.</p>
                 )}
-                {nickNameDuplicationCheckMessage === 'OK' && (
+                {nickNameDuplicationCheckMessage === 'checked' && (
                   <p className="text-[#2EB150]">사용 가능한 닉네임입니다.</p>
                 )}
               </Stack>
@@ -223,12 +223,12 @@ const GoogleLoginPage = () => {
               className="my-2"
             >
               <Stack>
-                {phoneNumberDuplicationCheckMessage === 'NO NO' && (
+                {phoneNumberDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">
                     이미 존재하는 전화번호입니다.
                   </p>
                 )}
-                {phoneNumberDuplicationCheckMessage === 'OK' && (
+                {phoneNumberDuplicationCheckMessage === 'checked' && (
                   <p className="text-[#2eb150]">사용 가능한 전화번호입니다.</p>
                 )}
               </Stack>
