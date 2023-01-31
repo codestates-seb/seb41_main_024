@@ -21,16 +21,18 @@ const MainPage: NextPageWithLayout = () => {
       <div className="mt-24">
         <MainSlogan />
       </div>
-      <div className="login flex justify-center m-7 my-12">
+      <div className="login flex justify-center m-7 my-4">
         <div className="flex flex-col w-[100%] items-center">
-          <p>
-            <strong className="font-normal text-lg">
-              <span className="text-[#63A8DA] font-bold">Ngether</span>는 위치
-              기반으로 주변 이웃들과{' '}
-              <span className="text-[#63A8DA] font-bold">공동구매</span>를 할 수
-              있는 플랫폼입니다.
-            </strong>
+          <p className="pt-px mt-4 text-lg">
+            <strong className="text-primary font-bold">Ngether</strong>는{' '}
+            <strong className="text-primary font-bold">위치 기반</strong>으로
+            주변 이웃들과
           </p>
+          <p className="pb-px text-lg">
+            <strong className="text-primary font-bold"> 공동구매</strong>를 할
+            수 있는 플랫폼입니다
+          </p>
+
           <Link
             href="/search"
             className="h-14 mt-[48px] w-10/12 max-w-lg bg-[#63A8DA] text-white flex items-center justify-center rounded"
