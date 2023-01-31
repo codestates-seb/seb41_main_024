@@ -28,7 +28,9 @@ const ChatItem = ({
       <img src={imageLink || base} className="w-16" />
       <div className="flex-1 flex-col px-4">
         <Badge recruitment={recruitment} />
-        <span className={`${styles.title_ellipsis} text-s font-medium`}>
+        <span
+          className={`${styles.title_ellipsis} text-s font-medium break-all`}
+        >
           {title}
         </span>
         <span
