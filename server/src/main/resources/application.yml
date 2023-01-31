@@ -31,12 +31,6 @@ spring:
         port: 465
       port: 465
 
-AdminMail:
-  id: ${G_MAIL}
-  password: ${G_PASSWORD}
-
-
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://database-1.ct9qwzzh9uwy.ap-northeast-2.rds.amazonaws.com:13306/main?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
@@ -44,6 +38,14 @@ AdminMail:
     #jdbc:mysql://localhost:3306/main?serverTimezone=Asia/Seoul
     username: admin
     password: qwer1234
+
+AdminMail:
+  id: ${G_MAIL}
+  password: ${G_PASSWORD}
+
+
+
+
 mail:
   address:
     admin: admin@gmail.com

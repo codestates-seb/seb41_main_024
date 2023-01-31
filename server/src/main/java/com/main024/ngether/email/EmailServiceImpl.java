@@ -8,11 +8,13 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
+@PropertySource("classpath:application.yml")
 public class EmailServiceImpl implements EmailService{
 
     @Autowired
@@ -31,20 +33,24 @@ public class EmailServiceImpl implements EmailService{
         message.addRecipients(RecipientType.TO, to);//보내는 대상
         message.setSubject("Ngether 이메일 인증 코드");//제목
 
-        String msgg="";
-        msgg+= "<div style='margin:20px;'>";
-        msgg+= "<h1> 안녕하세요 Ngether입니다. </h1>";
-        msgg+= "<br>";
-        msgg+= "<p>아래 코드를 복사해 입력해주세요<p>";
-        msgg+= "<br>";
-        msgg+= "<p>감사합니다.<p>";
-        msgg+= "<br>";
-        msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-        msgg+= "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
-        msgg+= "<div style='font-size:130%'>";
+        String msgg = "";
+        msgg += "<div style='padding: 40px; text-align: center; background-color: #f5f5f5; border-radius: 10px;'>";
+        msgg += "<div style='display: flex; flex-direction: column; align-items: center;'>";
+        msgg += "<p style='padding-bottom: 1px; font-size: 1.125rem; line-height: 1.75rem;'>";
+        msgg += "<strong style='color: rgb(99, 168, 218);'>N게더</strong>에 참여하여";
+        msgg += "</p>";
+        msgg += "<p style='padding-bottom: 1px; font-size: 1.125rem; line-height: 1.75rem;'>";
+        msgg += "동네의 <strong style='color: rgb(99, 168, 218);'>쇼핑 친구</strong>를 만나보세요";
+        msgg += "</p>";
+        msgg += "</div>";
+        msgg += "<p style='font-size: 20px; color: #333; margin-top: 20px;'>해당 코드를 입력해주세요:</p>";
+        msgg += "<div style='border: 1px solid #333; padding: 20px; margin-top: 20px; border-radius: 10px; max-width: 700px;'>";
+        msgg += "<div style='font-size: 24px;'>";
         msgg+= "CODE : <strong>";
         msgg+= ePw+"</strong><div><br/> ";
-        msgg+= "</div>";
+        msgg += "</div>";
+        msgg += "</div>";
+        msgg += "</div>";
         message.setText(msgg, "utf-8", "html");//내용
         message.setFrom(new InternetAddress(id,"Ngether"));//보내는 사람
 
