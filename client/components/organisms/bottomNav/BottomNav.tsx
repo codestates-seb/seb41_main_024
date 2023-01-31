@@ -28,7 +28,7 @@ export default function BottomNav(): JSX.Element {
 
   useEffect(() => {
     checkTokenExpiration()
-  }, [])
+  })
 
   const NAVIGATION_LIST: Array<object> = [
     {

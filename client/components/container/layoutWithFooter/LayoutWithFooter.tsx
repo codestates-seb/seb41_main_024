@@ -7,6 +7,7 @@ import basicTheme from '../../../theme/basic';
 import useLogin from '../../../hooks/common/useLogin';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 //메인페이지, 마이페이지
 const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
@@ -15,6 +16,14 @@ const LayoutWithFooter = ({ children }: defaultLayoutPropsType) => {
   const nickName = Cookies.get('nickName');
 
   const handleLogOut = () => {
+    axios.delete('https://ngether.site/api/deleteRefreshToken', 
+      {
+        headers: {
+          Authorization: Cookies.get('access_token'),
+          Refresh: Cookies.get('refresh_token'),
+        },
+      }
+    )
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
     Cookies.remove('memberId');
