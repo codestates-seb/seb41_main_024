@@ -220,6 +220,7 @@ public class ChatService {
                 MemberDto.ResponseChat responseChat = new MemberDto.ResponseChat();
                 responseChat.setMemberId(chatRoomMembers.get(i).getMember().getMemberId());
                 responseChat.setNickName(chatRoomMembers.get(i).getMember().getNickName());
+                responseChat.setImageLink(chatRoomMembers.get(i).getMember().getImageLink());
                 memberList.add(responseChat);
             }
             return memberList;

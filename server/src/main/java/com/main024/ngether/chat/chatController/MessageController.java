@@ -44,6 +44,7 @@ public class MessageController {
         message.setCreateDate(LocalDateTime.now());
         message.setChatRoomId(roomId);
         message.setCreateDate(LocalDateTime.now());
+        message.setImageLink(member.getImageLink());
         message.setUnreadCount(chatService.setUnreadMessageCount(roomId));
         ChatMessage savedMessage = chatMessageRepository.save(message);
         for (int i = 0; i < chatRoomMembersList.size(); i++) {
@@ -60,7 +61,7 @@ public class MessageController {
 
 
         //메시지 전송
-        sendingOperations.convertAndSend("/receive/chat/" + message.getChatRoomId(), message);
+        sendingOperations.convertAndSend("/receive/chat/" + message.getChatRoomId(),savedMessage);
     }
 
 }

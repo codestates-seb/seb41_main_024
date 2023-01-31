@@ -74,5 +74,6 @@ public class MemberDto {
     public static class ResponseChat{
         private Long memberId;
         private String nickName;
+        private String imageLink;
     }
 }
