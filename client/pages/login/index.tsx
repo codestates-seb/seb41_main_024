@@ -24,7 +24,7 @@ const LoginPage = () => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [loginErrorMessage, setLoginErrorMessage] = useState('');
+  const [loginErrorMessage, setLoginErrorMessage] = useState<string>();
   const [form, setForm] = useState({
     email: '',
     pw: '',
@@ -80,7 +80,7 @@ const LoginPage = () => {
 
       if (error?.response?.data?.status === 403) {
         setLoginErrorMessage('신고로 이용이 정지된 사용자입니다');
-      } else if (error?.response?.data?.status === 400) {
+      } else if (error?.response?.data?.status === 401) {
         setLoginErrorMessage('정확하지 않은 이메일 또는 패스워드입니다');
       }
     }

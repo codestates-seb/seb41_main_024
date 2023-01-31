@@ -18,7 +18,7 @@ const MainPage: NextPageWithLayout = () => {
 
   return (
     <div className="flex flex-col flex-grow">
-      <div className="mt-24">
+      <div className="mt-32">
         <MainSlogan />
       </div>
       <div className="login flex justify-center m-7 my-4">

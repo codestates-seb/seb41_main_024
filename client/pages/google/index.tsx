@@ -25,7 +25,7 @@ import Box from '@mui/material/Box';
 
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
-  const [open, setOpen] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(true);
 
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
     useState('');
@@ -144,7 +144,7 @@ const GoogleLoginPage = () => {
   ) => {
     if (reason === 'backdropClick') {
     } else {
-      setOpen(false);
+      setDialogOpen(false);
     }
   };
 
@@ -156,7 +156,7 @@ const GoogleLoginPage = () => {
   return (
     <div>
       <div>
-        <Dialog open={open} onClose={handleClose} disableEscapeKeyDown>
+        <Dialog open={dialogOpen} onClose={handleClose} disableEscapeKeyDown>
           <div className="mt-16">
             <SocialLoginTitle />
           </div>
@@ -195,12 +195,12 @@ const GoogleLoginPage = () => {
                 )}
               </Stack>
               <Button
-                variant="contained"
+                variant="text"
                 className="rounded"
                 onClick={handleCheckNickname}
                 size="small"
               >
-                중복 체크
+                중복 확인
               </Button>
             </Stack>
 
@@ -210,6 +210,7 @@ const GoogleLoginPage = () => {
                 name="phoneNumber"
                 type={'text'}
                 label="휴대전화"
+                maxLength={13}
                 value={phoneNumber}
                 onChange={onChange}
               />
@@ -233,12 +234,12 @@ const GoogleLoginPage = () => {
                 )}
               </Stack>
               <Button
-                variant="contained"
+                variant="text"
                 className="rounded"
                 onClick={handleCheckPhoneNumber}
                 size="small"
               >
-                중복 체크
+                중복 확인
               </Button>
             </Stack>
             <Stack>
