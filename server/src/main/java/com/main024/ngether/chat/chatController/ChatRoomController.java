@@ -99,7 +99,7 @@ public class ChatRoomController {
                     log.warn("Interrupted", e);
                 }
             }
-        }).orTimeout(10, TimeUnit.SECONDS);
+        }).orTimeout(5, TimeUnit.SECONDS);
         try {
             task.get();
         } catch (InterruptedException | ExecutionException e) {
