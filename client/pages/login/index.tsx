@@ -59,14 +59,14 @@ const LoginPage = () => {
       await requestLogin(form).then((res: any) => {
         setIsLoading(false);
 
-        res.headers.authorization &&
+        res?.headers?.authorization &&
           Cookies.set('access_token', res.headers.authorization, {
             expires: 0.083,
           });
         Cookies.set('access_token', res.headers.authorization, {
           expires: 0.079,
         });
-        res.headers.refresh &&
+        res?.headers?.refresh &&
           Cookies.set('refresh_token', res.headers.refresh, { expires: 0.16 });
         Cookies.set('refresh_token', res.headers.refresh, { expires: 20 });
         Cookies.set('memberId', res.data.memberId);
@@ -77,7 +77,7 @@ const LoginPage = () => {
       });
     } catch (error: any) {
       setLoginErrorMessage(
-        error.response.data.status !== 403
+        error?.response?.data?.status !== 403
           ? '정확하지 않은 이메일 또는 패스워드입니다'
           : '신고로 이용이 정지된 사용자입니다'
       );
