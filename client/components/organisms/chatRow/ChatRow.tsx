@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { chatRowType } from './chatRowType';
 import Cookie from 'js-cookie';
 
-const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatRowType) => {
+const ChatRow = ({ imageLink, nickName, message, createDate, unreadCount }: chatRowType) => {
   const MY_CHAT = Cookie.get('nickName') === nickName;
   const OTHER_CHAT = !MY_CHAT;
 
@@ -17,18 +17,17 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatR
           'flex-row-reverse': MY_CHAT,
         })}
       >
-        {OTHER_CHAT && thumbSrc && (
-          <span className="min-w-[2.8125rem] h-[2.8125rem] rounded-full overflow-hidden">
+        {OTHER_CHAT && imageLink && (
+          <span className="min-w-[2.2125rem] h-[2.2125rem] rounded-full overflow-hidden bg-[white]">
             <img
-              src={thumbSrc}
+              src={imageLink}
               alt=""
               className="block w-full h-full object-cover"
             />
           </span>
         )}
-
         <span
-          className={classnames('inline-flex flex-col ml-[0.75rem]', {
+          className={classnames('inline-flex flex-col mx-[0.5rem]', {
             'mr-[0.75rem]': MY_CHAT,
           })}
         >
@@ -47,7 +46,7 @@ const ChatRow = ({ thumbSrc, nickName, message, createDate, unreadCount }: chatR
             {message}
           </span>
         </span>
-        <span className="min-w-[3.25rem] text-[0.75rem] leading-[0.875rem] text-[#fff] self-end pb-[0.0625rem]">
+        <span className="min-w-[5rem] text-[0.75rem] leading-[0.875rem] text-[#fff] self-end pb-[0.0625rem]">
           {createDate}
         </span>
         {unreadCount !== 0 && 

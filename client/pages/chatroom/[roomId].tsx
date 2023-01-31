@@ -28,10 +28,9 @@ import ForbiddenMessage from '../../components/atoms/fobiddenMessage/ForbiddenMe
 const Chatroom = () => {
   let HEADER_TOKEN = { Authorization: Cookies.get('access_token') };
 
-  const { stompClient, messages, members, roomId, sharingData } =
-    useWebSocketClient(HEADER_TOKEN);
-  const isMemeber = members.includes(Cookies.get('nickName'));
+  const { stompClient, messages, members, roomId, sharingData } = useWebSocketClient(HEADER_TOKEN);
 
+  const isMember = members.filter((member) => {return member.nickName === Cookies.get('nickName')});
   const {isLogin} = useLogin();
 
   const [isOwner, setIsOwner] = useState(false);
@@ -69,7 +68,6 @@ const Chatroom = () => {
         JSON.stringify({ type: 'TALK', message: input })
       );
       setInput('');
-      console.log(sharingData)
     }
   }
 
@@ -91,23 +89,48 @@ const Chatroom = () => {
   }
 
 
+  const handleReportChatroomWithToast  = async () => {
+    if (!stompClient) return;
+    setOpen(true)
+    reportChat(roomId)
+    .then (() => {
+      setAlertOption({ severity: 'success', value: '신고가 관리자에게 전달되었습니다' });
+      router.push('/chatlist');
+    })
+    .catch (() => {
+      setAlertOption({ severity: 'warning', value: '신고에 실패했습니다' })
+    })
+  }
+
+  const handleCompleteRecrutmentWithToast = async (): Promise<void> => {
+    if (!stompClient) return;
+    handleCompleteRecrutment(roomId)
+    .then(() => {
+      setOpen(true)
+      setAlertOption({ severity: 'success', value: 'N게더 모집이 완료되었습니다' });
+    })
+    .catch(() => {
+      setOpen(true);
+      setAlertOption({ severity: 'error', value: '해당 요청이 실패했습니다. 잠시 후에 다시 시도해주세요' });
+    })
+  }
+
+  // 퇴장 핸들러
   const handleExitChatRoom = async (): Promise<void> => {
     if (!stompClient) return;
-
     const isDeclare = await checkDeclareStatus();
-    console.log(isDeclare)
-
     if (stompClient && !isDeclare ) {
       setOpen(true)
-      setAlertOption({ severity: 'success', value: 'N게더 모집에서 퇴장하셨습니다' });
-      stompClient.disconnect(() => {});
-      axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} );
+      axios.get(`https://ngether.site/chat/room/leave/${roomId}`, {headers : HEADER_TOKEN} )
+      .then(() => {
+        setAlertOption({ severity: 'success', value: 'N게더 모집에서 퇴장하셨습니다' })
+        stompClient.disconnect(() => {});
+      });
       router.push('/chatlist');
     }
     else {
       setOpen(true);
-      console.log(isDeclare)
-      setAlertOption({ severity: 'error', value: '해당 N게더는 현재 신고된 상태로 퇴장하실 수 없습니다.' });
+      setAlertOption({ severity: 'error', value: '해당 N게더는 현재 신고된 상태로 퇴장하실 수 없습니다' });
     }
     return
   }
@@ -120,16 +143,16 @@ const Chatroom = () => {
         members={members}
         declareStatus={sharingData.boardStatus}
         handleExitChat={handleExitChatRoom}
-        handleSendReport={() => reportChat(roomId)}
-        handleCompleteRecrutment={() => handleCompleteRecrutment(roomId)}
+        handleSendReport={handleReportChatroomWithToast}
+        handleCompleteRecrutment={handleCompleteRecrutmentWithToast}
       />
       {!isLogin && <ForbiddenMessage />}
-      {!isMemeber && isLogin && (
+      {!isMember && isLogin && (
         <div className='mt-[45%]'>
           <CircleLoading />
         </div>
       )}
-      {isMemeber && (
+      {isMember && (
         <>
           <div className="left-2/4 mt-16 translate-x-[-50%] fixed">
             <Link href={`/nearby/${roomId}`}>

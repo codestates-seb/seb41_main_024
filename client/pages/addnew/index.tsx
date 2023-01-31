@@ -12,7 +12,7 @@ import { useMutation } from '@tanstack/react-query';
 import useInput from '../../hooks/addNewHooks/useInput';
 import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 import { uploadPostType } from '../../hooks/addNewHooks/useInputType';
-import { Cookies } from 'react-cookie';
+
 import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
 import { getCurrentLocation } from '../../api/location';
 import * as cheerio from 'cheerio';
@@ -29,22 +29,30 @@ import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 import axios from 'axios';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import { validatePostInput } from '../../utils/uploadPost/postInputValidation';
+import Cookies from 'js-cookie';
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
   { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
 ];
 const AddNewPage = () => {
-  const [token, setToken] = useState({ authorization: '', refresh: '' });
+  const [token, setToken] = useState({ Authorization: '', Refresh: '' });
   const router = useRouter();
-  const [isSearch, setIsSearch] = useState(false);
+
   const [productImg, setProductImg] = useState(base);
   const [targetCoord, setTargetCoord] = useState({
-    lat: 0,
-    lng: 0,
-    address: '',
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
   });
-  const [center, setCenter] = useState({ lat: 0, lng: 0, address: '' });
-  const [locationError, setLocationError] = useState('');
+  const [isSearch, setIsSearch] = useState(false);
+  const [center, setCenter] = useState({
+    lat: 37.517331925853,
+    lng: 127.047377408384,
+    address: '서울 강남구',
+  });
+
+  const [locationError, setLocationError] = useState({ code: 0, message: '' });
+
   const [searchAddress, setSearchAddress] = useState('');
   const [open, setOpen] = useState(false);
   const [alertOption, setAlertOption] = useState<{
@@ -73,7 +81,6 @@ const AddNewPage = () => {
       alert('게시물 등록에 실패했습니다. 잠시 후 다시 시도해주세요');
     },
   });
-  const cookie = new Cookies();
   const [imageLink, setImageLink] = useState<string | undefined>('');
   const { inputValue, onChange } = useInput({
     title: '',
@@ -99,18 +106,17 @@ const AddNewPage = () => {
     address: string;
   }
   useEffect(() => {
+    setToken({
+      Authorization: Cookies.get('access_token') || '',
+      Refresh: Cookies.get('refresh_token') || '',
+    });
     getCurrentLocation(setCenter, setLocationError);
     setIsSearch((prev) => !prev);
-    const authorization = cookie.get('access_token');
-    const refresh = cookie.get('refresh_token');
-    authorization || refresh
-      ? setToken({ authorization, refresh })
-      : router.push('/login');
   }, []);
 
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center.lat, center.lng, isSearch]);
+  }, [center.lat, center.lng, isSearch, token.Authorization]);
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
   const handleSearchAddress = (e: {
@@ -129,8 +135,8 @@ const AddNewPage = () => {
       latitude: targetCoord.lat,
       longitude: targetCoord.lng,
       address: targetCoord.address,
-      accessToken: token.authorization,
-      refreshToken: token.refresh,
+      accessToken: token.Authorization,
+      refreshToken: token.Refresh,
       imageLink,
     };
     const validation = validatePostInput({
@@ -214,9 +220,15 @@ const AddNewPage = () => {
         <div className="flex justify-center m-7 my-12">
           <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
             <Stack spacing={4}>
-              <div id="map" className="w-[100%] h-[350px]"></div>
+              <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
               <p>
                 <em>상품을 나눌 위치를 지도에서 클릭해주세요</em>
+                {locationError?.message && (
+                  <em className="text-[red] block">
+                    위치 권한 허용을 하지 않으신 경우 아래에서 주소 검색을
+                    해주세요
+                  </em>
+                )}
               </p>
               <div className="flex width-[100%]">
                 <Input

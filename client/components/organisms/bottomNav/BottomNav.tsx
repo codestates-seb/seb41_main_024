@@ -11,16 +11,15 @@ import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutline
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import LoginIcon from '@mui/icons-material/Login';
-import { bottomNavPropsType } from './bottomNavType';
 import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
 import { checkTokenExpiration } from '../../../api/auth/checkTokenExpiration';
+import { UnreadMessageContext } from '../../../pages/_app';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<undefined | string>();
-  const [isUnReadMessage, setIsUnReadMessage] = useState(false);
+  const {isUnReadMessage} = useContext(UnreadMessageContext);
 
   useEffect(() => {
     const token = Cookies.get('access_token');
@@ -29,7 +28,7 @@ export default function BottomNav(): JSX.Element {
 
   useEffect(() => {
     checkTokenExpiration()
-  }, [])
+  })
 
   const NAVIGATION_LIST: Array<object> = [
     {
@@ -44,7 +43,7 @@ export default function BottomNav(): JSX.Element {
     },
     {
       label: '채팅',
-      icon: isUnReadMessage ? <MarkChatUnreadOutlinedIcon className="animate-bounce" fontSize="small" color="primary"/> : <ChatBubbleOutlineOutlinedIcon />,
+      icon: isUnReadMessage ? <MarkChatUnreadOutlinedIcon className="animate-bounce" fontSize="medium" color="error" /> : <ChatBubbleOutlineOutlinedIcon />,
       path: '/chatlist',
     },
     {
@@ -61,7 +60,6 @@ export default function BottomNav(): JSX.Element {
 
   const handleOnClick = (path: string) => {
     if(path === '/chatlist') {
-      setIsUnReadMessage(false);
       router.push(path);
     }
     if (isLogin || path === '/') {

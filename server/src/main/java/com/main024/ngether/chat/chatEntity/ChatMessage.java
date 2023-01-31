@@ -31,6 +31,8 @@ public class ChatMessage {
     private LocalDateTime createDate = LocalDateTime.now();
     //안 읽은 사람 수
     private int unreadCount;
+    @Column(length = 2000)
+    private String imageLink;
     @Builder
     public ChatMessage(MessageType type, Long chatRoomId, String nickName, String message, int unreadCount) {
         this.type = type;

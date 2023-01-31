@@ -74,6 +74,7 @@ public class BoardDto {
         private String productsLink;
         private Board.BoardStatus boardStatus;
         private String imageLink;
+        private String userImageLink;
     }
 
     @Getter

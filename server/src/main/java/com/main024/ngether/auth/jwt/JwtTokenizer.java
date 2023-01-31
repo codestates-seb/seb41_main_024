@@ -14,9 +14,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.SignatureException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -96,7 +94,7 @@ public class JwtTokenizer {
     }
 
     public Date getTokenExpiration(int expirationMinutes) {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"), Locale.KOREA);
         calendar.add(Calendar.MINUTE, expirationMinutes);
         Date expiration = calendar.getTime();
 
