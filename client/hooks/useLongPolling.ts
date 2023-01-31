@@ -21,7 +21,10 @@ const useLongPolling = () => {
         }
       } catch (error: any) {
         const checkToken = Cookies.get('access_token');
-        if (error?.response?.status === 500) {
+        if (
+          error?.response?.status === 500 ||
+          error?.response?.status === 402
+        ) {
           return;
         }
 
