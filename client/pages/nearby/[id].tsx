@@ -31,6 +31,8 @@ import Divider from '@mui/material/Divider';
 
 import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 import { getMySharing } from '../../api/mySharing';
+import useAdminRole from '../../hooks/common/useAdminRole';
+import { handleBlockUser } from '../../api/admin';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -65,6 +67,7 @@ export default function ProductDetail({ id, productData }: productDetailType) {
   const [isWriter, setIsWriter] = useState<any>();
   const [isMySharing, setIsMySharing] = useState<boolean>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const {isAdmin} = useAdminRole();
 
   const router = useRouter();
 
@@ -170,6 +173,14 @@ export default function ProductDetail({ id, productData }: productDetailType) {
       router.push(`/nearby/${id}`);
     });
   };
+  // 어드민일시 유저 정지
+  const handleBlockUserByNickName = () => {
+    const nickName = productData?.nickname;
+    handleBlockUser(nickName, Number(localStorage.getItem('reportId')));
+    localStorage.removeItem('reportId');
+    router.push('/admin');
+  }
+
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const handleReportModalOpen = () => setIsReportModalOpen(true);
   const handleReportModalClose = () => setIsReportModalOpen(false);
@@ -233,10 +244,8 @@ export default function ProductDetail({ id, productData }: productDetailType) {
           isCompleteModalOpen={isCompleteModalOpen}
           handleIsCompleteModalOpen={handleIsCompleteModalOpen}
           handleIsCompleteModalClose={handleIsCompleteModalClose}
-          isAdmin={false}
-          handleUserBlock={function (): void {
-            throw new Error('Function not implemented.');
-          }}
+          isAdmin={isAdmin}
+          handleUserBlock={handleBlockUserByNickName}
         />
         <UserMetaInfo
           isOpen={isOpen}

@@ -21,6 +21,8 @@ interface ChatDataSetType {
 
 const ReportChatDetail = ({
   id,
+  reportId,
+  refetch,
   handleGetChatLog,
   handleBlockUser,
   handleDeleteReport,
@@ -38,6 +40,11 @@ const ReportChatDetail = ({
   const handleRenderChatLog = () => {
     setIsLookUp(!isLookUp);
   };
+
+  const handleUserBlockWithRefetch = (nickName:string, reportId:number) => {
+    handleBlockUser(nickName, reportId);
+    refetch();
+  }
 
   return (
     <Fragment>
@@ -61,7 +68,7 @@ const ReportChatDetail = ({
               name={nickName}
               title={`${nickName}을 정지시키겠습니까?`}
               question={`네를 선택하시면 ${nickName} 유저를 정지합니다.`}
-              func={() => handleBlockUser(nickName)}
+              func={() => handleBlockUser(nickName, reportId)}
             />
           ))}
           <Divider />
