@@ -55,6 +55,7 @@
 |[koreadinosaur](https://github.com/koreadinosaur)|[noah-eunsoo](https://github.com/noah-eunsoo)|[Pikadev1771](https://github.com/Pikadev1771)|[SHWsgithub](https://github.com/SHWsgithub)|[yeonzzoo](https://github.com/yeonzzoo)|[parkjiyun98](https://github.com/parkjiyun98)|[Aru-slave](https://github.com/Aru-slave)|
 
 <br>
+
 ## 아키텍처
 
 ---
