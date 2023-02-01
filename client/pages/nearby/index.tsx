@@ -2,6 +2,7 @@ import React, { ChangeEvent, ReactElement, useEffect, useState } from 'react';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import {
   getAllSharingPosts,
+  getPostsByAddressBook,
   getPostsInSpecifiedLocation,
   searchPostsByTitle,
 } from '../../api/post';
@@ -16,6 +17,9 @@ import Pagination from '@mui/material/Pagination';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import FormButton from '../../components/molecules/formbutton/FormButton';
+import AddressBook, {
+  locationDataType,
+} from '../../components/container/addressBook/AddressBook';
 const TOGGLE_VALUES = [
   { value: 0.5, label: '0.5Km' },
   { value: 1, label: '1Km' },
@@ -35,6 +39,7 @@ interface nearbyPropsType {
   address: string;
   keyword: string;
   type: number;
+  selectedAddressBookId: number;
 }
 const LABEL = ['거리순', '최신순'];
 const Index = ({
@@ -45,13 +50,13 @@ const Index = ({
   searchOption = '주소',
   keyword,
   type,
+  selectedAddressBookId,
 }: nearbyPropsType) => {
   const [mapCenter, setMapCenter] = useState({
     lat: lat || 37.517331925853,
     lng: lng || 127.047377408384,
     address: address === 'undefined' ? '서울 강남구' : address,
   });
-
   const [currentMapCenter, setCurrentMapCenter] = useState({
     lat: 0,
     lng: 0,
@@ -105,7 +110,16 @@ const Index = ({
   } = useQuery({
     queryKey: ['sharingLists', page],
     queryFn: () => {
-      if (searchOption === '주소') {
+      /* if (selectedAddressBookId * 1 >= 0) {
+        console.log('getPostsByAddressBook');
+        return getPostsByAddressBook({
+          selectedAddressBookId,
+          range: alignment,
+          category: category === '상품 쉐어링' ? 'product' : 'delivery',
+          sortBy: currentTab === 0 ? 'distance' : 'time',
+          page,
+        });
+      } else */ if (searchOption === '주소') {
         return getPostsInSpecifiedLocation({
           locationData: currentMapCenter?.address
             ? currentMapCenter
@@ -263,7 +277,16 @@ const Index = ({
 export default Index;
 
 export async function getServerSideProps(context: any) {
-  const { lat, lng, address, searchOption, keyword, type } = context?.query;
+  const {
+    lat,
+    lng,
+    address,
+    searchOption,
+    keyword,
+    type,
+    selectedAddressBookId,
+  } = context?.query;
+  // console.log('SSR selectedAddressBook ::', selectedAddressBookId);
 
   const requestData = {
     lat: Number(lat),
@@ -283,6 +306,7 @@ export async function getServerSideProps(context: any) {
       searchOption: searchOption || '주소',
       keyword: keyword || '',
       type: type || 1,
+      selectedAddressBookId: selectedAddressBookId || '',
     },
   };
 }
