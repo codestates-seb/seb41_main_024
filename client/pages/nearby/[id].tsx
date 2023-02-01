@@ -54,8 +54,6 @@ export default function ProductDetail({ id, productData }: productDetailType) {
   //   initialData: detailData,
   // });
 
-  console.log(productData);
-
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
   const handleClose = () => {
     setIsLoginAlertOpen(false);
@@ -164,7 +162,6 @@ export default function ProductDetail({ id, productData }: productDetailType) {
     }
   };
 
-  console.log('isOpen', isOpen);
   // 모집 완료하기
   const handleComplete = () => {
     setIsOpen(false);

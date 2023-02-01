@@ -20,7 +20,6 @@ const ChatItem = ({
   declareStatus,
   imageLink,
 }: chatItemType) => {
-  console.log('unreadCount', unreadCount);
   const chatAddress = address?.split(' ').slice(1, 3).join(' ');
 
   return (
