@@ -145,110 +145,11 @@ export const searchMap = (searchAddress: string, setCenter: any) => {
   };
   geocoder.addressSearch(`${searchAddress}`, switchLocationToCoordinate);
 };
-
-/* export const setMarkerCluster = async (
-  coords: getMapAndMarkerPropsType['center'],
-  sharingLists: kakaoMapItemType[],
-  setMapCenter: getMapAndMarkerPropsType['setTargetCoord']
-) => {
-  let mapContainer =
-    document.getElementById('map') || document.createElement('div');
-  const map = new kakao.maps.Map(mapContainer, {
-    // 지도를 표시할 div
-    center: new kakao.maps.LatLng(coords.lat, coords.lng), // 지도의 중심좌표
-    level: coords.mapLevel || 4, // 지도의 확대 레벨
-  });
-  let marker = new kakao.maps.Marker({ position: map.getCenter() }); // 클릭한 위치를 표시할 마커입니다
-  marker.setMap(map);
-  marker.setOpacity(0.7);
-  marker.setTitle('지도 중심');
-  // 마커 클러스터러를 생성합니다
-  const clusterer = new kakao.maps.MarkerClusterer({
-    map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-    averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-    minLevel: 4, // 클러스터 할 최소 지도 레벨
-  });
-  let markers = [];
-  let mapLevel: number;
-  kakao.maps.event.addListener(map, 'zoom_changed', function () {
-    mapLevel = map.getLevel();
-    setMapCenter((prev: any) => {
-      return { ...prev, mapLevel };
-    });
-  });
-  kakao.maps.event.addListener(map, 'dragend', function () {
-    let latlng: any = map.getCenter();
-
-    // latlng가 any가 아닐 때 Ma와 La 필드가 latlng에 존재하지 않는다고 오류뜸.
-    const mapCenter = { lat: latlng.Ma, lng: latlng.La };
-    setDefaultCoordsAndAddress(mapCenter, (result, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        let detailAddr = !!result[0].address.address_name
-          ? result[0].address.address_name
-          : result[0].road_address.address_name;
-        setMapCenter((prev: any) => {
-          return { ...prev, ...mapCenter, address: detailAddr };
-        });
-      }
-    });
-  });
-
-  for (let i = 0; i < sharingLists?.length; i++) {
-    let sharingItemMarker = new kakao.maps.Marker({
-      position: new kakao.maps.LatLng(
-        sharingLists[i]?.latitude,
-        sharingLists[i]?.longitude
-      ),
-      clickable: true,
-    });
-    markers.push(sharingItemMarker);
-
-    const customOverlayContent = `<div class="absolute bg-white" style="bottom: 40px; transform: translateX(-50%); border-radius: 15px; border: 1px solid #63A8DA; padding: 0 10px;">
-    <a href=/nearby/${sharingLists[i]?.boardId} target=_blank>${sharingLists[i]?.title}</a>
-    </div>`;
-    let customOverlay = new kakao.maps.CustomOverlay({
-      content: customOverlayContent,
-      position: sharingItemMarker.getPosition(),
-      zIndex: 3,
-    });
-    let isAllOverlayOpen = false;
-    let isOverlayOpen = false;
-    kakao.maps.event.addListener(map, 'click', function () {
-      if (!isAllOverlayOpen) {
-        customOverlay.setMap(map);
-        isAllOverlayOpen = true;
-        isOverlayOpen = true;
-      } else {
-        customOverlay.setMap(null);
-        isAllOverlayOpen = false;
-        isOverlayOpen = false;
-      }
-    });
-
-    kakao.maps.event.addListener(sharingItemMarker, 'click', function () {
-      if (!isOverlayOpen) {
-        customOverlay.setMap(map);
-        isOverlayOpen = true;
-      } else if (isOverlayOpen) {
-        customOverlay.setMap(null);
-        isOverlayOpen = false;
-      }
-    });
-    kakao.maps.event.addListener(sharingItemMarker, 'mouseover', function () {
-      sharingItemMarker.setOpacity(0.9);
-      customOverlay.setZIndex(5);
-    });
-    kakao.maps.event.addListener(sharingItemMarker, 'mouseout', function () {
-      sharingItemMarker.setOpacity(1);
-      customOverlay.setZIndex(3);
-    });
-  }
-  clusterer.addMarkers(markers);
-}; */
 export const setMarkerCluster = async (
   coords: getMapAndMarkerPropsType['center'],
   sharingLists: kakaoMapItemType[],
-  setMapCenter: getMapAndMarkerPropsType['setTargetCoord']
+  setMapCenter: getMapAndMarkerPropsType['setTargetCoord'],
+  setIsMapLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   let mapContainer =
     document.getElementById('map') || document.createElement('div');
@@ -259,13 +160,12 @@ export const setMarkerCluster = async (
   });
   let marker = new kakao.maps.Marker({ position: map.getCenter() }); // 클릭한 위치를 표시할 마커입니다
   marker.setMap(map);
-  marker.setOpacity(0.7);
   marker.setTitle('지도 중심');
   // 마커 클러스터러를 생성합니다
   const clusterer = new kakao.maps.MarkerClusterer({
     map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
     averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-    minLevel: 4, // 클러스터 할 최소 지도 레벨
+    minLevel: 5, // 클러스터 할 최소 지도 레벨
   });
   const zoomControl = new kakao.maps.ZoomControl();
   map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
@@ -273,9 +173,9 @@ export const setMarkerCluster = async (
   let mapLevel: number;
   kakao.maps.event.addListener(map, 'dragend', function () {
     let latlng: any = map.getCenter();
-
     // latlng가 any가 아닐 때 Ma와 La 필드가 latlng에 존재하지 않는다고 오류뜸.
     const mapCenter = { lat: latlng.Ma, lng: latlng.La };
+    marker.setPosition(new kakao.maps.LatLng(mapCenter.lat, mapCenter.lng));
     setDefaultCoordsAndAddress(mapCenter, (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
         let detailAddr = !!result[0].address.address_name
@@ -289,16 +189,22 @@ export const setMarkerCluster = async (
   });
 
   for (let i = 0; i < sharingLists?.length; i++) {
+    const openAllOverlayButton = document.getElementById('openAllOverlay');
+    const imageSrc =
+        sharingLists[i].userImageLink ||
+        'https://t1.daumcdn.net/mapjsapi/images/2x/transparent.gif',
+      imageSize = new kakao.maps.Size(36, 36);
+    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
     let sharingItemMarker = new kakao.maps.Marker({
       position: new kakao.maps.LatLng(
         sharingLists[i]?.latitude,
         sharingLists[i]?.longitude
       ),
       clickable: true,
+      image: markerImage,
     });
     markers.push(sharingItemMarker);
-
-    const customOverlayContent = `<div class="absolute bg-white" style="bottom: 40px; max-width: 250px; transform: translateX(-50%); border-radius: 15px; border: 1px solid #63A8DA; padding: 0 10px;">
+    const customOverlayContent = `<div class="absolute bg-white" style="bottom: 40px; max-width: 250px; transform: translateX(-50%); border-radius: 36px; border: 1px solid #63A8DA; padding: 5px 15px;">
     <a class="block" style="width: 100%" href=/nearby/${sharingLists[i]?.boardId} target=_blank>
     <span class="text-lg truncate block">${sharingLists[i]?.title}</span>
     <span>${sharingLists[i]?.curNum}명 / ${sharingLists[i]?.maxNum}명</span>
@@ -313,19 +219,17 @@ export const setMarkerCluster = async (
     });
     let isAllOverlayOpen = false;
     let isOverlayOpen = false;
-    kakao.maps.event.addListener(map, 'click', function () {
-      if (!isAllOverlayOpen) {
+
+    kakao.maps.event.addListener(sharingItemMarker, 'click', function () {
+      if (!isOverlayOpen) {
         customOverlay.setMap(map);
-        isAllOverlayOpen = true;
         isOverlayOpen = true;
-      } else {
+      } else if (isOverlayOpen) {
         customOverlay.setMap(null);
-        isAllOverlayOpen = false;
         isOverlayOpen = false;
       }
     });
-
-    kakao.maps.event.addListener(sharingItemMarker, 'click', function () {
+    openAllOverlayButton?.addEventListener('click', function () {
       if (!isOverlayOpen) {
         customOverlay.setMap(map);
         isOverlayOpen = true;
@@ -343,5 +247,7 @@ export const setMarkerCluster = async (
       customOverlay.setZIndex(3);
     });
   }
+
   clusterer.addMarkers(markers);
+  setIsMapLoading(false);
 };

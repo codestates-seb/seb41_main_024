@@ -262,6 +262,28 @@ const AddNewPage = () => {
                 value={targetCoord.address || center.address}
                 disabled
               />
+              <div className="flex items-center">
+                <img
+                  className="h-40 w-40 mb-7 m-auto"
+                  src={imageLink || productImg}
+                  alt={'상품이미지'}
+                />
+                <span>
+                  상품 링크를 입력하면 자동으로 상품이미지가 등록됩니다
+                </span>
+              </div>
+              <Label htmlFor={'productsLink'} labelText={''} />
+              <Input
+                variant="outlined"
+                id="productsLink"
+                name="productsLink"
+                type="text"
+                label="상품 링크"
+                value={productsLink}
+                onChange={onChange}
+                onBlur={getLinkMetaData}
+                helperText="쿠팡, 네이버 상품은 이미지 자동 업로드가 지원되지 않습니다."
+              />
               <Label htmlFor={'title'} labelText={''} />
               <Input
                 variant="outlined"
@@ -286,28 +308,6 @@ const AddNewPage = () => {
                 onChange={onChange}
                 helperText="배송비를 포함한 가격을 입력해주세요"
                 {...(!productsLink && { disabled: true })}
-              />
-              <div className="flex items-center">
-                <img
-                  className="h-40 w-40 mb-7 m-auto"
-                  src={imageLink || productImg}
-                  alt={'상품이미지'}
-                />
-                <span>
-                  상품 링크를 입력하면 자동으로 상품이미지가 등록됩니다
-                </span>
-              </div>
-              <Label htmlFor={'productsLink'} labelText={''} />
-              <Input
-                variant="outlined"
-                id="productsLink"
-                name="productsLink"
-                type="text"
-                label="상품 링크"
-                value={productsLink}
-                onChange={onChange}
-                onBlur={getLinkMetaData}
-                helperText="쿠팡, 네이버 상품은 이미지 자동 업로드가 지원되지 않습니다."
               />
 
               <FormControl fullWidth>
