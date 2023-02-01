@@ -23,10 +23,16 @@ export default function BottomNav(): JSX.Element {
   const token = Cookies.get('access_token');
 
   useEffect(() => {
-    checkTokenExpiration();
-    axios.get('https://ngether.site/chat/room/findNewMessages', { headers: { Authorization: token } })
-    .then(res => {setIsUnReadMessage(res.data)})
-    .catch(error => {setIsUnReadMessage(false)})
+    axios
+      .get('https://ngether.site/chat/room/findNewMessages', {
+        headers: { Authorization: token },
+      })
+      .then((res) => {
+        setIsUnReadMessage(res.data);
+      })
+      .catch((error) => {
+        setIsUnReadMessage(false);
+      });
     setIsLogin(token);
   });
 
@@ -66,7 +72,8 @@ export default function BottomNav(): JSX.Element {
     },
   ];
 
-  const handleOnClick = (path: string) => {
+  const handleOnClick = async (path: string) => {
+    const res = await checkTokenExpiration();
     if (path === '/chatlist') {
       router.push(path);
     }
