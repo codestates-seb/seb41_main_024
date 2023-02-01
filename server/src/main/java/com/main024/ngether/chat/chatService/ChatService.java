@@ -115,6 +115,8 @@ public class ChatService {
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
 
+            return findMembersInChatRoom(roomId);
+
         } else {
             //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
@@ -132,9 +134,9 @@ public class ChatService {
                     .message("")
                     .type(ChatMessage.MessageType.REENTER)
                     .build());
-
+            return findMembersInChatRoom(roomId);
         }
-        return findMembersInChatRoom(roomId);
+
     }
 
     public List<MemberDto.ResponseChat> leaveRoom(Long roomId) {
