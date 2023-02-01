@@ -13,6 +13,8 @@ import RandomProfile from '../../components/organisms/randomProfile/RandomProfil
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import SadErrorBox from '../../components/organisms/sadErrorBox/SadErrorBox';
 import CircleSuccess from '../../components/organisms/circleSuccess/CircleSuccess';
+import axios from 'axios';
+import Input from '../../components/atoms/input/Input';
 
 const SignupSlogan = () => {
   return (
@@ -41,6 +43,7 @@ type formValueType = {
 const randomProfile = createProfileRandomUrl(15);
 
 const SignupPage = () => {
+  const router = useRouter();
   const [formValue, setFormValue] = useState<formValueType>({
     email: '',
     nickName: '',
@@ -48,7 +51,6 @@ const SignupPage = () => {
     pw: '',
     imageLink: randomProfile,
   });
-  const router = useRouter();
   const [pwConfirm, setPwConfirm] = useState('');
   const { email, nickName, pw, phoneNumber } = formValue;
   const [profileUrl, setProfileUrl] = useState(randomProfile);
@@ -72,88 +74,28 @@ const SignupPage = () => {
     nickName: false,
     phoneNumber: false,
   });
+  const [isEmailConfirm, setIsEmailConfirm] = useState({
+    code: '',
+    inputValue: '',
+    onProcess: false,
+    isLoading: false,
+    isMatched: false,
+    messageState: true
+  }) 
   const [isAllEquals, setIsAllEquals] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
+
   useEffect(() => {
     setIsAllEquals(
       formEqualCheck.email &&
-        formEqualCheck.nickName &&
-        formEqualCheck.phoneNumber
+      formEqualCheck.nickName &&
+      formEqualCheck.phoneNumber
     );
   }, [formEqualCheck]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { id, value } = event.target;
-
-    if (id === 'email') {
-      setFormValue({
-        ...formValue,
-        email: value,
-      });
-      setFormEqualCheck({
-        ...formEqualCheck,
-        email: false,
-      });
-      setEqualClickedCheck({
-        ...formEqualCheck,
-        email: false,
-      });
-      setIsEqualsError({
-        ...isEqualsError,
-        email: false,
-      });
-    } else if (id === 'nickName') {
-      setFormValue({
-        ...formValue,
-        nickName: value,
-      });
-      setFormEqualCheck({
-        ...formEqualCheck,
-        nickName: false,
-      });
-      setEqualClickedCheck({
-        ...formEqualCheck,
-        nickName: false,
-      });
-      setIsEqualsError({
-        ...isEqualsError,
-        nickName: false,
-      });
-    } else if (id === 'phoneNumber') {
-      setFormValue({
-        ...formValue,
-        [id]: value
-          .replace(/[^0-9]/g, '')
-          .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
-          .replace(/(\-{1,2})$/g, ''),
-      });
-      setFormEqualCheck({
-        ...formEqualCheck,
-        phoneNumber: false,
-      });
-      setEqualClickedCheck({
-        ...formEqualCheck,
-        phoneNumber: false,
-      });
-      setIsEqualsError({
-        ...isEqualsError,
-        phoneNumber: false,
-      });
-    } else if (id === 'pwConfirm') {
-      setPwConfirm(value);
-    } else {
-      setFormValue({
-        ...formValue,
-        [id]: value,
-      });
-    }
-  };
-
-  const handleClickRandomProfile = async () => {
-    setProfileUrl(createProfileRandomUrl(15));
-  };
+    
   useEffect(() => {
     setFormValue({
       ...formValue,
@@ -161,32 +103,119 @@ const SignupPage = () => {
     });
   }, [profileUrl]);
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { id, value } = event.target;
+    const updatedFormValue = { ...formValue, [id]: value };
+    const updatedFormEqualCheck = { ...formEqualCheck, [id]: false };
+    const updatedEqualClickedCheck = { ...equalClickedCheck, [id]: false };
+    const updatedIsEqualsError = { ...isEqualsError, [id]: false };
+
+    setFormValue(updatedFormValue);
+    setFormEqualCheck(updatedFormEqualCheck);
+    setEqualClickedCheck(updatedEqualClickedCheck);
+    setIsEqualsError(updatedIsEqualsError);
+
+    if (id === 'phoneNumber') {
+      setFormValue({
+        ...updatedFormValue,
+        [id]: value
+          .replace(/[^0-9]/g, '')
+          .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
+          .replace(/(\-{1,2})$/g, ''),
+      });
+    }
+    if (id === 'pwConfirm') {
+      setPwConfirm(value);
+    }
+    if (id === 'confirmCode') {
+      setIsEmailConfirm({
+        ...isEmailConfirm, 
+        inputValue:event.target.value
+      })
+    }
+  };
+
+  const handleClickRandomProfile = async () => {
+    setProfileUrl(createProfileRandomUrl(15));
+  };
+
   const equalcheck = async (inpName: string) => {
     const enteredData = {
       [inpName]: formValue[inpName],
     };
+
     setEqualClickedCheck({
       ...formEqualCheck,
       [inpName]: true,
     });
+    
     if (formValue[inpName] !== '') {
       await postUserEqualCheck(enteredData)
-        .then((res) => {
+      .then((res) => {
+        setFormEqualCheck({
+          ...formEqualCheck,
+          [inpName]: res.data,
+        });
+      })
+      .then(() => {
+        if (inpName === "email") {
           setFormEqualCheck({
             ...formEqualCheck,
-            [inpName]: res.data,
+            email: false,
           });
-        })
-        .catch((error) => {
-          if (error.response.status === 419) {
-            setIsEqualsError({
-              ...isEqualsError,
-              [inpName]: true,
-            });
-          }
-        });
+          setIsEmailConfirm({
+            ...isEmailConfirm, 
+            isLoading:true
+          })
+          axios.post(`https://ngether.site/api/emailConfirm?email=${email}`)
+          .then(res => {
+            setIsEmailConfirm({
+              ...isEmailConfirm, 
+              isLoading:false, 
+              code:res.data, 
+              onProcess:true
+            })
+          })
+          .catch(() => {
+            setIsError(true)
+          })
+        }
+      })
+      .catch((error) => {
+        if ([417, 418, 419].includes(error.response.status)) {
+          setIsEqualsError({
+            ...isEqualsError,
+            [inpName]: true,
+          });
+        }
+      });
     }
   };
+
+  const onEmailCodeCheckHandler = () => {
+    if (isEmailConfirm.code === isEmailConfirm.inputValue) {
+      console.log("맞아")
+      setFormEqualCheck({
+        ...formEqualCheck,
+        email: true
+      });
+      setIsEmailConfirm({
+        ...isEmailConfirm,
+        isMatched: true,
+        onProcess: false
+      });
+      setFormEqualCheck({
+        ...formEqualCheck,
+        email: true,
+      });
+    }
+    else {
+      setIsEmailConfirm({
+        ...isEmailConfirm,
+        messageState: false
+      });
+    }
+  }
 
   const onSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -246,25 +275,59 @@ const SignupPage = () => {
                       {equalClickedCheck.email &&
                         !formEqualCheck.email &&
                         formValue.email !== '' &&
-                        isEqualsError.email && (
+                        !isEmailConfirm.onProcess &&
+                        !isEmailConfirm.isLoading && (
                           <span className="text-[#F8719D] ani_fadeIn">
                             사용중인 이메일 입니다.
                           </span>
                         )}
-                      {equalClickedCheck.email && formEqualCheck.email && (
+                      {equalClickedCheck.email && 
+                      formEqualCheck.email && 
+                      !isEqualsError.email && 
+                      isEmailConfirm.isMatched && (
                         <span className="text-[#2EB150] ani_fadeIn">
                           사용가능 합니다.
                         </span>
                       )}
                     </p>
-                    <Button
-                      onClick={() => {
-                        equalcheck('email');
-                      }}
-                      className="p-0 text-[0.75rem]"
-                    >
-                      이메일 중복 확인
-                    </Button>
+                    {!isEmailConfirm.isLoading && !isEmailConfirm.onProcess && !isEmailConfirm.isMatched  && (
+                      <Button
+                        onClick={(event) => {
+                          equalcheck('email');
+                        }}
+                        className="p-0 text-[0.75rem]"
+                      >
+                        이메일 인증 전송
+                      </Button>
+                    )}
+                    {isEmailConfirm.isLoading && (
+                      <span className="block m-[0.3125rem] animate-spin w-[1.3125rem] h-[1.3125rem] rounded-full border-[0.3125rem] border-t-[#63A8DA] border-l-[#63A8DA] border-b-[#63A8DA] border-r-transparent border-solid" />
+                    )}
+                    {isEmailConfirm.onProcess  && (
+                      <>
+                        {!isEmailConfirm.messageState && (
+                          <p className='flex items-center justify-center mr-2'>
+                            <span className="text-[#F8719D] ani_fadeIn">
+                              인증번호가 일치하지 않습니다.
+                            </span>
+                          </p>
+                        )}
+                        <Input
+                          id="confirmCode"
+                          name="confirmCode"
+                          type="text"
+                          label="인증번호"
+                          value={isEmailConfirm.inputValue}
+                          onChange={handleInputChange}
+                        />
+                        <Button 
+                          className="p-0 text-[0.75rem]"
+                          onClick={onEmailCodeCheckHandler}
+                        >
+                          인증하기
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="mb-[1.3rem] last:mb-0">
@@ -292,14 +355,15 @@ const SignupPage = () => {
                           </span>
                         )}
                       {equalClickedCheck.nickName &&
-                        formEqualCheck.nickName && (
+                        formEqualCheck.nickName &&
+                        isEmailConfirm.isMatched && (
                           <span className="text-[#2EB150] ani_fadeIn">
                             사용가능 합니다.
                           </span>
                         )}
                     </p>
                     <Button
-                      onClick={() => {
+                      onClick={(event) => {
                         equalcheck('nickName');
                       }}
                       className="p-0 text-[0.75rem]"
