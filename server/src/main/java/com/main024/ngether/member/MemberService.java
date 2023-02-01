@@ -52,6 +52,7 @@ public class MemberService {
         newMember.setPhoneNumber(member.getPhoneNumber());
         newMember.setEmail(member.getEmail());
         newMember.setImageLink(member.getImageLink());
+        newMember.setGoogle(false);
         Member savedMember = memberRepository.save(newMember);
 
         publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));

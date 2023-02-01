@@ -39,20 +39,22 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       id,
-      detailData: data,
+      productData: data,
     },
   };
 }
 
 interface productDetailType {
   id: string;
-  datailData: any;
+  productData: any;
 }
 
-export default function ProductDetail({ id, datailData }: productDetailType) {
-  const { data } = useQuery(['productData'], () => getProductDetail(id), {
-    initialData: datailData,
-  });
+export default function ProductDetail({ id, productData }: productDetailType) {
+  // const { data } = useQuery(['productData'], () => getProductDetail(id), {
+  //   initialData: detailData,
+  // });
+
+  console.log(productData);
 
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
   const handleClose = () => {
@@ -68,7 +70,7 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
 
   const router = useRouter();
 
-  const productData = data?.data;
+  // const productData = data?.data;
 
   const isOpenBoard =
     productData?.boardStatus &&
@@ -161,10 +163,15 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
       goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
     }
   };
+
+  console.log('isOpen', isOpen);
   // 모집 완료하기
   const handleComplete = () => {
     setIsOpen(false);
-    completeSharing(id).then((res) => {});
+    completeSharing(id).then((res) => {
+      setIsCompleteModalOpen(false);
+      router.push(`/nearby/${id}`);
+    });
   };
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const handleReportModalOpen = () => setIsReportModalOpen(true);
@@ -184,7 +191,11 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
 
   return (
     <div>
-      <Box sx={{ mx: 3 }}>
+      <Box
+        sx={{
+          mx: 1.5,
+        }}
+      >
         <div className="relative pb-[70%]">
           <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
             <Image
