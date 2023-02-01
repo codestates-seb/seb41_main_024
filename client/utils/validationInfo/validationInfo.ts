@@ -20,11 +20,11 @@ const validationInfo: validationInfoType = {
     },
   },
   pw: {
-    regexPattern: new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})'),
+    regexPattern: new RegExp('(?=.*[0-9])(?=.*[a-z])(?=.*\\W)(?=\\S+$).{8,}'),
     helperText: {
-      default: '소문자, 특수문자 포함 8자 이상이어야 합니다.',
+      default: '소문자, 숫자, 특수문자 포함 8자 이상이어야 합니다.',
       verified: '올바른 비밀번호 양식입니다.',
-      unverified: '소문자, 특수문자 포함 8자 이상 입력해 주세요.',
+      unverified: '소문자, 숫자, 특수문자 포함 8자 이상 입력해 주세요.',
     },
   },
   pwConfirm: {
