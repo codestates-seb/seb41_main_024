@@ -55,7 +55,7 @@ const Index = ({
     lng: 0,
     address: '',
   });
-
+  const [isMapLoading, setIsMapLoading] = useState(true);
   const [category, setCategory] = useState('상품 쉐어링');
 
   const [locationError, setLocationError] = useState('');
@@ -65,7 +65,12 @@ const Index = ({
 
   useEffect(() => {
     const sharingListsInMap = dehydratedState?.queries[0]?.state.data.data;
-    setMarkerCluster(mapCenter, sharingListsInMap, setCurrentMapCenter);
+    setMarkerCluster(
+      mapCenter,
+      sharingListsInMap,
+      setCurrentMapCenter,
+      setIsMapLoading
+    );
   }, [mapCenter.address]);
   useEffect(() => {
     //검색 옵션이 글 제목이거나 검색페이지를 거치지 않고 왔을 때
@@ -139,7 +144,9 @@ const Index = ({
   return (
     <div className="flex flex-col items-center">
       <div className="mx-auto w-full h-fit">
-        <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
+        <div id="map" className="w-[100%] h-[350px] fadeIn">
+          {isMapLoading && <CircleLoading />}
+        </div>
         <p>
           <em className="text-gray-400">
             마우스를 드래그해서 지도를 이동해보세요 등록된 게시물이 나타납니다
