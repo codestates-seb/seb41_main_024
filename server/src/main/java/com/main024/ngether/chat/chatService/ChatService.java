@@ -151,7 +151,7 @@ public class ChatService {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         Board board = boardService.findBoard(roomId);
-        ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId());
+        ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId()).get();
 
 
         //채팅방 개설자가 나갈경우 채팅방 삭제, 채팅방 메시지 내역 삭제, 게시물 삭제
