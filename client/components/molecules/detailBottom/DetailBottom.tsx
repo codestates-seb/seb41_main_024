@@ -64,11 +64,7 @@ const DetailBottom = ({
           spacing={2}
         >
           {isOpen && isMySharing && !isWriter && !isAdmin && (
-            <Button
-              onClick={handleGetherModalOpen}
-              variant="contained"
-              className=""
-            >
+            <Button onClick={handleGether} variant="contained" className="">
               채팅방 가기
             </Button>
           )}
