@@ -11,14 +11,15 @@ export const getQuestions = () => {
   })
 }
 
-export const getReport = () => {
-  return axios({
-    url: `https://ngether.site/api/reports/admin/list?page=1&size=100`,
+export const getReport = async (page:number) => {
+  const reports = await axios({
+    url: `https://ngether.site/api/reports/admin/list?page=${page}&size=10`,
     method: 'get',
     headers: {
       Authorization : Cookies.get('access_token')
     }
   })
+  return reports.data;
 }
 
 export const handleDeleteReport = (reportId:number) => {
