@@ -18,10 +18,9 @@ import CircleLoading from '../../components/organisms/circleLoading/CircleLoadin
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const LoginPage = () => {
+  const router = useRouter();
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
   const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
-
-  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState<string>();

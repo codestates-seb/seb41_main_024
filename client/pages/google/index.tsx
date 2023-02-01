@@ -2,7 +2,7 @@
 // import TextField from '../../components/molecules/passwordTextField/TextField';
 import Input from '../../components/atoms/input/Input';
 import Label from '../../components/atoms/label/Label';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import { NextRouter, useRouter } from 'next/router';
 import Cookies from 'js-cookie';
@@ -25,6 +25,7 @@ import Box from '@mui/material/Box';
 
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
+  const [allChecked, setAllchecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(true);
 
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
@@ -73,7 +74,7 @@ const GoogleLoginPage = () => {
         }
       });
     } catch (error: any) {
-      if (error.response.data.status === 417) {
+      if (error?.response?.data?.status === 417) {
         setNickNameDuplicationCheckMessage('failed');
       }
     }
@@ -88,7 +89,7 @@ const GoogleLoginPage = () => {
         }
       });
     } catch (error: any) {
-      if (error.response.data.status === 418) {
+      if (error?.response?.data?.status === 418) {
         setPhoneNumberDuplicationCheckMessage('failed');
       }
     }
@@ -114,6 +115,7 @@ const GoogleLoginPage = () => {
     const { name, value } = event.target;
 
     if (name === 'phoneNumber') {
+      setPhoneNumberDuplicationCheckMessage('');
       setForm({
         ...form,
         [name]: value
@@ -127,7 +129,8 @@ const GoogleLoginPage = () => {
           .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
           .replace(/(\-{1,2})$/g, ''),
       });
-    } else {
+    } else if (name === 'nickName') {
+      setNickNameDuplicationCheckMessage('');
       setForm({
         ...form,
         [name]: value,
@@ -137,6 +140,15 @@ const GoogleLoginPage = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (
+      nickNameDuplicationCheckMessage === 'checked' &&
+      phoneNumberDuplicationCheckMessage === 'checked'
+    ) {
+      setAllchecked(true);
+    }
+  }, [nickNameDuplicationCheckMessage, phoneNumberDuplicationCheckMessage]);
 
   const handleClose = (
     event: {},
@@ -176,6 +188,7 @@ const GoogleLoginPage = () => {
                 label="닉네임"
                 value={nickName}
                 onChange={onChange}
+                inputProps={{ maxLength: 25 }}
               />
             </Stack>
             <Label htmlFor={'nickName-input'} labelText={''} />
@@ -210,9 +223,9 @@ const GoogleLoginPage = () => {
                 name="phoneNumber"
                 type={'text'}
                 label="휴대전화"
-                maxLength={13}
                 value={phoneNumber}
                 onChange={onChange}
+                inputProps={{ maxLength: 13 }}
               />
             </Stack>
             <Label htmlFor={'phoneNumber-input'} labelText={''} />
@@ -243,12 +256,31 @@ const GoogleLoginPage = () => {
               </Button>
             </Stack>
             <Stack>
-              <Button
-                className="h-14 mt-4 bg-primary text-white rounded"
-                onClick={handleSocialEdit}
-              >
-                완료
-              </Button>
+              {!allChecked && (
+                <Button
+                  disabled
+                  variant="contained"
+                  className="h-14 mt-4rounded"
+                  onClick={handleSocialEdit}
+                  sx={{
+                    '& .Mui-disabled': {
+                      color: 'white',
+                      backgroundColor: '#ff5656',
+                    },
+                  }}
+                >
+                  완료
+                </Button>
+              )}
+              {allChecked && (
+                <Button
+                  className="h-14 mt-4 bg-primary text-white rounded"
+                  onClick={handleSocialEdit}
+                >
+                  완료
+                </Button>
+              )}
+
               <Button
                 variant="text"
                 className="h-6 mt-4 text-sm"
