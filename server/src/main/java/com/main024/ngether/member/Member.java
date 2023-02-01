@@ -38,6 +38,8 @@ public class Member {
     private String phoneNumber;
     @Column(length = 1000)
     private String imageLink;
+    @Column(nullable = false)
+    boolean google;
     @JsonIgnore
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Board> boards = new ArrayList<>();
