@@ -115,7 +115,7 @@ public class ReportService {
     public void resetState(long reportId) {
         Report report = reportRepository.findById(reportId).get();
         if(Objects.equals(report.getReportType(), "board")){
-            Board board = boardRepository.findByBoardId(report.getReportId()).get();
+            Board board = boardRepository.findByBoardId(report.getReportedId()).get();
             if(board.getCurNum() == board.getMaxNum()){
                 board.setBoardStatus(Board.BoardStatus.FULL_MEMBER);
             }
