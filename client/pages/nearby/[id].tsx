@@ -175,7 +175,7 @@ export default function ProductDetail({ id, productData }: productDetailType) {
   };
   // 어드민일시 유저 정지
   const handleBlockUserByNickName = () => {
-    const nickName = data?.data?.nickname;
+    const nickName = productData?.nickname;
     handleBlockUser(nickName, Number(localStorage.getItem('reportId')));
     localStorage.removeItem('reportId');
     router.push('/admin');
