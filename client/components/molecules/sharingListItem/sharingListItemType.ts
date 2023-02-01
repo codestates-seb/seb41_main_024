@@ -27,4 +27,5 @@ export interface kakaoMapItemType {
   title: string;
   maxNum: number;
   curNum: number;
+  userImageLink: string;
 }

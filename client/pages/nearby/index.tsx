@@ -15,6 +15,7 @@ import { getCurrentLocation } from '../../api/location';
 import Pagination from '@mui/material/Pagination';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+import FormButton from '../../components/molecules/formbutton/FormButton';
 const TOGGLE_VALUES = [
   { value: 0.5, label: '0.5Km' },
   { value: 1, label: '1Km' },
@@ -41,31 +42,36 @@ const Index = ({
   lat,
   lng,
   address,
-  searchOption,
+  searchOption = '주소',
   keyword,
   type,
 }: nearbyPropsType) => {
   const [mapCenter, setMapCenter] = useState({
     lat: lat || 37.517331925853,
     lng: lng || 127.047377408384,
-    address: address || '서울 강남구',
+    address: address === 'undefined' ? '서울 강남구' : address,
   });
+
   const [currentMapCenter, setCurrentMapCenter] = useState({
     lat: 0,
     lng: 0,
     address: '',
   });
-
+  const [isMapLoading, setIsMapLoading] = useState(true);
   const [category, setCategory] = useState('상품 쉐어링');
 
   const [locationError, setLocationError] = useState('');
   const [alignment, setAlignment] = useState<number>(1.5);
   const [page, setPage] = useState(1);
   const [isOpenOptions, setIsOpenOptions] = useState(false);
-
   useEffect(() => {
     const sharingListsInMap = dehydratedState?.queries[0]?.state.data.data;
-    setMarkerCluster(mapCenter, sharingListsInMap, setCurrentMapCenter);
+    setMarkerCluster(
+      mapCenter,
+      sharingListsInMap,
+      setCurrentMapCenter,
+      setIsMapLoading
+    );
   }, [mapCenter.address]);
   useEffect(() => {
     //검색 옵션이 글 제목이거나 검색페이지를 거치지 않고 왔을 때
@@ -135,23 +141,36 @@ const Index = ({
     alignment,
     currentTab,
   ]);
+  useEffect(() => {
+    refetch();
+  }, []);
   const handleOpenOptions = () => setIsOpenOptions((prev) => !prev);
   return (
     <div className="flex flex-col items-center">
       <div className="mx-auto w-full h-fit">
-        <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
+        <div id="map" className="w-[100%] h-[350px] fadeIn">
+          {isMapLoading && <CircleLoading />}
+          <FormButton
+            id="openAllOverlay"
+            className="z-[4]"
+            content="게시물 제목보기"
+            variant={'contained'}
+          />
+        </div>
         <p>
           <em className="text-gray-400">
-            마우스를 드래그해서 지도를 이동해보세요 등록된 게시물이 나타납니다
+            마우스를 드래그해서 지도를 이동해보세요 주변 게시물이 나타납니다
           </em>
         </p>
         <p>
           <em className="text-gray-400">
-            지도나 마커를 클릭해주세요! 주변에 게시물이 있다면 글 제목을 볼 수
-            있습니다
+            캐릭터를 클릭해주세요! 모집 글을 볼 수 있습니다
           </em>
         </p>
-        <p>{locationError && '현재 위치를 파악하지 못했습니다'}</p>
+        <p className="text-[red]">
+          {locationError &&
+            '위치 정보 접근권한이 없어 현재 위치를 파악하지 못했습니다'}
+        </p>
       </div>
       <BasicTabs
         currentTab={currentTab}

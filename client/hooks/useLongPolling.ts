@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 
 const useLongPolling = () => {
   const [isUnReadMessage, setIsUnReadMessage] = useState(false);
   const token = Cookies.get('access_token');
-
   useEffect(() => {
     const longPoll = async () => {
       try {
@@ -19,11 +18,17 @@ const useLongPolling = () => {
           setTimeout(async () => {
             await longPoll();
           }, 5000);
-        } 
-      }
-      catch (error) {
+        }
+      } catch (error: any) {
         const checkToken = Cookies.get('access_token');
-        if(checkToken) {
+        if (
+          error?.response?.status === 500 ||
+          error?.response?.status === 402
+        ) {
+          return;
+        }
+
+        if (checkToken) {
           await setIsUnReadMessage(false);
           await longPoll();
         }
@@ -32,7 +37,7 @@ const useLongPolling = () => {
     token !== undefined && longPoll();
   }, [token]);
 
-  return {isUnReadMessage, setIsUnReadMessage};
+  return { isUnReadMessage, setIsUnReadMessage };
 };
 
 export default useLongPolling;
