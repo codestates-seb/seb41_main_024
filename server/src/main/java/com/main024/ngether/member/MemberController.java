@@ -158,4 +158,11 @@ public class MemberController {
                 new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
     }
 
+    @DeleteMapping("/googleMemberDelete")
+    public ResponseEntity googleMemberDelete(){
+        Member member = memberService.getLoginMember();
+        memberService.deleteMember(member.getMemberId());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
