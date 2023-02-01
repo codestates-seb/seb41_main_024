@@ -20,7 +20,7 @@ public class ChatRoomService {
             return "";
     }
     public void setSessionId(Long roomId, Member member, String sessionId){
-        ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(),roomId);
+        ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(),roomId).get();
         chatRoomMembers.setSessionId(sessionId);
         chatRoomMembers.setUnreadMessageCount(0);
         chatRoomMembersRepository.save(chatRoomMembers);

@@ -72,9 +72,11 @@ public class ChatService {
     //채팅방에 입장할 때
     public List<MemberDto.ResponseChat> enterRoom(Long roomId) {
         Member member = memberService.getLoginMember();
-        if (member == null)
+        if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        if (chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId) == null) {
+        }
+
+        if (chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).isEmpty()) {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
             Board board = boardService.findBoard(roomId);
@@ -120,17 +122,17 @@ public class ChatService {
         } else {
             //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
-            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId);
+            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get();
             Long count = chatRoomMembers.getLastMessageId();
-            for (int i = 0; i < chatMessageList.size() ; i++) {
+            for (int i = 0; i < chatMessageList.size(); i++) {
                 if (chatMessageList.get(i).getChatMessageId() > count) {
                     if (chatMessageList.get(i).getUnreadCount() != 0) {
                         chatMessageList.get(i).setUnreadCount(chatMessageList.get(i).getUnreadCount() - 1);
                         chatMessageRepository.save(chatMessageList.get(i));
                     }
                 }
-                if(i == chatMessageList.size() -1){
-                   chatRoomMembers.setLastMessageId(chatMessageList.get(i).getChatMessageId());
+                if (i == chatMessageList.size() - 1) {
+                    chatRoomMembers.setLastMessageId(chatMessageList.get(i).getChatMessageId());
                 }
             }
             chatRoomMembersRepository.save(chatRoomMembers);
