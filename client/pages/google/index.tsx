@@ -2,11 +2,15 @@
 // import TextField from '../../components/molecules/passwordTextField/TextField';
 import Input from '../../components/atoms/input/Input';
 import Label from '../../components/atoms/label/Label';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import { NextRouter, useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import { requestGoogleLogin, requestFirstGoogleLogin } from '../../api/members';
+import {
+  requestGoogleLogin,
+  requestFirstGoogleLogin,
+  deleteGoogleUser,
+} from '../../api/members';
 import React from 'react';
 
 import Button from '@mui/material/Button';
@@ -25,7 +29,8 @@ import Box from '@mui/material/Box';
 
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
-  const [open, setOpen] = useState(true);
+  const [allChecked, setAllchecked] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(true);
 
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
     useState('');
@@ -69,12 +74,12 @@ const GoogleLoginPage = () => {
     try {
       await checkNickName(nickNameForm).then((res) => {
         if (res.data) {
-          setNickNameDuplicationCheckMessage('OK');
+          setNickNameDuplicationCheckMessage('checked');
         }
       });
     } catch (error: any) {
-      if (error.response.data.message === 'NickName is exists') {
-        setNickNameDuplicationCheckMessage('NO NO');
+      if (error?.response?.data?.status === 417) {
+        setNickNameDuplicationCheckMessage('failed');
       }
     }
   };
@@ -84,12 +89,12 @@ const GoogleLoginPage = () => {
     try {
       await checkPhoneNumber(phoneNumberForm).then((res) => {
         if (res.data) {
-          setPhoneNumberDuplicationCheckMessage('OK');
+          setPhoneNumberDuplicationCheckMessage('checked');
         }
       });
     } catch (error: any) {
-      if (error.response.data.message === 'phoneNumber is exists') {
-        setPhoneNumberDuplicationCheckMessage('NO NO');
+      if (error?.response?.data?.status === 418) {
+        setPhoneNumberDuplicationCheckMessage('failed');
       }
     }
   };
@@ -98,8 +103,8 @@ const GoogleLoginPage = () => {
     event.preventDefault();
 
     if (
-      nickNameDuplicationCheckMessage === 'OK' &&
-      phoneNumberDuplicationCheckMessage === 'OK'
+      nickNameDuplicationCheckMessage === 'checked' &&
+      phoneNumberDuplicationCheckMessage === 'checked'
     ) {
       requestFirstGoogleLogin(form).then((res) => {
         Cookies.set('memberId', res.data.memberId);
@@ -114,6 +119,7 @@ const GoogleLoginPage = () => {
     const { name, value } = event.target;
 
     if (name === 'phoneNumber') {
+      setPhoneNumberDuplicationCheckMessage('');
       setForm({
         ...form,
         [name]: value
@@ -127,7 +133,8 @@ const GoogleLoginPage = () => {
           .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
           .replace(/(\-{1,2})$/g, ''),
       });
-    } else {
+    } else if (name === 'nickName') {
+      setNickNameDuplicationCheckMessage('');
       setForm({
         ...form,
         [name]: value,
@@ -138,25 +145,37 @@ const GoogleLoginPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (
+      nickNameDuplicationCheckMessage === 'checked' &&
+      phoneNumberDuplicationCheckMessage === 'checked'
+    ) {
+      setAllchecked(true);
+    }
+  }, [nickNameDuplicationCheckMessage, phoneNumberDuplicationCheckMessage]);
+
   const handleClose = (
     event: {},
     reason: 'backdropClick' | 'escapeKeyDown'
   ) => {
     if (reason === 'backdropClick') {
     } else {
-      setOpen(false);
+      setDialogOpen(false);
     }
   };
 
   const handleDeleteGoogleUser = () => {
-    // @@유저 정보 삭제 요청
-    router.push('/');
+    deleteGoogleUser().then((res) => {
+      Cookies.remove('access_token', { path: '' });
+      Cookies.remove('refresh_token', { path: '' });
+      router.push('/');
+    });
   };
 
   return (
     <div>
       <div>
-        <Dialog open={open} onClose={handleClose} disableEscapeKeyDown>
+        <Dialog open={dialogOpen} onClose={handleClose} disableEscapeKeyDown>
           <div className="mt-16">
             <SocialLoginTitle />
           </div>
@@ -176,6 +195,7 @@ const GoogleLoginPage = () => {
                 label="닉네임"
                 value={nickName}
                 onChange={onChange}
+                inputProps={{ maxLength: 25 }}
               />
             </Stack>
             <Label htmlFor={'nickName-input'} labelText={''} />
@@ -187,20 +207,20 @@ const GoogleLoginPage = () => {
               className="mt-2 mb-4"
             >
               <Stack>
-                {nickNameDuplicationCheckMessage === 'NO NO' && (
+                {nickNameDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">이미 존재하는 닉네임입니다.</p>
                 )}
-                {nickNameDuplicationCheckMessage === 'OK' && (
+                {nickNameDuplicationCheckMessage === 'checked' && (
                   <p className="text-[#2EB150]">사용 가능한 닉네임입니다.</p>
                 )}
               </Stack>
               <Button
-                variant="contained"
+                variant="text"
                 className="rounded"
                 onClick={handleCheckNickname}
                 size="small"
               >
-                중복 체크
+                중복 확인
               </Button>
             </Stack>
 
@@ -212,6 +232,7 @@ const GoogleLoginPage = () => {
                 label="휴대전화"
                 value={phoneNumber}
                 onChange={onChange}
+                inputProps={{ maxLength: 13 }}
               />
             </Stack>
             <Label htmlFor={'phoneNumber-input'} labelText={''} />
@@ -223,31 +244,50 @@ const GoogleLoginPage = () => {
               className="my-2"
             >
               <Stack>
-                {phoneNumberDuplicationCheckMessage === 'NO NO' && (
+                {phoneNumberDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">
                     이미 존재하는 전화번호입니다.
                   </p>
                 )}
-                {phoneNumberDuplicationCheckMessage === 'OK' && (
+                {phoneNumberDuplicationCheckMessage === 'checked' && (
                   <p className="text-[#2eb150]">사용 가능한 전화번호입니다.</p>
                 )}
               </Stack>
               <Button
-                variant="contained"
+                variant="text"
                 className="rounded"
                 onClick={handleCheckPhoneNumber}
                 size="small"
               >
-                중복 체크
+                중복 확인
               </Button>
             </Stack>
             <Stack>
-              <Button
-                className="h-14 mt-4 bg-primary text-white rounded"
-                onClick={handleSocialEdit}
-              >
-                완료
-              </Button>
+              {!allChecked && (
+                <Button
+                  disabled
+                  variant="contained"
+                  className="h-14 mt-4rounded"
+                  onClick={handleSocialEdit}
+                  sx={{
+                    '& .Mui-disabled': {
+                      color: 'white',
+                      backgroundColor: '#ff5656',
+                    },
+                  }}
+                >
+                  완료
+                </Button>
+              )}
+              {allChecked && (
+                <Button
+                  className="h-14 mt-4 bg-primary text-white rounded"
+                  onClick={handleSocialEdit}
+                >
+                  완료
+                </Button>
+              )}
+
               <Button
                 variant="text"
                 className="h-6 mt-4 text-sm"

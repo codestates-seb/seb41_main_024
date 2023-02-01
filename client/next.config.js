@@ -7,6 +7,7 @@ const nextConfig = {
       'cdn.011st.com',
       'https://www.kurly.com',
       'https://gmarket.co.kr',
+      'image.homeplus.kr',
     ],
   },
   webpack(config, { dev, webpack }) {

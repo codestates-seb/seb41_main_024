@@ -37,7 +37,6 @@ public class MemberController {
     private final BoardMapper boardMapper;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
     private final ChatService chatService;
-    private final BoardRepository boardRepository;
     private final LocationRepository locationRepository;
 
 
@@ -156,6 +155,13 @@ public class MemberController {
         List<Board> boardList = pageBoards.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(boardList, pageBoards), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/googleMemberDelete")
+    public ResponseEntity googleMemberDelete(){
+        Member member = memberService.getLoginMember();
+        memberService.deleteMember(member.getMemberId());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
