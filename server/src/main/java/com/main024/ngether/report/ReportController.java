@@ -53,16 +53,16 @@ public class ReportController {
     }
 
     //관리자가 memberId로 member role 바꿀 수 있는 api
-    @PatchMapping("/admin/changeMemberIdRole/{member-id}")
-    public ResponseEntity patchMemberIdRole(@PathVariable("member-id") @Positive long memberId) {
-        reportService.updateMemberIdRole(memberId);
+    @PatchMapping("/admin/changeMemberIdRole")
+    public ResponseEntity patchMemberIdRole(@RequestBody ReportDto.BanById banById) {
+        reportService.updateMemberIdRole(banById);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     //관리자가 nickName으로 member role 바꿀 수 있는 api
     @PatchMapping("/admin/changeMemberNickNameRole")
-    public ResponseEntity patchMemberNickNameRole(@RequestParam(value = "nickName") String nickName) {
-        reportService.updateMemberNickNameRole(nickName);
+    public ResponseEntity patchMemberNickNameRole(@RequestBody ReportDto.BanByNickName banByNickName) {
+        reportService.updateMemberNickNameRole(banByNickName);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -73,9 +73,10 @@ public class ReportController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //신고 내역 삭제
+    //신고 반려
     @DeleteMapping("/{report-id}")
     public ResponseEntity deleteReport(@PathVariable("report-id") @Positive long reportId){
+        reportService.resetState(reportId);
         reportService.deleteReport(reportId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
