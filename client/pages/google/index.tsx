@@ -189,7 +189,6 @@ const GoogleLoginPage = () => {
     });
   };
 
-  console.log('form', form);
   return (
     <div>
       <div>
