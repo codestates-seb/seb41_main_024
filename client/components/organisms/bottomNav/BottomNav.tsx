@@ -12,18 +12,21 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import LoginIcon from '@mui/icons-material/Login';
 import Cookies from 'js-cookie';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { checkTokenExpiration } from '../../../api/auth/checkTokenExpiration';
-import { UnreadMessageContext } from '../../../pages/_app';
+import axios from 'axios';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<undefined | string>();
-  const { isUnReadMessage } = useContext(UnreadMessageContext);
+  const [isUnReadMessage, setIsUnReadMessage] = useState(false);
+  const token = Cookies.get('access_token');
 
   useEffect(() => {
     checkTokenExpiration();
-    const token = Cookies.get('access_token');
+    axios.get('https://ngether.site/chat/room/findNewMessages', { headers: { Authorization: token } })
+    .then(res => {setIsUnReadMessage(res.data)})
+    .catch(error => {setIsUnReadMessage(false)})
     setIsLogin(token);
   });
 
