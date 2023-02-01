@@ -32,7 +32,7 @@ export default function BottomNav(): JSX.Element {
           headers: { Authorization: token },
         })
         .then((res) => {
-          res.data && setIsUnReadMessage(res.data);
+          setIsUnReadMessage(res.data);
         })
         .catch((error) => {
           setIsUnReadMessage(false);
