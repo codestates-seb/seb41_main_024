@@ -39,20 +39,22 @@ export async function getServerSideProps(context: any) {
   return {
     props: {
       id,
-      detailData: data,
+      productData: data,
     },
   };
 }
 
 interface productDetailType {
   id: string;
-  datailData: any;
+  productData: any;
 }
 
-export default function ProductDetail({ id, datailData }: productDetailType) {
-  const { data } = useQuery(['productData'], () => getProductDetail(id), {
-    initialData: datailData,
-  });
+export default function ProductDetail({ id, productData }: productDetailType) {
+  // const { data } = useQuery(['productData'], () => getProductDetail(id), {
+  //   initialData: detailData,
+  // });
+
+  console.log(productData);
 
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
   const handleClose = () => {
@@ -68,7 +70,7 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
 
   const router = useRouter();
 
-  const productData = data?.data;
+  // const productData = data?.data;
 
   const isOpenBoard =
     productData?.boardStatus &&
