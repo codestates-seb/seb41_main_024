@@ -20,7 +20,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 const LoginPage = () => {
   const router = useRouter();
   const emailRegex = new RegExp('[a-z0-9]+@[a-z]+.[a-z]{2,3}');
-  const passwordRegex = new RegExp('^(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})');
+  const passwordRegex = new RegExp(
+    '(?=.*[0-9])(?=.*[a-z])(?=.*\\W)(?=\\S+$).{8,}'
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState<string>();
@@ -46,7 +48,8 @@ const LoginPage = () => {
     text: {
       default: '',
       match: '',
-      unMatch: '소문자, 특수문자를 각 하나 포함한 8자리 이상이여야 합니다.',
+      unMatch:
+        '소문자, 숫자, 특수문자를 각 하나 포함한 8자리 이상이여야 합니다.',
     },
   });
 
@@ -60,13 +63,8 @@ const LoginPage = () => {
 
         res?.headers?.authorization &&
           Cookies.set('access_token', res.headers.authorization, {
-            expires: 0.083,
+            expires: 0.079,
           });
-        Cookies.set('access_token', res.headers.authorization, {
-          expires: 0.079,
-        });
-        res?.headers?.refresh &&
-          Cookies.set('refresh_token', res.headers.refresh, { expires: 0.16 });
         Cookies.set('refresh_token', res.headers.refresh, { expires: 20 });
         Cookies.set('memberId', res.data.memberId);
         Cookies.set('nickName', res.data.nickName);

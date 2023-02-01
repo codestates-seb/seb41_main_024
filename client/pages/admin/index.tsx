@@ -1,7 +1,9 @@
 import { ReactElement } from 'react';
 import AdminChecker from '../../components/container/adminChecker/AdminChecker';
 import AdminLayout from '../../components/container/adminLayout/AdminLayout';
-import AdminTab from '../../components/organisms/tab/adminTab/AdminTab';
+import NTabs from '../../components/organisms/nTabs/NTabs';
+import AnswerWork from '../../components/container/AdminWorks/AnswerWork'
+import ReportWork from '../../components/container/AdminWorks/ReportWork';
 
 const Admin = () => {
   return (
@@ -10,7 +12,13 @@ const Admin = () => {
         <div className="flex justify-center items-end h-[4.5rem] mb-10">
           <p className="text-xl">관리자페이지</p>
         </div>
-        <AdminTab />
+        <NTabs
+          ariaLabel="내 서비스 탭"
+          tabLabels={['신고처리', '1:1문의']}
+        >
+          <ReportWork />
+          <AnswerWork />
+        </NTabs>
       </div>
     </AdminChecker>
   );

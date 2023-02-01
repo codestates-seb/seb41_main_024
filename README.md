@@ -56,6 +56,91 @@
 
 <br>
 
+## 아키텍처
+
+---
+<img src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/Web_App_Reference_Architecture_3.png" />
+<br>
+
 ## ERD
 ---
 <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/8a217a16-9f28-4b67-bebc-330be74c4288/ERD_ScreenShot.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230201%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230201T054605Z&X-Amz-Expires=86400&X-Amz-Signature=8b7f09fb32a834a3d8ffe5a968b0bbfc7c788488c14c3e6467ea5ac1c0375bd2&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22ERD%2520ScreenShot.png%22&x-id=GetObject">
+
+## Ngether 사용 예시
+
+<details markdown="1">
+<summary><strong>회원가입 및 로그인, 마이페이지</strong></summary>
+메인페이지
+<br>
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/ngether.xyz_main.png" />
+회원가입
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif" />
+로그인
+<br>
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/login.gif" />
+마이페이지
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/edit-profile.gif" />
+
+</details>
+<details markdown="1">
+<summary><strong>게시물 등록, 검색, 수정</strong></summary>
+게시물 등록
+<br>
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/ngether.xyz_main.png" />
+
+검색
+<br>
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/search.gif" />
+
+
+수정
+<br>
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/edit.gif" />
+
+삭제
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/delete.gif" />
+</details>
+
+<details markdown="1">
+<summary><strong>주소록 등록, 나의 쉐어링, 찜</strong></summary>
+주소롱 등록
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/location-save.gif" />
+
+나의 쉐어링 
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/my-sharing.gif" />
+
+1:1 문의 등록
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/question.gif" />
+</details>
+
+<details markdown="1">
+<summary><strong>채팅리스트, 채팅방</strong></summary>
+
+채팅리스트, 채팅방
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/chatting.gif" />
+
+</details>
+
+<details markdown="1">
+<summary><strong>관리자 페이지</strong></summary>
+1:1 문의 답변
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/Answer.gif" />
+
+유저 정지
+<br>
+<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/blockuser.gif" />
+
+
+
+</details>
+
+
+

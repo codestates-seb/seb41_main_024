@@ -27,10 +27,22 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
+import createProfileRandomUrl from '../../utils/createProfileRandomUrl/createProfileRandomUrl';
+import RandomProfile from '../../components/organisms/randomProfile/RandomProfile';
+
+const randomProfile = createProfileRandomUrl(15);
+
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
   const [allChecked, setAllchecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(true);
+
+  const [form, setForm] = useState({
+    nickName: '',
+    phoneNumber: '',
+    imageLink: randomProfile,
+  });
+  const [profileUrl, setProfileUrl] = useState(randomProfile);
 
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
     useState('');
@@ -38,11 +50,21 @@ const GoogleLoginPage = () => {
     phoneNumberDuplicationCheckMessage,
     setPhoneNumberDuplicationCheckMessage,
   ] = useState('');
-
   const access_token: any = `Bearer ${router.query.access_token}`;
   const refresh_token: any = router.query.refresh_token;
-  Cookies.set('access_token', access_token);
-  Cookies.set('refresh_token', refresh_token);
+  Cookies.set('access_token', access_token, { expires: 0.079 });
+  Cookies.set('refresh_token', refresh_token, { expires: 20 });
+  /* useEffect(() => {
+    //첫 구글 로그인 이후 redirection 받았을 때 최초 쿠키 설정
+
+    console.log('access_token', access_token);
+    console.log('access_token decode : ', decodeURIComponent(access_token));
+
+
+    console.log('refresh_token', refresh_token);
+    console.log('refresh_token', decodeURIComponent(refresh_token));
+
+  }, []); */
 
   // 두 번째 소셜 로그인일 경우
   if (router.query.initial === 'false') {
@@ -53,11 +75,6 @@ const GoogleLoginPage = () => {
       router.push('/');
     });
   }
-
-  const [form, setForm] = useState({
-    nickName: '',
-    phoneNumber: '',
-  });
 
   const [nickNameForm, setNickNameForm] = useState({
     nickName: '',
@@ -98,6 +115,16 @@ const GoogleLoginPage = () => {
       }
     }
   };
+
+  const handleClickRandomProfile = async () => {
+    setProfileUrl(createProfileRandomUrl(15));
+  };
+  useEffect(() => {
+    setForm({
+      ...form,
+      imageLink: profileUrl,
+    });
+  }, [profileUrl]);
 
   const handleSocialEdit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -180,13 +207,19 @@ const GoogleLoginPage = () => {
             <SocialLoginTitle />
           </div>
           <Stack>
-            <p className="text-center text-primary my-6">
+            <p className="text-center text-primary my-4">
               닉네임과 휴대전화를 입력하지 않으시면
               <br />
               서비스 이용에 제한이 있습니다
             </p>
           </Stack>
-          <Box sx={{ width: 260, mt: 2, mb: 8, mx: 6 }}>
+          <Box sx={{ width: 250, mt: 1, mb: 4, mx: 6 }}>
+            <Stack>
+              <RandomProfile
+                onClick={handleClickRandomProfile}
+                profileUrl={profileUrl}
+              />
+            </Stack>
             <Stack>
               <Input
                 id="nickName-input"
@@ -309,7 +342,7 @@ const SocialLoginTitle = () => {
   return (
     <div className="flex flex-col items-center">
       <Logo />
-      <p className="pt-px mt-4 text-lg">
+      <p className="pt-px mt-2 text-lg">
         <strong className="text-primary font-bold">내 정보</strong>를 입력하고
       </p>
       <p className="pb-px text-lg">
