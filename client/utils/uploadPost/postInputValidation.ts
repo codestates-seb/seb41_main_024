@@ -31,7 +31,7 @@ export const validatePostInput = ({
     setOpen(true);
     setAlertOption({ severity: 'error', value: '제목을 입력해주세요' });
     return false;
-  } else if (address.trim() === '') {
+  } else if (address?.trim() === '') {
     setOpen(true);
     setAlertOption({
       severity: 'error',

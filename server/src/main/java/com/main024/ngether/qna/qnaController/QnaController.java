@@ -93,7 +93,11 @@ public class QnaController {
 
     //모든 문의글 목록
     @GetMapping("/questions")
-    public ResponseEntity qnaList() {
-        return ResponseEntity.ok(mapper.QnasToQnaResponseDtos(qnaService.findQnas(), answerRepository));
+    public ResponseEntity qnaList(@RequestParam(value = "page") int page,
+                                  @RequestParam(value = "size") int size) {
+        Page<Qna> pageQnas = qnaService.findQnas(page - 1, size);
+        List<Qna> qnaList = pageQnas.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.QnasToQnaResponseDtos(qnaList, answerRepository), pageQnas), HttpStatus.OK);
     }
 }

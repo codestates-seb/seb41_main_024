@@ -32,3 +32,15 @@ export function requestFirstGoogleLogin(form: any) {
     },
   });
 }
+
+export function deleteGoogleUser() {
+  return axios.delete(
+    `${REQUEST_URL}/api/members/googleMemberDelete?Authorization`,
+    {
+      headers: {
+        Authorization: Cookies.get('access_token'),
+        Refresh: Cookies.get('refresh_token'),
+      },
+    }
+  );
+}

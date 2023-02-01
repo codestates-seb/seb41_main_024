@@ -3,6 +3,7 @@ export interface passwordTextFieldPropsType {
   label: string;
   name?: string;
   type?: string;
-  value? : string | number;
+  value?: string | number;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onKeyPress?: any;
 }
