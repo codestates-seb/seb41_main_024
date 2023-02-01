@@ -23,16 +23,20 @@ export default function BottomNav(): JSX.Element {
   const token = Cookies.get('access_token');
 
   useEffect(() => {
-    axios
-      .get('https://ngether.site/chat/room/findNewMessages', {
-        headers: { Authorization: token },
-      })
-      .then((res) => {
-        setIsUnReadMessage(res.data);
-      })
-      .catch((error) => {
-        setIsUnReadMessage(false);
-      });
+    console.log();
+
+    token &&
+      token !== 'Bearer undefined' &&
+      axios
+        .get('https://ngether.site/chat/room/findNewMessages', {
+          headers: { Authorization: token },
+        })
+        .then((res) => {
+          setIsUnReadMessage(res.data);
+        })
+        .catch((error) => {
+          setIsUnReadMessage(false);
+        });
     setIsLogin(token);
   });
 
