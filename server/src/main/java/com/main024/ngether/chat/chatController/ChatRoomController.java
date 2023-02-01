@@ -91,22 +91,22 @@ public class ChatRoomController {
         if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
-        CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
-            while (!chatService.checkNewMessages(member)) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    log.warn("Interrupted", e);
-                }
-            }
-        }).orTimeout(5, TimeUnit.SECONDS);
-        try {
-            task.get();
-        } catch (InterruptedException | ExecutionException e) {
-
-            throw new BusinessLogicException(ExceptionCode.TIME_OUT);
-        }
-        return ResponseEntity.ok(true);
+//        CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
+//            while (!chatService.checkNewMessages(member)) {
+//                try {
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    log.warn("Interrupted", e);
+//                }
+//            }
+//        }).orTimeout(5, TimeUnit.SECONDS);
+//        try {
+//            task.get();
+//        } catch (InterruptedException | ExecutionException e) {
+//
+//            throw new BusinessLogicException(ExceptionCode.TIME_OUT);
+//        }
+        return ResponseEntity.ok(chatService.checkNewMessages(member));
     }
 
 
