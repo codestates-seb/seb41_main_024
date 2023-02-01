@@ -116,7 +116,6 @@ public class ChatService {
             chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
-
             return findMembersInChatRoom(roomId);
 
         } else {
@@ -124,24 +123,27 @@ public class ChatService {
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get();
             Long count = chatRoomMembers.getLastMessageId();
-            for (int i = 0; i < chatMessageList.size(); i++) {
-                if (chatMessageList.get(i).getChatMessageId() > count) {
-                    if (chatMessageList.get(i).getUnreadCount() != 0) {
-                        chatMessageList.get(i).setUnreadCount(chatMessageList.get(i).getUnreadCount() - 1);
-                        chatMessageRepository.save(chatMessageList.get(i));
+            if(chatRoomMembers.getLastMessageId() != 0) {
+                for (int i = 0; i < chatMessageList.size(); i++) {
+                    if (chatMessageList.get(i).getChatMessageId() > count) {
+                        if (chatMessageList.get(i).getUnreadCount() != 0) {
+                            chatMessageList.get(i).setUnreadCount(chatMessageList.get(i).getUnreadCount() - 1);
+                            chatMessageRepository.save(chatMessageList.get(i));
+                        }
+                    }
+                    if (i == chatMessageList.size() - 1) {
+                        chatRoomMembers.setLastMessageId(chatMessageList.get(i).getChatMessageId());
                     }
                 }
-                if (i == chatMessageList.size() - 1) {
-                    chatRoomMembers.setLastMessageId(chatMessageList.get(i).getChatMessageId());
-                }
+                chatRoomMembersRepository.save(chatRoomMembers);
+                sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
+                        .message("")
+                        .type(ChatMessage.MessageType.REENTER)
+                        .build());
             }
-            chatRoomMembersRepository.save(chatRoomMembers);
-            sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
-                    .message("")
-                    .type(ChatMessage.MessageType.REENTER)
-                    .build());
             return findMembersInChatRoom(roomId);
         }
+
 
     }
 
