@@ -37,7 +37,6 @@ public class MemberController {
     private final BoardMapper boardMapper;
     private final ChatRoomMembersRepository chatRoomMembersRepository;
     private final ChatService chatService;
-    private final BoardRepository boardRepository;
     private final LocationRepository locationRepository;
 
 

@@ -64,6 +64,7 @@ public class MemberDto {
         private String email;
         private String phoneNumber;
         private String imageLink;
+        private boolean google;
 
 
     }
