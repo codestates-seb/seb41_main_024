@@ -6,7 +6,11 @@ import { useEffect, useState } from 'react';
 import { ReactComponent as Logo } from '../../public/logos/logoRow.svg';
 import { NextRouter, useRouter } from 'next/router';
 import Cookies from 'js-cookie';
-import { requestGoogleLogin, requestFirstGoogleLogin } from '../../api/members';
+import {
+  requestGoogleLogin,
+  requestFirstGoogleLogin,
+  deleteGoogleUser,
+} from '../../api/members';
 import React from 'react';
 
 import Button from '@mui/material/Button';
@@ -161,8 +165,11 @@ const GoogleLoginPage = () => {
   };
 
   const handleDeleteGoogleUser = () => {
-    // @@유저 정보 삭제 요청
-    router.push('/');
+    deleteGoogleUser().then((res) => {
+      Cookies.remove('access_token', { path: '' });
+      Cookies.remove('refresh_token', { path: '' });
+      router.push('/');
+    });
   };
 
   return (
