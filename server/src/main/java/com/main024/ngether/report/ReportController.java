@@ -73,7 +73,7 @@ public class ReportController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //신고 내역 삭제
+    //신고 반려
     @DeleteMapping("/{report-id}")
     public ResponseEntity deleteReport(@PathVariable("report-id") @Positive long reportId){
         reportService.resetState(reportId);
