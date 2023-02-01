@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,15 +35,15 @@ public class ReportService {
 
 
     public Report createReport(Report report) {
-        Board board = new Board();
-        ChatRoom chatRoom = new ChatRoom();
+
+
         if (report.getReportType().equals("board")) {
-            board = boardRepository.findByBoardId(report.getReportedId()).get();
+            Board board = boardRepository.findByBoardId(report.getReportedId()).get();
             report.setTitle(board.getTitle());
             board.setBoardStatus(Board.BoardStatus.BOARD_NOT_DELETE);
             boardRepository.save(board);
         } else if (report.getReportType().equals("chat")){
-            chatRoom = chatRoomRepository.findByRoomId(report.getReportedId());
+            ChatRoom chatRoom = chatRoomRepository.findByRoomId(report.getReportedId());
             report.setTitle(chatRoom.getRoomName());
             chatRoom.setDeclareStatus(true);
             chatRoomRepository.save(chatRoom);
@@ -60,28 +61,30 @@ public class ReportService {
         return reportRepository.findAll(PageRequest.of(page, size));
     }
 
-    public void updateMemberIdRole(long memberId) {
+    public void updateMemberIdRole(ReportDto.BanById banById) {
         if (memberService.getLoginMember().getRoles().get(0).equals("USER"))
             throw new BusinessLogicException(ExceptionCode.ROLE_NOT_ADMIN);
 
-        Member member = memberRepository.findById(memberId).get();
+        Member member = memberRepository.findById(banById.getMemberId()).get();
         List<String> roles = new ArrayList<>();
         roles.add("BAN");
         member.setRoles(roles);
         memberRepository.save(member);
         chatService.removeChatRoomAndBoard(member.getMemberId());
+        reportRepository.delete(reportRepository.findById(banById.getReportId()).get());
     }
 
-    public void updateMemberNickNameRole(String nickName) {
+    public void updateMemberNickNameRole(ReportDto.BanByNickName banByNickName) {
         if (memberService.getLoginMember().getRoles().get(0).equals("USER"))
             throw new BusinessLogicException(ExceptionCode.ROLE_NOT_ADMIN);
 
-        Member member = memberRepository.findByNickName(nickName).get();
+        Member member = memberRepository.findByNickName(banByNickName.getNickName()).get();
         List<String> roles = new ArrayList<>();
         roles.add("BAN");
         member.setRoles(roles);
         memberRepository.save(member);
         chatService.removeChatRoomAndBoard(member.getMemberId());
+        reportRepository.delete(reportRepository.findById(banByNickName.getReportId()).get());
     }
 
     public void recoveryMemberRole(long memberId) {
@@ -108,5 +111,23 @@ public class ReportService {
                         new BusinessLogicException(ExceptionCode.REPORT_NOT_FOUND));
 
         return findReport;
+    }
+    public void resetState(long reportId) {
+        Report report = reportRepository.findById(reportId).get();
+        if(Objects.equals(report.getReportType(), "board")){
+            Board board = boardRepository.findByBoardId(report.getReportId()).get();
+            if(board.getCurNum() == board.getMaxNum()){
+                board.setBoardStatus(Board.BoardStatus.FULL_MEMBER);
+            }
+            else {
+                board.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
+            }
+            boardRepository.save(board);
+        }
+        else{
+            ChatRoom chatRoom = chatRoomRepository.findByRoomId(report.getReportedId());
+            chatRoom.setDeclareStatus(false);
+            chatRoomRepository.save(chatRoom);
+        }
     }
 }
