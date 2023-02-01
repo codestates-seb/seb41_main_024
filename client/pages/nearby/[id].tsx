@@ -18,9 +18,8 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import Image from 'next/image';
-// import base from '../../public/imageBox/base-box.svg';
+import Box from '@mui/material/Box';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -51,6 +50,10 @@ interface productDetailType {
 }
 
 export default function ProductDetail({ id, datailData }: productDetailType) {
+  const { data } = useQuery(['productData'], () => getProductDetail(id), {
+    initialData: datailData,
+  });
+
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
   const handleClose = () => {
     setIsLoginAlertOpen(false);
@@ -64,10 +67,6 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const router = useRouter();
-
-  const { data } = useQuery(['productData'], () => getProductDetail(id), {
-    initialData: datailData,
-  });
 
   const productData = data?.data;
 
@@ -183,19 +182,14 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
     router.push(`/edit/${id}`);
   };
 
-  if (productData?.imageLink === '') {
-    productData.imageLink = '/imageBox/base-box.svg';
-  }
-
   return (
     <div>
-      <div>
+      <Box sx={{ mx: 3 }}>
         <div className="relative pb-[70%]">
           <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
             <Image
-              className="p-8"
               src={productData?.imageLink || '/imageBox/base-box.svg'}
-              alt={'상품 이미지'}
+              alt="제품 이미지"
               fill
             />
             {isCompletedBoard && (
@@ -212,7 +206,6 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
             )}
           </div>
         </div>
-
         <DetailBottom
           isOpen={isOpen}
           isReported={isReported}
@@ -263,7 +256,7 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
           isLoginAlertOpen={isLoginAlertOpen}
           handleClose={handleClose}
         />
-      </div>
+      </Box>
     </div>
   );
 }

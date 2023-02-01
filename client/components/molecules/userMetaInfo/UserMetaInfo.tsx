@@ -54,7 +54,11 @@ const UserMetaInfo = ({
           <Stack direction="row" alignItems="center" spacing={2}>
             <Stack>
               <div className="bg-orange-100 w-14 h-14 p-1.5 rounded-lg">
-                <img src="https://avatars.dicebear.com/api/bottts/122.svg" />
+                <img
+                  src={
+                    productData?.userImageLink || '/profile/default_profile.svg'
+                  }
+                />
               </div>
             </Stack>
             <Stack direction="column">

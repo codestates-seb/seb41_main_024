@@ -35,14 +35,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            Map<String, Object> claims = verifyJws(request);
-            setAuthenticationToContext(claims);
-        } catch (ExpiredJwtException ee) {
-            throw new BusinessLogicException(ExceptionCode.JWT_EXPIRE);
-        } catch (Exception se) {
-            request.setAttribute("exception", se);
-        }
+
+        Map<String, Object> claims = verifyJws(request);
+        setAuthenticationToContext(claims);
         filterChain.doFilter(request, response);
     }
 
@@ -63,7 +58,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private void setAuthenticationToContext(Map<String, Object> claims) {
         String username = (String) claims.get("username");   //
-        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
+        List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List) claims.get("roles"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }

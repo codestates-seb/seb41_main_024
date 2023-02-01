@@ -12,6 +12,7 @@ export interface productDataProps {
     nickname: string;
     address: string;
     memberId: number;
+    userImageLink?: string;
   };
   handleDelete: () => void;
   handleComplete: () => void;
