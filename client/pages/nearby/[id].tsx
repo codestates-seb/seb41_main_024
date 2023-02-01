@@ -170,11 +170,12 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
     setIsOpen(false);
     completeSharing(id).then((res) => {});
   };
-
+  // 어드민일시 유저 정지
   const handleBlockUserByNickName = () => {
     const nickName = data.data.nickname;
-    handleBlockUser(nickName);
-    router.push('/admin')
+    handleBlockUser(nickName, Number(localStorage.getItem('reportId')));
+    localStorage.removeItem('reportId');
+    router.push('/admin');
   }
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);

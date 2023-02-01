@@ -1,14 +1,15 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-export const getQuestions = () => {
-  return axios({
-    url: `https://ngether.site/api/qna/questions`,
+export const getQuestions = async (page:number) => {
+  const questions = await axios({
+    url: `https://ngether.site/api/qna/questions?page=${page}&size=10`,
     method: 'get',
     headers: {
       Authorization : Cookies.get('access_token')
     }
   })
+  return questions;
 }
 
 export const getReport = async (page:number) => {
@@ -32,6 +33,7 @@ export const handleDeleteReport = (reportId:number) => {
   })
 }
 
+
 export const handleAnswerQuestion = (variables: {qnaId: number, content: string}) => {
   return axios({
     url: `https://ngether.site/api/answer/qna/${variables.qnaId}`,
@@ -43,10 +45,11 @@ export const handleAnswerQuestion = (variables: {qnaId: number, content: string}
   })
 }
 
-export const handleBlockUser = (nickName:string | undefined) => {
+export const handleBlockUser = (nickName:string | undefined, reportId:number | void) => {
   axios({
-    url: `https://ngether.site/api/reports/admin/changeMemberNickNameRole?nickName=${nickName}`,
+    url: `https://ngether.site/api/reports/admin/changeMemberNickNameRole`,
     method: 'patch',
+    data: {nickName, reportId},
     headers: {
       Authorization : Cookies.get('access_token')
     }

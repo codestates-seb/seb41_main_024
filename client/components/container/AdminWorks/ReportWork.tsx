@@ -14,6 +14,8 @@ import ReportChatDetail from '../../molecules/reportDetail/reportChatDetail/Repo
 import { getChatDataset } from '../../../api/getChatDataset';
 import { Pagination } from '@mui/material';
 import { Stack } from '@mui/system';
+import CircleLoading from '../../organisms/circleLoading/CircleLoading';
+import { transDateFullFormat } from '../../../utils/transDateFormat/transDateFormat';
 
 interface reportType {
   reportType: string;
@@ -31,22 +33,28 @@ const ReportWork = () => {
     totalElements: 0,
     totalPages: 1
   });
-  const {data, isSuccess, refetch} = useQuery(['reports'], () => getReport(pageInfo.page), {keepPreviousData : true});
+  const {data, isSuccess, refetch} = useQuery(['reports', pageInfo.page], () => getReport(pageInfo.page), 
+  { 
+    keepPreviousData : true
+  });
 
+  useEffect(() => {
+    if(isSuccess) {
+      setResports(data.data);
+      setPageInfo(data.pageInfo);
+    }
+  }, [pageInfo.page, data])
 
   const reportMutation = useMutation(handleDeleteReport, {
     onSuccess: () => {
       refetch();
     }
   });
-  
 
-  useEffect(()=>{
-    isSuccess && 
-    setResports(data.data);
-    isSuccess && 
-    setPageInfo(data.pageInfo);
-  }, [data])
+  const handleNavigate = (id:number, reportId:number) => {
+    localStorage.setItem('reportId', String(reportId));
+    router.push(`/nearby/${id}`);
+  }
   
   const handleDelete = async (reportId: number) => {
     await reportMutation.mutate(reportId);
@@ -55,57 +63,67 @@ const ReportWork = () => {
 
   return (
     <div className='flex flex-col text-center'>
-      <p className='my-[16px] text-xs'>게시물은 해당 게시글로 이동하여 처리하실 수 있습니다.</p>
-      <div className='h-[calc(100vh-350px)] overflow-x-hidden overflow-scroll'>
-        <ul>
-            {isSuccess 
-            && reports?.map((report:reportType) => {
-              return (
-                <li key={report.reportId} className='mb-2'>
-                  <Accordion >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography>{`신고된 ${report.reportType === 'board' && '게시글' || '채팅방'} | ${report.title}`}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      {report.reportType === 'board' 
-                      && <ReportBoardDetail 
-                          handleNavigate={()=>router.push(`/nearby/${report.reportedId}`)}
-                          handleDeleteReport={()=>handleDelete(report.reportId)}
-                      />} 
-                      {report.reportType === 'chat' 
-                      && <ReportChatDetail
-                          id={report.reportedId}
-                          handleGetChatLog={getChatDataset}
-                          handleBlockUser={handleBlockUser}
-                          handleDeleteReport={()=>handleDelete(report.reportId)}
-                      />} 
-                    </AccordionDetails>
-                  </Accordion>
-                </li>
-              )
-            })}
-        </ul>
-      </div>
-      <div className="flex justify-center">
-        <Stack spacing={2}>
-          <Pagination
-            count={pageInfo.totalPages}
-            page={pageInfo.page}
-            color="primary"
-            onChange={(event, value) => {
-              setPageInfo((prevState) => {
-                return {...prevState, page: value}
-              });
-              refetch()
-            }}
-          />
-        </Stack>
-      </div>
-    </div>
+      {!isSuccess && <CircleLoading message="잠시만 기다려 주세요." />}
+      {isSuccess && reports && (
+        <>
+          <p className='my-[16px] text-xs'>게시물은 해당 게시글로 이동하여 처리하실 수 있습니다.</p>
+          <div className='h-[calc(100vh-350px)] overflow-x-hidden overflow-scroll'>
+            <ul>
+                {reports.map((report:reportType) => {
+                  return (
+                    <li key={report.reportId} className='mb-1'>
+                      <Accordion >
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel1a-content"
+                          id="panel1a-header"
+                        >
+                            <Typography className='text-left'>
+                              <span className='text-gray-400'>{`신고된 ${report.reportType === 'board' && '게시글' || '채팅방'}`}</span> 
+                              <span className='ml-6'>{report.title}</span>
+                            </Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          {report.reportType === 'board' 
+                          && <ReportBoardDetail 
+                              handleNavigate={()=>handleNavigate(report.reportedId, report.reportId)}
+                              handleDeleteReport={()=>handleDelete(report.reportId)}
+                          />} 
+                          {report.reportType === 'chat' 
+                          && <ReportChatDetail
+                              id={report.reportedId}
+                              reportId={report.reportId}
+                              refetch={refetch}
+                              handleGetChatLog={getChatDataset}
+                              handleBlockUser={handleBlockUser}
+                              handleDeleteReport={()=>handleDelete(report.reportId)}
+                          />} 
+                        </AccordionDetails>
+                      </Accordion>
+                    </li>
+                  )
+                })}
+            </ul>
+          </div>
+          <div className="flex justify-center">
+            <Stack spacing={2}>
+              <Pagination
+                count={pageInfo.totalPages}
+                page={pageInfo.page}
+                color="primary"
+                onChange={(event, value) => {
+                  console.log(pageInfo, value)
+                  setPageInfo((prevState) => {
+                    return {...prevState, page: value}
+                  });
+                }}
+              />
+            </Stack>
+          </div>
+        </>
+      )
+    }
+  </div>
   )
 }
 
