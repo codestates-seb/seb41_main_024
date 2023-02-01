@@ -2,7 +2,6 @@ import React from 'react';
 import { badgeType } from './badgeType';
 
 const Badge = ({ recruitment }: badgeType) => {
-  console.log('recruitment', recruitment);
   return (
     <>
       {!recruitment && (
