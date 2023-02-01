@@ -184,7 +184,11 @@ export default function ProductDetail({ id, datailData }: productDetailType) {
 
   return (
     <div>
-      <Box sx={{ mx: 3 }}>
+      <Box
+        sx={{
+          mx: 1.5,
+        }}
+      >
         <div className="relative pb-[70%]">
           <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
             <Image
