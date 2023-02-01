@@ -52,7 +52,7 @@ public class AuthService {
         // === 현재시간과 Refresh Token 만료날짜를 통해 남은 만료기간 계산 === //
         // === Refresh Token 만료시간 계산해 1개월 미만일 시 refresh token도 발급 === //
         long refreshExpireTime = (long) jsonArray.get("exp") * 1000;
-        long diffDays = (refreshExpireTime - now) / 1000 / (24 * 60);
+        long diffDays = (refreshExpireTime - now) / 1000 / (24 * 3600);
         if (diffDays < 1) {
             String newRefreshToken = oauth2MemberSuccessHandler.delegateRefreshToken(member);
             accessTokenResponseMap.put("Refresh", newRefreshToken);
