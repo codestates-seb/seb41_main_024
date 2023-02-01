@@ -15,9 +15,11 @@ interface uploadPostType {
   refreshToken: string;
 }
 interface getPostType {
-  locationId?: number;
+  selectedAddressBookId: number;
   range: number;
   category: string;
+  sortBy: string;
+  page: number;
 }
 interface searchPostsByTitleType {
   type: number;
@@ -40,13 +42,16 @@ export const uploadPost = async (data: uploadPostType) => {
   });
 };
 
-export const getPosts = async ({
-  locationId,
-  range,
+export const getPostsByAddressBook = async ({
+  selectedAddressBookId,
+  range = 1.5,
   category,
+  sortBy,
+  page,
 }: getPostType) => {
-  const url = `${REQUEST_URL}/api/distance/${locationId}?range=${range}&&category=${category}`;
+  console.log('api ::', selectedAddressBookId, range, category, sortBy, page);
 
+  const url = `${REQUEST_URL}/api/distances/${selectedAddressBookId}?range=${range}&category=${category}&sortBy=${sortBy}&page=${page}&size=10`;
   return await axios({
     method: 'get',
     url,
