@@ -73,6 +73,7 @@ public class CustomOauth2UserService implements OAuth2UserService<OAuth2UserRequ
          */
         Member member = new Member();
         member.setEmail(attributes.getEmail());
+        member.setGoogle(true);
         member.setNickName(attributes.getName());
         member.setPw(getPasswordEncoder().encode("oauth2member!"));
         List<String> roles = List.of("USER");
