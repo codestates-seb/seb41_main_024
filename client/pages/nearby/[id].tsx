@@ -163,10 +163,15 @@ export default function ProductDetail({ id, productData }: productDetailType) {
       goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
     }
   };
+
+  console.log('isOpen', isOpen);
   // 모집 완료하기
   const handleComplete = () => {
     setIsOpen(false);
-    completeSharing(id).then((res) => {});
+    completeSharing(id).then((res) => {
+      setIsCompleteModalOpen(false);
+      router.push(`/nearby/${id}`);
+    });
   };
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const handleReportModalOpen = () => setIsReportModalOpen(true);
