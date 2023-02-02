@@ -211,10 +211,10 @@ export default function ProductDetail({ id, productData }: productDetailType) {
         >
           <div className="relative pb-[70%]">
             <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
-              <Image
+              <img
                 src={productData?.imageLink || '/imageBox/base-box.svg'}
                 alt="제품 이미지"
-                fill
+                className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-full h-auto"
               />
               {isCompletedBoard && (
                 <StateBadge stateText={'모집 확정'} usedDetail={true} />
