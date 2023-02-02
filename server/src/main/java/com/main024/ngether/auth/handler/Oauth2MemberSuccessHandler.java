@@ -60,7 +60,7 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         //DB에서 email를 통해 사용자 정보 확인
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         if(optionalMember.get().getRoles().get(0).equals("BAN")){
-            ErrorResponder.sendErrorResponse(response, HttpStatus.FORBIDDEN);
+            throw new BusinessLogicException(ExceptionCode.BAN);
         }
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         //사용자 생성 정보로 토큰 생성
