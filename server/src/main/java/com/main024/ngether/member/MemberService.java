@@ -86,6 +86,7 @@ public class MemberService {
             for(ChatMessage chatMessage : chatMessageList){
                 chatMessage.setNickName(findMember.getNickName());
             }
+            chatMessageRepository.saveAll(chatMessageList);
         }
 
         return memberRepository.save(findMember);
