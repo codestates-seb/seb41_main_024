@@ -211,7 +211,7 @@ const Search = () => {
             </em>
           )}
         </p>
-        <div className="flex w-[100%] mb-4">
+        <div className="flex w-[100%]">
           <Input
             id="location"
             name="location"
@@ -223,8 +223,9 @@ const Search = () => {
               if (e.key === 'Enter') return searchMap(searchAddress, setCenter);
             }}
             onChange={handleSearchAddress}
-            helperText="ex) 강남, 이문로"
+            // helperText="ex) 강남, 이문로 (강남에 게시물이 집중되어 있습니다)"
           />
+
           <FormButton
             variant="contained"
             className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px]"
@@ -242,6 +243,7 @@ const Search = () => {
             content="나의 주소록"
             className="bg-[skyblue] text-[white] ml-[10px] h-[52px]"
           ></FormButton>
+
           <Popover
             id={id}
             open={open}
@@ -285,6 +287,11 @@ const Search = () => {
             </Typography>
           </Popover>
         </div>
+
+        <span className="ml-2 mb-4 text-[gray]">
+          ex) 강남, 서초 (강남에 게시물이 집중되어 있습니다)
+        </span>
+
         <FormControl
           fullWidth
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
