@@ -1,4 +1,5 @@
 import { QueryClient, useMutation } from '@tanstack/react-query';
+import Cookies from 'js-cookie';
 import patchOneUserData from '../../api/patchOneUserData';
 const patchOneUserInfo = (
   formValue: {
@@ -12,6 +13,7 @@ const patchOneUserInfo = (
   return useMutation(patchOneUserData(formValue), {
     onSuccess: () => {
       queryClient.invalidateQueries(['userInfo']);
+      Cookies.set('nickName', formValue.nickName)
       alert('수정되었습니다!');
     },
   });

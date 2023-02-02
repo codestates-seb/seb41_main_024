@@ -30,7 +30,7 @@ const ChatList = () => {
   };
 
   return (
-    <div>
+    <div className="ani_fadeIn">
       {chatListData?.length === 0 && (
         <NoChatListAlert
           isNoChatListAlertOpen={isNoChatListAlertOpen}

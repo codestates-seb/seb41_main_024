@@ -105,7 +105,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <div className="mt-24">
+      <div className="mt-24 ani_fadeIn">
         <LoginSlogan />
       </div>
       <div className="login flex justify-center m-7 my-12">

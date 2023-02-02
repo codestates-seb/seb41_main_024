@@ -49,8 +49,6 @@ export const getPostsByAddressBook = async ({
   sortBy,
   page,
 }: getPostType) => {
-  console.log('api ::', selectedAddressBookId, range, category, sortBy, page);
-
   const url = `${REQUEST_URL}/api/distances/${selectedAddressBookId}?range=${range}&category=${category}&sortBy=${sortBy}&page=${page}&size=10`;
   return await axios({
     method: 'get',
