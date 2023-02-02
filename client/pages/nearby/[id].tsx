@@ -192,8 +192,8 @@ export default function ProductDetail({ id, productData }: productDetailType) {
       goChatroom(id)
       .then((res) => router.push(`/chatroom/${id}`))
       .catch(() => {
+        setDeleteSnackbarOpen(true);
         setGetherModalOpen(false);
-        setToastOpen(true);
         setAlertOption({ severity: 'error', value: '강퇴당한 유저는 참여할 수 없습니다.' });
         setTimeout(() => {
           router.push('/nearby')
