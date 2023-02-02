@@ -16,6 +16,7 @@ import Divider from '@mui/material/Divider';
 import axios from 'axios';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import LoadingButton from '@mui/lab/LoadingButton';
+import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -104,7 +105,7 @@ const LoginPage = () => {
 
   return (
     <div>
-      <div className="mt-24">
+      <div className="mt-24 ani_fadeIn">
         <LoginSlogan />
       </div>
       <div className="login flex justify-center m-7 my-12">

@@ -6,6 +6,7 @@ import com.main024.ngether.auth.RefreshToken.RefreshTokenRepository;
 import com.main024.ngether.auth.dto.LoginResponseDto;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
+import com.main024.ngether.auth.utils.ErrorResponder;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.location.Location;
@@ -13,6 +14,7 @@ import com.main024.ngether.location.LocationRepository;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -57,30 +59,37 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         //DB에서 email를 통해 사용자 정보 확인
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        //사용자 생성 정보로 토큰 생성
-        String accessToken = delegateAccessToken(findMember);
-        String refreshToken = delegateRefreshToken(findMember);
-
-        RefreshToken savedRefreshToken = new RefreshToken();
-        savedRefreshToken.setRefreshToken(refreshToken);
-        refreshTokenRepository.save(savedRefreshToken);
-
-        response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("RefreshToken", refreshToken);
-
-        String initialStatus = "";
-        if(findMember.getPhoneNumber() == null)
-            initialStatus = "true";
-        else
-            initialStatus = "false";
+        if(!optionalMember.get().getRoles().get(0).equals("BAN")) {
 
 
-        //최초 로그인일 경우와 아닌 경우를 구분
-        URI memberUri = memberCreateURI(accessToken, refreshToken, initialStatus);
+            Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+            //사용자 생성 정보로 토큰 생성
+            String accessToken = delegateAccessToken(findMember);
+            String refreshToken = delegateRefreshToken(findMember);
 
-        //users/info 에 토큰과 initial 여부를 쿼리로 담아 리다이렉트
-        getRedirectStrategy().sendRedirect(request, response, memberUri.toString());
+            RefreshToken savedRefreshToken = new RefreshToken();
+            savedRefreshToken.setRefreshToken(refreshToken);
+            refreshTokenRepository.save(savedRefreshToken);
+
+            response.setHeader("Authorization", "Bearer " + accessToken);
+            response.setHeader("RefreshToken", refreshToken);
+
+            String initialStatus = "";
+            if (findMember.getPhoneNumber() == null)
+                initialStatus = "true";
+            else
+                initialStatus = "false";
+
+
+            //최초 로그인일 경우와 아닌 경우를 구분
+            URI memberUri = memberCreateURI(accessToken, refreshToken, initialStatus);
+
+            //users/info 에 토큰과 initial 여부를 쿼리로 담아 리다이렉트
+            getRedirectStrategy().sendRedirect(request, response, memberUri.toString());
+        }
+        else if(optionalMember.get().getRoles().get(0).equals("BAN")){
+            ErrorResponder.sendErrorResponse(response, HttpStatus.FORBIDDEN);
+        }
 
     }
 

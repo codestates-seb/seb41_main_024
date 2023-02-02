@@ -53,9 +53,9 @@ const Index = ({
   selectedAddressBookId,
 }: nearbyPropsType) => {
   const [mapCenter, setMapCenter] = useState({
-    lat: lat || 37.517331925853,
-    lng: lng || 127.047377408384,
-    address: address === 'undefined' ? '서울 강남구' : address,
+    lat: lat || 0,
+    lng: lng || 0,
+    address: address || '',
   });
   const [currentMapCenter, setCurrentMapCenter] = useState({
     lat: 0,
@@ -65,7 +65,7 @@ const Index = ({
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [category, setCategory] = useState('상품 쉐어링');
 
-  const [locationError, setLocationError] = useState('');
+  const [locationError, setLocationError] = useState({ message: '' });
   const [alignment, setAlignment] = useState<number>(1.5);
   const [page, setPage] = useState(1);
   const [isOpenOptions, setIsOpenOptions] = useState(false);
@@ -82,7 +82,15 @@ const Index = ({
     //검색 옵션이 글 제목이거나 검색페이지를 거치지 않고 왔을 때
     !lat && getCurrentLocation(setMapCenter, setLocationError);
   }, []);
-
+  useEffect(() => {
+    if (!lat) {
+      setMapCenter({
+        lat: 37.517331925853,
+        lng: 127.047377408384,
+        address: '서울 강남구',
+      });
+    }
+  }, [locationError?.message]);
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
@@ -154,13 +162,15 @@ const Index = ({
     category,
     alignment,
     currentTab,
+    mapCenter.address,
+    locationError.message,
   ]);
   useEffect(() => {
     refetch();
   }, []);
   const handleOpenOptions = () => setIsOpenOptions((prev) => !prev);
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center  ani_fadeIn">
       <div className="mx-auto w-full h-fit">
         <div id="map" className="w-[100%] h-[350px] fadeIn">
           {isMapLoading && <CircleLoading />}
@@ -182,7 +192,7 @@ const Index = ({
           </em>
         </p>
         <p className="text-[red]">
-          {locationError &&
+          {locationError.message &&
             '위치 정보 접근권한이 없어 현재 위치를 파악하지 못했습니다'}
         </p>
       </div>
@@ -208,8 +218,8 @@ const Index = ({
           </button> */}
         </div>
       </div>
-      <div className="flex w-[100%] items-center justify-around p-2 ">
-        <div className="flex items-center">
+      <div className="flex w-[100%] items-center justify-around p-2">
+        <div className="flex flex-col h-[130px] sm:flex-row items-center">
           <span className="mr-4">카테고리</span>
           <DropdownInput
             dropDownOptions={CATEGORY_OPTIONS}
@@ -223,7 +233,7 @@ const Index = ({
           />
         </div>
 
-        <div>
+        <div className="flex flex-col h-[130px] sm:flex-row items-center">
           <span className="mr-4">거리설정</span>
           <ToggleButtons
             alignment={alignment}

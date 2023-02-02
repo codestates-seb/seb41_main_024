@@ -49,6 +49,7 @@ interface previousDataProps {
     curNum: number;
     deadLine: string;
     nickname: string;
+    imageLink: string;
   };
   id: string;
 }
@@ -95,7 +96,9 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
     }
   );
 
-  const [imageLink, setImageLink] = useState<string | undefined>('');
+  const [imageLink, setImageLink] = useState<string | undefined>(
+    previousData.imageLink
+  );
   const { inputValue, onChange } = useInput({
     title: previousData.title,
     price: previousData.price,
@@ -198,7 +201,7 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
-      <div className="flex justify-center m-7 my-12">
+      <div className="flex justify-center m-7 my-12 ani_fadeIn">
         <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
           <Stack spacing={4}>
             <div id="map" className="w-[100%] h-[350px]"></div>

@@ -23,7 +23,6 @@ export default function BottomNav(): JSX.Element {
   const [isUnReadMessage, setIsUnReadMessage] = useState(false);
   const token = Cookies.get('access_token');
   const [isLoading, setIsLoading] = useState(false);
-  console.log(isLoading);
   useEffect(() => {
     token &&
       token !== 'Bearer undefined' &&
@@ -77,7 +76,7 @@ export default function BottomNav(): JSX.Element {
   ];
 
   const handleOnClick = async (path: string) => {
-    setIsLoading(true);
+    router.pathname !== path && setIsLoading(true);
     const res = await checkTokenExpiration();
     if (path === '/chatlist') {
       router.push(path);

@@ -5,7 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { ReactComponent as RigthIcon } from '../../../../public/header/arrowbackRight.svg';
 
-const DrawerList = ({ isOpen, onClick, children }: drawerType) => {
+const DrawerSet = ({ isOpen, onClick, children }: drawerType) => {
   const drawerWidth = 240;
 
   const DrawerHeader = styled('div')(({ theme }) => ({
@@ -36,9 +36,9 @@ const DrawerList = ({ isOpen, onClick, children }: drawerType) => {
         </IconButton>
       </DrawerHeader>
       <Divider />
-      <List>{children}</List>
+      <div className='flex w-[100%]' >{children}</div>
     </Drawer>
   );
 };
 
-export default DrawerList;
+export default DrawerSet;
