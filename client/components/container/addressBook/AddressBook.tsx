@@ -193,7 +193,7 @@ const AddressBook = () => {
         />
         <FormButton
           variant="contained"
-          className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px] screen-tablet:px-[0.625rem]"
+          className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px] screen-maxw672:px-[0.625rem]"
           content="주소검색"
           onClick={() => {
             setIsSearch((prev) => !prev);
@@ -201,7 +201,7 @@ const AddressBook = () => {
           }}
         ></FormButton>
       </div>
-      <div className="flex w-[100%] justify-start px-4 screen-tablet:block">
+      <div className="flex w-[100%] justify-start px-4 screen-maxw672:block">
         <Input
           className="mr-4 "
           id="locationName-input"
@@ -214,7 +214,7 @@ const AddressBook = () => {
             setLocationName(e.target.value)
           }
         />
-        <div className="flex flex-1 screen-tablet:mt-4">
+        <div className="flex flex-1 screen-maxw672:mt-4">
           <Input
             className="flex-1"
             id="address-input"
@@ -226,7 +226,7 @@ const AddressBook = () => {
           />
           <FormButton
             variant="contained"
-            className="bg-[gray] text-[white] ml-[10px] h-[52px] screen-tablet:px-[0.625rem]"
+            className="bg-[gray] text-[white] ml-[10px] h-[52px] screen-maxw672:px-[0.625rem]"
             content="주소록 추가"
             onClick={handleModalOpen}
           ></FormButton>

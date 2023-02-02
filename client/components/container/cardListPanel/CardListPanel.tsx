@@ -55,7 +55,7 @@ const CardListPanel = ({ getApi }: CardListPanelType) => {
     <div className="ani_fadeIn flex justify-center">
       {loading && <CircleLoading message="잠시만 기다려 주세요." />}
       {isItem && (
-        <div>
+        <div className="w-full px-4">
           <div className="flex flex-col justify-center pb-[5rem]">
             <NearByList sharingLists={itemList} />
             <div className="flex justify-center mt-[1.875rem]">

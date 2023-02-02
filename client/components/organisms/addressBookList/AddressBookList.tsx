@@ -20,7 +20,7 @@ const AddressBookList = ({
       {addressBookList?.map((item: locationDataType) => (
         <div
           key={item.locationId}
-          className="flex w-[100%] my-4 px-4 screen-tablet:block"
+          className="flex w-[100%] my-4 px-4 screen-maxw672:block"
         >
           <Input
             className="mr-4"
@@ -30,7 +30,7 @@ const AddressBookList = ({
             label="장소명"
             value={item.locationName}
           />
-          <div className="flex flex-1 screen-tablet:mt-4">
+          <div className="flex flex-1 screen-maxw672:mt-4">
             <Input
               className="flex-grow"
               id="address-input"
@@ -42,7 +42,7 @@ const AddressBookList = ({
             />
             <FormButton
               variant="contained"
-              className={`bg-[${buttonColor}] text-[white] ml-[10px] h-[52px] screen-tablet:px-[0.625rem]`}
+              className={`bg-[${buttonColor}] text-[white] ml-[10px] h-[52px] screen-maxw672:px-[0.625rem]`}
               content={content}
               onClick={() => {
                 if (handleDeleteModalOpen) {
