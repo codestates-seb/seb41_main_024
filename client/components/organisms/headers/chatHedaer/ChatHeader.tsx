@@ -41,24 +41,28 @@ const ChatHeader = ({
         sx={{ height: '50px' }}
       >
         <div className="flex fixed items-center max-w-[672px] w-[100%] h-[50px] border-b-1 border-x-0 border-t-0 border-solid border-[#0000001f] bg-[white] justify-center">
-          <Button
-            className="w-[150px] border-0 m-0 p-0 bg-inherit"
-            type="button"
-            onClick={() => router.push('/chatlist')}
-          >
-            <ArrowbackIcon />
-            <p>채팅목록으로 이동</p>
-          </Button>
+          <div className="flex w-[150px]">
+            <Button
+              className="mr-auto border-0 bg-inherit"
+              type="button"
+              onClick={() => router.push('/chatlist')}
+            >
+              <ArrowbackIcon />
+              <strong className="font-normal">채팅목록</strong>
+            </Button>
+          </div>
           <div className="flex flex-1 justify-center">
             <Logo />
           </div>
-          <Button
-            className="w-[150px] border-0 px-5 bg-inherit min-w-0"
-            type="button"
-            onClick={handleDrawerToggle}
-          >
-            <NavigatorIcon />
-          </Button>
+          <div className="flex w-[150px]">
+            <Button
+              className="border-0 ml-auto bg-inherit"
+              type="button"
+              onClick={handleDrawerToggle}
+            >
+              <NavigatorIcon />
+            </Button>
+          </div>
         </div>
       </AppBar>
       <Divider />
