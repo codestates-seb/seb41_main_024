@@ -7,6 +7,7 @@ import MainSlogan from '../components/molecules/slogan/mainSlogan/MainSlogan';
 import LayoutWithFooter from '../components/container/layoutWithFooter/LayoutWithFooter';
 import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayoutType';
 import Link from 'next/link';
+import Head from 'next/head';
 
 const MainPage: NextPageWithLayout = () => {
   const [nearBy, setNearBy] = useState('');
@@ -18,6 +19,9 @@ const MainPage: NextPageWithLayout = () => {
 
   return (
     <div className="flex flex-col flex-grow my-28 ani_fadeIn">
+      <Head>
+        <title>Ngether 홈</title>
+      </Head>
       <div className="">
         <MainSlogan />
       </div>

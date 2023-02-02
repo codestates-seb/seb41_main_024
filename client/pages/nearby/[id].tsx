@@ -32,6 +32,7 @@ import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 import { getMySharing } from '../../api/mySharing';
 import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
+import Head from 'next/head';
 
 import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 
@@ -227,6 +228,9 @@ export default function ProductDetail({ id, productData }: productDetailType) {
 
   return (
     <div>
+      <Head>
+        <title>공유 상세 페이지</title>
+      </Head>
       {!productData && <NoPage />}
       {productData && (
         <Box
