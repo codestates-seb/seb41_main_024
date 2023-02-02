@@ -189,7 +189,7 @@ const Search = () => {
   const id = open ? 'simple-popover' : undefined;
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center ani_fadeIn">
       <div className="flex flex-col max-w-lg mt-3 w-[100%] relative">
         <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
         <div

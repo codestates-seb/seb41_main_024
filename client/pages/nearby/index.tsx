@@ -169,7 +169,7 @@ const Index = ({
   }, []);
   const handleOpenOptions = () => setIsOpenOptions((prev) => !prev);
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center  ani_fadeIn">
       <div className="mx-auto w-full h-fit">
         <div id="map" className="w-[100%] h-[350px] fadeIn">
           {isMapLoading && <CircleLoading />}
@@ -217,8 +217,8 @@ const Index = ({
           </button> */}
         </div>
       </div>
-      <div className="flex w-[100%] items-center justify-around p-2 ">
-        <div className="flex items-center">
+      <div className="flex w-[100%] items-center justify-around p-2">
+        <div className="flex flex-col h-[130px] sm:flex-row items-center">
           <span className="mr-4">카테고리</span>
           <DropdownInput
             dropDownOptions={CATEGORY_OPTIONS}
@@ -232,7 +232,7 @@ const Index = ({
           />
         </div>
 
-        <div>
+        <div className="flex flex-col h-[130px] sm:flex-row items-center">
           <span className="mr-4">거리설정</span>
           <ToggleButtons
             alignment={alignment}
