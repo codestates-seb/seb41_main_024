@@ -204,7 +204,7 @@ public class ChatService {
         Board board = boardService.findBoard(roomId);
 
         if (Objects.equals(chatRoom.getMemberId(), member.getMemberId())) {
-            if (!chatRoom.isDeclareStatus()) {
+            if (!chatRoom.isDeclareStatus() && !chatRoom.isRecruitment()) {
                 chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
                 if (chatRoom.isRecruitment()) {
                     chatRoom.setRecruitment(false);
