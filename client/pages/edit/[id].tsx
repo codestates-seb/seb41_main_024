@@ -49,6 +49,7 @@ interface previousDataProps {
     curNum: number;
     deadLine: string;
     nickname: string;
+    imageLink: string;
   };
   id: string;
 }
@@ -95,7 +96,9 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
     }
   );
 
-  const [imageLink, setImageLink] = useState<string | undefined>('');
+  const [imageLink, setImageLink] = useState<string | undefined>(
+    previousData.imageLink
+  );
   const { inputValue, onChange } = useInput({
     title: previousData.title,
     price: previousData.price,
