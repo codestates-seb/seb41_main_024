@@ -33,7 +33,6 @@ import { getMySharing } from '../../api/mySharing';
 import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
 import Head from 'next/head';
-
 import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 
 export async function getServerSideProps(context: any) {
@@ -190,7 +189,16 @@ export default function ProductDetail({ id, productData }: productDetailType) {
     if (!isLogin) {
       setIsLoginAlertOpen(true);
     } else {
-      goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
+      goChatroom(id)
+      .then((res) => router.push(`/chatroom/${id}`))
+      .catch(() => {
+        setDeleteSnackbarOpen(true);
+        setGetherModalOpen(false);
+        setAlertOption({ severity: 'error', value: '강퇴당한 유저는 참여할 수 없습니다.' });
+        setTimeout(() => {
+          router.push('/nearby')
+        }, 2000)
+      })
     }
   };
 
