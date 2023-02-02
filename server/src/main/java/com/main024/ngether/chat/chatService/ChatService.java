@@ -97,11 +97,12 @@ public class ChatService {
             board.setCurNum(board.getCurNum() + 1);
             boardRepository.save(board);
             //연관 매핑 테이블에 저장
+            List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             ChatRoomMembers chatRoomMembers = new ChatRoomMembers();
             chatRoomMembers.setMember(member);
             chatRoomMembers.setChatRoom(chatRoom);
             chatRoomMembers.setUnreadMessageCount(0);
-            chatRoomMembers.setLastMessageId(0L);
+            chatRoomMembers.setLastMessageId(chatMessageList.get(chatMessageList.size()-1).getChatMessageId());
             chatRoomMembers.setBan(false);
             chatRoomMembersRepository.save(chatRoomMembers);
             chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
