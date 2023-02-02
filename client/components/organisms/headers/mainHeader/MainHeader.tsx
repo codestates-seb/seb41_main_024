@@ -5,18 +5,15 @@ import Link from 'next/link';
 import { ReactComponent as SearchIcon } from '../../../../public/header/search.svg';
 import { ReactComponent as NavigatorIcon } from '../../../../public/header/navigator.svg';
 import { ReactComponent as Logo } from '../../../../public/logos/logoRow.svg';
-import DrawerList from '../drawer/DrawerList';
+import DrawerSet from '../drawer/DrawerSet';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import { mainHeaderType } from './mainHeaderType';
-import { nextTick } from 'process';
 import Cookies from 'js-cookie';
-import { useEffect } from 'react';
 import useAdminRole from '../../../../hooks/common/useAdminRole';
 
 const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
   const [isLogin, setIsLogin] = useState<undefined | string>();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  // const isLogin = Cookies.get('access_token');
   const { isAdmin } = useAdminRole();
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -52,24 +49,32 @@ const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
           </Button>
         </div>
       </AppBar>
-      <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
+      <DrawerSet isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
         {!isLogin && (
           <div className="flex justify-center items-center m-2">
-            <Link href={'/login'}>
-              <Button variant="contained" className="m-2">
-                로그인
-              </Button>
-            </Link>
-            <Link href={'/signup'}>
-              <Button variant="contained" className="m-2">
-                회원가입
-              </Button>
-            </Link>
+            <Button 
+              className="m-2"
+              href={'/login'} 
+              variant="contained" 
+              component="a"
+              LinkComponent={Link}
+            >
+              로그인
+            </Button>
+            <Button 
+              className="m-2"
+              href={'/signup'} 
+              variant="contained" 
+              component="a"
+              LinkComponent={Link}
+            >
+              회원가입
+            </Button>
           </div>
         )}
         {isLogin && (
           <>
-            <div className="flex flex-col items-center m-4">
+            <div className="flex flex-col items-center m-4 w-full">
               <span className="text-primary text-bold">{nickName}</span>
               <Button
                 variant="contained"
@@ -86,7 +91,7 @@ const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
             </div>
           </>
         )}
-      </DrawerList>
+      </DrawerSet>
     </Fragment>
   );
 };
