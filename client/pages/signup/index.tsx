@@ -80,8 +80,8 @@ const SignupPage = () => {
     onProcess: false,
     isLoading: false,
     isMatched: false,
-    messageState: true
-  }) 
+    messageState: true,
+  });
   const [isAllEquals, setIsAllEquals] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -90,12 +90,11 @@ const SignupPage = () => {
   useEffect(() => {
     setIsAllEquals(
       formEqualCheck.email &&
-      formEqualCheck.nickName &&
-      formEqualCheck.phoneNumber
+        formEqualCheck.nickName &&
+        formEqualCheck.phoneNumber
     );
   }, [formEqualCheck]);
 
-    
   useEffect(() => {
     setFormValue({
       ...formValue,
@@ -129,9 +128,9 @@ const SignupPage = () => {
     }
     if (id === 'confirmCode') {
       setIsEmailConfirm({
-        ...isEmailConfirm, 
-        inputValue:event.target.value
-      })
+        ...isEmailConfirm,
+        inputValue: event.target.value,
+      });
     }
   };
 
@@ -148,95 +147,97 @@ const SignupPage = () => {
       ...formEqualCheck,
       [inpName]: true,
     });
-    
+
     if (formValue[inpName] !== '') {
       await postUserEqualCheck(enteredData)
-      .then((res) => {
-        setFormEqualCheck({
-          ...formEqualCheck,
-          [inpName]: res.data,
-        });
-      })
-      .then(() => {
-        if (inpName === "email") {
+        .then((res) => {
           setFormEqualCheck({
             ...formEqualCheck,
-            email: false,
+            [inpName]: res.data,
           });
-          setIsEmailConfirm({
-            ...isEmailConfirm, 
-            isLoading:true
-          })
-          axios.post(`https://ngether.site/api/emailConfirm?email=${email}`)
-          .then(res => {
+        })
+        .then(() => {
+          if (inpName === 'email') {
+            setFormEqualCheck({
+              ...formEqualCheck,
+              email: false,
+            });
             setIsEmailConfirm({
-              ...isEmailConfirm, 
-              isLoading:false, 
-              code:res.data, 
-              onProcess:true
-            })
-          })
-          .catch(() => {
-            setIsError(true)
-          })
-        }
-      })
-      .catch((error) => {
-        if ([417, 418, 419].includes(error.response.status)) {
-          setIsEqualsError({
-            ...isEqualsError,
-            [inpName]: true,
-          });
-        }
-      });
+              ...isEmailConfirm,
+              isLoading: true,
+            });
+            axios
+              .post(`https://ngether.site/api/emailConfirm?email=${email}`)
+              .then((res) => {
+                setIsEmailConfirm({
+                  ...isEmailConfirm,
+                  isLoading: false,
+                  code: res.data,
+                  onProcess: true,
+                });
+              })
+              .catch(() => {
+                setIsError(true);
+              });
+          }
+        })
+        .catch((error) => {
+          if ([417, 418, 419].includes(error.response.status)) {
+            setIsEqualsError({
+              ...isEqualsError,
+              [inpName]: true,
+            });
+          }
+        });
     }
   };
 
   const onEmailCodeCheckHandler = () => {
     if (isEmailConfirm.code === isEmailConfirm.inputValue) {
-      console.log("맞아")
       setFormEqualCheck({
         ...formEqualCheck,
-        email: true
+        email: true,
       });
       setIsEmailConfirm({
         ...isEmailConfirm,
         isMatched: true,
-        onProcess: false
+        onProcess: false,
       });
       setFormEqualCheck({
         ...formEqualCheck,
         email: true,
       });
-    }
-    else {
+    } else {
       setIsEmailConfirm({
         ...isEmailConfirm,
-        messageState: false
+        messageState: false,
       });
     }
-  }
+  };
 
   const onSubmitHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log(formValue);
     setIsLoading(true);
-    try {
-      const result = await postSignup(formValue);
-      if (result.status === 200) {
-        setIsSuccess(true);
+
+    await postSignup(formValue)
+      .then((res) => {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000);
-        await router.push('/login');
-      }
-    } catch (error) {
-      setIsError(true);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
-      console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
-    }
+        setIsSuccess(true);
+      })
+      .then((res) => {
+        setTimeout(() => {
+          router.push('/');
+        }, 3000);
+      })
+      .catch((error) => {
+        setIsError(true);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000);
+        console.log(`다음과 같은 오류 ${error}가 발생했습니다:`);
+      });
   };
 
   return (
@@ -281,32 +282,34 @@ const SignupPage = () => {
                             사용중인 이메일 입니다.
                           </span>
                         )}
-                      {equalClickedCheck.email && 
-                      formEqualCheck.email && 
-                      !isEqualsError.email && 
-                      isEmailConfirm.isMatched && (
-                        <span className="text-[#2EB150] ani_fadeIn">
-                          사용가능 합니다.
-                        </span>
-                      )}
+                      {equalClickedCheck.email &&
+                        formEqualCheck.email &&
+                        !isEqualsError.email &&
+                        isEmailConfirm.isMatched && (
+                          <span className="text-[#2EB150] ani_fadeIn">
+                            사용가능 합니다.
+                          </span>
+                        )}
                     </p>
-                    {!isEmailConfirm.isLoading && !isEmailConfirm.onProcess && !isEmailConfirm.isMatched  && (
-                      <Button
-                        onClick={(event) => {
-                          equalcheck('email');
-                        }}
-                        className="p-0 text-[0.75rem]"
-                      >
-                        이메일 인증 전송
-                      </Button>
-                    )}
+                    {!isEmailConfirm.isLoading &&
+                      !isEmailConfirm.onProcess &&
+                      !isEmailConfirm.isMatched && (
+                        <Button
+                          onClick={(event) => {
+                            equalcheck('email');
+                          }}
+                          className="p-0 text-[0.75rem]"
+                        >
+                          이메일 인증 전송
+                        </Button>
+                      )}
                     {isEmailConfirm.isLoading && (
                       <span className="block m-[0.3125rem] animate-spin w-[1.3125rem] h-[1.3125rem] rounded-full border-[0.3125rem] border-t-[#63A8DA] border-l-[#63A8DA] border-b-[#63A8DA] border-r-transparent border-solid" />
                     )}
-                    {isEmailConfirm.onProcess  && (
+                    {isEmailConfirm.onProcess && (
                       <>
                         {!isEmailConfirm.messageState && (
-                          <p className='flex items-center justify-center mr-2'>
+                          <p className="flex items-center justify-center mr-2">
                             <span className="text-[#F8719D] ani_fadeIn">
                               인증번호가 일치하지 않습니다.
                             </span>
@@ -320,7 +323,7 @@ const SignupPage = () => {
                           value={isEmailConfirm.inputValue}
                           onChange={handleInputChange}
                         />
-                        <Button 
+                        <Button
                           className="p-0 text-[0.75rem]"
                           onClick={onEmailCodeCheckHandler}
                         >
@@ -355,8 +358,7 @@ const SignupPage = () => {
                           </span>
                         )}
                       {equalClickedCheck.nickName &&
-                        formEqualCheck.nickName &&
-                        isEmailConfirm.isMatched && (
+                        formEqualCheck.nickName && (
                           <span className="text-[#2EB150] ani_fadeIn">
                             사용가능 합니다.
                           </span>
