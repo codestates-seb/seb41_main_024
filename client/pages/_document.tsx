@@ -33,7 +33,7 @@ export default class MyDocument extends Document {
           />
           <meta
             property="og:image"
-            content="https://github.com/codestates-seb/seb41_main_024/blob/main/client/public/logos/apple-touch-icon-152x152.png"
+            content="https://github.com/codestates-seb/seb41_main_024/blob/main/client/public/logos/apple-touch-icon-152x152.png?raw=true"
           />
         </Head>
         <script
