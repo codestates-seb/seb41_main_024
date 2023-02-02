@@ -50,6 +50,8 @@ interface previousDataProps {
     deadLine: string;
     nickname: string;
     imageLink: string;
+    latitude: string;
+    longitude: string;
   };
   id: string;
 }
@@ -62,14 +64,18 @@ const CATEGORY_OPTIONS = [
 const EditPage = ({ previousData, id }: previousDataProps) => {
   const router = useRouter();
 
-  const [productImg, setProductImg] = useState(base);
-  const [targetCoord, setTargetCoord] = useState({
-    lat: 0,
-    lng: 0,
-    address: '',
+  const [productImg, setProductImg] = useState(previousData.imageLink);
+  const [targetCoord, setTargetCoord] = useState<any>({
+    lat: previousData.latitude,
+    lng: previousData.longitude,
+    address: previousData.address,
   });
 
-  const [center, setCenter] = useState({ lat: 0, lng: 0, address: '' });
+  const [center, setCenter] = useState<any>({
+    lat: previousData.latitude,
+    lng: previousData.longitude,
+    address: previousData.address,
+  });
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
   const [open, setOpen] = useState(false);
@@ -120,7 +126,7 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
 
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center.lat, center.lng]);
+  }, []);
 
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
