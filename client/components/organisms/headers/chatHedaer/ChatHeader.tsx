@@ -4,13 +4,13 @@ import { ReactComponent as ArrowbackIcon } from '../../../../public/header/arrow
 import { ReactComponent as NavigatorIcon } from '../../../../public/header/navigator.svg';
 import { ReactComponent as Logo } from '../../../../public/logos/logoFooter.svg';
 import { useState } from 'react';
-import DrawerList from '../drawer/DrawerList';
+import DrawerSet from '../drawer/DrawerSet';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import DialogMaker from '../../dialogMaker/DialogMaker';
 
 interface ChatHeaderType {
   isOwner: boolean;
-  members: { nickName: string; imageLink:string; }[];
+  members: { nickName: string; imageLink: string }[];
   declareStatus: string;
   handleExitChat: () => void;
   handleSendReport: () => void;
@@ -18,14 +18,13 @@ interface ChatHeaderType {
 }
 
 const ChatHeader = ({
-    isOwner, 
-    members, 
-    declareStatus, 
-    handleExitChat, 
-    handleSendReport, 
-    handleCompleteRecrutment
-  }: ChatHeaderType) => {
-
+  isOwner,
+  members,
+  declareStatus,
+  handleExitChat,
+  handleSendReport,
+  handleCompleteRecrutment,
+}: ChatHeaderType) => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const handleDrawerToggle = () => {
@@ -66,53 +65,65 @@ const ChatHeader = ({
         </div>
       </AppBar>
       <Divider />
-      <DrawerList isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        <p className='text-center my-3'>유저 목록</p>
-        {members.map((member,index) => (
-          <DrawerListItem key={index}>
-            <div className='flex pl-[0.35rem]'>
-              <span className="min-w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
-                <img
-                  src={member.imageLink}
-                  alt=""
-                  className="block w-full h-full object-cover"
+      <DrawerSet isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
+        <div className="flex flex-col min-h-[calc(100vh-57px)] w-full relative pb-150px box-border">
+          <strong className="font-normal text-center my-3">유저 목록</strong>
+            <ul className="flex flex-auto h-0 flex-col overflow-y-auto">
+              {members.map((member, index) => (
+                <li>
+                  <DrawerListItem key={index}>
+                    <div className="flex pl-[0.35rem]">
+                      <span className="min-w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
+                        <img
+                          src={member.imageLink}
+                          alt=""
+                          className="block w-full h-full object-cover"
+                        />
+                      </span>
+                      <p className="text-s text-primary pl-[1rem] pt-[0.6rem]">
+                        {member.nickName}
+                      </p>
+                    </div>
+                  </DrawerListItem>
+                </li>
+              ))}
+            </ul>
+          <Divider className="mt-3" />
+          <ul className="mt-auto">
+            {isOwner && declareStatus !== 'BOARD_COMPLETE' && (
+              <li>
+                <DrawerListItem>
+                  <DialogMaker
+                    name="N게더 모집 완료하기"
+                    title="N게더 모집을 완료하시겠어요?"
+                    question="N게더 모집을 완료하면 더 이상 다른 분들이 참여하실 수 없습니다"
+                    func={handleCompleteRecrutment}
+                  />
+                </DrawerListItem>
+              </li>
+            )}
+            <li>
+              <DrawerListItem>
+                  <DialogMaker
+                    name="채팅방 신고하기"
+                    title="이 채팅방을 신고하시겠어요?"
+                    func={handleSendReport}
+                  />
+              </DrawerListItem>
+            </li>
+            <li>
+              <DrawerListItem>
+                <DialogMaker
+                  name="채팅방 나가기"
+                  title="채팅방에서 나가시겠어요?"
+                  question="채팅방에서 나가면 N게더에서도 불참하게되며, 방장이실 경우 게시물도 같이 삭제됩니다"
+                  func={handleExitChat}
                 />
-              </span>
-              <p className="text-s text-primary pl-[1rem] pt-[0.6rem]">
-                {member.nickName}
-              </p>
-            </div>
-          </DrawerListItem>
-        ))}
-        <Divider className='mt-3'/>
-        <div className='fixed bottom-3 w-[100%]'>
-          {isOwner && declareStatus !== "BOARD_COMPLETE" && (
-            <DrawerListItem>
-              <DialogMaker
-                name="N게더 모집 완료하기"
-                title="N게더 모집을 완료하시겠어요?"
-                question="N게더 모집을 완료하면 더 이상 다른 분들이 참여하실 수 없습니다"
-                func={handleCompleteRecrutment}
-              />
-            </DrawerListItem>
-          )}
-          <DrawerListItem>
-            <DialogMaker
-              name="채팅방 신고하기"
-              title="이 채팅방을 신고하시겠어요?"
-              func={handleSendReport}
-            />
-          </DrawerListItem>
-          <DrawerListItem>
-            <DialogMaker
-              name="채팅방 나가기"
-              title="채팅방에서 나가시겠어요?"
-              question="채팅방에서 나가면 N게더에서도 불참하게되며, 방장이실 경우 게시물도 같이 삭제됩니다"
-              func={handleExitChat}
-            />
-          </DrawerListItem>
+              </DrawerListItem>
+            </li>
+          </ul>
         </div>
-      </DrawerList>
+      </DrawerSet>
     </>
   );
 };

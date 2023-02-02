@@ -4,7 +4,7 @@ import { drawerListItemPropsType } from './drawerListItemType';
 
 const DrawerListItem = ({ text, path, onClick, children }: drawerListItemPropsType) => {
   return (
-    <ListItem key={text} disablePadding>
+    <div key={text}>
       <ListItemButton onClick={onClick}>
         {children ? children 
         : (path ? 
@@ -16,7 +16,7 @@ const DrawerListItem = ({ text, path, onClick, children }: drawerListItemPropsTy
           : (<ListItemText primary={text} />)
         )}
       </ListItemButton>
-    </ListItem>
+    </div>
   );
 };
 
