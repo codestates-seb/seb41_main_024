@@ -128,7 +128,7 @@ const AddNewPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const addressInfo = targetCoord.address.split(' ');
+    const addressInfo = targetCoord?.address.split(' ');
     if (addressInfo.length <= 1)
       return alert('주소는 시,구 까지 입력되어야 합니다. 지도를 클릭해주세요');
     let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
