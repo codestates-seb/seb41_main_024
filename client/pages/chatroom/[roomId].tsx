@@ -130,26 +130,16 @@ const Chatroom = () => {
   // 추방 핸들러
   const handleExcutedUser = (nickName: string) => {
     if (!stompClient) return;
-    axios
-      .get(
-        `https://ngether.site/chat/room/deport/${roomId}?nickName=${nickName}`,
-        { headers: HEADER_TOKEN }
-      )
-      .then((res) => {
-        setOpen(true);
-        setAlertOption({
-          severity: 'success',
-          value: `유저 ${nickName}이 성공적으로 퇴장시켰습니다`,
-        });
-      })
-      .catch(() => {
-        setOpen(true);
-        setAlertOption({
-          severity: 'error',
-          value: '신고된 채팅방에서는 퇴장시킬 수 없습니다.',
-        });
-      });
-  };
+    axios.get(`https://ngether.site/chat/room/deport/${roomId}?nickName=${nickName}`, {headers : HEADER_TOKEN})
+    .then(res => {
+      setOpen(true);
+      setAlertOption({ severity: 'success', value: `유저 ${nickName}이 성공적으로 퇴장시켰습니다` });
+    })
+    .catch(() => {
+      setOpen(true);
+      setAlertOption({ severity: 'error', value: '모집 완료되거나 신고된 채팅방에서는 퇴장시킬 수 없습니다.' });
+    })
+  }
 
   // 퇴장 핸들러
   const handleExitChatRoom = async (): Promise<void> => {
