@@ -9,7 +9,7 @@ const DrawerListItem = ({
   children,
 }: drawerListItemPropsType) => {
   return (
-    <ListItem key={text} disablePadding>
+    <div key={text}>
       <ListItemButton onClick={onClick}>
         {children ? (
           children
@@ -26,7 +26,7 @@ const DrawerListItem = ({
           <ListItemText primary={text} />
         )}
       </ListItemButton>
-    </ListItem>
+    </div>
   );
 };
 
