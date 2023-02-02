@@ -14,11 +14,13 @@ import { useEffect } from 'react';
 import useAdminRole from '../../../../hooks/common/useAdminRole';
 
 const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
+  const [isLogin, setIsLogin] = useState<undefined | string>();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const isLogin = Cookies.get('access_token');
-  const {isAdmin} = useAdminRole();
+  // const isLogin = Cookies.get('access_token');
+  const { isAdmin } = useAdminRole();
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
+    setIsLogin(Cookies.get('access_token'));
   };
 
   return (
@@ -76,11 +78,14 @@ const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
               >
                 로그아웃
               </Button>
-              {isAdmin ? <DrawerListItem text={'관리자페이지'} path={'/admin'} /> : <DrawerListItem text={'마이페이지'} path={'/mypage'} />}
+              {isAdmin ? (
+                <DrawerListItem text={'관리자페이지'} path={'/admin'} />
+              ) : (
+                <DrawerListItem text={'마이페이지'} path={'/mypage'} />
+              )}
             </div>
           </>
         )}
-
       </DrawerList>
     </Fragment>
   );
