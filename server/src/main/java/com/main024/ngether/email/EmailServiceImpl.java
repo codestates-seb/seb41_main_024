@@ -23,9 +23,8 @@ public class EmailServiceImpl implements EmailService{
     @Value("${AdminMail.id}")
     private String id;
 
-    public static String ePw = createKey();
 
-    private MimeMessage createMessage(String to)throws Exception{
+    private MimeMessage createMessage(String to, String ePw)throws Exception{
         System.out.println("보내는 대상 : "+ to);
         System.out.println("인증 번호 : "+ePw);
         MimeMessage  message = emailSender.createMimeMessage();
@@ -84,7 +83,8 @@ public class EmailServiceImpl implements EmailService{
     @Override
     public String sendSimpleMessage(String to)throws Exception {
         // TODO Auto-generated method stub
-        MimeMessage message = createMessage(to);
+        String ePw = createKey();
+        MimeMessage message = createMessage(to,ePw);
         try{//예외처리
             emailSender.send(message);
         }catch(MailException es){
