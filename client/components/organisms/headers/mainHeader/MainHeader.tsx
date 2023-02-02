@@ -51,7 +51,7 @@ const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
       </AppBar>
       <DrawerSet isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
         {!isLogin && (
-          <div className="flex justify-center items-center m-2">
+          <div className="flex justify-center items-center m-2 w-full">
             <Button 
               className="m-2"
               href={'/login'} 
