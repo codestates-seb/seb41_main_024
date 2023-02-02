@@ -70,8 +70,8 @@ const ChatHeader = ({
           <strong className="font-normal text-center my-3">유저 목록</strong>
             <ul className="flex flex-auto h-0 flex-col overflow-y-auto">
               {members.map((member, index) => (
-                <li>
-                  <DrawerListItem key={index}>
+                <li key={index}>
+                  <DrawerListItem>
                     <div className="flex pl-[0.35rem]">
                       <span className="min-w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
                         <img
