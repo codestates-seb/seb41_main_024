@@ -15,16 +15,15 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { checkTokenExpiration } from '../../../api/auth/checkTokenExpiration';
 import axios from 'axios';
+import CircleLoading from '../circleLoading/CircleLoading';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState<undefined | string>();
   const [isUnReadMessage, setIsUnReadMessage] = useState(false);
   const token = Cookies.get('access_token');
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    console.log();
-
     token &&
       token !== 'Bearer undefined' &&
       axios
@@ -77,6 +76,7 @@ export default function BottomNav(): JSX.Element {
   ];
 
   const handleOnClick = async (path: string) => {
+    setIsLoading(true);
     const res = await checkTokenExpiration();
     if (path === '/chatlist') {
       router.push(path);
@@ -86,54 +86,69 @@ export default function BottomNav(): JSX.Element {
     } else {
       router.push('/login');
     }
+    setIsLoading(false);
   };
 
+  useEffect(() => {
+    router.prefetch('/nearby');
+    router.prefetch('/addnew');
+    router.prefetch('/mypage');
+  }, []);
   return (
-    <Box
-      sx={{
-        height: 56,
-      }}
-    >
-      <CssBaseline />
-      <Paper sx={{}} elevation={4}>
-        <BottomNavigation
-          showLabels
-          value={router.pathname}
-          sx={{
-            position: 'fixed',
-            left: '50%',
-            width: '100%',
-            maxWidth: '672px',
-            transform: 'translateX(-50%)',
-            bottom: '0',
-            zIndex: '10',
-            // borderTop: '1px solid #475569',
-          }}
-        >
-          {NAVIGATION_LIST.map(({ label, icon, path }: any) => {
-            return (
-              <BottomNavigationAction
-                key={label}
-                label={label}
-                icon={icon}
-                value={path}
-                onClick={() => handleOnClick(path)}
-                sx={
-                  path === '/addnew'
-                    ? {
-                        bgcolor: (theme) => theme.palette.primary.main,
-                        color: (theme) => theme.palette.primary.contrastText,
-                        '& .Mui-selected, svg': {
+    <>
+      {isLoading && (
+        <div className="absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]">
+          <CircleLoading message="페이지 이동 중입니다 잠시만 기다려주세요" />
+        </div>
+      )}
+
+      <Box
+        sx={{
+          height: 56,
+        }}
+      >
+        <CssBaseline />
+        <Paper sx={{}} elevation={4}>
+          <BottomNavigation
+            showLabels
+            value={router.pathname}
+            sx={{
+              position: 'fixed',
+              left: '50%',
+              width: '100%',
+              maxWidth: '672px',
+              transform: 'translateX(-50%)',
+              bottom: '0',
+              zIndex: '10',
+              // borderTop: '1px solid #475569',
+            }}
+          >
+            {NAVIGATION_LIST.map(({ label, icon, path }: any) => {
+              return (
+                <BottomNavigationAction
+                  key={label}
+                  label={label}
+                  icon={icon}
+                  value={path}
+                  onClick={() => handleOnClick(path)}
+                  sx={
+                    path === '/addnew'
+                      ? {
+                          bgcolor: (theme) => theme.palette.primary.main,
                           color: (theme) => theme.palette.primary.contrastText,
-                        },
-                      }
-                    : null
-                }
-              />
-            );
-          })}
-        </BottomNavigation>
-      </Paper>
-    </Box>
+                          '& .Mui-selected, svg': {
+                            color: (theme) =>
+                              theme.palette.primary.contrastText,
+                          },
+                        }
+                      : null
+                  }
+                />
+              );
+            })}
+          </BottomNavigation>
+        </Paper>
+      </Box>
+    </>
   );
 }

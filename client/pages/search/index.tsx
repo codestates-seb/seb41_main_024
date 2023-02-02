@@ -25,6 +25,7 @@ import AddressBookList from '../../components/organisms/addressBookList/AddressB
 import Cookies from 'js-cookie';
 import { locationDataType } from '../../components/container/addressBook/AddressBook';
 import Link from 'next/link';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
@@ -45,6 +46,7 @@ const Search = () => {
     lng: 127.047377408384,
     address: '서울 강남구',
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isSearch, setIsSearch] = useState(false);
 
@@ -130,6 +132,7 @@ const Search = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     setSelectedAddressBook({});
     const {
       range,
@@ -313,6 +316,11 @@ const Search = () => {
             type="submit"
           />
         </form>
+      </div>
+      <div>
+        {isLoading && (
+          <CircleLoading message="검색 중입니다 잠시만 기다려주세요" />
+        )}
       </div>
     </div>
   );
