@@ -54,17 +54,6 @@ const GoogleLoginPage = () => {
   const refresh_token: any = router.query.refresh_token;
   Cookies.set('access_token', access_token, { expires: 0.079 });
   Cookies.set('refresh_token', refresh_token, { expires: 20 });
-  /* useEffect(() => {
-    //첫 구글 로그인 이후 redirection 받았을 때 최초 쿠키 설정
-
-    console.log('access_token', access_token);
-    console.log('access_token decode : ', decodeURIComponent(access_token));
-
-
-    console.log('refresh_token', refresh_token);
-    console.log('refresh_token', decodeURIComponent(refresh_token));
-
-  }, []); */
 
   // 두 번째 소셜 로그인일 경우
   if (router.query.initial === 'false') {

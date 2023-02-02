@@ -7,8 +7,8 @@ const UserInfoEdit = () => {
   return (
     <>
       <NTabs
-        ariaLabel="내정보, 검색위치 등록 탭"
-        tabLabels={['내정보 수정', '검색위치 등록']}
+        ariaLabel="내정보, 주소록 탭"
+        tabLabels={['내정보 수정', '주소록 등록']}
         themeSub={true}
       >
         <EditUserInfo />

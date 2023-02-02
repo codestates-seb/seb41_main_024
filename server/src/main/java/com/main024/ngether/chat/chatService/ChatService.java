@@ -204,7 +204,7 @@ public class ChatService {
         Board board = boardService.findBoard(roomId);
 
         if (Objects.equals(chatRoom.getMemberId(), member.getMemberId())) {
-            if (!chatRoom.isDeclareStatus()) {
+            if (!chatRoom.isDeclareStatus() && !chatRoom.isRecruitment()) {
                 chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
                 if (chatRoom.isRecruitment()) {
                     chatRoom.setRecruitment(false);
@@ -235,6 +235,18 @@ public class ChatService {
                         .message(deportedMember.getNickName())
                         .build();
                 sendingOperations.convertAndSend("/receive/chat/" + roomId, evenTrigger);
+                List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
+                for (int i = 0; i < chatMessageList.size(); i++) {
+                    if (chatRoomMembers.getLastMessageId() < chatMessageList.get(i).getChatMessageId()) {
+                        chatMessageList.get(i).setUnreadCount(chatMessageList.get(i).getUnreadCount() - 1);
+                        chatMessageRepository.save(chatMessageList.get(i));
+                    }
+                }
+                sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
+                        .message("")
+                        .type(ChatMessage.MessageType.REENTER)
+                        .build());
+
 
                 return findMembersInChatRoom(roomId);
             } else {

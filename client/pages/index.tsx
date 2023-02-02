@@ -7,6 +7,7 @@ import MainSlogan from '../components/molecules/slogan/mainSlogan/MainSlogan';
 import LayoutWithFooter from '../components/container/layoutWithFooter/LayoutWithFooter';
 import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayoutType';
 import Link from 'next/link';
+import Head from 'next/head';
 
 const MainPage: NextPageWithLayout = () => {
   const [nearBy, setNearBy] = useState('');
@@ -18,11 +19,14 @@ const MainPage: NextPageWithLayout = () => {
 
   return (
     <div className="flex flex-col flex-grow my-28 ani_fadeIn">
+      <Head>
+        <title>Ngether 홈</title>
+      </Head>
       <div className="">
         <MainSlogan />
       </div>
       <div className="login flex justify-center m-7 my-4">
-        <div className="flex flex-col w-[100%] items-center">
+        <div className="flex flex-col w-[100%] items-center text-center break-keep">
           <p className="pt-px mt-4 text-lg">
             <strong className="text-primary font-bold">Ngether</strong>는{' '}
             <strong className="text-primary font-bold">위치 기반</strong>으로

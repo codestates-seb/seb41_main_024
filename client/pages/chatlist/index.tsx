@@ -13,6 +13,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Head from 'next/head';
 
 const ChatList = () => {
   const { data, refetch } = useQuery(['mySharing'], getMySharing);
@@ -31,6 +32,9 @@ const ChatList = () => {
 
   return (
     <div className="ani_fadeIn">
+      <Head>
+        <title>채팅 목록</title>
+      </Head>
       {chatListData?.length === 0 && (
         <NoChatListAlert
           isNoChatListAlertOpen={isNoChatListAlertOpen}

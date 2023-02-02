@@ -26,6 +26,7 @@ import Cookies from 'js-cookie';
 import { locationDataType } from '../../components/container/addressBook/AddressBook';
 import Link from 'next/link';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+import Head from 'next/head';
 
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
@@ -190,7 +191,14 @@ const Search = () => {
 
   return (
     <div className="flex flex-col items-center ani_fadeIn">
-      <div className="flex flex-col max-w-lg mt-3 w-[100%] relative">
+      <Head>
+        <title>검색</title>
+        <meta
+          name="description"
+          content="실시간 위치로 주변 이웃들의 Ngether 모집 글을 찾아보세요! 실시간 위치 뿐만 아니라 원하는 위치 어디든 검색할 수 있습니다."
+        />
+      </Head>
+      <div className="flex flex-col max-w-lg mt-3 w-[100%] relative screen-maxw672:max-w-full screen-maxw672:px-4 screen-maxw672:w-full">
         <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
         <div
           className={`${
@@ -203,7 +211,7 @@ const Search = () => {
             ? `${searchOption} 검색은 위치 검색 지원이 되지 않습니다. 자동으로 현재 위치로 이동합니다`
             : ''}
         </div>
-        <p className="mb-4">
+        <p className="m-4">
           <em>지도를 클릭하면 더 정확한 주소를 검색할 수 있습니다</em>
           {error?.message && (
             <em className="text-[red] block">
@@ -211,11 +219,12 @@ const Search = () => {
             </em>
           )}
         </p>
-        <div className="flex w-[100%]">
+        <div className="flex w-[100%] mb-4 screen-maxw430:block">
           <Input
             id="location"
             name="location"
             type="text"
+            className="screen-maxw430:w-full"
             label="도로명•지번주소 검색"
             onKeyDown={(e: KeyboardEvent) => {
               setSelectedAddressBook({});
@@ -225,25 +234,25 @@ const Search = () => {
             onChange={handleSearchAddress}
             // helperText="ex) 강남, 이문로 (강남에 게시물이 집중되어 있습니다)"
           />
-
-          <FormButton
-            variant="contained"
-            className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px]"
-            content="주소검색"
-            onClick={() => {
-              setSelectedAddressBook({});
-              setIsSearch((prev) => !prev);
-              searchMap(searchAddress, setCenter);
-            }}
-          ></FormButton>
-          <FormButton
-            aria-describedby={id}
-            variant="contained"
-            onClick={handleClick}
-            content="나의 주소록"
-            className="bg-[skyblue] text-[white] ml-[10px] h-[52px]"
-          ></FormButton>
-
+          <div className="screen-maxw430:mt-[0.3125rem]">
+            <FormButton
+              variant="contained"
+              className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px] screen-maxw672:px-[0.625rem] screen-maxw430:ml-0 screen-maxw430:w-[48%]"
+              content="주소검색"
+              onClick={() => {
+                setSelectedAddressBook({});
+                setIsSearch((prev) => !prev);
+                searchMap(searchAddress, setCenter);
+              }}
+            ></FormButton>
+            <FormButton
+              aria-describedby={id}
+              variant="contained"
+              onClick={handleClick}
+              content="나의 주소록"
+              className="bg-[skyblue] text-[white] ml-[10px] h-[52px] screen-maxw672:px-[0.625rem] screen-maxw430:w-[48%]"
+            ></FormButton>
+          </div>
           <Popover
             id={id}
             open={open}
