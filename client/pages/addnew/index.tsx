@@ -30,6 +30,7 @@ import axios from 'axios';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import { validatePostInput } from '../../utils/uploadPost/postInputValidation';
 import Cookies from 'js-cookie';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
   { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
@@ -127,7 +128,9 @@ const AddNewPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    const addressInfo = targetCoord.address.split(' ');
+    if (addressInfo.length <= 1)
+      return alert('주소는 시,구 까지 입력되어야 합니다. 지도를 클릭해주세요');
     let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
     const requestBody: any = {
       ...inputValue,
@@ -357,12 +360,21 @@ const AddNewPage = () => {
                 multiline
                 className="h-15.75"
               ></Input>
+
               <FormButton
                 className="h-14 mt-4"
                 variant="contained"
                 content="쉐어링 등록"
                 type="submit"
               />
+              <div className="relative">
+                {isLoading && (
+                  <CircleLoading
+                    className="absolute top-[-500px] left-[50%] translate-x-[-50%]"
+                    message="쉐어링 등록 중입니다. 잠시만 기다려주세요"
+                  />
+                )}
+              </div>
             </Stack>
           </FormControl>
           <Snackbar
