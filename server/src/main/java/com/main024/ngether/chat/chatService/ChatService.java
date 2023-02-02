@@ -229,6 +229,11 @@ public class ChatService {
                 chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
                 chatRoomRepository.save(chatRoom);
                 sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
+                ChatMessage evenTrigger = ChatMessage.builder()
+                        .type(ChatMessage.MessageType.DISCONNECTED)
+                        .message(deportedMember.getNickName())
+                        .build();
+                sendingOperations.convertAndSend("/receive/chat/" + roomId, evenTrigger);
 
                 return findMembersInChatRoom(roomId);
             } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
