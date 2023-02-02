@@ -59,7 +59,7 @@ const AddNewPage = () => {
   const [alertOption, setAlertOption] = useState<{
     severity: AlertColor;
     value: string;
-  }>({ severity: 'error', value: '' });
+  }>({ severity: 'warning', value: '' });
 
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: async (data) => {
@@ -178,11 +178,23 @@ const AddNewPage = () => {
     }
   }; */
   const getLinkMetaData = async (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (
-      e.target.value.includes('www.coupang.com') ||
-      !e.target.value.includes('https')
-    )
-      return;
+    if (e.target.value.includes('www.coupang.com')) {
+      console.log('hi');
+
+      setOpen(true);
+      return setAlertOption({
+        severity: 'warning',
+        value: '쿠팡은 이미지 업로드 지원이 되지 않습니다.',
+      });
+    }
+    if (!e.target.value.includes('https')) {
+      setOpen(true);
+      return setAlertOption({
+        severity: 'warning',
+        value: 'http 사이트는 이미지 업로드 지원이 되지 않습니다',
+      });
+    }
+
     /* const data = await axios({
       method: 'post',
       url: '/api/getLinkMetaInfo',
@@ -195,7 +207,11 @@ const AddNewPage = () => {
         url: e.target.value,
       }).then(({ data, status }) => {
         if (status !== 200) {
-          alert('이미지 정보를 불러오는데 실패했습니다.');
+          setOpen(true);
+          setAlertOption({
+            severity: 'warning',
+            value: '이미지 업로드에 실패했습니다.',
+          });
         }
         const $ = cheerio.load(data);
         $('meta').each((_, el) => {
@@ -205,15 +221,29 @@ const AddNewPage = () => {
             const checkUrl = value?.includes('https');
             if (key === 'image' && checkUrl) {
               if (value && value.length >= 2000) {
-                return;
+                setOpen(true);
+                return setAlertOption({
+                  severity: 'warning',
+                  value: '이미지 업로드에 실패했습니다.',
+                });
               }
               setImageLink(value);
+              setOpen(true);
+              setAlertOption({
+                severity: 'success',
+                value: '이미지가 업로드되었습니다',
+              });
             }
           }
         });
       });
     } catch (error) {
-      alert('이미지 업로드에 실패했습니다');
+      console.log(error);
+      setOpen(true);
+      setAlertOption({
+        severity: 'warning',
+        value: '이미지 업로드에 실패했습니다.',
+      });
     }
   };
 
@@ -282,11 +312,12 @@ const AddNewPage = () => {
                 id="productsLink"
                 name="productsLink"
                 type="text"
-                label="상품 링크"
+                autoComplete="off"
+                label="공동구매 상품 링크"
                 value={productsLink}
                 onChange={onChange}
                 onBlur={getLinkMetaData}
-                helperText="쿠팡, 네이버 상품은 이미지 자동 업로드가 지원되지 않습니다."
+                helperText="11번가, 이마트, 홈플러스 사이트에서 이미지 자동업로드가 지원됩니다."
               />
               <Label htmlFor={'title'} labelText={''} />
               <Input
