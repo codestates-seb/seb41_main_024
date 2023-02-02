@@ -56,7 +56,6 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
       .then(res => setMessages(res.data.map(transDateFormChatMessage)));
       await getChatSharing(roomId)
       .then((response) => {
-        console.log(response.data)
         setSharingData(response.data);
       })
     } 
@@ -66,7 +65,7 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
         const sockjs = new SockJS(`https://ngether.site/ws`);
         const ws = StompJS.over(sockjs);
         setStompClient(ws);
-
+        ws.debug  = () => {};
         await ws.connect(
           HEADER_TOKEN,
           () => {

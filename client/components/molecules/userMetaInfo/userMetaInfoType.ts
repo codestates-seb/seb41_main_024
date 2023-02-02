@@ -13,6 +13,7 @@ export interface productDataProps {
     address: string;
     memberId: number;
     userImageLink?: string;
+    boardStatus: string;
   };
   handleDelete: () => void;
   handleComplete: () => void;
