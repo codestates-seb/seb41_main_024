@@ -6,6 +6,7 @@ import com.main024.ngether.auth.RefreshToken.RefreshTokenRepository;
 import com.main024.ngether.auth.dto.LoginResponseDto;
 import com.main024.ngether.auth.jwt.JwtTokenizer;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
+import com.main024.ngether.auth.utils.ErrorResponder;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
 import com.main024.ngether.location.Location;
@@ -13,6 +14,7 @@ import com.main024.ngether.location.LocationRepository;
 import com.main024.ngether.member.Member;
 import com.main024.ngether.member.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -57,6 +59,9 @@ public class Oauth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         //DB에서 email를 통해 사용자 정보 확인
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        if(optionalMember.get().getRoles().get(0).equals("BAN")){
+            ErrorResponder.sendErrorResponse(response, HttpStatus.FORBIDDEN);
+        }
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         //사용자 생성 정보로 토큰 생성
         String accessToken = delegateAccessToken(findMember);
