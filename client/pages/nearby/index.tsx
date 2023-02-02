@@ -119,7 +119,6 @@ const Index = ({
     queryKey: ['sharingLists', page],
     queryFn: () => {
       if (selectedAddressBookId && selectedAddressBookId * 1 >= 0) {
-        console.log('getPostsByAddressBook');
         return getPostsByAddressBook({
           selectedAddressBookId,
           range: alignment,
@@ -170,7 +169,7 @@ const Index = ({
   }, []);
   const handleOpenOptions = () => setIsOpenOptions((prev) => !prev);
   return (
-    <div className="flex flex-col items-center  ani_fadeIn">
+    <div className="flex flex-col items-center max-w-lg ani_fadeIn mx-auto pb-[3.75rem] screen-maxw672:max-w-full screen-maxw672:px-4 screen-maxw672:w-full">
       <div className="mx-auto w-full h-fit">
         <div id="map" className="w-[100%] h-[350px] fadeIn">
           {isMapLoading && <CircleLoading />}
@@ -181,17 +180,17 @@ const Index = ({
             variant={'contained'}
           />
         </div>
-        <p>
+        <p className="mt-4 mb-0 ml-4 mr-4">
           <em className="text-gray-400">
             마우스를 드래그해서 지도를 이동해보세요 주변 게시물이 나타납니다
           </em>
         </p>
-        <p>
+        <p className="mt-1 mb-0 ml-4 mr-4">
           <em className="text-gray-400">
             캐릭터를 클릭해주세요! 모집 글을 볼 수 있습니다
           </em>
         </p>
-        <p className="text-[red]">
+        <p className="text-[red] mt-1 mb-0 ml-4 mr-4">
           {locationError.message &&
             '위치 정보 접근권한이 없어 현재 위치를 파악하지 못했습니다'}
         </p>
@@ -203,7 +202,7 @@ const Index = ({
         centered={false}
       />
       <div className="flex w-[100%] items-center">
-        <div className="flex mt-2 justify-around px-2 w-[100%]">
+        <div className="flex mt-4 mb-2 justify-around px-2 w-[100%]">
           <p>
             <strong className="font-[500] whitespace-nowrap">
               주변 {category || ''} 게시물 수 :{' '}
@@ -271,10 +270,10 @@ const Index = ({
       {isLoading && (
         <CircleLoading message="쉐어링 목록을 불러오는 중입니다. 잠시만 기다려주세요" />
       )}
-      <TabPanel currentTab={currentTab} index={0}>
+      <TabPanel currentTab={currentTab} index={0} className="w-full">
         <NearByList sharingLists={data?.data} />
       </TabPanel>
-      <TabPanel currentTab={currentTab} index={1}>
+      <TabPanel currentTab={currentTab} index={1} className="w-full">
         <NearByList sharingLists={data?.data} />
       </TabPanel>
       <Pagination
@@ -298,7 +297,6 @@ export async function getServerSideProps(context: any) {
     type,
     selectedAddressBookId,
   } = context?.query;
-  // console.log('SSR selectedAddressBook ::', selectedAddressBookId);
 
   const requestData = {
     lat: Number(lat),

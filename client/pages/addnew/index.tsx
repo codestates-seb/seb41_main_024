@@ -167,16 +167,6 @@ const AddNewPage = () => {
     setOpen(false);
   };
 
-  /* const fetchOgData = async (url: string) => {
-    try {
-      await axios
-        .get(`/api/fetch-og-data?url=${url}`)
-        .then((res) => setProductImg(res.data.image.url));
-      console.log(productImg);
-    } catch (error) {
-      console.log(error);
-    }
-  }; */
   const getLinkMetaData = async (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (e.target.value.includes('www.coupang.com')) {
       console.log('hi');
@@ -250,8 +240,11 @@ const AddNewPage = () => {
   return (
     <LoginChecker path="/addnew">
       <Box component="form" onSubmit={handleSubmit}>
-        <div className="flex justify-center m-7 my-12">
-          <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
+        <div className="flex justify-center m-7 my-12 screen-maxw672:mx-0">
+          <FormControl
+            fullWidth
+            className="flex flex-col w-10/12 max-w-lg screen-maxw672:max-w-full screen-maxw672:px-4 screen-maxw672:w-full"
+          >
             <Stack spacing={4}>
               <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
               <p>
@@ -296,13 +289,13 @@ const AddNewPage = () => {
                 value={targetCoord.address || center.address}
                 disabled
               />
-              <div className="flex items-center">
+              <div className="flex items-center screen-maxw672:flex-col">
                 <img
                   className="h-40 w-40 mb-7 m-auto"
                   src={imageLink || productImg}
                   alt={'상품이미지'}
                 />
-                <span>
+                <span className="text-center break-keep">
                   상품 링크를 입력하면 자동으로 상품이미지가 등록됩니다
                 </span>
               </div>
