@@ -194,10 +194,10 @@ export default function ProductDetail({ id, productData }: productDetailType) {
       .catch(() => {
         setDeleteSnackbarOpen(true);
         setGetherModalOpen(false);
-        setAlertOption({ severity: 'error', value: '강퇴당한 유저는 참여할 수 없습니다.' });
+        setDeleteAlertOption({ severity: 'error', value: '강퇴당한 유저는 참여할 수 없습니다.' });
         setTimeout(() => {
           router.push('/nearby')
-        }, 2000)
+        }, 1000)
       })
     }
   };
