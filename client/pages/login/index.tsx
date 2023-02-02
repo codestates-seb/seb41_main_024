@@ -104,66 +104,64 @@ const LoginPage = () => {
   };
 
   return (
-    <LoginChecker path="/">
-      <div>
-        <div className="mt-24">
-          <LoginSlogan />
-        </div>
-        <div className="login flex justify-center m-7 my-12">
-          <div className="flex flex-col w-10/12 max-w-lg">
-            <Input
-              id="email-input"
-              name="email"
-              type={'text'}
-              label="이메일"
-              value={email}
-              onChange={onChange}
-            />
-            <Label htmlFor={'email-input'} labelText={emailRegexText} />
-            <TextField
-              id="password-input"
-              name="pw"
-              label="패스워드"
-              value={pw}
-              onChange={onChange}
-              onKeyPress={onKeyPress}
-            />
-            <Label htmlFor={'password-input'} labelText={passwordRegexText} />
-            <p className="text-[#dd3030]">{loginErrorMessage}</p>
-            {isLoading && (
-              <LoadingButton loading variant="text" size="small">
-                Submit
-              </LoadingButton>
-            )}
-            <Button
-              className="h-14 mt-4 bg-primary text-white rounded"
-              onClick={handleLogin}
+    <div>
+      <div className="mt-24">
+        <LoginSlogan />
+      </div>
+      <div className="login flex justify-center m-7 my-12">
+        <div className="flex flex-col w-10/12 max-w-lg">
+          <Input
+            id="email-input"
+            name="email"
+            type={'text'}
+            label="이메일"
+            value={email}
+            onChange={onChange}
+          />
+          <Label htmlFor={'email-input'} labelText={emailRegexText} />
+          <TextField
+            id="password-input"
+            name="pw"
+            label="패스워드"
+            value={pw}
+            onChange={onChange}
+            onKeyPress={onKeyPress}
+          />
+          <Label htmlFor={'password-input'} labelText={passwordRegexText} />
+          <p className="text-[#dd3030]">{loginErrorMessage}</p>
+          {isLoading && (
+            <LoadingButton loading variant="text" size="small">
+              Submit
+            </LoadingButton>
+          )}
+          <Button
+            className="h-14 mt-4 bg-primary text-white rounded"
+            onClick={handleLogin}
+          >
+            로그인
+          </Button>
+          <Button
+            className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
+            onClick={() => router.push('/signup')}
+          >
+            회원가입
+          </Button>
+          <Divider />
+          <Button className="h-14 mt-4" onClick={() => handleSocialLogin()}>
+            <div
+              style={{ width: '100%', height: '100%', position: 'relative' }}
             >
-              로그인
-            </Button>
-            <Button
-              className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
-              onClick={() => router.push('/signup')}
-            >
-              회원가입
-            </Button>
-            <Divider />
-            <Button className="h-14 mt-4" onClick={() => handleSocialLogin()}>
-              <div
-                style={{ width: '100%', height: '100%', position: 'relative' }}
-              >
-                <Image
-                  alt="google login"
-                  src="/login/btn_google.png"
-                  layout="fill"
-                  objectFit="contain"
-                />
-              </div>
-            </Button>
-          </div>
+              <Image
+                alt="google login"
+                src="/login/btn_google.png"
+                layout="fill"
+                objectFit="contain"
+              />
+            </div>
+          </Button>
         </div>
       </div>
-    </LoginChecker>
+    </div>
   );
 };
 
