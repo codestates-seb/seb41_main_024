@@ -26,6 +26,7 @@ import Cookies from 'js-cookie';
 import { locationDataType } from '../../components/container/addressBook/AddressBook';
 import Link from 'next/link';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+import Head from 'next/head';
 
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
@@ -190,6 +191,13 @@ const Search = () => {
 
   return (
     <div className="flex flex-col items-center ani_fadeIn">
+      <Head>
+        <title>검색</title>
+        <meta
+          name="description"
+          content="실시간 위치로 주변 이웃들의 Ngether 모집 글을 찾아보세요! 실시간 위치 뿐만 아니라 원하는 위치 어디든 검색할 수 있습니다."
+        />
+      </Head>
       <div className="flex flex-col max-w-lg mt-3 w-[100%] relative screen-maxw672:max-w-full screen-maxw672:px-4 screen-maxw672:w-full">
         <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
         <div
