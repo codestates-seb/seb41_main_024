@@ -53,9 +53,9 @@ const Index = ({
   selectedAddressBookId,
 }: nearbyPropsType) => {
   const [mapCenter, setMapCenter] = useState({
-    lat: lat || 37.517331925853,
-    lng: lng || 127.047377408384,
-    address: address === 'undefined' ? '서울 강남구' : address,
+    lat: 0,
+    lng: 0,
+    address: '',
   });
   const [currentMapCenter, setCurrentMapCenter] = useState({
     lat: 0,
@@ -82,7 +82,15 @@ const Index = ({
     //검색 옵션이 글 제목이거나 검색페이지를 거치지 않고 왔을 때
     !lat && getCurrentLocation(setMapCenter, setLocationError);
   }, []);
-
+  useEffect(
+    () =>
+      setMapCenter({
+        lat: 37.517331925853,
+        lng: 127.047377408384,
+        address: '서울 강남구',
+      }),
+    [locationError]
+  );
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
@@ -154,6 +162,7 @@ const Index = ({
     category,
     alignment,
     currentTab,
+    mapCenter.address,
   ]);
   useEffect(() => {
     refetch();
