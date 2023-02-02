@@ -75,9 +75,9 @@ const LoginPage = () => {
     } catch (error: any) {
       setIsLoading(false);
 
-      if (error?.response?.data?.status === 403) {
+      if (error?.response?.status === 403) {
         setLoginErrorMessage('신고로 이용이 정지된 사용자입니다');
-      } else if (error?.response?.data?.status === 401) {
+      } else if (error?.response?.status === 401) {
         setLoginErrorMessage('정확하지 않은 이메일 또는 패스워드입니다');
       }
     }
