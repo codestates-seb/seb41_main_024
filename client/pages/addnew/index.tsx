@@ -31,6 +31,7 @@ import DropdownInput from '../../components/molecules/dropdownInput/DropdownInpu
 import { validatePostInput } from '../../utils/uploadPost/postInputValidation';
 import Cookies from 'js-cookie';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+import Head from 'next/head';
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
   { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
@@ -219,6 +220,13 @@ const AddNewPage = () => {
 
   return (
     <LoginChecker path="/addnew">
+      <Head>
+        <title>Ngether 모집</title>
+        <meta
+          name="description"
+          content="Negther를 모집하는 글을 등록할 수 있습니다. 우리 동네 근처에 모집글을 올려 이웃들과 함께 대량의 물품을 구매해서 나눠보세요"
+        />
+      </Head>
       <Box component="form" onSubmit={handleSubmit}>
         <div className="flex justify-center m-7 my-12">
           <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">

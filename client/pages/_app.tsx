@@ -10,6 +10,7 @@ import React, { ReactElement } from 'react';
 import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayoutType';
 
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Head from 'next/head';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -25,11 +26,16 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const queryClient = new QueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Hydrate state={pageProps.dehydratedState}>
-        <ReactQueryDevtools initialIsOpen={false} />
-        {renderWithLayout(<Component {...pageProps} />)}
-      </Hydrate>
-    </QueryClientProvider>
+    <>
+      <Head>
+        <title>Ngether</title>
+      </Head>
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          {renderWithLayout(<Component {...pageProps} />)}
+        </Hydrate>
+      </QueryClientProvider>
+    </>
   );
 }

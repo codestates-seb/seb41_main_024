@@ -20,6 +20,7 @@ import FormButton from '../../components/molecules/formbutton/FormButton';
 import AddressBook, {
   locationDataType,
 } from '../../components/container/addressBook/AddressBook';
+import Head from 'next/head';
 const TOGGLE_VALUES = [
   { value: 0.5, label: '0.5Km' },
   { value: 1, label: '1Km' },
@@ -171,6 +172,13 @@ const Index = ({
   const handleOpenOptions = () => setIsOpenOptions((prev) => !prev);
   return (
     <div className="flex flex-col items-center  ani_fadeIn">
+      <Head>
+        <title>내 근처 목록</title>
+        <meta
+          name="description"
+          content="지도에서 주변 Ngether들을 찾아볼 수 있습니다. 아래 sharing 목록에서 원하는 물품을 찾아보세요"
+        />
+      </Head>
       <div className="mx-auto w-full h-fit">
         <div id="map" className="w-[100%] h-[350px] fadeIn">
           {isMapLoading && <CircleLoading />}

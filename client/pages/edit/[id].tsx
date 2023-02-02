@@ -23,6 +23,7 @@ import axios from 'axios';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import { validatePostInput } from '../../utils/uploadPost/postInputValidation';
 import { getIsWriter } from '../../api/isWriter';
+import Head from 'next/head';
 
 export async function getServerSideProps(context: { params: { id: string } }) {
   const { id } = context.params;
@@ -201,6 +202,13 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
+      <Head>
+        <title>게시글 수정</title>
+        <meta
+          name="description"
+          content="내가 게시한 Ngether 모집글을 수정할 수 있는 페이지입니다"
+        />
+      </Head>
       <div className="flex justify-center m-7 my-12 ani_fadeIn">
         <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
           <Stack spacing={4}>
