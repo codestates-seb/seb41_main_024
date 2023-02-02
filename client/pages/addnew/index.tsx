@@ -242,6 +242,7 @@ const AddNewPage = () => {
                   onKeyDown={(e: KeyboardEvent) => {
                     if (e.key === 'Enter') {
                       setIsSearch((prev) => !prev);
+                      e.preventDefault();
                       return searchMap(searchAddress, setCenter);
                     }
                   }}
