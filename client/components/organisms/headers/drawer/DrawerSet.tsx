@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import { ReactComponent as RigthIcon } from '../../../../public/header/arrowbackRight.svg';
 
 const DrawerSet = ({ isOpen, onClick, children }: drawerType) => {
-  const drawerWidth = 240;
+  const drawerWidth = 280;
 
   const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',

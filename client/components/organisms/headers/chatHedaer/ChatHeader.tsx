@@ -7,6 +7,7 @@ import { useState } from 'react';
 import DrawerSet from '../drawer/DrawerSet';
 import DrawerListItem from '../../../molecules/drawerListItem/DrawerListItem';
 import DialogMaker from '../../dialogMaker/DialogMaker';
+import Cookies from 'js-cookie';
 
 interface ChatHeaderType {
   isOwner: boolean;
@@ -15,6 +16,7 @@ interface ChatHeaderType {
   handleExitChat: () => void;
   handleSendReport: () => void;
   handleCompleteRecrutment: () => void;
+  handleExcutedUser: (nickName:string) => void;
 }
 
 const ChatHeader = ({
@@ -24,6 +26,7 @@ const ChatHeader = ({
   handleExitChat,
   handleSendReport,
   handleCompleteRecrutment,
+  handleExcutedUser
 }: ChatHeaderType) => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -66,12 +69,12 @@ const ChatHeader = ({
       </AppBar>
       <Divider />
       <DrawerSet isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        <div className="flex flex-col min-h-[calc(100vh-57px)] w-full relative pb-150px box-border">
+        <div className="flex flex-col min-h-[calc(100vh-66px)] w-full relative pb-150px box-border">
           <strong className="font-normal text-center my-3">유저 목록</strong>
             <ul className="flex flex-auto h-0 flex-col overflow-y-auto">
               {members.map((member, index) => (
-                <li>
-                  <DrawerListItem key={index}>
+                <li key={index}>
+                  <DrawerListItem>
                     <div className="flex pl-[0.35rem]">
                       <span className="min-w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
                         <img
@@ -80,9 +83,19 @@ const ChatHeader = ({
                           className="block w-full h-full object-cover"
                         />
                       </span>
-                      <p className="text-s text-primary pl-[1rem] pt-[0.6rem]">
+                      <p className="text-s text-primary pl-[1rem] pt-[0.6rem] w-[140px] truncate">
                         {member.nickName}
                       </p>
+                      {isOwner && member.nickName !== Cookies.get('nickName') && (
+                        <DialogMaker
+                          name="강퇴"
+                          title="해당 유저를 강퇴하시겠어요?"
+                          question="강퇴당한 유저는 다시는 입장할 수 없습니다."
+                          func={() => handleExcutedUser(member.nickName)}
+                          className="p-0 m-0 text-xs text-red-500"
+                        />
+                      )}
+
                     </div>
                   </DrawerListItem>
                 </li>

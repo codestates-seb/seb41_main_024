@@ -16,6 +16,7 @@ module.exports = {
         white: '#FFFFFF',
       },
       screens: {
+        'screen-minw672': { raw: '(min-width: 672px)' },
         'screen-maxw530': { raw: '(max-width: 530px)' },
       },
     },

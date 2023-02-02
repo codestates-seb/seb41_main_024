@@ -7,7 +7,7 @@ const ChatGroup = ({ chatData }: chatGroupType  ) => {
   return (
     <div className="mx-[1.25rem]">
       {chatData.map(({imageLink, chatMessageId, nickName, message, createDate, type, unreadCount}: chatRowType) => {
-        if(type === 'ENTER' || type === 'LEAVE') {
+        if(type === 'ENTER' || type === 'LEAVE' || type === 'BAN') {
           return <ChatNoticeRow key={chatMessageId} message={message}/>;
         }
 
