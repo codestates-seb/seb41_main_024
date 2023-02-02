@@ -124,7 +124,7 @@ const useWebSocketClient = (HEADER_TOKEN: {
                     ws.unsubscribe('sub-0');
                     setIsConnected(false);
                   });
-                  alert(`${sharingData.title}에서 퇴장당하셨습니다.`);
+                  alert(`${sharingData.title} 채팅방에서 퇴장당하셨습니다.`);
                   push('/');
                 }
                 setMessages((prevMessages) => [

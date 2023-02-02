@@ -16,7 +16,7 @@ interface ChatHeaderType {
   handleExitChat: () => void;
   handleSendReport: () => void;
   handleCompleteRecrutment: () => void;
-  handleExcutedUser: (nickName:string) => void;
+  handleExcutedUser: (nickName: string) => void;
 }
 
 const ChatHeader = ({
@@ -26,7 +26,7 @@ const ChatHeader = ({
   handleExitChat,
   handleSendReport,
   handleCompleteRecrutment,
-  handleExcutedUser
+  handleExcutedUser,
 }: ChatHeaderType) => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -35,7 +35,7 @@ const ChatHeader = ({
   };
 
   return (
-    <>
+    <div className="relative">
       <AppBar
         position="static"
         color="inherit"
@@ -69,40 +69,41 @@ const ChatHeader = ({
       </AppBar>
       <Divider />
       <DrawerSet isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        <div className="flex flex-col min-h-[calc(100vh-66px)] w-full relative pb-150px box-border">
-          <strong className="font-normal text-center my-3">유저 목록</strong>
-            <ul className="flex flex-auto h-0 flex-col overflow-y-auto">
-              {members.map((member, index) => (
-                <li key={index}>
-                  <DrawerListItem>
-                    <div className="flex pl-[0.35rem]">
-                      <span className="w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
-                        <img
-                          src={member.imageLink}
-                          alt=""
-                          className="block w-full h-full object-cover"
-                        />
-                      </span>
-                      <p className="text-s text-primary pl-[1rem] pt-[0.6rem] w-[140px] truncate">
-                        {member.nickName}
-                      </p>
-                      {isOwner && member.nickName !== Cookies.get('nickName') && (
-                        <DialogMaker
-                          name="강퇴"
-                          title="해당 유저를 강퇴하시겠어요?"
-                          question="강퇴당한 유저는 다시는 입장할 수 없습니다."
-                          func={() => handleExcutedUser(member.nickName)}
-                          className="p-0 m-0 text-xs text-red-500"
-                        />
-                      )}
-
-                    </div>
-                  </DrawerListItem>
-                </li>
-              ))}
-            </ul>
+        <div className="absolute left-0 right-0 top-[64px] bottom-0">
+          <strong className="block font-normal text-center my-3">
+            유저 목록
+          </strong>
+          <ul className="absolute left-0 right-0 top-[46px] bottom-[157px] overflow-y-auto">
+            {members.map((member, index) => (
+              <li key={index}>
+                <DrawerListItem>
+                  <div className="flex pl-[0.35rem]">
+                    <span className="w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
+                      <img
+                        src={member.imageLink}
+                        alt=""
+                        className="block w-full h-full object-cover"
+                      />
+                    </span>
+                    <p className="text-s text-primary pl-[1rem] pt-[0.6rem] w-[140px] truncate">
+                      {member.nickName}
+                    </p>
+                    {isOwner && member.nickName !== Cookies.get('nickName') && (
+                      <DialogMaker
+                        name="강퇴"
+                        title="해당 유저를 강퇴하시겠어요?"
+                        question="강퇴당한 유저는 다시는 입장할 수 없습니다."
+                        func={() => handleExcutedUser(member.nickName)}
+                        className="p-0 m-0 text-xs text-red-500"
+                      />
+                    )}
+                  </div>
+                </DrawerListItem>
+              </li>
+            ))}
+          </ul>
           <Divider className="mt-3" />
-          <ul className="mt-auto">
+          <ul className="absolute left-0 right-0 bottom-0">
             {isOwner && declareStatus !== 'BOARD_COMPLETE' && (
               <li>
                 <DrawerListItem>
@@ -117,11 +118,11 @@ const ChatHeader = ({
             )}
             <li>
               <DrawerListItem>
-                  <DialogMaker
-                    name="채팅방 신고하기"
-                    title="이 채팅방을 신고하시겠어요?"
-                    func={handleSendReport}
-                  />
+                <DialogMaker
+                  name="채팅방 신고하기"
+                  title="이 채팅방을 신고하시겠어요?"
+                  func={handleSendReport}
+                />
               </DrawerListItem>
             </li>
             <li>
@@ -137,7 +138,7 @@ const ChatHeader = ({
           </ul>
         </div>
       </DrawerSet>
-    </>
+    </div>
   );
 };
 
