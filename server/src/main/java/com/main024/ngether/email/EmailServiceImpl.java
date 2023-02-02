@@ -36,7 +36,7 @@ public class EmailServiceImpl implements EmailService{
         msgg += "<div style='padding: 40px; text-align: center; background-color: #f5f5f5; border-radius: 10px;'>";
         msgg += "<div style='display: flex; flex-direction: column; align-items: center;'>";
         msgg += "<p style='padding-bottom: 1px; font-size: 1.125rem; line-height: 1.75rem;'>";
-        msgg += "<strong style='color: rgb(99, 168, 218);'>N게더</strong>에 참여하여";
+        msgg += "<strong style='color: rgb(99, 168, 218);'>N게더</strong>에 참여하여 ";
         msgg += "</p>";
         msgg += "<p style='padding-bottom: 1px; font-size: 1.125rem; line-height: 1.75rem;'>";
         msgg += "동네의 <strong style='color: rgb(99, 168, 218);'>쇼핑 친구</strong>를 만나보세요";
