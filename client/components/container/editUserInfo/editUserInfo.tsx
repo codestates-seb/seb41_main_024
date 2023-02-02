@@ -6,11 +6,15 @@ import useValidation from '../../../hooks/common/useValidation';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import getOneUserData from '../../../api/getOneUserData';
 import patchOneUserInfo from '../../../utils/patchOneUserInfo/patchOneUserInfo';
-import { Button } from '@mui/material';
+import { Alert, AlertColor, Button, Snackbar } from '@mui/material';
 import postUserEqualCheck from '../../../api/postUserEqualCheck';
 import createProfileRandomUrl from '../../../utils/createProfileRandomUrl/createProfileRandomUrl';
 import RandomProfile from '../../organisms/randomProfile/RandomProfile';
 import CircleLoading from '../../organisms/circleLoading/CircleLoading';
+import { deleteUser } from '../../../api/deleteUser';
+import Cookies from 'js-cookie';
+import CircleSuccess from '../../organisms/circleSuccess/CircleSuccess';
+import { useRouter } from 'next/router';
 
 type formValueType = {
   [name: string]: string;
@@ -24,11 +28,21 @@ const EditUserInfo = () => {
   const { isLoading, data } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getOneUserData,
-    onSuccess(data) {
-      console.log(data);
-    },
+    refetchOnWindowFocus: false,
+    retry: 1,
+    staleTime: Infinity,
+    cacheTime: 1000 * 60 * 30,
   });
+  const [deleteUserLoading, setDeleteUserLoading] = useState(false);
+  const [deleteUserSuccess, setDeleteUserSuccess] = useState(false);
   const [formValue, setFormValue] = useState<formValueType>({
+    email: '',
+    nickName: '',
+    phoneNumber: '',
+    pw: '',
+    imageLink: '',
+  });
+  const [defaultFormValue, setDefaultFormValue] = useState<formValueType>({
     email: '',
     nickName: '',
     phoneNumber: '',
@@ -62,6 +76,12 @@ const EditUserInfo = () => {
   useEffect(() => {
     setIsAllEquals(formEqualCheck.nickName && formEqualCheck.phoneNumber);
   }, [formEqualCheck]);
+  const [open, setOpen] = useState(false);
+  const [alertOption, setAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'error', value: '' });
+  const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { id, value } = event.target;
@@ -121,10 +141,41 @@ const EditUserInfo = () => {
       imageLink: data?.data.imageLink,
       pw: '',
     });
+    setDefaultFormValue({
+      email: data?.data.email,
+      nickName: data?.data.nickName,
+      phoneNumber: data?.data.phoneNumber,
+      imageLink: data?.data.imageLink,
+      pw: '',
+    });
+
     setProfileUrl(data?.data.imageLink);
     setPwConfirm('');
-    setIsValid({ ...isValid, isEmail: true }),
-      setCheckActiveValid({ ...checkActiveValid, isEmail: true });
+    setIsValid({
+      ...isValid,
+      isEmail: true,
+      isNickName: true,
+      isPhoneNumber: true,
+    });
+    setCheckActiveValid({
+      ...checkActiveValid,
+      isEmail: true,
+      isNickName: true,
+      isPhoneNumber: true,
+    });
+
+    setEqualClickedCheck({
+      ...formEqualCheck,
+      nickName: true,
+      phoneNumber: true,
+    });
+    setFormEqualCheck({
+      ...formEqualCheck,
+      nickName: true,
+      phoneNumber: true,
+    });
+
+    console.log(equalClickedCheck.nickName, formEqualCheck.nickName);
   }, [data]);
 
   const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
@@ -147,22 +198,34 @@ const EditUserInfo = () => {
       ...formEqualCheck,
       [inpName]: true,
     });
-    if (formValue[inpName] !== '') {
-      await postUserEqualCheck(enteredData)
-        .then((res) => {
-          setFormEqualCheck({
-            ...formEqualCheck,
-            [inpName]: res.data,
-          });
-        })
-        .catch((error) => {
-          if (error.response.status === 419) {
-            setIsEqualsError({
-              ...isEqualsError,
-              [inpName]: true,
+    console.log(formValue[inpName], defaultFormValue[inpName]);
+    if (formValue[inpName] === defaultFormValue[inpName]) {
+      setFormEqualCheck({
+        ...formEqualCheck,
+        [inpName]: true,
+      });
+    } else {
+      if (formValue[inpName] !== '') {
+        await postUserEqualCheck(enteredData)
+          .then((res) => {
+            setFormEqualCheck({
+              ...formEqualCheck,
+              [inpName]: res.data,
             });
-          }
-        });
+          })
+          .catch((error) => {
+            if (
+              error.response.status === 419 ||
+              error.response.status === 418 ||
+              error.response.status === 417
+            ) {
+              setIsEqualsError({
+                ...isEqualsError,
+                [inpName]: true,
+              });
+            }
+          });
+      }
     }
   };
 
@@ -170,9 +233,52 @@ const EditUserInfo = () => {
     event.preventDefault();
     patchOneUserQuery.mutate();
   };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleClickDelete = async () => {
+    const memberId = Cookies.get('memberId');
+    setDeleteUserLoading(true);
+    memberId &&
+      (await deleteUser(memberId)
+        .then((res) => {
+          setTimeout(() => {
+            setDeleteUserLoading(false);
+          }, 1000);
+          setDeleteUserSuccess(true);
+          console.log(!deleteUserLoading && deleteUserSuccess);
+          Cookies.remove('access_token', { path: '' });
+          Cookies.remove('refresh_token', { path: '' });
+          Cookies.remove('memberId', { path: '' });
+          Cookies.remove('nickName', { path: '' });
+          Cookies.remove('locationId', { path: '' });
+          Cookies.remove('role', { path: '' });
+        })
+        .then((res) => {
+          setTimeout(() => {
+            router.push('/');
+          }, 3000);
+        })
+        .catch((error) => {
+          setDeleteUserLoading(false);
+          setOpen(true);
+          setAlertOption({
+            severity: 'error',
+            value: '서비스 에러입니다. 다음에 다시 시도해주세요.',
+          });
+        }));
+  };
   return (
     <div>
-      {data && (
+      {!deleteUserLoading && !deleteUserSuccess && data && (
         <div className="flex justify-center mt-7 mb-[3.75rem] ani_fadeIn">
           <form
             className="flex flex-col justify-center w-10/12 max-w-lg"
@@ -310,11 +416,26 @@ const EditUserInfo = () => {
               className="h-14 mt-4"
               variant="outlined"
               content="회원탈퇴"
+              onClick={handleClickDelete}
             />
           </form>
+          <Snackbar
+            open={open}
+            autoHideDuration={4000}
+            onClose={handleClose}
+            className="bottom-[25%]"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+            <Alert severity={alertOption?.severity}>{alertOption?.value}</Alert>
+          </Snackbar>
         </div>
       )}
-      {isLoading && <CircleLoading message="잠시만 기다려 주세요." />}
+      {(isLoading || deleteUserLoading) && (
+        <CircleLoading message="잠시만 기다려 주세요." />
+      )}
+      {!deleteUserLoading && deleteUserSuccess && (
+        <CircleSuccess message="탈퇴 완료. 홈으로 이동합니다." />
+      )}
     </div>
   );
 };

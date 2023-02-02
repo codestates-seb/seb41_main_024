@@ -6,6 +6,7 @@ const FormButton = ({
   content,
   className,
   type,
+  onClick,
   ...props
 }: formButtonType) => {
   return (
@@ -17,6 +18,7 @@ const FormButton = ({
       }
       variant={variant}
       type={type}
+      onClick={onClick}
       {...props}
     >
       {content}
