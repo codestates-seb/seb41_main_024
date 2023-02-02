@@ -23,7 +23,6 @@ export default function BottomNav(): JSX.Element {
   const [isUnReadMessage, setIsUnReadMessage] = useState(false);
   const token = Cookies.get('access_token');
   const [isLoading, setIsLoading] = useState(false);
-  console.log(isLoading);
   useEffect(() => {
     token &&
       token !== 'Bearer undefined' &&

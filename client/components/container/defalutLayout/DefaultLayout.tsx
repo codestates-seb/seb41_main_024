@@ -15,14 +15,12 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
   const nickName = Cookies.get('nickName');
 
   const handleLogOut = () => {
-    axios.delete('https://ngether.site/api/deleteRefreshToken', 
-      {
-        headers: {
-          Authorization: Cookies.get('access_token'),
-          Refresh: Cookies.get('refresh_token'),
-        },
-      }
-    )
+    axios.delete('https://ngether.site/api/deleteRefreshToken', {
+      headers: {
+        Authorization: Cookies.get('access_token'),
+        Refresh: Cookies.get('refresh_token'),
+      },
+    });
     Cookies.remove('access_token', { path: '' });
     Cookies.remove('refresh_token', { path: '' });
     Cookies.remove('memberId', { path: '' });
