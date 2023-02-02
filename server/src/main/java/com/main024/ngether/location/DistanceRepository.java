@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DistanceRepository  extends JpaRepository<Distance, Long> {
-    Optional<List<Distance>> findByDistanceTypeAndLocationLocationIdAndBoardCategory
-            (Distance.DistanceType distanceType, long locationId, String category, Sort sort);
+    Optional<List<Distance>> findByResultLessThanAndLocationLocationIdAndBoardCategory
+            (Double result, long locationId, String category, Sort sort);
+
 }
