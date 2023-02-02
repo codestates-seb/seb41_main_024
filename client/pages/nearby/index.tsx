@@ -53,9 +53,9 @@ const Index = ({
   selectedAddressBookId,
 }: nearbyPropsType) => {
   const [mapCenter, setMapCenter] = useState({
-    lat: 0,
-    lng: 0,
-    address: '',
+    lat: lat || 0,
+    lng: lng || 0,
+    address: address || '',
   });
   const [currentMapCenter, setCurrentMapCenter] = useState({
     lat: 0,
@@ -65,7 +65,7 @@ const Index = ({
   const [isMapLoading, setIsMapLoading] = useState(true);
   const [category, setCategory] = useState('상품 쉐어링');
 
-  const [locationError, setLocationError] = useState('');
+  const [locationError, setLocationError] = useState({ message: '' });
   const [alignment, setAlignment] = useState<number>(1.5);
   const [page, setPage] = useState(1);
   const [isOpenOptions, setIsOpenOptions] = useState(false);
@@ -82,15 +82,15 @@ const Index = ({
     //검색 옵션이 글 제목이거나 검색페이지를 거치지 않고 왔을 때
     !lat && getCurrentLocation(setMapCenter, setLocationError);
   }, []);
-  useEffect(
-    () =>
+  useEffect(() => {
+    if (!lat) {
       setMapCenter({
         lat: 37.517331925853,
         lng: 127.047377408384,
         address: '서울 강남구',
-      }),
-    [locationError]
-  );
+      });
+    }
+  }, [locationError?.message]);
   const [currentTab, setCurrentTab] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newCurrentTab: number) => {
