@@ -82,6 +82,7 @@ public class ReportService {
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(banByNickName.getReportId());
         if(!Objects.equals(chatRoom.getMemberId(), member.getMemberId())){
             chatRoom.setDeclareStatus(false);
+            chatRoomRepository.save(chatRoom);
         }
         List<String> roles = new ArrayList<>();
         roles.add("BAN");
