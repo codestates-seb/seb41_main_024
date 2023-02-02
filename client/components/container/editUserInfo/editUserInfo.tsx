@@ -87,9 +87,6 @@ const EditUserInfo = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { id, value } = event.target;
 
-    console.log(formValue);
-    console.log(snsUser);
-
     if (id === 'nickName') {
       setFormValue({
         ...formValue,

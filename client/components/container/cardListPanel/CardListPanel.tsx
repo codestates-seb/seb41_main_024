@@ -44,7 +44,6 @@ const CardListPanel = ({ getApi }: CardListPanelType) => {
           setIsItem(false);
         }
         setLoading(false);
-        console.log(res.data);
       })
       .catch(() => {
         setLoading(false);
