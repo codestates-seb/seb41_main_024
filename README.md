@@ -83,7 +83,7 @@
 <br>
 회원가입
 <br>
-<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/signup.gif" />
 <br>
 <br>
 로그인
@@ -93,7 +93,7 @@
 <br>
 마이페이지
 <br>
-<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/edit-profile.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/mypage.gif" />
 
 </details>
 <details markdown="1">
@@ -107,17 +107,17 @@
 <br>
 검색
 <br>
-<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/search.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/nearby_search.gif" />
 <br>
 <br>
 수정
 <br>
-<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/edit.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/nearby_edit.gif" />
 <br>
 <br>
 삭제
 <br>
-<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/delete.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/nearby_delete.gif" />
 </details>
 
 <details markdown="1">
@@ -126,17 +126,17 @@
 <br>
 주소롱 등록
 <br>
-<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/location-save.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/adress_post.gif" />
 <br>
 <br>
 나의 쉐어링 
 <br>
-<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/my-sharing.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/my_sharing.gif" />
 <br>
 <br>
 1:1 문의 등록
 <br>
-<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/question.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/post_qna.gif" />
 </details>
 
 <details markdown="1">
@@ -153,14 +153,10 @@
 <summary><strong>관리자 페이지</strong></summary>
 <br>
 <br>
-1:1 문의 답변
+유저 신고 및 문의 처리
 <br>
-<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/Answer.gif" />
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/admin_page.gif" />
 <br>
-<br>
-유저 정지
-<br>
-<img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/blockuser.gif" />
 </details>
 
 ## git & github guide
