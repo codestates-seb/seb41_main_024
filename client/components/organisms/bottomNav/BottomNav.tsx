@@ -23,6 +23,7 @@ export default function BottomNav(): JSX.Element {
   const [isUnReadMessage, setIsUnReadMessage] = useState(false);
   const token = Cookies.get('access_token');
   const [isLoading, setIsLoading] = useState(false);
+  console.log(isLoading);
   useEffect(() => {
     token &&
       token !== 'Bearer undefined' &&
@@ -86,19 +87,23 @@ export default function BottomNav(): JSX.Element {
     } else {
       router.push('/login');
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
     router.prefetch('/nearby');
     router.prefetch('/addnew');
     router.prefetch('/mypage');
+    router.prefetch('/chatlist');
   }, []);
+  useEffect(() => {
+    setIsLoading(false);
+  }, [router.pathname]);
   return (
     <>
       {isLoading && (
         <div className="absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]">
           <CircleLoading message="페이지 이동 중입니다 잠시만 기다려주세요" />
+          {/* <button onClick={() => setIsLoading(false)}>닫기</button> */}
         </div>
       )}
 
