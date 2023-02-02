@@ -12,10 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import java.util.List;
@@ -107,6 +104,13 @@ public class ChatRoomController {
 //            throw new BusinessLogicException(ExceptionCode.TIME_OUT);
 //        }
         return ResponseEntity.ok(chatService.checkNewMessages(member));
+    }
+
+    //채팅방에서 추방하기
+    @GetMapping("/room/deport/{room-Id}")
+    public ResponseEntity deportMember(@PathVariable("room-Id") Long roomId,
+                                       @RequestParam String nickName) {
+        return new ResponseEntity<>(chatService.deportMember(roomId,nickName), HttpStatus.OK);
     }
 
 

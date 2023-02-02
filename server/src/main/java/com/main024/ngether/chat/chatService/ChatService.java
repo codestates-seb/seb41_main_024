@@ -124,22 +124,22 @@ public class ChatService {
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get();
             Long count = chatRoomMembers.getLastMessageId();
 
-                for (int i = 0; i < chatMessageList.size(); i++) {
-                    if (chatMessageList.get(i).getChatMessageId() > count) {
-                        if (chatMessageList.get(i).getUnreadCount() != 0) {
-                            chatMessageList.get(i).setUnreadCount(chatMessageList.get(i).getUnreadCount() - 1);
-                            chatMessageRepository.save(chatMessageList.get(i));
-                        }
-                    }
-                    if (i == chatMessageList.size() - 1) {
-                        chatRoomMembers.setLastMessageId(chatMessageList.get(i).getChatMessageId());
+            for (int i = 0; i < chatMessageList.size(); i++) {
+                if (chatMessageList.get(i).getChatMessageId() > count) {
+                    if (chatMessageList.get(i).getUnreadCount() != 0) {
+                        chatMessageList.get(i).setUnreadCount(chatMessageList.get(i).getUnreadCount() - 1);
+                        chatMessageRepository.save(chatMessageList.get(i));
                     }
                 }
-                chatRoomMembersRepository.save(chatRoomMembers);
-                sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
-                        .message("")
-                        .type(ChatMessage.MessageType.REENTER)
-                        .build());
+                if (i == chatMessageList.size() - 1) {
+                    chatRoomMembers.setLastMessageId(chatMessageList.get(i).getChatMessageId());
+                }
+            }
+            chatRoomMembersRepository.save(chatRoomMembers);
+            sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
+                    .message("")
+                    .type(ChatMessage.MessageType.REENTER)
+                    .build());
 
             return findMembersInChatRoom(roomId);
         }
@@ -173,6 +173,9 @@ public class ChatService {
                 return null;
             } else {
                 chatRoomMembersRepository.delete(chatRoomMembers);
+                if (chatRoom.isRecruitment()) {
+                    chatRoom.setRecruitment(false);
+                }
 
                 ChatMessage chatMessage = ChatMessage.builder()
                         .nickName(member.getNickName())
@@ -189,6 +192,47 @@ public class ChatService {
                 return findMembersInChatRoom(roomId);
             }
         } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+    }
+
+    public List<MemberDto.ResponseChat> deportMember(Long roomId, String nickName) {
+        Member member = memberService.getLoginMember();
+        Member deportedMember = memberRepository.findByNickName(nickName).get();
+        if (member == null){
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        }
+        ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
+        Board board = boardService.findBoard(roomId);
+
+        if (Objects.equals(chatRoom.getMemberId(), member.getMemberId())) {
+            if (!chatRoom.isDeclareStatus()) {
+                chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
+                if (chatRoom.isRecruitment()) {
+                    chatRoom.setRecruitment(false);
+                }
+
+                board.setCurNum(board.getCurNum() - 1);
+                if (board.getBoardStatus() == Board.BoardStatus.FULL_MEMBER) {
+                    board.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
+                }
+                boardRepository.save(board);
+                ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(deportedMember.getMemberId(), roomId).get();
+                chatRoomMembersRepository.delete(chatRoomMembers);
+
+                ChatMessage chatMessage = ChatMessage.builder()
+                        .nickName(deportedMember.getNickName())
+                        .chatRoomId(roomId)
+                        .type(ChatMessage.MessageType.NOTICE)
+                        .message("[알림] " + deportedMember.getNickName() + "님이 추방당하셨습니다.")
+                        .build();
+                ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
+                chatRoom.setLastMessage(savedMessage.getMessage());
+                chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
+                chatRoomRepository.save(chatRoom);
+                sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
+
+                return findMembersInChatRoom(roomId);
+            } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        } else throw new BusinessLogicException(ExceptionCode.NOT_CHATROOM_MASTER);
     }
 
     public void removeChatRoomAndBoard(Long memberId) {
