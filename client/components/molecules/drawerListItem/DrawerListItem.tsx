@@ -15,12 +15,7 @@ const DrawerListItem = ({
           children
         ) : path ? (
           <Link href={path}>
-            <ListItemText
-              sx={{
-                width: '100%',
-              }}
-              primary={text}
-            />
+            <ListItemText primary={text} />
           </Link>
         ) : (
           <ListItemText primary={text} />
