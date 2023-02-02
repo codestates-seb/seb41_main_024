@@ -69,7 +69,10 @@ export default function ProductDetail({ id, productData }: productDetailType) {
   const [isMySharing, setIsMySharing] = useState<boolean>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { isAdmin } = useAdminRole();
-
+  const [alertOption, setAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'warning', value: '' });
   const router = useRouter();
 
   // const productData = data?.data;
@@ -136,7 +139,14 @@ export default function ProductDetail({ id, productData }: productDetailType) {
 
   // 삭제하기
   const handleDelete = () => {
-    deleteProductDetail(id).then((res) => router.push('/'));
+    deleteProductDetail(id)
+      .then((res) => {
+        setAlertOption({ severity: 'success', value: '삭제 완료되었습니다' });
+        router.push('/');
+      })
+      .catch((error) => {
+        setAlertOption({ severity: 'warning', value: '삭제에 실패하였습니다' });
+      });
   };
   // 찜하기
   const handleLike = () => {
