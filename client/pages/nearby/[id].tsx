@@ -19,7 +19,6 @@ import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
-import Box from '@mui/material/Box';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -33,6 +32,8 @@ import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 import { getMySharing } from '../../api/mySharing';
 import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
+
+import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -58,10 +59,17 @@ interface productDetailType {
 
 export default function ProductDetail({ id, productData }: productDetailType) {
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
+
   const handleClose = () => {
     setIsLoginAlertOpen(false);
     router.push('/login');
   };
+
+  const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState(false);
+  const [deleteAlertOption, setDeleteAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'error', value: '' });
 
   const [isLogin, setIsLogin] = useState<boolean>();
   const [isLiked, setIsLiked] = useState<boolean>();
@@ -136,7 +144,17 @@ export default function ProductDetail({ id, productData }: productDetailType) {
 
   // 삭제하기
   const handleDelete = () => {
-    deleteProductDetail(id).then((res) => router.push('/'));
+    deleteProductDetail(id).then((res) => {
+      setDeleteSnackbarOpen(true);
+      setDeleteAlertOption({
+        severity: 'success',
+        value: '게시글이 삭제되었습니다',
+      });
+
+      setTimeout(() => {
+        router.push('/');
+      }, 1500);
+    });
   };
   // 찜하기
   const handleLike = () => {
@@ -278,6 +296,17 @@ export default function ProductDetail({ id, productData }: productDetailType) {
             isLoginAlertOpen={isLoginAlertOpen}
             handleClose={handleClose}
           />
+          <Snackbar
+            open={deleteSnackbarOpen}
+            autoHideDuration={4000}
+            onClose={handleClose}
+            className="bottom-[25%]"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+            <Alert severity={deleteAlertOption?.severity}>
+              {deleteAlertOption?.value}
+            </Alert>
+          </Snackbar>
         </Box>
       )}
     </div>
