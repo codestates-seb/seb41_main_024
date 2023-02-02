@@ -17,7 +17,7 @@ interface chatMessageType {
 }
 
 const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) => {
-  const {query: {roomId}, isReady} = useRouter();
+  const {query: {roomId}, isReady, push} = useRouter();
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
   const [sharingData, setSharingData] = useState({
@@ -77,7 +77,7 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
                 await axios.get(`https://ngether.site/chat/room/messages/${roomId}`, {headers : HEADER_TOKEN})
                 .then(res => setMessages(res.data.map(transDateFormChatMessage)));
               } 
-              if (message.type === 'ENTER' || message.type === 'LEAVE') {
+              if (message.type === 'ENTER' || message.type === 'LEAVE' || message.type === 'BAN') {
                 await axios.get(`https://ngether.site/chat/room/${roomId}/memberList`, {headers : HEADER_TOKEN})
                 .then(res => {        
                   const members = mapMembers(res.data);
@@ -88,6 +88,14 @@ const useWebSocketClient = (HEADER_TOKEN: {Authorization : string | undefined}) 
                 await getChatSharing(roomId)
                 .then((response) => {setSharingData(response.data);
                 })
+              }
+              if (message.type === 'DISCONNECTED' && message.message === Cookies.get('nickName')){
+                ws.disconnect(() => {
+                  ws.unsubscribe('sub-0');
+                  setIsConnected(false);
+                });
+                alert("해당 N게더에서 퇴장당하셨습니다.");
+                push('/');
               }
               setMessages((prevMessages) => [...prevMessages, transDateFormChatMessage(message)])
             }, 
