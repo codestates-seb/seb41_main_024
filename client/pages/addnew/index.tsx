@@ -59,7 +59,7 @@ const AddNewPage = () => {
   const [alertOption, setAlertOption] = useState<{
     severity: AlertColor;
     value: string;
-  }>({ severity: 'error', value: '' });
+  }>({ severity: 'warning', value: '' });
 
   const { isLoading, error, mutate } = useMutation(uploadPost, {
     onSuccess: async (data) => {
@@ -128,8 +128,8 @@ const AddNewPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const addressInfo = targetCoord?.address.split(' ');
-    if (addressInfo.length <= 1)
+    const addressInfo = targetCoord?.address?.split(' ');
+    if (addressInfo?.length <= 1)
       return alert('주소는 시,구 까지 입력되어야 합니다. 지도를 클릭해주세요');
     let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
     const requestBody: any = {
@@ -167,22 +167,24 @@ const AddNewPage = () => {
     setOpen(false);
   };
 
-  /* const fetchOgData = async (url: string) => {
-    try {
-      await axios
-        .get(`/api/fetch-og-data?url=${url}`)
-        .then((res) => setProductImg(res.data.image.url));
-      console.log(productImg);
-    } catch (error) {
-      console.log(error);
-    }
-  }; */
   const getLinkMetaData = async (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (
-      e.target.value.includes('www.coupang.com') ||
-      !e.target.value.includes('https')
-    )
-      return;
+    if (e.target.value.includes('www.coupang.com')) {
+      console.log('hi');
+
+      setOpen(true);
+      return setAlertOption({
+        severity: 'warning',
+        value: '쿠팡은 이미지 업로드 지원이 되지 않습니다.',
+      });
+    }
+    if (!e.target.value.includes('https')) {
+      setOpen(true);
+      return setAlertOption({
+        severity: 'warning',
+        value: 'http 사이트는 이미지 업로드 지원이 되지 않습니다',
+      });
+    }
+
     /* const data = await axios({
       method: 'post',
       url: '/api/getLinkMetaInfo',
@@ -195,7 +197,11 @@ const AddNewPage = () => {
         url: e.target.value,
       }).then(({ data, status }) => {
         if (status !== 200) {
-          alert('이미지 정보를 불러오는데 실패했습니다.');
+          setOpen(true);
+          setAlertOption({
+            severity: 'warning',
+            value: '이미지 업로드에 실패했습니다.',
+          });
         }
         const $ = cheerio.load(data);
         $('meta').each((_, el) => {
@@ -205,23 +211,40 @@ const AddNewPage = () => {
             const checkUrl = value?.includes('https');
             if (key === 'image' && checkUrl) {
               if (value && value.length >= 2000) {
-                return;
+                setOpen(true);
+                return setAlertOption({
+                  severity: 'warning',
+                  value: '이미지 업로드에 실패했습니다.',
+                });
               }
               setImageLink(value);
+              setOpen(true);
+              setAlertOption({
+                severity: 'success',
+                value: '이미지가 업로드되었습니다',
+              });
             }
           }
         });
       });
     } catch (error) {
-      alert('이미지 업로드에 실패했습니다');
+      console.log(error);
+      setOpen(true);
+      setAlertOption({
+        severity: 'warning',
+        value: '이미지 업로드에 실패했습니다.',
+      });
     }
   };
 
   return (
     <LoginChecker path="/addnew">
       <Box component="form" onSubmit={handleSubmit}>
-        <div className="flex justify-center m-7 my-12">
-          <FormControl fullWidth className="flex flex-col w-10/12 max-w-lg">
+        <div className="flex justify-center m-7 my-12 screen-maxw672:mx-0">
+          <FormControl
+            fullWidth
+            className="flex flex-col w-10/12 max-w-lg screen-maxw672:max-w-full screen-maxw672:px-4 screen-maxw672:w-full"
+          >
             <Stack spacing={4}>
               <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
               <p>
@@ -242,6 +265,7 @@ const AddNewPage = () => {
                   onKeyDown={(e: KeyboardEvent) => {
                     if (e.key === 'Enter') {
                       setIsSearch((prev) => !prev);
+                      e.preventDefault();
                       return searchMap(searchAddress, setCenter);
                     }
                   }}
@@ -265,13 +289,13 @@ const AddNewPage = () => {
                 value={targetCoord.address || center.address}
                 disabled
               />
-              <div className="flex items-center">
+              <div className="flex items-center screen-maxw672:flex-col">
                 <img
                   className="h-40 w-40 mb-7 m-auto"
                   src={imageLink || productImg}
                   alt={'상품이미지'}
                 />
-                <span>
+                <span className="text-center break-keep">
                   상품 링크를 입력하면 자동으로 상품이미지가 등록됩니다
                 </span>
               </div>
@@ -281,11 +305,12 @@ const AddNewPage = () => {
                 id="productsLink"
                 name="productsLink"
                 type="text"
-                label="상품 링크"
+                autoComplete="off"
+                label="공동구매 상품 링크"
                 value={productsLink}
                 onChange={onChange}
                 onBlur={getLinkMetaData}
-                helperText="쿠팡, 네이버 상품은 이미지 자동 업로드가 지원되지 않습니다."
+                helperText="11번가, 이마트, 홈플러스 사이트에서 이미지 자동업로드가 지원됩니다."
               />
               <Label htmlFor={'title'} labelText={''} />
               <Input
@@ -313,29 +338,26 @@ const AddNewPage = () => {
                 {...(!productsLink && { disabled: true })}
               />
 
-              <FormControl fullWidth>
-                <DropdownInput
-                  dropDownOptions={CATEGORY_OPTIONS}
-                  id="category"
-                  name="category"
-                  label="카테고리"
-                  onChange={onChange}
-                  defaultValue="상품 쉐어링"
-                  value={category}
-                />
-              </FormControl>
-              <FormControl fullWidth>
-                <Input
-                  variant="outlined"
-                  id="maxNum"
-                  name="maxNum"
-                  value={maxNum}
-                  label="모집 인원"
-                  inputProps={{ min: 0 }}
-                  type="number"
-                  onChange={onChange}
-                ></Input>
-              </FormControl>
+              <DropdownInput
+                dropDownOptions={CATEGORY_OPTIONS}
+                id="category"
+                name="category"
+                label="카테고리"
+                onChange={onChange}
+                defaultValue="상품 쉐어링"
+                value={category}
+              />
+
+              <Input
+                variant="outlined"
+                id="maxNum"
+                name="maxNum"
+                value={maxNum}
+                label="모집 인원"
+                inputProps={{ min: 0 }}
+                type="number"
+                onChange={onChange}
+              ></Input>
 
               <Input
                 variant="outlined"

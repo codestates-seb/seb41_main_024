@@ -7,10 +7,12 @@ function TabPanel({
   currentTab,
   index,
   boxPadding = 2,
+  className,
   ...other
 }: tabPanelType) {
   return (
     <div
+      className={className}
       role="tabpanel"
       hidden={currentTab !== index}
       id={`simple-tabpanel-${index}`}

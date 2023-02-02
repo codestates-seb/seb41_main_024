@@ -18,10 +18,10 @@ const NearByPageTab = ({ sharingLists }: any) => {
         tabLabels={LABEL}
         centered={false}
       />
-      <TabPanel currentTab={currentTab} index={0}>
+      <TabPanel currentTab={currentTab} index={0} className="w-full">
         <NearByList sharingLists={sharingLists} />
       </TabPanel>
-      <TabPanel currentTab={currentTab} index={1}>
+      <TabPanel currentTab={currentTab} index={1} className="w-full">
         <NearByList sharingLists={sharingLists} />
       </TabPanel>
     </>

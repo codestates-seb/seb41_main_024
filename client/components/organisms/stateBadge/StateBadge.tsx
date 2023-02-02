@@ -8,8 +8,8 @@ const StateBadge = ({ stateText, usedDetail, usedList }: stateBadgeType) => {
         <span
           className={classnames(
             `absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] text-white whitespace-nowrap`,
-            { 'text-[5.6vw] pcScreenWidth:text-[37px]': usedDetail },
-            { 'text-[3.3vw] pcScreenWidth:text-[22px]': usedList }
+            { 'text-[5.6vw] screen-tablet:text-[37px]': usedDetail },
+            { 'text-[3.3vw] screen-tablet:text-[22px]': usedList }
           )}
         >
           {stateText}

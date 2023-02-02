@@ -87,9 +87,6 @@ const EditUserInfo = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { id, value } = event.target;
 
-    console.log(formValue);
-    console.log(snsUser);
-
     if (id === 'nickName') {
       setFormValue({
         ...formValue,
@@ -307,7 +304,7 @@ const EditUserInfo = () => {
       {!deleteUserLoading && !deleteUserSuccess && data && (
         <div className="flex justify-center mt-7 mb-[3.75rem] ani_fadeIn">
           <form
-            className="flex flex-col justify-center w-10/12 max-w-lg"
+            className="flex flex-col justify-center w-10/12 max-w-lg screen-maxw672:max-w-full screen-maxw672:px-4 screen-maxw672:w-full"
             onSubmit={onSubmitHandler}
           >
             <RandomProfile
