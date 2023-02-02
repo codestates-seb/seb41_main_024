@@ -88,6 +88,9 @@ const UserMetaInfo = ({
                   size="small"
                   className="m-1"
                   onClick={() => handleGoEdit(id)}
+                  {...(productData?.boardStatus === 'BOARD_NOT_DELETE'
+                    ? { disabled: true }
+                    : null)}
                 >
                   수정
                 </Button>
@@ -96,6 +99,9 @@ const UserMetaInfo = ({
                   size="small"
                   className="m-1"
                   onClick={handleIsDeleteModalOpen}
+                  {...(productData?.boardStatus === 'BOARD_NOT_DELETE'
+                    ? { disabled: true }
+                    : null)}
                 >
                   삭제
                 </Button>
