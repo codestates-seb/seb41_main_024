@@ -76,7 +76,7 @@ const ChatHeader = ({
                 <li key={index}>
                   <DrawerListItem>
                     <div className="flex pl-[0.35rem]">
-                      <span className="min-w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
+                      <span className="w-[2.4125rem] h-[2.4125rem] rounded-full overflow-hidden">
                         <img
                           src={member.imageLink}
                           alt=""
