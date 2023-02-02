@@ -42,12 +42,11 @@ public class EmailServiceImpl implements EmailService{
         msgg += "동네의 <strong style='color: rgb(99, 168, 218);'>쇼핑 친구</strong>를 만나보세요";
         msgg += "</p>";
         msgg += "</div>";
-        msgg += "<p style='font-size: 20px; color: #333; margin-top: 20px;'>해당 코드를 입력해주세요:</p>";
+        msgg += "<p style='font-size: 20px; color: #333; margin:20px auto 0;'>해당 코드를 입력해주세요:</p>";
         msgg += "<div style='border: 1px solid #333; padding: 20px; margin-top: 20px; border-radius: 10px; max-width: 700px;'>";
         msgg += "<div style='font-size: 24px;'>";
         msgg+= "CODE : <strong>";
-        msgg+= ePw+"</strong><div><br/> ";
-        msgg += "</div>";
+        msgg+= ePw+"</strong>";
         msgg += "</div>";
         msgg += "</div>";
         message.setText(msgg, "utf-8", "html");//내용
