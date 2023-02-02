@@ -33,6 +33,7 @@ import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 import { getMySharing } from '../../api/mySharing';
 import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
+import { AlertColor } from '@mui/material';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
