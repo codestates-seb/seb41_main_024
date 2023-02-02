@@ -144,8 +144,14 @@ export default function BottomNav(): JSX.Element {
                             color: (theme) =>
                               theme.palette.primary.contrastText,
                           },
+
+                          padding: '0px',
+                          minWidth: '72px',
                         }
-                      : null
+                      : {
+                          padding: '0px',
+                          minWidth: '72px',
+                        }
                   }
                 />
               );
