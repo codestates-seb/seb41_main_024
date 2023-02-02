@@ -167,28 +167,12 @@ const AddNewPage = () => {
     setOpen(false);
   };
 
-  /* const fetchOgData = async (url: string) => {
-    try {
-      await axios
-        .get(`/api/fetch-og-data?url=${url}`)
-        .then((res) => setProductImg(res.data.image.url));
-      console.log(productImg);
-    } catch (error) {
-      console.log(error);
-    }
-  }; */
   const getLinkMetaData = async (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (
       e.target.value.includes('www.coupang.com') ||
       !e.target.value.includes('https')
     )
       return;
-    /* const data = await axios({
-      method: 'post',
-      url: '/api/getLinkMetaInfo',
-      data: { url: e.target.value },
-    });
-    console.log(data); */
     try {
       return axios({
         method: 'get',

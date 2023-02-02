@@ -119,7 +119,6 @@ const Index = ({
     queryKey: ['sharingLists', page],
     queryFn: () => {
       if (selectedAddressBookId && selectedAddressBookId * 1 >= 0) {
-        console.log('getPostsByAddressBook');
         return getPostsByAddressBook({
           selectedAddressBookId,
           range: alignment,
@@ -298,7 +297,6 @@ export async function getServerSideProps(context: any) {
     type,
     selectedAddressBookId,
   } = context?.query;
-  // console.log('SSR selectedAddressBook ::', selectedAddressBookId);
 
   const requestData = {
     lat: Number(lat),
