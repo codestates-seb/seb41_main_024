@@ -46,7 +46,7 @@ const basicTheme = createTheme({
           font-weight: 100;
           font-style: normal;
           src:
-            local('NotoSans-Regular'),
+            local('NotoSans-Thin'),
             url(${nsTotf}) format('opentype'),
             url(${nsTwoff}) format('woff'),
             url(${nsTwoff2}) format('woff2');
