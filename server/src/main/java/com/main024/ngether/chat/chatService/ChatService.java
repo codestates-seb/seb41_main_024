@@ -123,7 +123,7 @@ public class ChatService {
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get();
             Long count = chatRoomMembers.getLastMessageId();
-            if(chatRoomMembers.getLastMessageId() != 0) {
+
                 for (int i = 0; i < chatMessageList.size(); i++) {
                     if (chatMessageList.get(i).getChatMessageId() > count) {
                         if (chatMessageList.get(i).getUnreadCount() != 0) {
@@ -140,7 +140,7 @@ public class ChatService {
                         .message("")
                         .type(ChatMessage.MessageType.REENTER)
                         .build());
-            }
+
             return findMembersInChatRoom(roomId);
         }
 

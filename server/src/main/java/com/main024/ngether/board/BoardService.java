@@ -139,6 +139,9 @@ public class BoardService {
                 chatRoom.setMaxNum(findBoard.getMaxNum());
             }
             else throw new BusinessLogicException(ExceptionCode.NOT_ALLOW);
+            if(findBoard.getMaxNum() != findBoard.getCurNum()){
+                findBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
+            }
             chatRoomRepository.save(chatRoom);
             return boardRepository.save(findBoard);
         } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);

@@ -12,11 +12,12 @@ import Cookies from 'js-cookie';
 import useAdminRole from '../../../../hooks/common/useAdminRole';
 
 const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
+  const [isLogin, setIsLogin] = useState<undefined | string>();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const isLogin = Cookies.get('access_token');
   const { isAdmin } = useAdminRole();
   const handleDrawerToggle = () => {
     setIsDrawerOpen(!isDrawerOpen);
+    setIsLogin(Cookies.get('access_token'));
   };
 
   return (
