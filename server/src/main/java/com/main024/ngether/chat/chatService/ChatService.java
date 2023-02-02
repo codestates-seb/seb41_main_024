@@ -332,7 +332,7 @@ public class ChatService {
         List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
         int count = 0;
         for (int i = 0; i < chatRoomMembersList.size(); i++) {
-            if (chatRoomMembersList.get(i).getSessionId() == null) {
+            if (chatRoomMembersList.get(i).getSessionId() == null && !chatRoomMembersList.get(i).isBan()) {
                 chatRoomMembersList.get(i).setUnreadMessageCount(chatRoomMembersList.get(i).getUnreadMessageCount() + 1);
                 count++;
             }
