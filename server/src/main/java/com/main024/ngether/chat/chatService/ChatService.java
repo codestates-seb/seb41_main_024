@@ -76,6 +76,7 @@ public class ChatService {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
 
+
         if (chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).isEmpty()) {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
@@ -101,6 +102,7 @@ public class ChatService {
             chatRoomMembers.setChatRoom(chatRoom);
             chatRoomMembers.setUnreadMessageCount(0);
             chatRoomMembers.setLastMessageId(0L);
+            chatRoomMembers.setBan(false);
             chatRoomMembersRepository.save(chatRoomMembers);
             chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
 
@@ -118,7 +120,7 @@ public class ChatService {
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
             return findMembersInChatRoom(roomId);
 
-        } else {
+        } else if (!chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get().isBan()) {
             //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get();
@@ -144,7 +146,7 @@ public class ChatService {
             return findMembersInChatRoom(roomId);
         }
 
-
+        return findMembersInChatRoom(roomId);
     }
 
     public List<MemberDto.ResponseChat> leaveRoom(Long roomId) {
@@ -197,7 +199,7 @@ public class ChatService {
     public List<MemberDto.ResponseChat> deportMember(Long roomId, String nickName) {
         Member member = memberService.getLoginMember();
         Member deportedMember = memberRepository.findByNickName(nickName).get();
-        if (member == null){
+        if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
@@ -216,7 +218,8 @@ public class ChatService {
                 }
                 boardRepository.save(board);
                 ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(deportedMember.getMemberId(), roomId).get();
-                chatRoomMembersRepository.delete(chatRoomMembers);
+                chatRoomMembers.setBan(true);
+                chatRoomMembersRepository.save(chatRoomMembers);
 
                 ChatMessage chatMessage = ChatMessage.builder()
                         .nickName(deportedMember.getNickName())
