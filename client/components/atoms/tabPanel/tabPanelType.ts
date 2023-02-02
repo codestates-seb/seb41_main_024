@@ -3,4 +3,5 @@ export interface tabPanelType {
   boxPadding?: number | string;
   index: number;
   currentTab: number;
+  className?: string;
 }

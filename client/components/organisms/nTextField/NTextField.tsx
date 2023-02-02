@@ -47,7 +47,11 @@ const NInput = ({
                   onMouseDown={handleMouseDownPassword}
                   edge="end"
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showPassword ? (
+                    <VisibilityOff className="w-[1.5rem] h-[1.5rem]" />
+                  ) : (
+                    <Visibility className="w-[1.5rem] h-[1.5rem]" />
+                  )}
                 </IconButton>
               </InputAdornment>
             ) : undefined

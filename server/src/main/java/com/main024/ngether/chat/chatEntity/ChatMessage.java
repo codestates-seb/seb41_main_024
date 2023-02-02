@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 public class ChatMessage {
     public enum MessageType {
-        ENTER, TALK, LEAVE, REENTER, NOTICE, DISCONNECTED
+        ENTER, TALK, LEAVE, REENTER, NOTICE, DISCONNECTED, BAN
     }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

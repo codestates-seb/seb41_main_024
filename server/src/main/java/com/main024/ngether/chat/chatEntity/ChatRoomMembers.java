@@ -18,6 +18,7 @@ public class ChatRoomMembers {
     private int unreadMessageCount;
     private Long lastMessageId;
     private String sessionId;
+    private boolean ban;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "CHATROOM_ID")
