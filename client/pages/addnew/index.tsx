@@ -128,8 +128,8 @@ const AddNewPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const addressInfo = targetCoord?.address.split(' ');
-    if (addressInfo.length <= 1)
+    const addressInfo = targetCoord?.address?.split(' ');
+    if (addressInfo?.length <= 1)
       return alert('주소는 시,구 까지 입력되어야 합니다. 지도를 클릭해주세요');
     let categoryValue = category === '상품 쉐어링' ? 'product' : 'delivery';
     const requestBody: any = {
@@ -242,6 +242,7 @@ const AddNewPage = () => {
                   onKeyDown={(e: KeyboardEvent) => {
                     if (e.key === 'Enter') {
                       setIsSearch((prev) => !prev);
+                      e.preventDefault();
                       return searchMap(searchAddress, setCenter);
                     }
                   }}
@@ -313,29 +314,26 @@ const AddNewPage = () => {
                 {...(!productsLink && { disabled: true })}
               />
 
-              <FormControl fullWidth>
-                <DropdownInput
-                  dropDownOptions={CATEGORY_OPTIONS}
-                  id="category"
-                  name="category"
-                  label="카테고리"
-                  onChange={onChange}
-                  defaultValue="상품 쉐어링"
-                  value={category}
-                />
-              </FormControl>
-              <FormControl fullWidth>
-                <Input
-                  variant="outlined"
-                  id="maxNum"
-                  name="maxNum"
-                  value={maxNum}
-                  label="모집 인원"
-                  inputProps={{ min: 0 }}
-                  type="number"
-                  onChange={onChange}
-                ></Input>
-              </FormControl>
+              <DropdownInput
+                dropDownOptions={CATEGORY_OPTIONS}
+                id="category"
+                name="category"
+                label="카테고리"
+                onChange={onChange}
+                defaultValue="상품 쉐어링"
+                value={category}
+              />
+
+              <Input
+                variant="outlined"
+                id="maxNum"
+                name="maxNum"
+                value={maxNum}
+                label="모집 인원"
+                inputProps={{ min: 0 }}
+                type="number"
+                onChange={onChange}
+              ></Input>
 
               <Input
                 variant="outlined"
