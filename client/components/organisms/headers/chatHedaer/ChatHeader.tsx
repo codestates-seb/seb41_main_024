@@ -102,7 +102,7 @@ const ChatHeader = ({
               ))}
             </ul>
           <Divider className="mt-3" />
-          <ul className="mt-auto">
+          <ul className="relative right-0 botton-0">
             {isOwner && declareStatus !== 'BOARD_COMPLETE' && (
               <li>
                 <DrawerListItem>
