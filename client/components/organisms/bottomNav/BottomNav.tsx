@@ -76,7 +76,7 @@ export default function BottomNav(): JSX.Element {
   ];
 
   const handleOnClick = async (path: string) => {
-    setIsLoading(true);
+    router.pathname !== path && setIsLoading(true);
     const res = await checkTokenExpiration();
     if (path === '/chatlist') {
       router.push(path);
