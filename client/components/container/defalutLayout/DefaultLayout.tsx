@@ -28,6 +28,7 @@ const DefaultLayout = ({ children }: defaultLayoutPropsType) => {
     Cookies.remove('locationId', { path: '' });
     Cookies.remove('role', { path: '' });
     router.push('/');
+    window.location.reload();
   };
 
   return (

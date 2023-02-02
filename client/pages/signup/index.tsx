@@ -228,7 +228,7 @@ const SignupPage = () => {
       })
       .then((res) => {
         setTimeout(() => {
-          router.push('/');
+          router.push('/login');
         }, 3000);
       })
       .catch((error) => {
@@ -271,7 +271,7 @@ const SignupPage = () => {
                   <div className="flex justify-end">
                     <p className="flex items-center text-[#777] text-[0.75rem] mr-[0.875rem] ml-[0.875rem] screen-maxw530:mr-auto">
                       {!equalClickedCheck.email && (
-                        <span className="ani_fadeIn">중복 확인 해주세요.</span>
+                        <span className="ani_fadeIn">인증해주세요</span>
                       )}
                       {equalClickedCheck.email &&
                         !formEqualCheck.email &&

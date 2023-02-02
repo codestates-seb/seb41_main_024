@@ -126,12 +126,12 @@ public class BoardService {
                     .ifPresent(findBoard::setDeadLine);
             Optional.ofNullable(board.getContent())
                     .ifPresent(findBoard::setContent);
-            Optional.ofNullable(board.getPrice())
+            Optional.of(board.getPrice())
                     .ifPresent(findBoard::setPrice);
             Optional.ofNullable(board.getImageLink())
                     .ifPresent(findBoard::setImageLink);
             if(board.getMaxNum() >= 2) {
-                Optional.ofNullable(board.getMaxNum())
+                Optional.of(board.getMaxNum())
                         .ifPresent(findBoard::setMaxNum);
                 chatRoom.setMaxNum(findBoard.getMaxNum());
             }

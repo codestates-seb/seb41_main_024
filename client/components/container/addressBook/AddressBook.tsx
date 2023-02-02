@@ -124,8 +124,8 @@ const AddressBook = () => {
     exchangeCoordToAddress(center, setTargetCoord);
   }, [center.lat, center.lng, isSearch]);
   const addAddressHandler = () => {
-    const addressInfo = targetCoord?.address.split(' ');
-    if (addressInfo.length <= 1) {
+    const addressInfo = targetCoord?.address?.split(' ');
+    if (addressInfo?.length <= 1) {
       return alert('주소는 시,구 까지 입력되어야 합니다. 지도를 클릭해주세요');
     }
     const locationData = targetCoord.address

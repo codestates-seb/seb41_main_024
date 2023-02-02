@@ -33,6 +33,7 @@ import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 import { getMySharing } from '../../api/mySharing';
 import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
+import { AlertColor } from '@mui/material';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -69,7 +70,10 @@ export default function ProductDetail({ id, productData }: productDetailType) {
   const [isMySharing, setIsMySharing] = useState<boolean>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { isAdmin } = useAdminRole();
-
+  const [alertOption, setAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'warning', value: '' });
   const router = useRouter();
 
   // const productData = data?.data;
@@ -136,7 +140,14 @@ export default function ProductDetail({ id, productData }: productDetailType) {
 
   // 삭제하기
   const handleDelete = () => {
-    deleteProductDetail(id).then((res) => router.push('/'));
+    deleteProductDetail(id)
+      .then((res) => {
+        setAlertOption({ severity: 'success', value: '삭제 완료되었습니다' });
+        router.push('/');
+      })
+      .catch((error) => {
+        setAlertOption({ severity: 'warning', value: '삭제에 실패하였습니다' });
+      });
   };
   // 찜하기
   const handleLike = () => {
@@ -211,10 +222,10 @@ export default function ProductDetail({ id, productData }: productDetailType) {
         >
           <div className="relative pb-[70%]">
             <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
-              <Image
+              <img
                 src={productData?.imageLink || '/imageBox/base-box.svg'}
                 alt="제품 이미지"
-                fill
+                className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-full h-auto"
               />
               {isCompletedBoard && (
                 <StateBadge stateText={'모집 확정'} usedDetail={true} />

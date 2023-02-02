@@ -224,7 +224,7 @@ const Search = () => {
               if (e.key === 'Enter') return searchMap(searchAddress, setCenter);
             }}
             onChange={handleSearchAddress}
-            helperText="ex) 강남, 이문로"
+            // helperText="ex) 강남, 이문로 (강남에 게시물이 집중되어 있습니다)"
           />
           <div className="screen-maxw430:mt-[0.3125rem]">
             <FormButton
@@ -288,6 +288,11 @@ const Search = () => {
             </Typography>
           </Popover>
         </div>
+
+        <span className="ml-2 mb-4 text-[gray]">
+          ex) 강남, 서초 (강남에 게시물이 집중되어 있습니다)
+        </span>
+
         <FormControl
           fullWidth
           sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}

@@ -76,6 +76,7 @@ public class ChatService {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
 
+
         if (chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).isEmpty()) {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
@@ -101,6 +102,7 @@ public class ChatService {
             chatRoomMembers.setChatRoom(chatRoom);
             chatRoomMembers.setUnreadMessageCount(0);
             chatRoomMembers.setLastMessageId(0L);
+            chatRoomMembers.setBan(false);
             chatRoomMembersRepository.save(chatRoomMembers);
             chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
 
@@ -118,7 +120,7 @@ public class ChatService {
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
             return findMembersInChatRoom(roomId);
 
-        } else {
+        } else if (!chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get().isBan()) {
             //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get();
@@ -142,9 +144,7 @@ public class ChatService {
                     .build());
 
             return findMembersInChatRoom(roomId);
-        }
-
-
+        } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
     }
 
     public List<MemberDto.ResponseChat> leaveRoom(Long roomId) {
@@ -197,7 +197,7 @@ public class ChatService {
     public List<MemberDto.ResponseChat> deportMember(Long roomId, String nickName) {
         Member member = memberService.getLoginMember();
         Member deportedMember = memberRepository.findByNickName(nickName).get();
-        if (member == null){
+        if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         }
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
@@ -216,12 +216,13 @@ public class ChatService {
                 }
                 boardRepository.save(board);
                 ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(deportedMember.getMemberId(), roomId).get();
-                chatRoomMembersRepository.delete(chatRoomMembers);
+                chatRoomMembers.setBan(true);
+                chatRoomMembersRepository.save(chatRoomMembers);
 
                 ChatMessage chatMessage = ChatMessage.builder()
                         .nickName(deportedMember.getNickName())
                         .chatRoomId(roomId)
-                        .type(ChatMessage.MessageType.NOTICE)
+                        .type(ChatMessage.MessageType.BAN)
                         .message("[알림] " + deportedMember.getNickName() + "님이 추방당하셨습니다.")
                         .build();
                 ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
@@ -229,10 +230,23 @@ public class ChatService {
                 chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
                 chatRoomRepository.save(chatRoom);
                 sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
+                ChatMessage evenTrigger = ChatMessage.builder()
+                        .type(ChatMessage.MessageType.DISCONNECTED)
+                        .message(deportedMember.getNickName())
+                        .build();
+                sendingOperations.convertAndSend("/receive/chat/" + roomId, evenTrigger);
 
                 return findMembersInChatRoom(roomId);
-            } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
-        } else throw new BusinessLogicException(ExceptionCode.NOT_CHATROOM_MASTER);
+            } else {
+                throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+            }
+        } else {
+            throw new BusinessLogicException(ExceptionCode.NOT_CHATROOM_MASTER);
+        }
+    }
+
+    public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId) {
+        return chatMessageRepository.findByChatRoomId(chatRoomId);
     }
 
     public void removeChatRoomAndBoard(Long memberId) {
@@ -258,19 +272,18 @@ public class ChatService {
         }
     }
 
-    public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId) {
-        return chatMessageRepository.findByChatRoomId(chatRoomId);
-    }
 
     public List<MemberDto.ResponseChat> findMembersInChatRoom(Long roomId) {
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
         List<MemberDto.ResponseChat> memberList = new ArrayList<>();
         for (int i = 0; i < chatRoomMembers.size(); i++) {
-            MemberDto.ResponseChat responseChat = new MemberDto.ResponseChat();
-            responseChat.setMemberId(chatRoomMembers.get(i).getMember().getMemberId());
-            responseChat.setNickName(chatRoomMembers.get(i).getMember().getNickName());
-            responseChat.setImageLink(chatRoomMembers.get(i).getMember().getImageLink());
-            memberList.add(responseChat);
+            if (!chatRoomMembers.get(i).isBan()) {
+                MemberDto.ResponseChat responseChat = new MemberDto.ResponseChat();
+                responseChat.setMemberId(chatRoomMembers.get(i).getMember().getMemberId());
+                responseChat.setNickName(chatRoomMembers.get(i).getMember().getNickName());
+                responseChat.setImageLink(chatRoomMembers.get(i).getMember().getImageLink());
+                memberList.add(responseChat);
+            }
         }
         return memberList;
     }
@@ -292,20 +305,22 @@ public class ChatService {
         List<ChatDto.myChatting> chatRoomList = new ArrayList<>();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
         for (int i = 0; i < chatRoomMembers.size(); i++) {
-            ChatDto.myChatting myChatting = new ChatDto.myChatting();
-            myChatting.setRoomId(chatRoomMembers.get(i).getChatRoom().getRoomId());
-            myChatting.setDeclareStatus(chatRoomMembers.get(i).getChatRoom().isDeclareStatus());
-            myChatting.setAddress(chatRoomMembers.get(i).getChatRoom().getAddress());
-            myChatting.setMaxNum(chatRoomMembers.get(i).getChatRoom().getMaxNum());
-            myChatting.setRoomName(chatRoomMembers.get(i).getChatRoom().getRoomName());
-            myChatting.setImageLink(chatRoomMembers.get(i).getChatRoom().getImageLink());
-            myChatting.setRecruitment(chatRoomMembers.get(i).getChatRoom().isRecruitment());
-            myChatting.setMemberCount(chatRoomMembers.get(i).getChatRoom().getMemberCount());
-            myChatting.setLastMessage(chatRoomMembers.get(i).getChatRoom().getLastMessage());
-            myChatting.setLastMessageCreated(chatRoomMembers.get(i).getChatRoom().getLastMessageCreated());
-            myChatting.setUnreadCount(chatRoomMembers.get(i).getUnreadMessageCount());
-            myChatting.setMemberId(chatRoomMembers.get(i).getChatRoom().getMemberId());
-            chatRoomList.add(myChatting);
+            if (!chatRoomMembers.get(i).isBan()) {
+                ChatDto.myChatting myChatting = new ChatDto.myChatting();
+                myChatting.setRoomId(chatRoomMembers.get(i).getChatRoom().getRoomId());
+                myChatting.setDeclareStatus(chatRoomMembers.get(i).getChatRoom().isDeclareStatus());
+                myChatting.setAddress(chatRoomMembers.get(i).getChatRoom().getAddress());
+                myChatting.setMaxNum(chatRoomMembers.get(i).getChatRoom().getMaxNum());
+                myChatting.setRoomName(chatRoomMembers.get(i).getChatRoom().getRoomName());
+                myChatting.setImageLink(chatRoomMembers.get(i).getChatRoom().getImageLink());
+                myChatting.setRecruitment(chatRoomMembers.get(i).getChatRoom().isRecruitment());
+                myChatting.setMemberCount(chatRoomMembers.get(i).getChatRoom().getMemberCount());
+                myChatting.setLastMessage(chatRoomMembers.get(i).getChatRoom().getLastMessage());
+                myChatting.setLastMessageCreated(chatRoomMembers.get(i).getChatRoom().getLastMessageCreated());
+                myChatting.setUnreadCount(chatRoomMembers.get(i).getUnreadMessageCount());
+                myChatting.setMemberId(chatRoomMembers.get(i).getChatRoom().getMemberId());
+                chatRoomList.add(myChatting);
+            }
         }
         return chatRoomList;
     }
@@ -315,7 +330,7 @@ public class ChatService {
         List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
         int count = 0;
         for (int i = 0; i < chatRoomMembersList.size(); i++) {
-            if (chatRoomMembersList.get(i).getSessionId() == null) {
+            if (chatRoomMembersList.get(i).getSessionId() == null && !chatRoomMembersList.get(i).isBan()) {
                 chatRoomMembersList.get(i).setUnreadMessageCount(chatRoomMembersList.get(i).getUnreadMessageCount() + 1);
                 count++;
             }
@@ -331,8 +346,10 @@ public class ChatService {
         List<ChatRoomMembers> chatRoomMembers =
                 chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
         for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
-            if (chatRoomMember.getUnreadMessageCount() > 0) {
-                return true;
+            if (!chatRoomMember.isBan()) {
+                if (chatRoomMember.getUnreadMessageCount() > 0) {
+                    return true;
+                }
             }
         }
         return false;

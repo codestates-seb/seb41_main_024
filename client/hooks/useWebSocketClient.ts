@@ -22,6 +22,7 @@ const useWebSocketClient = (HEADER_TOKEN: {
   const {
     query: { roomId },
     isReady,
+    push,
   } = useRouter();
   const [messages, setMessages] = useState<any[]>([]);
   const [members, setMembers] = useState<any[]>([]);
@@ -78,7 +79,7 @@ const useWebSocketClient = (HEADER_TOKEN: {
         const sockjs = new SockJS(`https://ngether.site/ws`);
         const ws = StompJS.over(sockjs);
         setStompClient(ws);
-
+        ws.debug = () => {};
         await ws.connect(
           HEADER_TOKEN,
           () => {
@@ -95,7 +96,11 @@ const useWebSocketClient = (HEADER_TOKEN: {
                       setMessages(res.data.map(transDateFormChatMessage))
                     );
                 }
-                if (message.type === 'ENTER' || message.type === 'LEAVE') {
+                if (
+                  message.type === 'ENTER' ||
+                  message.type === 'LEAVE' ||
+                  message.type === 'BAN'
+                ) {
                   await axios
                     .get(
                       `https://ngether.site/chat/room/${roomId}/memberList`,
@@ -110,6 +115,17 @@ const useWebSocketClient = (HEADER_TOKEN: {
                   await getChatSharing(roomId).then((response) => {
                     setSharingData(response.data);
                   });
+                }
+                if (
+                  message.type === 'DISCONNECTED' &&
+                  message.message === Cookies.get('nickName')
+                ) {
+                  ws.disconnect(() => {
+                    ws.unsubscribe('sub-0');
+                    setIsConnected(false);
+                  });
+                  alert('해당 N게더에서 퇴장당하셨습니다.');
+                  push('/');
                 }
                 setMessages((prevMessages) => [
                   ...prevMessages,
