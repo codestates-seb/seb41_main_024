@@ -25,6 +25,7 @@ import AddressBookList from '../../components/organisms/addressBookList/AddressB
 import Cookies from 'js-cookie';
 import { locationDataType } from '../../components/container/addressBook/AddressBook';
 import Link from 'next/link';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
@@ -45,6 +46,7 @@ const Search = () => {
     lng: 127.047377408384,
     address: '서울 강남구',
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isSearch, setIsSearch] = useState(false);
 
@@ -55,7 +57,7 @@ const Search = () => {
   });
   const [error, setError] = useState({ code: 0, message: '' });
 
-  const { inputValue, onChange } = useInput({
+  const { inputValue, onChange, setInputValue } = useInput({
     title: '',
     searchOption: '주소',
     category: '상품 쉐어링',
@@ -130,7 +132,13 @@ const Search = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     setSelectedAddressBook({});
+    const addressInfo = targetCoord?.address?.split(' ');
+    if (addressInfo?.length <= 1 && searchOption === '주소') {
+      setIsLoading(false);
+      return alert('주소는 시,구 까지 입력되어야 합니다. 지도를 클릭해주세요');
+    }
     const {
       range,
       category,
@@ -171,7 +179,7 @@ const Search = () => {
       lng: locationData.longitude,
       address: locationData.address,
     };
-
+    setInputValue({ ...inputValue, searchOption: '주소' });
     setTargetCoord(coordsAndAddress);
     setSelectedAddressBook(locationData);
     handleClose();
@@ -181,7 +189,7 @@ const Search = () => {
   const id = open ? 'simple-popover' : undefined;
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center ani_fadeIn">
       <div className="flex flex-col max-w-lg mt-3 w-[100%] relative">
         <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
         <div
@@ -214,7 +222,7 @@ const Search = () => {
               if (e.key === 'Enter') return searchMap(searchAddress, setCenter);
             }}
             onChange={handleSearchAddress}
-            helperText="ex) OO시 OO구, 이문로"
+            helperText="ex) 강남, 이문로"
           />
           <FormButton
             variant="contained"
@@ -313,6 +321,11 @@ const Search = () => {
             type="submit"
           />
         </form>
+      </div>
+      <div>
+        {isLoading && (
+          <CircleLoading message="검색 중입니다 잠시만 기다려주세요" />
+        )}
       </div>
     </div>
   );

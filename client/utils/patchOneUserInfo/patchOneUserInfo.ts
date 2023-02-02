@@ -1,6 +1,7 @@
 import { AlertColor } from '@mui/material';
 import { QueryClient, useMutation } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
+import Cookies from 'js-cookie';
 import patchOneUserData from '../../api/patchOneUserData';
 const patchOneUserInfo = (
   formValue: {
@@ -26,6 +27,7 @@ const patchOneUserInfo = (
         severity: 'success',
         value: '수정 완료 되었습니다.',
       });
+      Cookies.set('nickName', formValue.nickName);
     },
   });
 };

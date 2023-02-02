@@ -31,7 +31,7 @@ public enum ExceptionCode {
     JWT_EXPIRE(422,"Jwt expired"),
     NOT_VALIDATE(423, "Not validate token"),
     REFRESH_TOKEN_NOT_FOUND(424, "RefreshToken not found"),
-    RECRUITE_COMPLETE(425," Recruitment Complete");
+    RECRUITED_COMPLETE(425," Recruitment Complete");
 
     @Getter
     private int status;

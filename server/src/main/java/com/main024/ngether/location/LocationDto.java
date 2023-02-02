@@ -63,7 +63,7 @@ public class LocationDto {
     @AllArgsConstructor
     @Builder
     public static class DistanceResponse{
-        private String result;
+        private double result;
     }
 
 }

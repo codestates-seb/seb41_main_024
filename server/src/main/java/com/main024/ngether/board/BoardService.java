@@ -7,12 +7,10 @@ import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
-import com.main024.ngether.likes.LikeRepository;
 import com.main024.ngether.location.Location;
 import com.main024.ngether.location.LocationRepository;
 import com.main024.ngether.location.LocationService;
 import com.main024.ngether.member.Member;
-import com.main024.ngether.member.MemberRepository;
 import com.main024.ngether.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -139,6 +136,9 @@ public class BoardService {
                 chatRoom.setMaxNum(findBoard.getMaxNum());
             }
             else throw new BusinessLogicException(ExceptionCode.NOT_ALLOW);
+            if(findBoard.getMaxNum() != findBoard.getCurNum()){
+                findBoard.setBoardStatus(Board.BoardStatus.BOARD_NOT_COMPLETE);
+            }
             chatRoomRepository.save(chatRoom);
             return boardRepository.save(findBoard);
         } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
@@ -244,7 +244,7 @@ public class BoardService {
         if(!Objects.equals(board.getMember().getMemberId(), memberService.getLoginMember().getMemberId()))
             throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
         if(board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
-            throw new BusinessLogicException(ExceptionCode.RECRUITE_COMPLETE);
+            throw new BusinessLogicException(ExceptionCode.RECRUITED_COMPLETE);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(boardId);
         ChatMessage chatMessage = ChatMessage.builder()
                 .chatRoomId(boardId)

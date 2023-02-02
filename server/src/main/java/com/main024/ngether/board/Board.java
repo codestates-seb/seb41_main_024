@@ -82,11 +82,6 @@ public class Board {
     @JsonIgnore
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<Distance> distances = new ArrayList<>();
-/*
-    @OneToOne(mappedBy = "board", cascade = CascadeType.ALL)
-    private Location location;
-
- */
 
 
     @JsonIgnore

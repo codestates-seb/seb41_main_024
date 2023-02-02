@@ -82,7 +82,7 @@ public class ChatService {
             Board board = boardService.findBoard(roomId);
             //모집완료 됬을 경우
             if (board.getBoardStatus() == Board.BoardStatus.BOARD_COMPLETE)
-                throw new BusinessLogicException(ExceptionCode.RECRUITE_COMPLETE);
+                throw new BusinessLogicException(ExceptionCode.RECRUITED_COMPLETE);
             //참여 인원이 가득 찼을 경우
             if (board.getBoardStatus() == Board.BoardStatus.FULL_MEMBER)
                 throw new BusinessLogicException(ExceptionCode.FULL_MEMBER);
@@ -123,7 +123,7 @@ public class ChatService {
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
             ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get();
             Long count = chatRoomMembers.getLastMessageId();
-            if(chatRoomMembers.getLastMessageId() != 0) {
+
                 for (int i = 0; i < chatMessageList.size(); i++) {
                     if (chatMessageList.get(i).getChatMessageId() > count) {
                         if (chatMessageList.get(i).getUnreadCount() != 0) {
@@ -140,7 +140,7 @@ public class ChatService {
                         .message("")
                         .type(ChatMessage.MessageType.REENTER)
                         .build());
-            }
+
             return findMembersInChatRoom(roomId);
         }
 

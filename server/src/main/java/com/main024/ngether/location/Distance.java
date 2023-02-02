@@ -18,7 +18,7 @@ public class Distance {
     private Long distanceId;
 
     @Column(nullable = false)
-    private String result;
+    private double result;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
