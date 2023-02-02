@@ -81,10 +81,14 @@ const EditUserInfo = () => {
     severity: AlertColor;
     value: string;
   }>({ severity: 'error', value: '' });
+  const [snsUser, setSnsUser] = useState(false);
   const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { id, value } = event.target;
+
+    console.log(formValue);
+    console.log(snsUser);
 
     if (id === 'nickName') {
       setFormValue({
@@ -134,13 +138,6 @@ const EditUserInfo = () => {
   };
 
   useEffect(() => {
-    setFormValue({
-      email: data?.data.email,
-      nickName: data?.data.nickName,
-      phoneNumber: data?.data.phoneNumber,
-      imageLink: data?.data.imageLink,
-      pw: '',
-    });
     setDefaultFormValue({
       email: data?.data.email,
       nickName: data?.data.nickName,
@@ -163,7 +160,6 @@ const EditUserInfo = () => {
       isNickName: true,
       isPhoneNumber: true,
     });
-
     setEqualClickedCheck({
       ...formEqualCheck,
       nickName: true,
@@ -175,10 +171,35 @@ const EditUserInfo = () => {
       phoneNumber: true,
     });
 
-    console.log(equalClickedCheck.nickName, formEqualCheck.nickName);
+    if (!data?.data.google) {
+      setFormValue({
+        email: data?.data.email,
+        nickName: data?.data.nickName,
+        phoneNumber: data?.data.phoneNumber,
+        imageLink: data?.data.imageLink,
+        pw: '',
+      });
+    } else {
+      setSnsUser(data?.data.google);
+      setIsValid({
+        ...isValid,
+        isPw: true,
+        isPwConfirm: true,
+      });
+      setCheckActiveValid({
+        ...checkActiveValid,
+        isPw: true,
+        isPwConfirm: true,
+      });
+      setFormValue({
+        email: data?.data.email,
+        nickName: data?.data.nickName,
+        phoneNumber: data?.data.phoneNumber,
+        imageLink: data?.data.imageLink,
+        pw: 'snsuser1!',
+      });
+    }
   }, [data]);
-
-  const patchOneUserQuery = patchOneUserInfo(formValue, useQueryClient());
 
   const handleClickRandomProfile = () => {
     setProfileUrl(createProfileRandomUrl(15));
@@ -198,7 +219,7 @@ const EditUserInfo = () => {
       ...formEqualCheck,
       [inpName]: true,
     });
-    console.log(formValue[inpName], defaultFormValue[inpName]);
+
     if (formValue[inpName] === defaultFormValue[inpName]) {
       setFormEqualCheck({
         ...formEqualCheck,
@@ -229,6 +250,12 @@ const EditUserInfo = () => {
     }
   };
 
+  const patchOneUserQuery = patchOneUserInfo(
+    formValue,
+    useQueryClient(),
+    setOpen,
+    setAlertOption
+  );
   const onSubmitHandler = (event: React.FormEvent) => {
     event.preventDefault();
     patchOneUserQuery.mutate();
@@ -254,7 +281,6 @@ const EditUserInfo = () => {
             setDeleteUserLoading(false);
           }, 1000);
           setDeleteUserSuccess(true);
-          console.log(!deleteUserLoading && deleteUserSuccess);
           Cookies.remove('access_token', { path: '' });
           Cookies.remove('refresh_token', { path: '' });
           Cookies.remove('memberId', { path: '' });
@@ -380,30 +406,35 @@ const EditUserInfo = () => {
                 </Button>
               </div>
             </div>
-            <div className="mb-[1.3rem] last:mb-0">
-              <NTextField
-                id="pw"
-                type="password"
-                label={'새로운 패스워드'}
-                value={pw}
-                validation={isValid.isPw}
-                helperText={helperText.ofPw}
-                onChange={handleInputChange}
-                required={true}
-              />
-            </div>
-            <div className="mb-[1.3rem] last:mb-0">
-              <NTextField
-                id="pwConfirm"
-                type="password"
-                label={'패스워드 확인'}
-                value={pwConfirm}
-                validation={isValid.isPwConfirm}
-                helperText={helperText.ofPwConfirm}
-                onChange={handleInputChange}
-                required={true}
-              />
-            </div>
+            {!snsUser && (
+              <>
+                <div className="mb-[1.3rem] last:mb-0">
+                  <NTextField
+                    id="pw"
+                    type="password"
+                    label={'새로운 패스워드'}
+                    value={pw}
+                    validation={isValid.isPw}
+                    helperText={helperText.ofPw}
+                    onChange={handleInputChange}
+                    required={true}
+                  />
+                </div>
+                <div className="mb-[1.3rem] last:mb-0">
+                  <NTextField
+                    id="pwConfirm"
+                    type="password"
+                    label={'패스워드 확인'}
+                    value={pwConfirm}
+                    validation={isValid.isPwConfirm}
+                    helperText={helperText.ofPwConfirm}
+                    onChange={handleInputChange}
+                    required={true}
+                  />
+                </div>
+              </>
+            )}
+
             <FormButton
               type="submit"
               className="h-14 mt-4"
