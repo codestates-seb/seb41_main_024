@@ -73,7 +73,7 @@ const MainHeader = ({ nickName, logOutHandler }: mainHeaderType) => {
         )}
         {isLogin && (
           <>
-            <div className="flex flex-col items-center m-4">
+            <div className="flex flex-col items-center m-4 w-full">
               <span className="text-primary text-bold">{nickName}</span>
               <Button
                 variant="contained"
