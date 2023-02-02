@@ -163,6 +163,7 @@ const Index = ({
     alignment,
     currentTab,
     mapCenter.address,
+    locationError.message,
   ]);
   useEffect(() => {
     refetch();
@@ -191,7 +192,7 @@ const Index = ({
           </em>
         </p>
         <p className="text-[red]">
-          {locationError &&
+          {locationError.message &&
             '위치 정보 접근권한이 없어 현재 위치를 파악하지 못했습니다'}
         </p>
       </div>
