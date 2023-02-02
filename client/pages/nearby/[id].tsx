@@ -19,7 +19,6 @@ import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
-import Box from '@mui/material/Box';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -33,7 +32,8 @@ import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 import { getMySharing } from '../../api/mySharing';
 import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
-import { AlertColor } from '@mui/material';
+
+import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -59,10 +59,17 @@ interface productDetailType {
 
 export default function ProductDetail({ id, productData }: productDetailType) {
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
+
   const handleClose = () => {
     setIsLoginAlertOpen(false);
     router.push('/login');
   };
+
+  const [deleteSnackbarOpen, setDeleteSnackbarOpen] = useState(false);
+  const [deleteAlertOption, setDeleteAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'error', value: '' });
 
   const [isLogin, setIsLogin] = useState<boolean>();
   const [isLiked, setIsLiked] = useState<boolean>();
@@ -142,8 +149,15 @@ export default function ProductDetail({ id, productData }: productDetailType) {
   const handleDelete = () => {
     deleteProductDetail(id)
       .then((res) => {
-        setAlertOption({ severity: 'success', value: '삭제 완료되었습니다' });
-        router.push('/');
+        setDeleteSnackbarOpen(true);
+        setDeleteAlertOption({
+          severity: 'success',
+          value: '게시글이 삭제되었습니다',
+        });
+
+        setTimeout(() => {
+          router.push('/');
+        }, 1500);
       })
       .catch((error) => {
         setAlertOption({ severity: 'warning', value: '삭제에 실패하였습니다' });
@@ -289,6 +303,17 @@ export default function ProductDetail({ id, productData }: productDetailType) {
             isLoginAlertOpen={isLoginAlertOpen}
             handleClose={handleClose}
           />
+          <Snackbar
+            open={deleteSnackbarOpen}
+            autoHideDuration={4000}
+            onClose={handleClose}
+            className="bottom-[25%]"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+            <Alert severity={deleteAlertOption?.severity}>
+              {deleteAlertOption?.value}
+            </Alert>
+          </Snackbar>
         </Box>
       )}
     </div>
