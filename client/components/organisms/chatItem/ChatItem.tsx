@@ -33,7 +33,7 @@ const ChatItem = ({
           {title}
         </span>
         <span
-          className={`${styles.title_ellipsis} text-xs text-black font-medium opacity-50`}
+          className={`${styles.title_ellipsis} text-xs text-black font-medium opacity-50 break-all`}
         >
           {lastMessage}
         </span>

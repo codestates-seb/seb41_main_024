@@ -100,8 +100,11 @@ public class LocationService {
             double lon1 = Double.parseDouble(location.getLongitude());
             double lat2 = Double.parseDouble(board.getLatitude());
             double lon2 = Double.parseDouble(board.getLongitude());
+            double result = 0;
+            if(lat1==lat2 && lon1==lon2)
+                result = 0;
 
-            double result = distance(lat1, lon1, lat2, lon2, "kilometer");
+            result = distance(lat1, lon1, lat2, lon2, "kilometer");
             Distance distance = new Distance();
             if (category.equals("product")) {
                 if (result < 0.5) {
@@ -124,8 +127,7 @@ public class LocationService {
                     distance.setDistanceType(Distance.DistanceType.DISTANCE_EXCESS_RANGE);
             }
 
-            String result_str = String.valueOf(result);
-            distance.setResult(result_str);
+            distance.setResult(result);
             distance.setLocation(location);
             distance.setBoard(board);
             distanceRepository.save(distance);
@@ -184,26 +186,25 @@ public class LocationService {
         List<Distance> distanceList = new ArrayList<>();
 
         if (range == 0.2)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_200, locationId, category, Sort.by("result")).get();
+            distanceList = distanceRepository.findByResultLessThanAndLocationLocationIdAndBoardCategory
+                    (range, locationId, category, Sort.by("result")).get();
         else if (range == 0.4)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_400, locationId, category, Sort.by("result")).get();
+            distanceList = distanceRepository.findByResultLessThanAndLocationLocationIdAndBoardCategory
+                    (range, locationId, category, Sort.by("result")).get();
         else if (range == 0.6)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_600, locationId, category, Sort.by("result")).get();
+            distanceList = distanceRepository.findByResultLessThanAndLocationLocationIdAndBoardCategory
+                    (range, locationId, category, Sort.by("result")).get();
         else if (range == 0.5)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_500, locationId, category, Sort.by("result")).get();
+            distanceList = distanceRepository.findByResultLessThanAndLocationLocationIdAndBoardCategory
+                    (range, locationId, category, Sort.by("result")).get();
         else if (range == 1)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_1000, locationId, category, Sort.by("result")).get();
+            distanceList = distanceRepository.findByResultLessThanAndLocationLocationIdAndBoardCategory
+                    (range, locationId, category, Sort.by("result")).get();
         else if (range == 1.5)
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_1500, locationId, category, Sort.by("result")).get();
+            distanceList = distanceRepository.findByResultLessThanAndLocationLocationIdAndBoardCategory
+                    (range, locationId, category, Sort.by("result")).get();
         else
-            distanceList = distanceRepository.findByDistanceTypeAndLocationLocationIdAndBoardCategory
-                    (Distance.DistanceType.DISTANCE_EXCESS_RANGE, locationId, category, Sort.by("result")).get();
+            throw new BusinessLogicException(ExceptionCode.RANGE_NOT_FOUND);
 
         List<Board> boardList = new ArrayList<>();
         for (int i = 0; i < distanceList.size(); i++) {

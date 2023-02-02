@@ -16,6 +16,7 @@ import Divider from '@mui/material/Divider';
 import axios from 'axios';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import LoadingButton from '@mui/lab/LoadingButton';
+import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -75,9 +76,9 @@ const LoginPage = () => {
     } catch (error: any) {
       setIsLoading(false);
 
-      if (error?.response?.data?.status === 403) {
+      if (error?.response?.status === 403) {
         setLoginErrorMessage('신고로 이용이 정지된 사용자입니다');
-      } else if (error?.response?.data?.status === 401) {
+      } else if (error?.response?.status === 401) {
         setLoginErrorMessage('정확하지 않은 이메일 또는 패스워드입니다');
       }
     }
@@ -103,64 +104,66 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
-      <div className="mt-24">
-        <LoginSlogan />
-      </div>
-      <div className="login flex justify-center m-7 my-12">
-        <div className="flex flex-col w-10/12 max-w-lg">
-          <Input
-            id="email-input"
-            name="email"
-            type={'text'}
-            label="이메일"
-            value={email}
-            onChange={onChange}
-          />
-          <Label htmlFor={'email-input'} labelText={emailRegexText} />
-          <TextField
-            id="password-input"
-            name="pw"
-            label="패스워드"
-            value={pw}
-            onChange={onChange}
-            onKeyPress={onKeyPress}
-          />
-          <Label htmlFor={'password-input'} labelText={passwordRegexText} />
-          <p className="text-[#dd3030]">{loginErrorMessage}</p>
-          {isLoading && (
-            <LoadingButton loading variant="text" size="small">
-              Submit
-            </LoadingButton>
-          )}
-          <Button
-            className="h-14 mt-4 bg-primary text-white rounded"
-            onClick={handleLogin}
-          >
-            로그인
-          </Button>
-          <Button
-            className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
-            onClick={() => router.push('/signup')}
-          >
-            회원가입
-          </Button>
-          <Divider />
-          <Button className="h-14 mt-4" onClick={() => handleSocialLogin()}>
-            <div
-              style={{ width: '100%', height: '100%', position: 'relative' }}
+    <LoginChecker path="/">
+      <div>
+        <div className="mt-24">
+          <LoginSlogan />
+        </div>
+        <div className="login flex justify-center m-7 my-12">
+          <div className="flex flex-col w-10/12 max-w-lg">
+            <Input
+              id="email-input"
+              name="email"
+              type={'text'}
+              label="이메일"
+              value={email}
+              onChange={onChange}
+            />
+            <Label htmlFor={'email-input'} labelText={emailRegexText} />
+            <TextField
+              id="password-input"
+              name="pw"
+              label="패스워드"
+              value={pw}
+              onChange={onChange}
+              onKeyPress={onKeyPress}
+            />
+            <Label htmlFor={'password-input'} labelText={passwordRegexText} />
+            <p className="text-[#dd3030]">{loginErrorMessage}</p>
+            {isLoading && (
+              <LoadingButton loading variant="text" size="small">
+                Submit
+              </LoadingButton>
+            )}
+            <Button
+              className="h-14 mt-4 bg-primary text-white rounded"
+              onClick={handleLogin}
             >
-              <Image
-                alt="google login"
-                src="/login/btn_google.png"
-                layout="fill"
-                objectFit="contain"
-              />
-            </div>
-          </Button>
+              로그인
+            </Button>
+            <Button
+              className="h-14 my-4 border-solid border-1 border-[#63A8DA] text-primary rounded "
+              onClick={() => router.push('/signup')}
+            >
+              회원가입
+            </Button>
+            <Divider />
+            <Button className="h-14 mt-4" onClick={() => handleSocialLogin()}>
+              <div
+                style={{ width: '100%', height: '100%', position: 'relative' }}
+              >
+                <Image
+                  alt="google login"
+                  src="/login/btn_google.png"
+                  layout="fill"
+                  objectFit="contain"
+                />
+              </div>
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </LoginChecker>
   );
 };
 
