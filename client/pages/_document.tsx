@@ -13,7 +13,15 @@ export default class MyDocument extends Document {
           id="kakaoScript"
         ></script>
         <body>
-          <Head></Head>
+          <Head>
+            <link
+              rel="icon"
+              type="image/svg"
+              sizes="32x32"
+              href="/logos/windowFavicon"
+            />
+            <link rel="apple-touch-icon" href="/logos/appleFavicon" />
+          </Head>
           <Main />
           <NextScript />
         </body>
