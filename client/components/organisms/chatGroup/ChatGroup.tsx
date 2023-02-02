@@ -15,7 +15,7 @@ const ChatGroup = ({ chatData }: chatGroupType  ) => {
           return <ChatNoticeRow key={chatMessageId} message={message.split("\n")}/>
         }
 
-        if(type === 'REENTER') return;     
+        if(type === 'REENTER' || type === 'DISCONNECTED') return;     
 
         return (
           <ChatRow
