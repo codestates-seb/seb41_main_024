@@ -33,7 +33,7 @@ import StateBadge from '../../components/organisms/stateBadge/StateBadge';
 import { getMySharing } from '../../api/mySharing';
 import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
-import { AlertColor } from '@mui/material';
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -70,6 +70,7 @@ export default function ProductDetail({ id, productData }: productDetailType) {
   const [isMySharing, setIsMySharing] = useState<boolean>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { isAdmin } = useAdminRole();
+  const [toastOpen, setToastOpen] = useState(false);
   const [alertOption, setAlertOption] = useState<{
     severity: AlertColor;
     value: string;
@@ -175,7 +176,16 @@ export default function ProductDetail({ id, productData }: productDetailType) {
     if (!isLogin) {
       setIsLoginAlertOpen(true);
     } else {
-      goChatroom(id).then((res) => router.push(`/chatroom/${id}`));
+      goChatroom(id)
+      .then((res) => router.push(`/chatroom/${id}`))
+      .catch(() => {
+        setGetherModalOpen(false);
+        setToastOpen(true);
+        setAlertOption({ severity: 'error', value: '강퇴당한 유저는 참여할 수 없습니다.' });
+        setTimeout(() => {
+          router.push('/nearby')
+        }, 2000)
+      })
     }
   };
 
@@ -289,6 +299,15 @@ export default function ProductDetail({ id, productData }: productDetailType) {
             isLoginAlertOpen={isLoginAlertOpen}
             handleClose={handleClose}
           />
+          <Snackbar
+            open={toastOpen}
+            autoHideDuration={4000}
+            onClose={handleClose}
+            className="bottom-[25%]"
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          >
+          <Alert severity={alertOption?.severity}>{alertOption?.value}</Alert>
+        </Snackbar>
         </Box>
       )}
     </div>

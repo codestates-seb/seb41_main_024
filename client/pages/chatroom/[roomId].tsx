@@ -125,7 +125,7 @@ const Chatroom = () => {
     })
     .catch(() => {
       setOpen(true);
-      setAlertOption({ severity: 'error', value: '신고된 채팅방에서는 퇴장시킬 수 없습니다.' });
+      setAlertOption({ severity: 'error', value: '모집 완료되거나 신고된 채팅방에서는 퇴장시킬 수 없습니다.' });
     })
   }
 
