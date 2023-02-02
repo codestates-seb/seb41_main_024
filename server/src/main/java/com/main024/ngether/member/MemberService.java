@@ -3,8 +3,11 @@ package com.main024.ngether.member;
 import com.main024.ngether.auth.utils.CustomAuthorityUtils;
 import com.main024.ngether.board.Board;
 import com.main024.ngether.board.BoardRepository;
+import com.main024.ngether.chat.chatEntity.ChatMessage;
 import com.main024.ngether.chat.chatEntity.ChatRoom;
+import com.main024.ngether.chat.chatRepository.ChatMessageRepository;
 import com.main024.ngether.chat.chatRepository.ChatRoomMembersRepository;
+import com.main024.ngether.chat.chatRepository.ChatRoomRepository;
 import com.main024.ngether.chat.chatService.ChatService;
 import com.main024.ngether.exception.BusinessLogicException;
 import com.main024.ngether.exception.ExceptionCode;
@@ -20,16 +23,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class MemberService {
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
     private final PasswordEncoder passwordEncoder;
@@ -79,6 +81,12 @@ public class MemberService {
                 .ifPresent(findMember::setPhoneNumber);
         Optional.ofNullable(member.getImageLink())
                 .ifPresent(findMember::setImageLink);
+        if(!Objects.equals(name, findMember.getNickName())){
+            List<ChatMessage> chatMessageList = chatMessageRepository.findByNickName(name);
+            for(ChatMessage chatMessage : chatMessageList){
+                chatMessage.setNickName(findMember.getNickName());
+            }
+        }
 
         return memberRepository.save(findMember);
     }
