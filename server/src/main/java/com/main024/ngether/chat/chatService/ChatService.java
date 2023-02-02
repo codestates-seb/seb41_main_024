@@ -102,7 +102,13 @@ public class ChatService {
             chatRoomMembers.setMember(member);
             chatRoomMembers.setChatRoom(chatRoom);
             chatRoomMembers.setUnreadMessageCount(0);
+            if(chatMessageList.size() > 0){
             chatRoomMembers.setLastMessageId(chatMessageList.get(chatMessageList.size()-1).getChatMessageId());
+            }
+            else {
+                chatRoomMembers.setLastMessageId(0L);
+            }
+
             chatRoomMembers.setBan(false);
             chatRoomMembersRepository.save(chatRoomMembers);
             chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
