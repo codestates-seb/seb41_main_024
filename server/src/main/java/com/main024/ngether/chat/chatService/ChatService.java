@@ -241,6 +241,10 @@ public class ChatService {
                 return findMembersInChatRoom(roomId);
             } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
         } else throw new BusinessLogicException(ExceptionCode.NOT_CHATROOM_MASTER);
+    };
+    
+    public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId) {
+        return chatMessageRepository.findByChatRoomId(chatRoomId);
     }
 
     public void removeChatRoomAndBoard(Long memberId) {
@@ -266,9 +270,7 @@ public class ChatService {
         }
     }
 
-    public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId) {
-        return chatMessageRepository.findByChatRoomId(chatRoomId);
-    }
+
 
     public List<MemberDto.ResponseChat> findMembersInChatRoom(Long roomId) {
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
