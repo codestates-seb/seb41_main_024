@@ -134,6 +134,11 @@ const Search = () => {
     e.preventDefault();
     setIsLoading(true);
     setSelectedAddressBook({});
+    const addressInfo = targetCoord?.address.split(' ');
+    if (addressInfo.length <= 1) {
+      setIsLoading(false);
+      return alert('주소는 시,구 까지 입력되어야 합니다. 지도를 클릭해주세요');
+    }
     const {
       range,
       category,
