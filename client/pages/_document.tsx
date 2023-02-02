@@ -20,6 +20,7 @@ export default class MyDocument extends Document {
             sizes="16x16"
             href="logos/favicon-16x16.png"
           />
+          <link rel="image_src" href="logos/apple-touch-icon-152.png" />
           <title>Ngether</title>
           <meta
             name="description"
@@ -29,6 +30,10 @@ export default class MyDocument extends Document {
           <meta
             property="og:description"
             content="Negther는 실시간 위치를 파악하여 주변 이웃들과 공동구매를 할 수 있는 플랫폼 서비스 입니다. Ngether와 함께라면 합리적인 가격으로 소량구매 할 수 있습니다."
+          />
+          <meta
+            property="og:image"
+            content="https://github.com/codestates-seb/seb41_main_024/blob/main/client/public/logos/apple-touch-icon-152x152.png"
           />
         </Head>
         <script
