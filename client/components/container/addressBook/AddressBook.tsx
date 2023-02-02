@@ -168,9 +168,9 @@ const AddressBook = () => {
     setToastOpen(false);
   };
   return (
-    <div className="flex flex-col items-center my-4">
+    <div className="flex flex-col items-center my-4 pb-[2.5rem]">
       <div id="map" className="w-[100%] h-[350px] fadeIn"></div>
-      <p className="mb-4">
+      <p className="m-4">
         <em>지도를 클릭하면 정확한 주소를 저장할 수 있습니다.</em>
         {error?.message && (
           <em className="text-[red] block">
@@ -178,7 +178,7 @@ const AddressBook = () => {
           </em>
         )}
       </p>
-      <div className="flex w-[100%] mb-4">
+      <div className="flex w-[100%] mb-4 px-4">
         <Input
           id="location"
           name="location"
@@ -193,7 +193,7 @@ const AddressBook = () => {
         />
         <FormButton
           variant="contained"
-          className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px]"
+          className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px] screen-maxw672:px-[0.625rem]"
           content="주소검색"
           onClick={() => {
             setIsSearch((prev) => !prev);
@@ -201,9 +201,9 @@ const AddressBook = () => {
           }}
         ></FormButton>
       </div>
-      <div className="flex w-[100%] justify-start">
+      <div className="flex w-[100%] justify-start px-4 screen-maxw672:block">
         <Input
-          className="mr-4"
+          className="mr-4 "
           id="locationName-input"
           name="locationName"
           type="text"
@@ -214,21 +214,23 @@ const AddressBook = () => {
             setLocationName(e.target.value)
           }
         />
-        <Input
-          className="flex-grow"
-          id="address-input"
-          name="address"
-          type="text"
-          label="주소"
-          disabled
-          value={targetCoord.address || center.address}
-        />
-        <FormButton
-          variant="contained"
-          className="bg-[gray] text-[white] ml-[10px] h-[52px]"
-          content="주소록에 추가하기"
-          onClick={handleModalOpen}
-        ></FormButton>
+        <div className="flex flex-1 screen-maxw672:mt-4">
+          <Input
+            className="flex-1"
+            id="address-input"
+            name="address"
+            type="text"
+            label="주소"
+            disabled
+            value={targetCoord.address || center.address}
+          />
+          <FormButton
+            variant="contained"
+            className="bg-[gray] text-[white] ml-[10px] h-[52px] screen-maxw672:px-[0.625rem]"
+            content="주소록 추가"
+            onClick={handleModalOpen}
+          ></FormButton>
+        </div>
 
         <ModalComponent
           modalOpen={modalOpen}
@@ -253,15 +255,8 @@ const AddressBook = () => {
           negativeResponse="취소"
           negativeColor={'black'}
         />
-
-        {/* <FormButton
-          variant="contained"
-          className="bg-[red] text-[white] ml-[10px] h-[52px]"
-          content="주소록 삭제"
-          onClick={handleModalOpen}
-        ></FormButton> */}
       </div>
-      <h2 className="my-4">저장된 주소록</h2>
+      <h2 className="mt-10 mb-4">저장된 주소록</h2>
       <AddressBookList
         addressBookList={data?.data}
         handleDeleteModalOpen={handleDeleteModalOpen}

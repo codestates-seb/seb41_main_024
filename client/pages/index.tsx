@@ -26,7 +26,7 @@ const MainPage: NextPageWithLayout = () => {
         <MainSlogan />
       </div>
       <div className="login flex justify-center m-7 my-4">
-        <div className="flex flex-col w-[100%] items-center">
+        <div className="flex flex-col w-[100%] items-center text-center break-keep">
           <p className="pt-px mt-4 text-lg">
             <strong className="text-primary font-bold">Ngether</strong>는{' '}
             <strong className="text-primary font-bold">위치 기반</strong>으로

@@ -4,9 +4,7 @@ import ChatForm from '../../components/organisms/chatForm/ChatForm';
 import useWebSocketClient from '../../hooks/useWebSocketClient';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
-import ChatItem from '../../components/organisms/chatItem/ChatItem';
-import { getChatSharing } from '../../api/chatSharing';
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 
 import Link from 'next/link';
 import ChatRoomLayout from '../../components/container/chatRoomLayout/ChatRoomLayout';
@@ -97,6 +95,7 @@ const Chatroom = () => {
     setOpen(true);
     reportChat(roomId)
       .then(() => {
+        setOpen(true);
         setAlertOption({
           severity: 'success',
           value: '신고가 관리자에게 전달되었습니다',
@@ -104,6 +103,7 @@ const Chatroom = () => {
         router.push('/chatlist');
       })
       .catch(() => {
+        setOpen(true);
         setAlertOption({ severity: 'warning', value: '신고에 실패했습니다' });
       });
   };
@@ -111,7 +111,7 @@ const Chatroom = () => {
   const handleCompleteRecrutmentWithToast = async (): Promise<void> => {
     if (!stompClient) return;
     handleCompleteRecrutment(roomId)
-      .then(() => {
+      .then((res) => {
         setOpen(true);
         setAlertOption({
           severity: 'success',
@@ -127,6 +127,30 @@ const Chatroom = () => {
       });
   };
 
+  // 추방 핸들러
+  const handleExcutedUser = (nickName: string) => {
+    if (!stompClient) return;
+    axios
+      .get(
+        `https://ngether.site/chat/room/deport/${roomId}?nickName=${nickName}`,
+        { headers: HEADER_TOKEN }
+      )
+      .then((res) => {
+        setOpen(true);
+        setAlertOption({
+          severity: 'success',
+          value: `유저 ${nickName}이 성공적으로 퇴장시켰습니다`,
+        });
+      })
+      .catch(() => {
+        setOpen(true);
+        setAlertOption({
+          severity: 'error',
+          value: '신고된 채팅방에서는 퇴장시킬 수 없습니다.',
+        });
+      });
+  };
+
   // 퇴장 핸들러
   const handleExitChatRoom = async (): Promise<void> => {
     if (!stompClient) return;
@@ -137,7 +161,8 @@ const Chatroom = () => {
         .get(`https://ngether.site/chat/room/leave/${roomId}`, {
           headers: HEADER_TOKEN,
         })
-        .then(() => {
+        .then((res) => {
+          setOpen(true);
           setAlertOption({
             severity: 'success',
             value: 'N게더 모집에서 퇴장하셨습니다',
@@ -171,6 +196,7 @@ const Chatroom = () => {
         handleExitChat={handleExitChatRoom}
         handleSendReport={handleReportChatroomWithToast}
         handleCompleteRecrutment={handleCompleteRecrutmentWithToast}
+        handleExcutedUser={handleExcutedUser}
       />
       {!isLogin && <ForbiddenMessage />}
       {!isMember && isLogin && (

@@ -72,7 +72,7 @@ const myQuestionForm = ({
         <div className="flex justify-center mt-7 ani_fadeIn">
           <form
             onSubmit={onSubmitHandler}
-            className="flex flex-col justify-center w-10/12 max-w-lg"
+            className="flex flex-col justify-center w-10/12 max-w-lg screen-maxw672:max-w-full screen-maxw672:px-4 screen-maxw672:w-full"
           >
             <FormControl className="mt-4">
               <Input

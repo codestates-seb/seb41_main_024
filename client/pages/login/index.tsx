@@ -105,7 +105,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div className="ani_fadeIn">
       <Head>
         <title>로그인</title>
         <meta
@@ -113,7 +113,7 @@ const LoginPage = () => {
           content="로그인 페이지입니다. 회원이 아니라면 간편하게 구글로그인을 하거나 회원가입 하셔서 Ngether가 되어보세요"
         />
       </Head>
-      <div className="mt-24 ani_fadeIn">
+      <div className="mt-24">
         <LoginSlogan />
       </div>
       <div className="login flex justify-center m-7 my-12">

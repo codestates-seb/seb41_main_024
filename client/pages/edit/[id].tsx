@@ -51,6 +51,8 @@ interface previousDataProps {
     deadLine: string;
     nickname: string;
     imageLink: string;
+    latitude: string;
+    longitude: string;
   };
   id: string;
 }
@@ -63,14 +65,19 @@ const CATEGORY_OPTIONS = [
 const EditPage = ({ previousData, id }: previousDataProps) => {
   const router = useRouter();
 
-  const [productImg, setProductImg] = useState(base);
-  const [targetCoord, setTargetCoord] = useState({
-    lat: 0,
-    lng: 0,
-    address: '',
+  const [productImg, setProductImg] = useState(previousData.imageLink);
+  const [targetCoord, setTargetCoord] = useState<any>({
+    lat: previousData.latitude,
+    lng: previousData.longitude,
+    address: previousData.address,
   });
 
-  const [center, setCenter] = useState({ lat: 0, lng: 0, address: '' });
+  const [isSearch, setIsSearch] = useState(false);
+  const [center, setCenter] = useState<any>({
+    lat: previousData.latitude,
+    lng: previousData.longitude,
+    address: previousData.address,
+  });
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
   const [open, setOpen] = useState(false);
@@ -116,12 +123,11 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
         router.push('/login');
       }
     });
-    getCurrentLocation(setCenter, setLocationError);
   }, []);
 
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, [center.lat, center.lng]);
+  }, [center.lat, center.lng, isSearch]);
 
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
@@ -222,6 +228,13 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
                 name="location"
                 type="text"
                 label="도로명주소 검색"
+                onKeyDown={(e: KeyboardEvent) => {
+                  if (e.key === 'Enter') {
+                    setIsSearch((prev) => !prev);
+                    e.preventDefault();
+                    return searchMap(searchAddress, setCenter);
+                  }
+                }}
                 onChange={handleSearchAddress}
               />
               <FormButton

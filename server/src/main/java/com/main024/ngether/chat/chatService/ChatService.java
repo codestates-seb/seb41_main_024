@@ -144,8 +144,7 @@ public class ChatService {
                     .build());
 
             return findMembersInChatRoom(roomId);
-        }
-        else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
+        } else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
     }
 
     public List<MemberDto.ResponseChat> leaveRoom(Long roomId) {
@@ -205,7 +204,7 @@ public class ChatService {
         Board board = boardService.findBoard(roomId);
 
         if (Objects.equals(chatRoom.getMemberId(), member.getMemberId())) {
-            if (!chatRoom.isDeclareStatus()) {
+            if (!chatRoom.isDeclareStatus() && !chatRoom.isRecruitment()) {
                 chatRoom.setMemberCount(chatRoom.getMemberCount() - 1);
                 if (chatRoom.isRecruitment()) {
                     chatRoom.setRecruitment(false);
@@ -274,12 +273,11 @@ public class ChatService {
     }
 
 
-
     public List<MemberDto.ResponseChat> findMembersInChatRoom(Long roomId) {
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
         List<MemberDto.ResponseChat> memberList = new ArrayList<>();
         for (int i = 0; i < chatRoomMembers.size(); i++) {
-            if(!chatRoomMembers.get(i).isBan()) {
+            if (!chatRoomMembers.get(i).isBan()) {
                 MemberDto.ResponseChat responseChat = new MemberDto.ResponseChat();
                 responseChat.setMemberId(chatRoomMembers.get(i).getMember().getMemberId());
                 responseChat.setNickName(chatRoomMembers.get(i).getMember().getNickName());
@@ -307,7 +305,7 @@ public class ChatService {
         List<ChatDto.myChatting> chatRoomList = new ArrayList<>();
         List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
         for (int i = 0; i < chatRoomMembers.size(); i++) {
-            if(!chatRoomMembers.get(i).isBan()) {
+            if (!chatRoomMembers.get(i).isBan()) {
                 ChatDto.myChatting myChatting = new ChatDto.myChatting();
                 myChatting.setRoomId(chatRoomMembers.get(i).getChatRoom().getRoomId());
                 myChatting.setDeclareStatus(chatRoomMembers.get(i).getChatRoom().isDeclareStatus());
@@ -332,7 +330,7 @@ public class ChatService {
         List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
         int count = 0;
         for (int i = 0; i < chatRoomMembersList.size(); i++) {
-            if (chatRoomMembersList.get(i).getSessionId() == null) {
+            if (chatRoomMembersList.get(i).getSessionId() == null && !chatRoomMembersList.get(i).isBan()) {
                 chatRoomMembersList.get(i).setUnreadMessageCount(chatRoomMembersList.get(i).getUnreadMessageCount() + 1);
                 count++;
             }
@@ -348,8 +346,10 @@ public class ChatService {
         List<ChatRoomMembers> chatRoomMembers =
                 chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
         for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
-            if (chatRoomMember.getUnreadMessageCount() > 0) {
-                return true;
+            if (!chatRoomMember.isBan()) {
+                if (chatRoomMember.getUnreadMessageCount() > 0) {
+                    return true;
+                }
             }
         }
         return false;
