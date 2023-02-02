@@ -69,7 +69,7 @@ const ChatHeader = ({
       </AppBar>
       <Divider />
       <DrawerSet isOpen={isDrawerOpen} onClick={handleDrawerToggle}>
-        <div className="flex flex-col min-h-[calc(100vh-266px)] w-full relative pb-150px box-border z-50">
+        <div className="flex flex-col min-h-[calc(100vh-66px)] w-full relative pb-150px box-border z-50">
           <strong className="font-normal text-center my-3">유저 목록</strong>
             <ul className="flex flex-auto h-0 flex-col overflow-y-auto">
               {members.map((member, index) => (
