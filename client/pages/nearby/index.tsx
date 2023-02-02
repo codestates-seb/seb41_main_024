@@ -208,8 +208,8 @@ const Index = ({
           </button> */}
         </div>
       </div>
-      <div className="flex w-[100%] items-center justify-around p-2 ">
-        <div className="flex items-center">
+      <div className="flex w-[100%] items-center justify-around p-2">
+        <div className="flex flex-col h-[130px] sm:flex-row items-center">
           <span className="mr-4">카테고리</span>
           <DropdownInput
             dropDownOptions={CATEGORY_OPTIONS}
@@ -223,7 +223,7 @@ const Index = ({
           />
         </div>
 
-        <div>
+        <div className="flex flex-col h-[130px] sm:flex-row items-center">
           <span className="mr-4">거리설정</span>
           <ToggleButtons
             alignment={alignment}
