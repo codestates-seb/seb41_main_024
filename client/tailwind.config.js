@@ -17,6 +17,7 @@ module.exports = {
       },
       screens: {
         'screen-maxw530': { raw: '(max-width: 530px)' },
+        'screen-tablet': { raw: '(max-width: 672px)' },
       },
     },
     borderWidth: {

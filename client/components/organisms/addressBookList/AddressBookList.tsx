@@ -18,7 +18,10 @@ const AddressBookList = ({
   return (
     <>
       {addressBookList?.map((item: locationDataType) => (
-        <div key={item.locationId} className="flex w-[100%] my-4">
+        <div
+          key={item.locationId}
+          className="flex w-[100%] my-4 px-4 screen-tablet:block"
+        >
           <Input
             className="mr-4"
             id="locationName-input"
@@ -27,27 +30,29 @@ const AddressBookList = ({
             label="장소명"
             value={item.locationName}
           />
-          <Input
-            className="flex-grow"
-            id="address-input"
-            name="address"
-            type="text"
-            label="주소"
-            disabled
-            value={item.address}
-          />
-          <FormButton
-            variant="contained"
-            className={`bg-[${buttonColor}] text-[white] ml-[10px] h-[52px]`}
-            content={content}
-            onClick={() => {
-              if (handleDeleteModalOpen) {
-                return handleDeleteModalOpen(item.locationId);
-              } else if (selectAddress) {
-                return selectAddress(item);
-              }
-            }}
-          ></FormButton>
+          <div className="flex flex-1 screen-tablet:mt-4">
+            <Input
+              className="flex-grow"
+              id="address-input"
+              name="address"
+              type="text"
+              label="주소"
+              disabled
+              value={item.address}
+            />
+            <FormButton
+              variant="contained"
+              className={`bg-[${buttonColor}] text-[white] ml-[10px] h-[52px] screen-tablet:px-[0.625rem]`}
+              content={content}
+              onClick={() => {
+                if (handleDeleteModalOpen) {
+                  return handleDeleteModalOpen(item.locationId);
+                } else if (selectAddress) {
+                  return selectAddress(item);
+                }
+              }}
+            ></FormButton>
+          </div>
         </div>
       ))}
     </>
