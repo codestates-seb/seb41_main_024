@@ -118,7 +118,7 @@ const Index = ({
   } = useQuery({
     queryKey: ['sharingLists', page],
     queryFn: () => {
-      /* if (selectedAddressBookId * 1 >= 0) {
+      if (selectedAddressBookId && selectedAddressBookId * 1 >= 0) {
         console.log('getPostsByAddressBook');
         return getPostsByAddressBook({
           selectedAddressBookId,
@@ -127,7 +127,7 @@ const Index = ({
           sortBy: currentTab === 0 ? 'distance' : 'time',
           page,
         });
-      } else */ if (searchOption === '주소') {
+      } else if (searchOption === '주소') {
         return getPostsInSpecifiedLocation({
           locationData: currentMapCenter?.address
             ? currentMapCenter

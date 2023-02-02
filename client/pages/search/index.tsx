@@ -133,7 +133,7 @@ const Search = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setSelectedAddressBook({});
+
     const addressInfo = targetCoord?.address?.split(' ');
     if (addressInfo?.length <= 1 && searchOption === '주소') {
       setIsLoading(false);
@@ -218,6 +218,7 @@ const Search = () => {
             type="text"
             label="도로명•지번주소 검색"
             onKeyDown={(e: KeyboardEvent) => {
+              setSelectedAddressBook({});
               setIsSearch((prev) => !prev);
               if (e.key === 'Enter') return searchMap(searchAddress, setCenter);
             }}
@@ -229,6 +230,7 @@ const Search = () => {
             className="bg-[#63A8DA] text-[white] ml-[10px] h-[52px]"
             content="주소검색"
             onClick={() => {
+              setSelectedAddressBook({});
               setIsSearch((prev) => !prev);
               searchMap(searchAddress, setCenter);
             }}
