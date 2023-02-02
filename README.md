@@ -34,10 +34,10 @@
 
 <details markdown="1">
 <summary><strong>Server</strong></summary>
-<h4 style="color:#cc6cab"><strong>EC2 서버를 사용하여 서버 배포하기</strong></h4>
+<h4 style="color:#cc6cab"><strong> aws와 github actions를 사용하여 서버 배포하기</strong></h4>
 <ol>
     <li>레포지토리에 변화가 생기면 Github Actions 작동</li>
-    <li>프로젝트 빌드 결과물(.jar)을 S3로 전송 및 저장 <주소></li>
+    <li>프로젝트 빌드 결과물(.jar)을 S3로 전송 및 저장 </li>
     <li>Amazon CodeDeploy에 배포 명령 </li>
     <li>S3에서 Amazon CodeDeploy에 프로젝트 빌드 결과물(.jar) 전달</li>
     <li>EC2 배포 및 실행</li>
@@ -48,11 +48,19 @@
 ## 나누조 팀소개
 
 
-|김형진|김은수|박경현|송현우|김연주|박지윤|최지현|
-|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-|[<img width="140px" height="140px" src="readmeImage/김형진.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EA%B9%80%ED%98%95%EC%A7%84.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070205097600102470/c2aabf0408d26d274d05aef03f83a9d2-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EA%B9%80%EC%9D%80%EC%88%98.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070205298029101126/4b505b32b.PNG">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EB%B0%95%EA%B2%BD%ED%98%84.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070203560626769941/da4ef0c91fc0ee99c1609cfa58fc86d4-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EC%86%A1%ED%98%84%EC%9A%B0.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070203709843329034/ec9c5931875927fc181542a8cdb6a853-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EA%B9%80%EC%97%B0%EC%A3%BC.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070204891747844106/5392d2c8940c52f0ebe0f02e4edd2d20-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EB%B0%95%EC%A7%80%EC%9C%A4.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070203285740458015/ee5b2ccd5d8e0f65e76a42869822cfee-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EC%B5%9C%EC%A7%80%ED%98%84.png)|
-|FE(팀장)|FE|FE|FE|BE|BE|BE|
-|[koreadinosaur](https://github.com/koreadinosaur)|[noah-eunsoo](https://github.com/noah-eunsoo)|[Pikadev1771](https://github.com/Pikadev1771)|[SHWsgithub](https://github.com/SHWsgithub)|[yeonzzoo](https://github.com/yeonzzoo)|[parkjiyun98](https://github.com/parkjiyun98)|[Aru-slave](https://github.com/Aru-slave)|
+|김형진|김은수|박경현|송현우|
+|:--:|:--:|:--:|:--:|
+|[<img width="140px" height="140px" src="readmeImage/김형진.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EA%B9%80%ED%98%95%EC%A7%84.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070205097600102470/c2aabf0408d26d274d05aef03f83a9d2-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EA%B9%80%EC%9D%80%EC%88%98.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070205298029101126/4b505b32b.PNG">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EB%B0%95%EA%B2%BD%ED%98%84.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070203560626769941/da4ef0c91fc0ee99c1609cfa58fc86d4-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EC%86%A1%ED%98%84%EC%9A%B0.png)|
+|FE(팀장)|FE|FE|FE|
+|[koreadinosaur](https://github.com/koreadinosaur)|[noah-eunsoo](https://github.com/noah-eunsoo)|[Pikadev1771](https://github.com/Pikadev1771)|[SHWsgithub](https://github.com/SHWsgithub)|
+
+|김연주|박지윤|최지현|
+|:--:|:--:|:--:|
+|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070203709843329034/ec9c5931875927fc181542a8cdb6a853-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EA%B9%80%EC%97%B0%EC%A3%BC.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070204891747844106/5392d2c8940c52f0ebe0f02e4edd2d20-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EB%B0%95%EC%A7%80%EC%9C%A4.png)|[<img width="140px" height="140px" src="https://cdn.discordapp.com/attachments/1059639201731182705/1070203285740458015/ee5b2ccd5d8e0f65e76a42869822cfee-sticker.png">](https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/%EC%B5%9C%EC%A7%80%ED%98%84.png)|
+|BE|BE|BE|
+|[yeonzzoo](https://github.com/yeonzzoo)|[parkjiyun98](https://github.com/parkjiyun98)|[Aru-slave](https://github.com/Aru-slave)|
+
+
 
 <br>
 
