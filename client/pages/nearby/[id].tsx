@@ -36,14 +36,19 @@ import { handleBlockUser } from '../../api/admin';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
-  const { data } = await getProductDetail(id);
 
-  return {
-    props: {
-      id,
-      productData: data,
-    },
-  };
+  try {
+    const res = await getProductDetail(id);
+
+    if (res.status === 200) {
+      const productData = res.data;
+      return { props: { id, productData } };
+    }
+    return { props: { id } };
+  } catch (error) {
+    console.log(error);
+    return { props: { id } };
+  }
 }
 
 interface productDetailType {
@@ -52,10 +57,6 @@ interface productDetailType {
 }
 
 export default function ProductDetail({ id, productData }: productDetailType) {
-  // const { data } = useQuery(['productData'], () => getProductDetail(id), {
-  //   initialData: detailData,
-  // });
-
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
   const handleClose = () => {
     setIsLoginAlertOpen(false);
@@ -67,7 +68,7 @@ export default function ProductDetail({ id, productData }: productDetailType) {
   const [isWriter, setIsWriter] = useState<any>();
   const [isMySharing, setIsMySharing] = useState<boolean>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const {isAdmin} = useAdminRole();
+  const { isAdmin } = useAdminRole();
 
   const router = useRouter();
 
@@ -96,9 +97,11 @@ export default function ProductDetail({ id, productData }: productDetailType) {
     setIsOpen(isOpenBoard);
     setIsReported(isReportedBoard);
 
-    getIsWriter(id).then((res) => {
-      setIsWriter(res.data);
-    });
+    if (productData) {
+      getIsWriter(id).then((res) => {
+        setIsWriter(res.data);
+      });
+    }
 
     if (Cookies.get('access_token')) {
       setIsLogin(true);
@@ -179,7 +182,7 @@ export default function ProductDetail({ id, productData }: productDetailType) {
     handleBlockUser(nickName, Number(localStorage.getItem('reportId')));
     localStorage.removeItem('reportId');
     router.push('/admin');
-  }
+  };
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const handleReportModalOpen = () => setIsReportModalOpen(true);
@@ -199,81 +202,84 @@ export default function ProductDetail({ id, productData }: productDetailType) {
 
   return (
     <div>
-      <Box
-        sx={{
-          mx: 1.5,
-        }}
-      >
-        <div className="relative pb-[70%]">
-          <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
-            <Image
-              src={productData?.imageLink || '/imageBox/base-box.svg'}
-              alt="제품 이미지"
-              fill
-            />
-            {isCompletedBoard && (
-              <StateBadge stateText={'모집 확정'} usedDetail={true} />
-            )}
-            {isReported && (
-              <StateBadge stateText={'신고 완료'} usedDetail={true} />
-            )}
-            {isFullMemberBorad && (
-              <StateBadge stateText={'참여 불가'} usedDetail={true} />
-            )}
-            {isExpiredBorad && (
-              <StateBadge stateText={'기간 만료'} usedDetail={true} />
-            )}
+      {!productData && <NoPage />}
+      {productData && (
+        <Box
+          sx={{
+            mx: 1.5,
+          }}
+        >
+          <div className="relative pb-[70%]">
+            <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
+              <Image
+                src={productData?.imageLink || '/imageBox/base-box.svg'}
+                alt="제품 이미지"
+                fill
+              />
+              {isCompletedBoard && (
+                <StateBadge stateText={'모집 확정'} usedDetail={true} />
+              )}
+              {isReported && (
+                <StateBadge stateText={'신고 완료'} usedDetail={true} />
+              )}
+              {isFullMemberBorad && (
+                <StateBadge stateText={'참여 불가'} usedDetail={true} />
+              )}
+              {isExpiredBorad && (
+                <StateBadge stateText={'기간 만료'} usedDetail={true} />
+              )}
+            </div>
           </div>
-        </div>
-        <DetailBottom
-          isOpen={isOpen}
-          isReported={isReported}
-          isLiked={isLiked}
-          isWriter={isWriter}
-          isMySharing={isMySharing}
-          handleLike={handleLike}
-          handleReport={handleReport}
-          handleGether={handleGether}
-          handleComplete={handleComplete}
-          isReportModalOpen={isReportModalOpen}
-          handleReportModalOpen={handleReportModalOpen}
-          handleReportModalClose={handleReportModalClose}
-          isGetherModalOpen={isGetherModalOpen}
-          handleGetherModalOpen={handleGetherModalOpen}
-          handleGetherModalClose={handleGetherModalClose}
-          isCompleteModalOpen={isCompleteModalOpen}
-          handleIsCompleteModalOpen={handleIsCompleteModalOpen}
-          handleIsCompleteModalClose={handleIsCompleteModalClose}
-          isAdmin={isAdmin}
-          handleUserBlock={handleBlockUserByNickName}
-        />
-        <UserMetaInfo
-          isOpen={isOpen}
-          productData={productData}
-          handleDelete={handleDelete}
-          isWriter={isWriter}
-          id={id}
-          handleComplete={handleComplete}
-          handleGoEdit={handleGoEdit}
-          isDeleteModalOpen={isDeleteModalOpen}
-          handleIsDeleteModalOpen={handleIsDeleteModalOpen}
-          handleIsDeleteModalClose={handleIsDeleteModalClose}
-          isCompleteModalOpen={isCompleteModalOpen}
-          handleIsCompleteModalOpen={handleIsCompleteModalOpen}
-          handleIsCompleteModalClose={handleIsCompleteModalClose}
-        />
-        <Divider variant="middle" sx={{ my: 1 }} />
-        <PostMeta
-          productData={productData}
-          isLiked={isLiked}
-          handleLike={handleLike}
-        />
-        <DetailPageTab productData={productData} />
-        <LoginAlert
-          isLoginAlertOpen={isLoginAlertOpen}
-          handleClose={handleClose}
-        />
-      </Box>
+          <DetailBottom
+            isOpen={isOpen}
+            isReported={isReported}
+            isLiked={isLiked}
+            isWriter={isWriter}
+            isMySharing={isMySharing}
+            handleLike={handleLike}
+            handleReport={handleReport}
+            handleGether={handleGether}
+            handleComplete={handleComplete}
+            isReportModalOpen={isReportModalOpen}
+            handleReportModalOpen={handleReportModalOpen}
+            handleReportModalClose={handleReportModalClose}
+            isGetherModalOpen={isGetherModalOpen}
+            handleGetherModalOpen={handleGetherModalOpen}
+            handleGetherModalClose={handleGetherModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
+            isAdmin={isAdmin}
+            handleUserBlock={handleBlockUserByNickName}
+          />
+          <UserMetaInfo
+            isOpen={isOpen}
+            productData={productData}
+            handleDelete={handleDelete}
+            isWriter={isWriter}
+            id={id}
+            handleComplete={handleComplete}
+            handleGoEdit={handleGoEdit}
+            isDeleteModalOpen={isDeleteModalOpen}
+            handleIsDeleteModalOpen={handleIsDeleteModalOpen}
+            handleIsDeleteModalClose={handleIsDeleteModalClose}
+            isCompleteModalOpen={isCompleteModalOpen}
+            handleIsCompleteModalOpen={handleIsCompleteModalOpen}
+            handleIsCompleteModalClose={handleIsCompleteModalClose}
+          />
+          <Divider variant="middle" sx={{ my: 1 }} />
+          <PostMeta
+            productData={productData}
+            isLiked={isLiked}
+            handleLike={handleLike}
+          />
+          <DetailPageTab productData={productData} />
+          <LoginAlert
+            isLoginAlertOpen={isLoginAlertOpen}
+            handleClose={handleClose}
+          />
+        </Box>
+      )}
     </div>
   );
 }
@@ -304,6 +310,18 @@ const LoginAlert = ({ isLoginAlertOpen, handleClose }: LoginAlertPropsType) => {
           </Button>
         </DialogActions>
       </Dialog>
+    </div>
+  );
+};
+
+const NoPage = () => {
+  return (
+    <div className="w-[100%] text-5xl mt-[12rem] leading-normal text-[#999]">
+      <p className="text-center">
+        존재하지 않는
+        <br />
+        쉐어링입니다
+      </p>
     </div>
   );
 };
