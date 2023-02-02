@@ -3,11 +3,11 @@ import Cookies from 'js-cookie';
 
 const REQUEST_URL = 'https://ngether.site';
 
-const accessToken = Cookies.get('access_token');
-const refreshToken = Cookies.get('refresh_token');
-
 export const checkTokenExpiration = () => {
+  const accessToken = Cookies.get('access_token');
+  const refreshToken = Cookies.get('refresh_token');
   // 로그인 안했으면 리턴 accessToken === undefined && accessToken === undefined 이었던 것 수정
+
   if (accessToken === undefined && refreshToken === undefined) {
     return;
   }
