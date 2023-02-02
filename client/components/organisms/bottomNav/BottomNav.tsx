@@ -100,7 +100,7 @@ export default function BottomNav(): JSX.Element {
   return (
     <>
       {isLoading && (
-        <div className="absolute left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%]">
+        <div className="bg-[white] bg-opacity-[60%] flex justify-center items-center fixed left-[0] right-[0] top-[50px] bottom-[56px]">
           <CircleLoading message="페이지 이동 중입니다 잠시만 기다려주세요" />
           {/* <button onClick={() => setIsLoading(false)}>닫기</button> */}
         </div>
