@@ -17,6 +17,7 @@ import axios from 'axios';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import LoadingButton from '@mui/lab/LoadingButton';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
+import Head from 'next/head';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -105,6 +106,13 @@ const LoginPage = () => {
 
   return (
     <div className="ani_fadeIn">
+      <Head>
+        <title>로그인</title>
+        <meta
+          name="description"
+          content="로그인 페이지입니다. 회원이 아니라면 간편하게 구글로그인을 하거나 회원가입 하셔서 Ngether가 되어보세요"
+        />
+      </Head>
       <div className="mt-24">
         <LoginSlogan />
       </div>
