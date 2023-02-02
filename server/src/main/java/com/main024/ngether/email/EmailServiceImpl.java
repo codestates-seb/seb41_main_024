@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService{
     @Value("${AdminMail.id}")
     private String id;
 
-    public static final String ePw = createKey();
+    public static String ePw = createKey();
 
     private MimeMessage createMessage(String to)throws Exception{
         System.out.println("보내는 대상 : "+ to);
