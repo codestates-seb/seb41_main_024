@@ -71,6 +71,7 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
     address: previousData.address,
   });
 
+  const [isSearch, setIsSearch] = useState(false);
   const [center, setCenter] = useState<any>({
     lat: previousData.latitude,
     lng: previousData.longitude,
@@ -121,12 +122,11 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
         router.push('/login');
       }
     });
-    getCurrentLocation(setCenter, setLocationError);
   }, []);
 
   useEffect(() => {
     exchangeCoordToAddress(center, setTargetCoord);
-  }, []);
+  }, [center.lat, center.lng, isSearch]);
 
   const { title, price, productsLink, category, maxNum, content, deadLine } =
     inputValue;
@@ -220,6 +220,13 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
                 name="location"
                 type="text"
                 label="도로명주소 검색"
+                onKeyDown={(e: KeyboardEvent) => {
+                  if (e.key === 'Enter') {
+                    setIsSearch((prev) => !prev);
+                    e.preventDefault();
+                    return searchMap(searchAddress, setCenter);
+                  }
+                }}
                 onChange={handleSearchAddress}
               />
               <FormButton
