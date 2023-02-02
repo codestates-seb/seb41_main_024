@@ -160,7 +160,7 @@ const Index = ({
   }, []);
   const handleOpenOptions = () => setIsOpenOptions((prev) => !prev);
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center  ani_fadeIn">
       <div className="mx-auto w-full h-fit">
         <div id="map" className="w-[100%] h-[350px] fadeIn">
           {isMapLoading && <CircleLoading />}
