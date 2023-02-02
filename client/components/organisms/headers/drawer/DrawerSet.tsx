@@ -30,12 +30,12 @@ const DrawerSet = ({ isOpen, onClick, children }: drawerType) => {
         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
       }}
     >
-      <DrawerHeader>
+      <DrawerHeader className='fixed'>
         <IconButton onClick={onClick}>
           <RigthIcon />
         </IconButton>
       </DrawerHeader>
-      <Divider />
+      <Divider className='mt-[57px]'/>
       <div className='flex w-[100%]' >{children}</div>
     </Drawer>
   );
