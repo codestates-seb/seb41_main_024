@@ -38,7 +38,7 @@ const ChatRow = ({ imageLink, nickName, message, createDate, unreadCount }: chat
           )}
           <span
             className={classnames(
-              'inline-flex pt-[0.812rem] pb-[0.875rem] px-[1rem] rounded leading-[1.125rem] break-all',
+              'inline-flex pt-[0.812rem] pb-[0.875rem] max-w-[300px] px-[1rem] rounded leading-[1.125rem] break-all',
               { 'bg-[#fff]': OTHER_CHAT },
               { 'bg-[#faff00] ': MY_CHAT }
             )}
