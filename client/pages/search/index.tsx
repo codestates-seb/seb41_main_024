@@ -25,6 +25,7 @@ import AddressBookList from '../../components/organisms/addressBookList/AddressB
 import Cookies from 'js-cookie';
 import { locationDataType } from '../../components/container/addressBook/AddressBook';
 import Link from 'next/link';
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 
 const CATEGORY_OPTIONS = [
   { label: '상품 쉐어링', value: '상품 쉐어링' },
@@ -45,6 +46,7 @@ const Search = () => {
     lng: 127.047377408384,
     address: '서울 강남구',
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isSearch, setIsSearch] = useState(false);
 
@@ -68,6 +70,15 @@ const Search = () => {
   });
   const [searchAddress, setSearchAddress] = useState('');
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [selectedAddressBook, setSelectedAddressBook] = useState<any>({
+    address: '',
+    latitude: '',
+    locationId: -1,
+    locationName: '',
+    longitude: '',
+    memberId: 0,
+    nickName: '',
+  });
   const handleSearchAddress = (e: {
     target: { value: React.SetStateAction<string> };
   }) => {
@@ -85,6 +96,11 @@ const Search = () => {
     exchangeCoordToAddress(center, setTargetCoord);
   }, [center.lat, center.lng, isSearch]);
   const { title, searchOption } = inputValue;
+  /* const coordsByAddressBook = {
+    lat: selectedAddressBook.latitude,
+    lng: selectedAddressBook.longitude,
+    address: selectedAddressBook.address,
+  }; */
   const finalLocation = targetCoord.address ? targetCoord : center;
 
   const argumentOfLocation = {
@@ -101,9 +117,23 @@ const Search = () => {
     argumentOfLocation,
     argumentOfTitle,
   }); */
+  const { data } = useQuery({
+    queryKey: ['addressBooks'],
+    queryFn: () =>
+      getAddressBooks({
+        Authorization: Cookies.get('access_token') || '',
+        Refresh: Cookies.get('refresh_token') || '',
+      }),
+    refetchOnWindowFocus: false,
+    retry: 1,
+    staleTime: Infinity,
+    cacheTime: 1000 * 60 * 30,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setSelectedAddressBook({});
     const {
       range,
       category,
@@ -114,6 +144,7 @@ const Search = () => {
     const { keyword, page: titlePage, size: titleSize } = argumentOfTitle;
     const type =
       searchOption === '글 제목' ? 1 : searchOption === '글 내용' ? 2 : 3;
+
     const query = {
       searchOption,
       type,
@@ -125,6 +156,7 @@ const Search = () => {
       address,
       range,
       category,
+      selectedAddressBookId: selectedAddressBook?.locationId,
     };
     router.push({ pathname: '/nearby', query }, '/nearby');
   };
@@ -144,23 +176,12 @@ const Search = () => {
     };
 
     setTargetCoord(coordsAndAddress);
+    setSelectedAddressBook(locationData);
     handleClose();
   };
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  const { data } = useQuery({
-    queryKey: ['addressBooks'],
-    queryFn: () =>
-      getAddressBooks({
-        Authorization: Cookies.get('access_token') || '',
-        Refresh: Cookies.get('refresh_token') || '',
-      }),
-    refetchOnWindowFocus: false,
-    retry: 1,
-    staleTime: Infinity,
-    cacheTime: 1000 * 60 * 30,
-  });
 
   return (
     <div className="flex flex-col items-center">
@@ -295,6 +316,11 @@ const Search = () => {
             type="submit"
           />
         </form>
+      </div>
+      <div>
+        {isLoading && (
+          <CircleLoading message="검색 중입니다 잠시만 기다려주세요" />
+        )}
       </div>
     </div>
   );

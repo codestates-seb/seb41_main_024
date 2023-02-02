@@ -72,9 +72,11 @@ public class ChatService {
     //채팅방에 입장할 때
     public List<MemberDto.ResponseChat> enterRoom(Long roomId) {
         Member member = memberService.getLoginMember();
-        if (member == null)
+        if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-        if (chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId) == null) {
+        }
+
+        if (chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).isEmpty()) {
 
             ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
             Board board = boardService.findBoard(roomId);
@@ -98,6 +100,7 @@ public class ChatService {
             chatRoomMembers.setMember(member);
             chatRoomMembers.setChatRoom(chatRoom);
             chatRoomMembers.setUnreadMessageCount(0);
+            chatRoomMembers.setLastMessageId(0L);
             chatRoomMembersRepository.save(chatRoomMembers);
             chatRoom.setChatRoomMembers(chatRoomMembersRepository.findByChatRoomRoomId(roomId));
 
@@ -113,33 +116,35 @@ public class ChatService {
             chatRoom.setLastMessageCreated(savedMessage.getCreateDate());
             chatRoomRepository.save(chatRoom);
             sendingOperations.convertAndSend("/receive/chat/" + roomId, savedMessage);
+            return findMembersInChatRoom(roomId);
 
         } else {
             //이미 들어와 있는 멤버라면
             List<ChatMessage> chatMessageList = chatMessageRepository.findByChatRoomId(roomId);
-            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId);
-            Long count;
-            if (chatRoomMembers.getLastMessageId() == null)
-                count = 0L;
-            else count = chatRoomMembers.getLastMessageId();
-            for (ChatMessage chatMessage : chatMessageList) {
-                if (chatMessage.getChatMessageId() > count) {
-                    if (chatMessage.getUnreadCount() != 0) {
-                        chatMessage.setUnreadCount(chatMessage.getUnreadCount() - 1);
-                        chatMessageRepository.save(chatMessage);
+            ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(member.getMemberId(), roomId).get();
+            Long count = chatRoomMembers.getLastMessageId();
+            if(chatRoomMembers.getLastMessageId() != 0) {
+                for (int i = 0; i < chatMessageList.size(); i++) {
+                    if (chatMessageList.get(i).getChatMessageId() > count) {
+                        if (chatMessageList.get(i).getUnreadCount() != 0) {
+                            chatMessageList.get(i).setUnreadCount(chatMessageList.get(i).getUnreadCount() - 1);
+                            chatMessageRepository.save(chatMessageList.get(i));
+                        }
+                    }
+                    if (i == chatMessageList.size() - 1) {
+                        chatRoomMembers.setLastMessageId(chatMessageList.get(i).getChatMessageId());
                     }
                 }
-
+                chatRoomMembersRepository.save(chatRoomMembers);
+                sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
+                        .message("")
+                        .type(ChatMessage.MessageType.REENTER)
+                        .build());
             }
-
-
-            sendingOperations.convertAndSend("/receive/chat/" + roomId, ChatMessage.builder()
-                    .message("")
-                    .type(ChatMessage.MessageType.REENTER)
-                    .build());
-
+            return findMembersInChatRoom(roomId);
         }
-        return findMembersInChatRoom(roomId);
+
+
     }
 
     public List<MemberDto.ResponseChat> leaveRoom(Long roomId) {
@@ -148,7 +153,7 @@ public class ChatService {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId);
         Board board = boardService.findBoard(roomId);
-        ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId());
+        ChatRoomMembers chatRoomMembers = chatRoomMembersRepository.findByMemberMemberIdAndChatRoomRoomId(memberService.getLoginMember().getMemberId(), chatRoom.getRoomId()).get();
 
 
         //채팅방 개설자가 나갈경우 채팅방 삭제, 채팅방 메시지 내역 삭제, 게시물 삭제
@@ -209,84 +214,84 @@ public class ChatService {
         }
     }
 
-        public List<ChatMessage> findMessagesInChatRoom (Long chatRoomId){
-            return chatMessageRepository.findByChatRoomId(chatRoomId);
+    public List<ChatMessage> findMessagesInChatRoom(Long chatRoomId) {
+        return chatMessageRepository.findByChatRoomId(chatRoomId);
+    }
+
+    public List<MemberDto.ResponseChat> findMembersInChatRoom(Long roomId) {
+        List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
+        List<MemberDto.ResponseChat> memberList = new ArrayList<>();
+        for (int i = 0; i < chatRoomMembers.size(); i++) {
+            MemberDto.ResponseChat responseChat = new MemberDto.ResponseChat();
+            responseChat.setMemberId(chatRoomMembers.get(i).getMember().getMemberId());
+            responseChat.setNickName(chatRoomMembers.get(i).getMember().getNickName());
+            responseChat.setImageLink(chatRoomMembers.get(i).getMember().getImageLink());
+            memberList.add(responseChat);
         }
+        return memberList;
+    }
 
-        public List<MemberDto.ResponseChat> findMembersInChatRoom (Long roomId){
-            List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
-            List<MemberDto.ResponseChat> memberList = new ArrayList<>();
-            for (int i = 0; i < chatRoomMembers.size(); i++) {
-                MemberDto.ResponseChat responseChat = new MemberDto.ResponseChat();
-                responseChat.setMemberId(chatRoomMembers.get(i).getMember().getMemberId());
-                responseChat.setNickName(chatRoomMembers.get(i).getMember().getNickName());
-                responseChat.setImageLink(chatRoomMembers.get(i).getMember().getImageLink());
-                memberList.add(responseChat);
-            }
-            return memberList;
+    public List<Board> findMySharingList(List<ChatRoomMembers> chatRoomMembersList) {
+        List<Board> boardList = new ArrayList<>();
+        for (int i = 0; i < chatRoomMembersList.size(); i++) {
+            boardList.add(boardRepository.findByBoardId(chatRoomMembersList.get(i).getChatRoom().getRoomId()).get());
         }
-
-        public List<Board> findMySharingList (List < ChatRoomMembers > chatRoomMembersList) {
-            List<Board> boardList = new ArrayList<>();
-            for (int i = 0; i < chatRoomMembersList.size(); i++) {
-                boardList.add(boardRepository.findByBoardId(chatRoomMembersList.get(i).getChatRoom().getRoomId()).get());
-            }
-            return boardList;
-
-        }
-
-
-        public List<ChatDto.myChatting> findMyChatRoom () {
-            Member member = memberService.getLoginMember();
-            if (member == null)
-                throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
-            List<ChatDto.myChatting> chatRoomList = new ArrayList<>();
-            List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
-            for (int i = 0; i < chatRoomMembers.size(); i++) {
-                ChatDto.myChatting myChatting = new ChatDto.myChatting();
-                myChatting.setRoomId(chatRoomMembers.get(i).getChatRoom().getRoomId());
-                myChatting.setDeclareStatus(chatRoomMembers.get(i).getChatRoom().isDeclareStatus());
-                myChatting.setAddress(chatRoomMembers.get(i).getChatRoom().getAddress());
-                myChatting.setMaxNum(chatRoomMembers.get(i).getChatRoom().getMaxNum());
-                myChatting.setRoomName(chatRoomMembers.get(i).getChatRoom().getRoomName());
-                myChatting.setImageLink(chatRoomMembers.get(i).getChatRoom().getImageLink());
-                myChatting.setRecruitment(chatRoomMembers.get(i).getChatRoom().isRecruitment());
-                myChatting.setMemberCount(chatRoomMembers.get(i).getChatRoom().getMemberCount());
-                myChatting.setLastMessage(chatRoomMembers.get(i).getChatRoom().getLastMessage());
-                myChatting.setLastMessageCreated(chatRoomMembers.get(i).getChatRoom().getLastMessageCreated());
-                myChatting.setUnreadCount(chatRoomMembers.get(i).getUnreadMessageCount());
-                myChatting.setMemberId(chatRoomMembers.get(i).getChatRoom().getMemberId());
-                chatRoomList.add(myChatting);
-            }
-            return chatRoomList;
-        }
-
-
-        public int setUnreadMessageCount (Long roomId){
-            List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
-            int count = 0;
-            for (int i = 0; i < chatRoomMembersList.size(); i++) {
-                if (chatRoomMembersList.get(i).getSessionId() == null) {
-                    chatRoomMembersList.get(i).setUnreadMessageCount(chatRoomMembersList.get(i).getUnreadMessageCount() + 1);
-                    count++;
-                }
-            }
-
-            chatRoomMembersRepository.saveAll(chatRoomMembersList);
-
-            return count;
-        }
-
-
-        public Boolean checkNewMessages (Member member){
-            List<ChatRoomMembers> chatRoomMembers =
-                    chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
-            for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
-                if (chatRoomMember.getUnreadMessageCount() > 0) {
-                    return true;
-                }
-            }
-            return false;
-        }
+        return boardList;
 
     }
+
+
+    public List<ChatDto.myChatting> findMyChatRoom() {
+        Member member = memberService.getLoginMember();
+        if (member == null)
+            throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
+        List<ChatDto.myChatting> chatRoomList = new ArrayList<>();
+        List<ChatRoomMembers> chatRoomMembers = chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+        for (int i = 0; i < chatRoomMembers.size(); i++) {
+            ChatDto.myChatting myChatting = new ChatDto.myChatting();
+            myChatting.setRoomId(chatRoomMembers.get(i).getChatRoom().getRoomId());
+            myChatting.setDeclareStatus(chatRoomMembers.get(i).getChatRoom().isDeclareStatus());
+            myChatting.setAddress(chatRoomMembers.get(i).getChatRoom().getAddress());
+            myChatting.setMaxNum(chatRoomMembers.get(i).getChatRoom().getMaxNum());
+            myChatting.setRoomName(chatRoomMembers.get(i).getChatRoom().getRoomName());
+            myChatting.setImageLink(chatRoomMembers.get(i).getChatRoom().getImageLink());
+            myChatting.setRecruitment(chatRoomMembers.get(i).getChatRoom().isRecruitment());
+            myChatting.setMemberCount(chatRoomMembers.get(i).getChatRoom().getMemberCount());
+            myChatting.setLastMessage(chatRoomMembers.get(i).getChatRoom().getLastMessage());
+            myChatting.setLastMessageCreated(chatRoomMembers.get(i).getChatRoom().getLastMessageCreated());
+            myChatting.setUnreadCount(chatRoomMembers.get(i).getUnreadMessageCount());
+            myChatting.setMemberId(chatRoomMembers.get(i).getChatRoom().getMemberId());
+            chatRoomList.add(myChatting);
+        }
+        return chatRoomList;
+    }
+
+
+    public int setUnreadMessageCount(Long roomId) {
+        List<ChatRoomMembers> chatRoomMembersList = chatRoomMembersRepository.findByChatRoomRoomId(roomId);
+        int count = 0;
+        for (int i = 0; i < chatRoomMembersList.size(); i++) {
+            if (chatRoomMembersList.get(i).getSessionId() == null) {
+                chatRoomMembersList.get(i).setUnreadMessageCount(chatRoomMembersList.get(i).getUnreadMessageCount() + 1);
+                count++;
+            }
+        }
+
+        chatRoomMembersRepository.saveAll(chatRoomMembersList);
+
+        return count;
+    }
+
+
+    public Boolean checkNewMessages(Member member) {
+        List<ChatRoomMembers> chatRoomMembers =
+                chatRoomMembersRepository.findByMemberMemberId(member.getMemberId());
+        for (ChatRoomMembers chatRoomMember : chatRoomMembers) {
+            if (chatRoomMember.getUnreadMessageCount() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}

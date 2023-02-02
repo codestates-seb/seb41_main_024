@@ -8,6 +8,9 @@ import com.main024.ngether.qna.qnaDto.QnaDto;
 import com.main024.ngether.qna.qnaEntity.Qna;
 import com.main024.ngether.qna.qnaRepository.QnaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -64,12 +67,13 @@ public class QnaService {
         return findVerifyQna(qnaId);
     }
 
-    public List<Qna> findQnas(){
+    public Page<Qna> findQnas(int page, int size){
         Member member = memberService.getLoginMember();
         if (member == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LOGIN);
         } else if (member.getRoles().get(0).equals("ADMIN")) {
-            return qnaRepository.findAll();
+            return qnaRepository.findAll(PageRequest.of(page, size,
+                    Sort.by("qnaId").descending()));
         }
         else throw new BusinessLogicException(ExceptionCode.PERMISSION_DENIED);
     }
