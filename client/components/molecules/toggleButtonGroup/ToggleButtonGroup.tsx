@@ -8,6 +8,7 @@ export default function ToggleButtons({
 }: toggleButtonGroupPropsType) {
   return (
     <ToggleButtonGroup
+      sx={{ marginTop: 1, marginBottom: 1 }}
       value={alignment}
       exclusive
       onChange={handleAlignment}
@@ -15,6 +16,7 @@ export default function ToggleButtons({
     >
       {toggleValues?.map((toggle) => (
         <ToggleButton
+          className="h-[55.97px]"
           value={toggle.value}
           key={toggle.value}
           aria-label={toggle.label}

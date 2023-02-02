@@ -8,7 +8,7 @@ import ReportWork from '../../components/container/AdminWorks/ReportWork';
 const Admin = () => {
   return (
     <AdminChecker path='/'>
-      <div className="flex flex-col">
+      <div className="flex flex-col ani_fadeIn">
         <div className="flex justify-center items-end h-[4.5rem] mb-10">
           <p className="text-xl">관리자페이지</p>
         </div>

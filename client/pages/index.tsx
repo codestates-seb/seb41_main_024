@@ -17,7 +17,7 @@ const MainPage: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="flex flex-col flex-grow my-28">
+    <div className="flex flex-col flex-grow my-28 ani_fadeIn">
       <div className="">
         <MainSlogan />
       </div>
@@ -37,7 +37,7 @@ const MainPage: NextPageWithLayout = () => {
             href="/search"
             className="h-14 m-[48px] w-10/12 max-w-lg bg-[#63A8DA] text-white flex items-center justify-center rounded"
           >
-            <SearchOutlinedIcon />
+            <SearchOutlinedIcon className="w-[18px] h-[18px] fill-white" />
             지도에서 위치 검색하기
           </Link>
         </div>
