@@ -60,54 +60,58 @@ const DetailPageTab = ({ productData }: productDataProps) => {
 
   return (
     <div className="mx-2.5">
-      <BasicTabs
-        currentTab={currentTab}
-        handleChange={handleChange}
-        tabLabels={LABEL}
-        centered={true}
-        handleClick={handleClick}
-      />
-      <section id="section-0" className="mt-4">
-        <div className="pt-3">
-          <strong className="text-[#FF0000] font-medium flex items-center justify-center text-sm">
-            <Alert /> 거래 전 주의사항 안내
-          </strong>
-          <p className="m-4 text-center text-xs px-2 py-4 border-x-0 border-t-0 border-b-0 border-solid border-[#475569]">
-            판매자가 별도의 메신저로 결제링크를 보내는 행위는 사기일 가능성이
-            높으니 거래를 자제해 주시고
-            <br />
-            고객센터로 신고해주시기 바랍니다.
-          </p>
-          <Divider sx={{ p: 1 }}>상세 설명</Divider>
-          <main className="m-4 text-base text-center leading-relaxed">
-            {productData?.content}
-          </main>
-        </div>
-      </section>
-      <section id="section-1" className="px-2 py-4">
-        <Divider sx={{ p: 1 }}>거래 위치</Divider>
-        {productData && (
-          <Box
-            sx={{
-              p: 4,
-              mt: 4,
-              mb: 2,
-              border: '2px solid #b1afac',
-              borderRadius: '10px',
-              backgroundColor: '#efece6',
-            }}
-          >
-            <DetailMap
-              latitude={productData?.latitude}
-              longitude={productData?.longitude}
-            />
-          </Box>
-        )}
-      </section>
-      <section id="section-2" className="px-2 py-2">
-        <Divider sx={{ p: 1 }}>주변 상품</Divider>
-        <NearByList sharingLists={sharingListExcludeThisPost || []} />
-      </section>
+      <div className="sticky top-[50px] p-4 bg-[white] z-10">
+        <BasicTabs
+          currentTab={currentTab}
+          handleChange={handleChange}
+          tabLabels={LABEL}
+          centered={true}
+          handleClick={handleClick}
+        />
+      </div>
+      <div>
+        <section id="section-0" className="mt-4">
+          <div className="pt-3">
+            <strong className="text-[#FF0000] font-medium flex items-center justify-center text-sm">
+              <Alert /> 거래 전 주의사항 안내
+            </strong>
+            <p className="m-4 text-center text-xs px-2 py-4 border-x-0 border-t-0 border-b-0 border-solid border-[#475569]">
+              판매자가 별도의 메신저로 결제링크를 보내는 행위는 사기일 가능성이
+              높으니 거래를 자제해 주시고
+              <br />
+              고객센터로 신고해주시기 바랍니다.
+            </p>
+            <Divider sx={{ p: 1 }}>상세 설명</Divider>
+            <main className="m-4 text-base text-center leading-relaxed">
+              {productData?.content}
+            </main>
+          </div>
+        </section>
+        <section id="section-1" className="px-2 py-4">
+          <Divider sx={{ p: 1 }}>거래 위치</Divider>
+          {productData && (
+            <Box
+              sx={{
+                p: 4,
+                mt: 4,
+                mb: 2,
+                border: '2px solid #b1afac',
+                borderRadius: '10px',
+                backgroundColor: '#efece6',
+              }}
+            >
+              <DetailMap
+                latitude={productData?.latitude}
+                longitude={productData?.longitude}
+              />
+            </Box>
+          )}
+        </section>
+        <section id="section-2" className="px-2 py-2">
+          <Divider sx={{ p: 1 }}>주변 상품</Divider>
+          <NearByList sharingLists={sharingListExcludeThisPost || []} />
+        </section>
+      </div>
     </div>
   );
 };
