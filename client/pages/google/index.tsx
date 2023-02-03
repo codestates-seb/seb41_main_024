@@ -77,6 +77,10 @@ const GoogleLoginPage = () => {
 
   const handleCheckNickname = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (nickNameForm?.nickName[0] === ' ') {
+      setNickNameDuplicationCheckMessage('wrong form');
+    }
     try {
       await checkNickName(nickNameForm).then((res) => {
         if (res.data) {
@@ -92,6 +96,15 @@ const GoogleLoginPage = () => {
 
   const handleCheckPhoneNumber = async (event: React.FormEvent) => {
     event.preventDefault();
+
+    if (phoneNumberForm?.phoneNumber.slice(0, 3) !== '010') {
+      setPhoneNumberDuplicationCheckMessage('wrong form');
+    }
+
+    if (phoneNumberForm?.phoneNumber.length !== 13) {
+      setPhoneNumberDuplicationCheckMessage('too short');
+    }
+
     try {
       await checkPhoneNumber(phoneNumberForm).then((res) => {
         if (res.data) {
@@ -229,6 +242,11 @@ const GoogleLoginPage = () => {
               className="mt-2 mb-4"
             >
               <Stack>
+                {nickNameDuplicationCheckMessage === 'wrong form' && (
+                  <p className="text-[#dd3030]">
+                    닉네임은 공백으로 시작할 수 없습니다.
+                  </p>
+                )}
                 {nickNameDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">이미 존재하는 닉네임입니다.</p>
                 )}
@@ -266,6 +284,16 @@ const GoogleLoginPage = () => {
               className="my-2"
             >
               <Stack>
+                {phoneNumberDuplicationCheckMessage === 'wrong form' && (
+                  <p className="text-[#dd3030]">
+                    휴대전화는 010으로 시작해야 합니다.
+                  </p>
+                )}
+                {phoneNumberDuplicationCheckMessage === 'too short' && (
+                  <p className="text-[#dd3030]">
+                    휴대전화 11자리 숫자를 입력해 주세요.
+                  </p>
+                )}
                 {phoneNumberDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">
                     이미 존재하는 전화번호입니다.
