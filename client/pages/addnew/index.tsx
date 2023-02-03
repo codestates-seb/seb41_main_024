@@ -336,7 +336,7 @@ const AddNewPage = () => {
                 variant="outlined"
                 id="price"
                 name="price"
-                type="text"
+                type="number"
                 label="상품 가격(상품 링크를 먼저 입력해주세요)"
                 placeholder="총모집인원 x 상품가격"
                 value={price}
