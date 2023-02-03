@@ -35,8 +35,6 @@ const randomProfile = createProfileRandomUrl(15);
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
 
-  const [nickNameChecked, setNickNameChecked] = useState(false);
-  const [phoneNumberChecked, setPhoneNumberChecked] = useState(false);
   const [allChecked, setAllchecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(true);
 
@@ -47,12 +45,20 @@ const GoogleLoginPage = () => {
   });
   const [profileUrl, setProfileUrl] = useState(randomProfile);
 
+  const [nickNamePreChecked, setNickNamePreChecked] = useState(false);
+  const [phoneNumberPreChecked, setPhoneNumberPreChecked] = useState(false);
+  const [nickNamePreCheckMessage, setNickNamePreCheckMessage] =
+    useState('check me');
+  const [phoneNumberPreCheckMessage, setPhoneNumberPreCheckMessage] =
+    useState('check me');
+
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
     useState('check me');
   const [
     phoneNumberDuplicationCheckMessage,
     setPhoneNumberDuplicationCheckMessage,
   ] = useState('check me');
+
   const access_token: any = `Bearer ${router.query.access_token}`;
   const refresh_token: any = router.query.refresh_token;
   Cookies.set('access_token', access_token, { expires: 0.079 });
@@ -139,6 +145,30 @@ const GoogleLoginPage = () => {
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
 
+    // if (nickNameForm?.nickName[0] === ' ') {
+    //   setNickNamePreCheckMessage('wrong form');
+    //   setNickNamePreChecked(false);
+    // } else if (nickNameForm?.nickName === '') {
+    //   setNickNamePreCheckMessage('too short');
+    //   setNickNamePreChecked(false);
+    // } else {
+    //   setNickNamePreChecked(true);
+    // }
+
+    // if (
+    //   phoneNumberForm?.phoneNumber.length > 0 &&
+    //   phoneNumberForm?.phoneNumber.slice(0, 3) !== '010'
+    // ) {
+    //   setPhoneNumberPreCheckMessage('wrong form');
+    //   setPhoneNumberPreChecked(false);
+    // } else if (phoneNumberForm?.phoneNumber.length !== 13) {
+    //   setPhoneNumberPreCheckMessage('too short');
+    //   setPhoneNumberPreChecked(false);
+    // } else {
+    //   setPhoneNumberPreCheckMessage('pass');
+    //   setPhoneNumberPreChecked(true);
+    // }
+
     if (name === 'phoneNumber') {
       setPhoneNumberDuplicationCheckMessage('');
       setForm({
@@ -166,44 +196,36 @@ const GoogleLoginPage = () => {
     }
   };
 
-  console.log(phoneNumberForm?.phoneNumber.length);
+  console.log('닉네임 길이', nickNameForm?.nickName.length);
+  console.log('nickNamePreCheckMessage', nickNamePreCheckMessage);
 
-  console.log(
-    'nickNameDuplicationCheckMessage',
-    nickNameDuplicationCheckMessage
-  );
   useEffect(() => {
     if (nickNameForm?.nickName[0] === ' ') {
-      setNickNameDuplicationCheckMessage('wrong form');
-      setNickNameChecked(false);
-    } else if (nickNameForm?.nickName.length > 0) {
-      setNickNameChecked(true);
-    }
-    if (nickNameForm?.nickName.length === 0) {
-      setNickNameDuplicationCheckMessage('too short');
-      setNickNameChecked(false);
+      setNickNamePreCheckMessage('wrong form');
+      setNickNamePreChecked(false);
+    } else if (nickNameForm?.nickName.length === 0) {
+      setNickNamePreCheckMessage('too short');
+      setNickNamePreChecked(false);
+    } else {
+      setNickNamePreChecked(true);
     }
 
     if (
       phoneNumberForm?.phoneNumber.length > 0 &&
       phoneNumberForm?.phoneNumber.slice(0, 3) !== '010'
     ) {
-      setPhoneNumberDuplicationCheckMessage('wrong form');
-      setPhoneNumberChecked(false);
+      setPhoneNumberPreCheckMessage('wrong form');
+      setPhoneNumberPreChecked(false);
+    } else if (phoneNumberForm?.phoneNumber.length !== 13) {
+      setPhoneNumberPreCheckMessage('too short');
+      setPhoneNumberPreChecked(false);
     } else {
-      setPhoneNumberChecked(true);
-    }
-
-    if (
-      phoneNumberForm?.phoneNumber.length !== 0 &&
-      phoneNumberForm?.phoneNumber.length !== 13
-    ) {
-      setPhoneNumberDuplicationCheckMessage('too short');
-      setPhoneNumberChecked(false);
-    } else {
-      setPhoneNumberChecked(true);
+      setPhoneNumberPreCheckMessage('pass');
+      setPhoneNumberPreChecked(true);
     }
   }, [nickNameForm, phoneNumberForm]);
+
+  useEffect(() => {}, [nickNamePreCheckMessage, phoneNumberPreCheckMessage]);
 
   useEffect(() => {
     if (
@@ -270,11 +292,17 @@ const GoogleLoginPage = () => {
               justifyContent="space-between"
               alignItems="center"
               spacing={1}
-              className="mt-2 mb-4"
+              className=" mb-4"
             >
               <Stack>
-                {nickNameDuplicationCheckMessage === 'wrong form' && (
-                  <p className="text-[#dd3030]">
+                {nickNamePreCheckMessage === 'too short' &&
+                  nickNameDuplicationCheckMessage !== 'checked' && (
+                    <p className="text-[#919191] text-[12px] ">
+                      사용하실 닉네임을 입력해주세요.
+                    </p>
+                  )}
+                {nickNamePreCheckMessage === 'wrong form' && (
+                  <p className="text-[#dd3030] text-[12px] ">
                     닉네임은 공백으로 시작할 수 없습니다.
                   </p>
                 )}
@@ -285,7 +313,7 @@ const GoogleLoginPage = () => {
                   <p className="text-[#2EB150]">사용 가능한 닉네임입니다.</p>
                 )}
               </Stack>
-              {!nickNameChecked && (
+              {!nickNamePreChecked && (
                 <Button
                   variant="text"
                   className="rounded"
@@ -296,7 +324,7 @@ const GoogleLoginPage = () => {
                   중복 확인
                 </Button>
               )}
-              {nickNameChecked && (
+              {nickNamePreChecked && (
                 <Button
                   variant="text"
                   className="rounded"
@@ -325,19 +353,20 @@ const GoogleLoginPage = () => {
               justifyContent="space-between"
               alignItems="center"
               spacing={1}
-              className="my-2"
+              className="mt-2 mb-4"
             >
               <Stack>
-                {phoneNumberDuplicationCheckMessage === 'wrong form' && (
-                  <p className="text-[#dd3030]">
+                {phoneNumberPreCheckMessage === 'too short' && (
+                  <p className="text-[#919191] text-[12px]">
+                    휴대전화는 11자리 숫자로 입력해 주세요.
+                  </p>
+                )}
+                {phoneNumberPreCheckMessage === 'wrong form' && (
+                  <p className="text-[#dd3030] text-[12px]">
                     휴대전화는 010으로 시작해야 합니다.
                   </p>
                 )}
-                {phoneNumberDuplicationCheckMessage === 'too short' && (
-                  <p className="text-[#dd3030]">
-                    휴대전화 11자리 숫자를 입력해 주세요.
-                  </p>
-                )}
+
                 {phoneNumberDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">
                     이미 존재하는 전화번호입니다.
@@ -347,7 +376,7 @@ const GoogleLoginPage = () => {
                   <p className="text-[#2eb150]">사용 가능한 전화번호입니다.</p>
                 )}
               </Stack>
-              {!phoneNumberChecked && (
+              {!phoneNumberPreChecked && (
                 <Button
                   variant="text"
                   className="rounded"
@@ -358,7 +387,7 @@ const GoogleLoginPage = () => {
                   중복 확인
                 </Button>
               )}
-              {phoneNumberChecked && (
+              {phoneNumberPreChecked && (
                 <Button
                   variant="text"
                   className="rounded"
