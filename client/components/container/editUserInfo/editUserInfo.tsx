@@ -28,10 +28,6 @@ const EditUserInfo = () => {
   const { isLoading, data } = useQuery({
     queryKey: ['userInfo'],
     queryFn: getOneUserData,
-    refetchOnWindowFocus: false,
-    retry: 1,
-    staleTime: Infinity,
-    cacheTime: 1000 * 60 * 30,
   });
   const [deleteUserLoading, setDeleteUserLoading] = useState(false);
   const [deleteUserSuccess, setDeleteUserSuccess] = useState(false);

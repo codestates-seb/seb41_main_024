@@ -151,6 +151,7 @@ const Index = ({
     staleTime: 5000,
     retry: false,
     refetchOnWindowFocus: false,
+    enabled: false,
     onError: (data) => alert('검색에 실패했습니다 잠시후 다시 시도해주세요'),
   });
 
