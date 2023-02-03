@@ -34,6 +34,9 @@ const randomProfile = createProfileRandomUrl(15);
 
 const GoogleLoginPage = () => {
   const router: NextRouter = useRouter();
+
+  const [nickNameChecked, setNickNameChecked] = useState(false);
+  const [phoneNumberChecked, setPhoneNumberChecked] = useState(false);
   const [allChecked, setAllchecked] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(true);
 
@@ -45,11 +48,11 @@ const GoogleLoginPage = () => {
   const [profileUrl, setProfileUrl] = useState(randomProfile);
 
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
-    useState('');
+    useState('check me');
   const [
     phoneNumberDuplicationCheckMessage,
     setPhoneNumberDuplicationCheckMessage,
-  ] = useState('');
+  ] = useState('check me');
   const access_token: any = `Bearer ${router.query.access_token}`;
   const refresh_token: any = router.query.refresh_token;
   Cookies.set('access_token', access_token, { expires: 0.079 });
@@ -78,9 +81,6 @@ const GoogleLoginPage = () => {
   const handleCheckNickname = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (nickNameForm?.nickName[0] === ' ') {
-      setNickNameDuplicationCheckMessage('wrong form');
-    }
     try {
       await checkNickName(nickNameForm).then((res) => {
         if (res.data) {
@@ -96,14 +96,6 @@ const GoogleLoginPage = () => {
 
   const handleCheckPhoneNumber = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    if (phoneNumberForm?.phoneNumber.slice(0, 3) !== '010') {
-      setPhoneNumberDuplicationCheckMessage('wrong form');
-    }
-
-    if (phoneNumberForm?.phoneNumber.length !== 13) {
-      setPhoneNumberDuplicationCheckMessage('too short');
-    }
 
     try {
       await checkPhoneNumber(phoneNumberForm).then((res) => {
@@ -173,6 +165,45 @@ const GoogleLoginPage = () => {
       });
     }
   };
+
+  console.log(phoneNumberForm?.phoneNumber.length);
+
+  console.log(
+    'nickNameDuplicationCheckMessage',
+    nickNameDuplicationCheckMessage
+  );
+  useEffect(() => {
+    if (nickNameForm?.nickName[0] === ' ') {
+      setNickNameDuplicationCheckMessage('wrong form');
+      setNickNameChecked(false);
+    } else if (nickNameForm?.nickName.length > 0) {
+      setNickNameChecked(true);
+    }
+    if (nickNameForm?.nickName.length === 0) {
+      setNickNameDuplicationCheckMessage('too short');
+      setNickNameChecked(false);
+    }
+
+    if (
+      phoneNumberForm?.phoneNumber.length > 0 &&
+      phoneNumberForm?.phoneNumber.slice(0, 3) !== '010'
+    ) {
+      setPhoneNumberDuplicationCheckMessage('wrong form');
+      setPhoneNumberChecked(false);
+    } else {
+      setPhoneNumberChecked(true);
+    }
+
+    if (
+      phoneNumberForm?.phoneNumber.length !== 0 &&
+      phoneNumberForm?.phoneNumber.length !== 13
+    ) {
+      setPhoneNumberDuplicationCheckMessage('too short');
+      setPhoneNumberChecked(false);
+    } else {
+      setPhoneNumberChecked(true);
+    }
+  }, [nickNameForm, phoneNumberForm]);
 
   useEffect(() => {
     if (
@@ -254,14 +285,27 @@ const GoogleLoginPage = () => {
                   <p className="text-[#2EB150]">사용 가능한 닉네임입니다.</p>
                 )}
               </Stack>
-              <Button
-                variant="text"
-                className="rounded"
-                onClick={handleCheckNickname}
-                size="small"
-              >
-                중복 확인
-              </Button>
+              {!nickNameChecked && (
+                <Button
+                  variant="text"
+                  className="rounded"
+                  onClick={handleCheckNickname}
+                  size="small"
+                  disabled
+                >
+                  중복 확인
+                </Button>
+              )}
+              {nickNameChecked && (
+                <Button
+                  variant="text"
+                  className="rounded"
+                  onClick={handleCheckNickname}
+                  size="small"
+                >
+                  중복 확인
+                </Button>
+              )}
             </Stack>
 
             <Stack>
@@ -303,14 +347,27 @@ const GoogleLoginPage = () => {
                   <p className="text-[#2eb150]">사용 가능한 전화번호입니다.</p>
                 )}
               </Stack>
-              <Button
-                variant="text"
-                className="rounded"
-                onClick={handleCheckPhoneNumber}
-                size="small"
-              >
-                중복 확인
-              </Button>
+              {!phoneNumberChecked && (
+                <Button
+                  variant="text"
+                  className="rounded"
+                  onClick={handleCheckPhoneNumber}
+                  size="small"
+                  disabled
+                >
+                  중복 확인
+                </Button>
+              )}
+              {phoneNumberChecked && (
+                <Button
+                  variant="text"
+                  className="rounded"
+                  onClick={handleCheckPhoneNumber}
+                  size="small"
+                >
+                  중복 확인
+                </Button>
+              )}
             </Stack>
             <Stack>
               {!allChecked && (
