@@ -203,7 +203,7 @@ const GoogleLoginPage = () => {
 
     if (
       phoneNumberForm?.phoneNumber.length > 0 &&
-      phoneNumberForm?.phoneNumber.slice(0, 3) !== '010'
+      !phoneNumberForm?.phoneNumber?.startsWith('010')
     ) {
       setPhoneNumberPreCheckMessage('wrong form');
       setPhoneNumberPreChecked(false);
