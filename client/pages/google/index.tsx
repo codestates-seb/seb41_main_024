@@ -12,23 +12,16 @@ import {
   deleteGoogleUser,
 } from '../../api/members';
 import React from 'react';
-
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import axios from 'axios';
-import { checkNickName, checkPhoneNumber } from '../../api/socialLogin';
-import Divider from '@mui/material/Divider';
 
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
 import createProfileRandomUrl from '../../utils/createProfileRandomUrl/createProfileRandomUrl';
 import RandomProfile from '../../components/organisms/randomProfile/RandomProfile';
+
+import { checkNickName, checkPhoneNumber } from '../../api/socialLogin';
 
 const randomProfile = createProfileRandomUrl(15);
 
@@ -47,17 +40,35 @@ const GoogleLoginPage = () => {
 
   const [nickNamePreChecked, setNickNamePreChecked] = useState(false);
   const [phoneNumberPreChecked, setPhoneNumberPreChecked] = useState(false);
-  const [nickNamePreCheckMessage, setNickNamePreCheckMessage] =
-    useState('check me');
-  const [phoneNumberPreCheckMessage, setPhoneNumberPreCheckMessage] =
-    useState('check me');
 
+  type NickNamePreCheckMessageType =
+    | 'too short'
+    | 'wrong form'
+    | 'check me'
+    | 'pre checked';
+  const [nickNamePreCheckMessage, setNickNamePreCheckMessage] =
+    useState<NickNamePreCheckMessageType>('check me');
+
+  type PhoneNumberPreCheckMessageType =
+    | 'too short'
+    | 'wrong form'
+    | 'check me'
+    | 'pre checked';
+  const [phoneNumberPreCheckMessage, setPhoneNumberPreCheckMessage] =
+    useState<PhoneNumberPreCheckMessageType>('check me');
+
+  type NickNameDuplicationCheckMessageType = 'failed' | 'passed' | 'check me';
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
-    useState('check me');
+    useState<NickNameDuplicationCheckMessageType>('check me');
+
+  type PhoneNumberDuplicationCheckMessageType =
+    | 'failed'
+    | 'passed'
+    | 'check me';
   const [
     phoneNumberDuplicationCheckMessage,
     setPhoneNumberDuplicationCheckMessage,
-  ] = useState('check me');
+  ] = useState<PhoneNumberDuplicationCheckMessageType>('check me');
 
   const access_token: any = `Bearer ${router.query.access_token}`;
   const refresh_token: any = router.query.refresh_token;
@@ -84,13 +95,26 @@ const GoogleLoginPage = () => {
 
   const { nickName, phoneNumber } = form;
 
+  // 프로필 선택
+  const handleClickRandomProfile = async () => {
+    setProfileUrl(createProfileRandomUrl(15));
+  };
+
+  useEffect(() => {
+    setForm({
+      ...form,
+      imageLink: profileUrl,
+    });
+  }, [profileUrl]);
+
+  // 닉네임 중복검사
   const handleCheckNickname = async (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
       await checkNickName(nickNameForm).then((res) => {
         if (res.data) {
-          setNickNameDuplicationCheckMessage('checked');
+          setNickNameDuplicationCheckMessage('passed');
         }
       });
     } catch (error: any) {
@@ -100,13 +124,14 @@ const GoogleLoginPage = () => {
     }
   };
 
+  // 전화번호 중복검사
   const handleCheckPhoneNumber = async (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
       await checkPhoneNumber(phoneNumberForm).then((res) => {
         if (res.data) {
-          setPhoneNumberDuplicationCheckMessage('checked');
+          setPhoneNumberDuplicationCheckMessage('passed');
         }
       });
     } catch (error: any) {
@@ -116,22 +141,13 @@ const GoogleLoginPage = () => {
     }
   };
 
-  const handleClickRandomProfile = async () => {
-    setProfileUrl(createProfileRandomUrl(15));
-  };
-  useEffect(() => {
-    setForm({
-      ...form,
-      imageLink: profileUrl,
-    });
-  }, [profileUrl]);
-
+  // 구글 로그인
   const handleSocialEdit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (
-      nickNameDuplicationCheckMessage === 'checked' &&
-      phoneNumberDuplicationCheckMessage === 'checked'
+      nickNameDuplicationCheckMessage === 'passed' &&
+      phoneNumberDuplicationCheckMessage === 'passed'
     ) {
       requestFirstGoogleLogin(form).then((res) => {
         Cookies.set('memberId', res.data.memberId);
@@ -142,35 +158,22 @@ const GoogleLoginPage = () => {
     }
   };
 
+  console.log(
+    'phoneNumberDuplicationCheckMessage',
+    phoneNumberDuplicationCheckMessage
+  );
+
+  console.log(
+    'nickNameDuplicationCheckMessage',
+    nickNameDuplicationCheckMessage
+  );
+
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
 
-    // if (nickNameForm?.nickName[0] === ' ') {
-    //   setNickNamePreCheckMessage('wrong form');
-    //   setNickNamePreChecked(false);
-    // } else if (nickNameForm?.nickName === '') {
-    //   setNickNamePreCheckMessage('too short');
-    //   setNickNamePreChecked(false);
-    // } else {
-    //   setNickNamePreChecked(true);
-    // }
-
-    // if (
-    //   phoneNumberForm?.phoneNumber.length > 0 &&
-    //   phoneNumberForm?.phoneNumber.slice(0, 3) !== '010'
-    // ) {
-    //   setPhoneNumberPreCheckMessage('wrong form');
-    //   setPhoneNumberPreChecked(false);
-    // } else if (phoneNumberForm?.phoneNumber.length !== 13) {
-    //   setPhoneNumberPreCheckMessage('too short');
-    //   setPhoneNumberPreChecked(false);
-    // } else {
-    //   setPhoneNumberPreCheckMessage('pass');
-    //   setPhoneNumberPreChecked(true);
-    // }
-
     if (name === 'phoneNumber') {
-      setPhoneNumberDuplicationCheckMessage('');
+      setPhoneNumberDuplicationCheckMessage('check me');
+      setAllchecked(false);
       setForm({
         ...form,
         [name]: value
@@ -185,7 +188,8 @@ const GoogleLoginPage = () => {
           .replace(/(\-{1,2})$/g, ''),
       });
     } else if (name === 'nickName') {
-      setNickNameDuplicationCheckMessage('');
+      setNickNameDuplicationCheckMessage('check me');
+      setAllchecked(false);
       setForm({
         ...form,
         [name]: value,
@@ -196,8 +200,7 @@ const GoogleLoginPage = () => {
     }
   };
 
-  console.log('닉네임 길이', nickNameForm?.nickName.length);
-  console.log('nickNamePreCheckMessage', nickNamePreCheckMessage);
+  console.log('allChecked', allChecked);
 
   useEffect(() => {
     if (nickNameForm?.nickName[0] === ' ') {
@@ -220,7 +223,7 @@ const GoogleLoginPage = () => {
       setPhoneNumberPreCheckMessage('too short');
       setPhoneNumberPreChecked(false);
     } else {
-      setPhoneNumberPreCheckMessage('pass');
+      setPhoneNumberPreCheckMessage('pre checked');
       setPhoneNumberPreChecked(true);
     }
   }, [nickNameForm, phoneNumberForm]);
@@ -229,8 +232,8 @@ const GoogleLoginPage = () => {
 
   useEffect(() => {
     if (
-      nickNameDuplicationCheckMessage === 'checked' &&
-      phoneNumberDuplicationCheckMessage === 'checked'
+      nickNameDuplicationCheckMessage === 'passed' &&
+      phoneNumberDuplicationCheckMessage === 'passed'
     ) {
       setAllchecked(true);
     }
@@ -296,7 +299,7 @@ const GoogleLoginPage = () => {
             >
               <Stack>
                 {nickNamePreCheckMessage === 'too short' &&
-                  nickNameDuplicationCheckMessage !== 'checked' && (
+                  nickNameDuplicationCheckMessage !== 'passed' && (
                     <p className="text-[#919191] text-[12px] ">
                       사용하실 닉네임을 입력해주세요.
                     </p>
@@ -309,7 +312,7 @@ const GoogleLoginPage = () => {
                 {nickNameDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">이미 존재하는 닉네임입니다.</p>
                 )}
-                {nickNameDuplicationCheckMessage === 'checked' && (
+                {nickNameDuplicationCheckMessage === 'passed' && (
                   <p className="text-[#2EB150]">사용 가능한 닉네임입니다.</p>
                 )}
               </Stack>
@@ -372,7 +375,7 @@ const GoogleLoginPage = () => {
                     이미 존재하는 전화번호입니다.
                   </p>
                 )}
-                {phoneNumberDuplicationCheckMessage === 'checked' && (
+                {phoneNumberDuplicationCheckMessage === 'passed' && (
                   <p className="text-[#2eb150]">사용 가능한 전화번호입니다.</p>
                 )}
               </Stack>
