@@ -158,16 +158,6 @@ const GoogleLoginPage = () => {
     }
   };
 
-  console.log(
-    'phoneNumberDuplicationCheckMessage',
-    phoneNumberDuplicationCheckMessage
-  );
-
-  console.log(
-    'nickNameDuplicationCheckMessage',
-    nickNameDuplicationCheckMessage
-  );
-
   const onChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = event.target;
 
@@ -199,8 +189,6 @@ const GoogleLoginPage = () => {
       });
     }
   };
-
-  console.log('allChecked', allChecked);
 
   useEffect(() => {
     if (nickNameForm?.nickName[0] === ' ') {
@@ -316,29 +304,16 @@ const GoogleLoginPage = () => {
                   <p className="text-[#2EB150]">사용 가능한 닉네임입니다.</p>
                 )}
               </Stack>
-              {!nickNamePreChecked && (
-                <Button
-                  variant="text"
-                  className="rounded"
-                  onClick={handleCheckNickname}
-                  size="small"
-                  disabled
-                >
-                  중복 확인
-                </Button>
-              )}
-              {nickNamePreChecked && (
-                <Button
-                  variant="text"
-                  className="rounded"
-                  onClick={handleCheckNickname}
-                  size="small"
-                >
-                  중복 확인
-                </Button>
-              )}
+              <Button
+                variant="text"
+                className="rounded"
+                onClick={handleCheckNickname}
+                size="small"
+                {...(!nickNamePreChecked ? { disabled: true } : {})}
+              >
+                중복 확인
+              </Button>
             </Stack>
-
             <Stack>
               <Input
                 id="phoneNumber-input"
@@ -369,7 +344,6 @@ const GoogleLoginPage = () => {
                     휴대전화는 010으로 시작해야 합니다.
                   </p>
                 )}
-
                 {phoneNumberDuplicationCheckMessage === 'failed' && (
                   <p className="text-[#dd3030]">
                     이미 존재하는 전화번호입니다.
@@ -379,54 +353,31 @@ const GoogleLoginPage = () => {
                   <p className="text-[#2eb150]">사용 가능한 전화번호입니다.</p>
                 )}
               </Stack>
-              {!phoneNumberPreChecked && (
-                <Button
-                  variant="text"
-                  className="rounded"
-                  onClick={handleCheckPhoneNumber}
-                  size="small"
-                  disabled
-                >
-                  중복 확인
-                </Button>
-              )}
-              {phoneNumberPreChecked && (
-                <Button
-                  variant="text"
-                  className="rounded"
-                  onClick={handleCheckPhoneNumber}
-                  size="small"
-                >
-                  중복 확인
-                </Button>
-              )}
+              <Button
+                variant="text"
+                className="rounded"
+                onClick={handleCheckPhoneNumber}
+                size="small"
+                {...(!phoneNumberPreChecked ? { disabled: true } : {})}
+              >
+                중복 확인
+              </Button>
             </Stack>
             <Stack>
-              {!allChecked && (
-                <Button
-                  disabled
-                  variant="contained"
-                  className="h-14 mt-4rounded"
-                  onClick={handleSocialEdit}
-                  sx={{
-                    '& .Mui-disabled': {
-                      color: 'white',
-                      backgroundColor: '#ff5656',
-                    },
-                  }}
-                >
-                  완료
-                </Button>
-              )}
-              {allChecked && (
-                <Button
-                  className="h-14 mt-4 bg-primary text-white rounded"
-                  onClick={handleSocialEdit}
-                >
-                  완료
-                </Button>
-              )}
-
+              <Button
+                variant="contained"
+                className="h-14 mt-4rounded"
+                onClick={handleSocialEdit}
+                sx={{
+                  '& .Mui-disabled': {
+                    color: 'white',
+                    backgroundColor: '#ff5656',
+                  },
+                }}
+                {...(!allChecked ? { disabled: true } : {})}
+              >
+                완료
+              </Button>
               <Button
                 variant="text"
                 className="h-6 mt-4 text-sm"
