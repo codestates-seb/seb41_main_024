@@ -107,7 +107,7 @@ const Index = ({
   const handlePagination = (e: ChangeEvent<unknown>, page: number) => {
     setPage(page);
   };
-
+  console.log(searchOption);
   const {
     status,
     data,
