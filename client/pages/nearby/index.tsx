@@ -119,6 +119,7 @@ const Index = ({
   } = useQuery({
     queryKey: ['sharingLists', page],
     queryFn: () => {
+      if (currentMapCenter?.address === '' || mapCenter?.address === '') return;
       if (selectedAddressBookId && selectedAddressBookId * 1 >= 0) {
         return getPostsByAddressBook({
           selectedAddressBookId,
