@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { checkTokenExpiration } from '../../../api/auth/checkTokenExpiration';
 import axios from 'axios';
 import CircleLoading from '../circleLoading/CircleLoading';
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 
 export default function BottomNav(): JSX.Element {
   const router = useRouter();
@@ -23,6 +24,11 @@ export default function BottomNav(): JSX.Element {
   const [isUnReadMessage, setIsUnReadMessage] = useState(false);
   const token = Cookies.get('access_token');
   const [isLoading, setIsLoading] = useState(false);
+  const [toastOption, setToastOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'error', value: '' });
+  const [toastOpen, setToastOpen] = useState(false);
   useEffect(() => {
     token &&
       token !== 'Bearer undefined' &&
@@ -76,19 +82,27 @@ export default function BottomNav(): JSX.Element {
   ];
 
   const handleOnClick = async (path: string) => {
-    router.pathname !== path && setIsLoading(true);
+    router.pathname !== path &&
+      router.pathname !== '/login' &&
+      setIsLoading(true);
     const res = await checkTokenExpiration();
     if (path === '/chatlist') {
       router.push(path);
     }
     if (isLogin || path === '/') {
       router.push(path);
-    } else {
+    } else if (path !== '/login') {
+      setToastOption({
+        severity: 'warning',
+        value: '로그인이 필요한 서비스입니다.',
+      });
+      setToastOpen(true);
       router.push('/login');
     }
   };
 
   useEffect(() => {
+    console.log('rerendering');
     router.prefetch('/nearby');
     router.prefetch('/addnew');
     router.prefetch('/mypage');
@@ -97,6 +111,16 @@ export default function BottomNav(): JSX.Element {
   useEffect(() => {
     setIsLoading(false);
   }, [router.pathname]);
+  const handleToastClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setToastOpen(false);
+  };
   return (
     <>
       {isLoading && (
@@ -158,6 +182,15 @@ export default function BottomNav(): JSX.Element {
             })}
           </BottomNavigation>
         </Paper>
+        <Snackbar
+          open={toastOpen}
+          autoHideDuration={4000}
+          onClose={handleToastClose}
+          className="bottom-[25%]"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert severity={toastOption?.severity}>{toastOption?.value}</Alert>
+        </Snackbar>
       </Box>
     </>
   );
