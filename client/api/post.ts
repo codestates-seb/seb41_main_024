@@ -64,11 +64,10 @@ export const getPostsInSpecifiedLocation = async ({
   sortBy = 'distance',
 }: any) => {
   const newData = {
-    latitude: locationData?.lat,
-    longitude: locationData?.lng,
-    address: locationData?.address,
+    latitude: locationData?.lat || 37.517331925853,
+    longitude: locationData?.lng || 127.047377408384,
+    address: locationData?.address || '서울 강남구',
   };
-
   const url = `${REQUEST_URL}/api/distance?range=${range}&category=${category}&sortBy=${sortBy}&page=${page}&size=${size}`;
   return await axios({ method: 'post', url, data: newData }).then(
     (res) => res.data
