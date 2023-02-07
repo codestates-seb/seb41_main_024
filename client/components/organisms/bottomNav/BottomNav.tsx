@@ -89,7 +89,7 @@ export default function BottomNav(): JSX.Element {
     if (path === '/chatlist') {
       router.push(path);
     }
-    if (isLogin || path === '/' || path === '/login') {
+    if (isLogin || path === '/' || path === '/login' || path === '/nearby') {
       router.push(path);
     } else if (!isLogin && path !== '/login') {
       setToastOption({
