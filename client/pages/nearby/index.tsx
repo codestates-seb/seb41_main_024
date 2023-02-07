@@ -84,7 +84,7 @@ const Index = ({
     !lat && getCurrentLocation(setMapCenter, setLocationError);
   }, []);
   useEffect(() => {
-    if (!lat) {
+    if (!lat && locationError?.message) {
       setMapCenter({
         lat: 37.517331925853,
         lng: 127.047377408384,
@@ -107,7 +107,7 @@ const Index = ({
   const handlePagination = (e: ChangeEvent<unknown>, page: number) => {
     setPage(page);
   };
-  console.log(searchOption);
+
   const {
     status,
     data,
@@ -129,9 +129,7 @@ const Index = ({
         });
       } else if (searchOption === '주소') {
         return getPostsInSpecifiedLocation({
-          locationData: currentMapCenter?.address
-            ? currentMapCenter
-            : mapCenter,
+          locationData: currentMapCenter?.lat ? currentMapCenter : mapCenter,
           range: alignment,
           category: category === '상품 쉐어링' ? 'product' : 'delivery',
           page: page || 1,
@@ -156,19 +154,18 @@ const Index = ({
   });
 
   useEffect(() => {
+    if (!currentMapCenter?.lat && !mapCenter?.lat) return;
     refetch();
   }, [
-    currentMapCenter.lat,
-    currentMapCenter.lng,
+    currentMapCenter?.lat,
+    currentMapCenter?.lng,
     category,
     alignment,
     currentTab,
-    mapCenter.address,
-    locationError.message,
+    mapCenter?.lng,
+    mapCenter?.lat,
   ]);
-  useEffect(() => {
-    refetch();
-  }, []);
+
   const handleOpenOptions = () => setIsOpenOptions((prev) => !prev);
   return (
     <div className="flex flex-col items-center max-w-lg ani_fadeIn mx-auto pb-[3.75rem] screen-maxw672:max-w-full screen-maxw672:px-4 screen-maxw672:w-full">
