@@ -309,7 +309,7 @@ const GoogleLoginPage = () => {
                 className="rounded"
                 onClick={handleCheckNickname}
                 size="small"
-                {...(!nickNamePreChecked ? { disabled: true } : {})}
+                disabled={!nickNamePreChecked}
               >
                 중복 확인
               </Button>
@@ -358,7 +358,7 @@ const GoogleLoginPage = () => {
                 className="rounded"
                 onClick={handleCheckPhoneNumber}
                 size="small"
-                {...(!phoneNumberPreChecked ? { disabled: true } : {})}
+                disabled={!phoneNumberPreChecked}
               >
                 중복 확인
               </Button>
@@ -374,7 +374,7 @@ const GoogleLoginPage = () => {
                     backgroundColor: '#ff5656',
                   },
                 }}
-                {...(!allChecked ? { disabled: true } : {})}
+                disabled={!allChecked}
               >
                 완료
               </Button>
