@@ -89,9 +89,9 @@ export default function BottomNav(): JSX.Element {
     if (path === '/chatlist') {
       router.push(path);
     }
-    if (isLogin || path === '/') {
+    if (isLogin || path === '/' || path === '/login') {
       router.push(path);
-    } else if (path !== '/login') {
+    } else if (!isLogin && path !== '/login') {
       setToastOption({
         severity: 'warning',
         value: '로그인이 필요한 서비스입니다.',
