@@ -164,6 +164,7 @@ const Index = ({
     currentTab,
     mapCenter?.lng,
     mapCenter?.lat,
+    page,
   ]);
 
   const handleOpenOptions = () => setIsOpenOptions((prev) => !prev);

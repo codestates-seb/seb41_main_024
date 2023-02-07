@@ -14,6 +14,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Head from 'next/head';
+import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 
 const ChatList = () => {
   const { data, refetch } = useQuery(['mySharing'], getMySharing);
@@ -31,36 +32,38 @@ const ChatList = () => {
   };
 
   return (
-    <div className="ani_fadeIn">
-      <Head>
-        <title>채팅 목록</title>
-      </Head>
-      {chatListData?.length === 0 && (
-        <NoChatListAlert
-          isNoChatListAlertOpen={isNoChatListAlertOpen}
-          handleNoChatListAlertClose={handleNoChatListAlertClose}
-        />
-      )}
-      {chatListData &&
-        chatListData.map((chatItem: any) => {
-          return (
-            <Link href={`/chatroom/${chatItem.roomId}`}>
-              <ChatItem
-                key={chatItem.roomId}
-                thumbnail={ProductImg}
-                recruitment={chatItem.recruitment}
-                title={chatItem.roomName}
-                price={chatItem.price}
-                lastMessage={chatItem.lastMessage}
-                address={chatItem.address}
-                unreadCount={chatItem.unreadCount}
-                declareStatus={chatItem.declareStatus}
-                imageLink={chatItem.imageLink}
-              />
-            </Link>
-          );
-        })}
-    </div>
+    <LoginChecker path="/login">
+      <div className="ani_fadeIn">
+        <Head>
+          <title>채팅 목록</title>
+        </Head>
+        {chatListData?.length === 0 && (
+          <NoChatListAlert
+            isNoChatListAlertOpen={isNoChatListAlertOpen}
+            handleNoChatListAlertClose={handleNoChatListAlertClose}
+          />
+        )}
+        {chatListData &&
+          chatListData.map((chatItem: any) => {
+            return (
+              <Link href={`/chatroom/${chatItem.roomId}`}>
+                <ChatItem
+                  key={chatItem.roomId}
+                  thumbnail={ProductImg}
+                  recruitment={chatItem.recruitment}
+                  title={chatItem.roomName}
+                  price={chatItem.price}
+                  lastMessage={chatItem.lastMessage}
+                  address={chatItem.address}
+                  unreadCount={chatItem.unreadCount}
+                  declareStatus={chatItem.declareStatus}
+                  imageLink={chatItem.imageLink}
+                />
+              </Link>
+            );
+          })}
+      </div>
+    </LoginChecker>
   );
 };
 
