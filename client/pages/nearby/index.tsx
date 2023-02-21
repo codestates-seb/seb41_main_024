@@ -17,9 +17,6 @@ import Pagination from '@mui/material/Pagination';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
 import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
 import FormButton from '../../components/molecules/formbutton/FormButton';
-import AddressBook, {
-  locationDataType,
-} from '../../components/container/addressBook/AddressBook';
 import Head from 'next/head';
 const TOGGLE_VALUES = [
   { value: 0.5, label: '0.5Km' },
@@ -216,12 +213,6 @@ const Index = ({
               {data?.pageInfo.totalElements || 0}
             </strong>
           </p>
-          {/* <button
-            onClick={handleOpenOptions}
-            className="bg-[gray] text-white p-1"
-          >
-            검색 상세 옵션
-          </button> */}
         </div>
       </div>
       <div className="flex w-[100%] items-center justify-around p-2">
@@ -248,32 +239,7 @@ const Index = ({
           />
         </div>
       </div>
-      {/* {isOpenOptions && (
-        <div className="flex flex-col w-[50%] items-start justify-end mt-4 p-2 border border-solid ">
-          <div className="flex items-center">
-            <span className="mr-4">카테고리</span>
-            <DropdownInput
-              dropDownOptions={CATEGORY_OPTIONS}
-              id="category"
-              name="category"
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setCategory(e.target.value)
-              }
-              defaultValue="상품 쉐어링"
-              value={category}
-            />
-          </div>
 
-          <div>
-            <span className="mr-4">거리설정</span>
-            <ToggleButtons
-              alignment={alignment}
-              handleAlignment={handleAlignment}
-              toggleValues={TOGGLE_VALUES}
-            />
-          </div>
-        </div>
-      )} */}
       {isLoading && (
         <CircleLoading message="쉐어링 목록을 불러오는 중입니다. 잠시만 기다려주세요" />
       )}
