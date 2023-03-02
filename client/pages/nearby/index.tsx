@@ -55,6 +55,7 @@ const Index = ({
     lng: lng || 0,
     address: address || '',
   });
+
   const [currentMapCenter, setCurrentMapCenter] = useState({
     lat: 0,
     lng: 0,
@@ -76,6 +77,7 @@ const Index = ({
       setIsMapLoading
     );
   }, [mapCenter.address]);
+
   useEffect(() => {
     //검색 옵션이 글 제목이거나 검색페이지를 거치지 않고 왔을 때
     !lat && getCurrentLocation(setMapCenter, setLocationError);
@@ -278,7 +280,10 @@ export async function getServerSideProps(context: any) {
   };
 
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(['sharingListInMap'], getAllSharingPosts);
+  await queryClient.prefetchQuery(['sharingListInMap'], getAllSharingPosts, {
+    staleTime: 60 * 60 * 1000,
+    cacheTime: 60 * 60 * 1000,
+  });
 
   return {
     props: {
