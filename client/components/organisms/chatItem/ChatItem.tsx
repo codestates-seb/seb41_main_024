@@ -4,11 +4,8 @@ import Alert from '../../atoms/alert/Alert';
 import styles from './chatItem.module.css';
 import { chatItemType } from './chatItemType';
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getProductDetail } from '../../../api/detail';
 import Image from 'next/image';
 import base from '../../../public/imageBox/base-box.svg';
-import StateBadge from '../stateBadge/StateBadge';
 
 const ChatItem = ({
   recruitment,
@@ -29,8 +26,6 @@ const ChatItem = ({
           width={62}
           height={62}
           quality={15}
-          // fill
-          // sizes="(max-width: 672px) 3px, 5px"
         />
       </div>
       <div className="flex-1 flex-col px-4">

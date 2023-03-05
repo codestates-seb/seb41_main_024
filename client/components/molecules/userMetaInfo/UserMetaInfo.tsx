@@ -1,6 +1,5 @@
 import React from 'react';
 import { productDataProps } from './userMetaInfoType';
-import Link from 'next/link';
 import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
