@@ -59,8 +59,8 @@ const UserMetaInfo = ({
                     productData?.userImageLink || '/profile/default_profile.svg'
                   }
                   quality={10}
-                  width={45}
-                  height={45}
+                  width={44}
+                  height={44}
                 />
               </div>
             </Stack>
