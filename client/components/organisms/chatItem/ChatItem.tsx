@@ -11,20 +11,28 @@ import base from '../../../public/imageBox/base-box.svg';
 import StateBadge from '../stateBadge/StateBadge';
 
 const ChatItem = ({
-  thumbnail,
   recruitment,
   title,
   lastMessage,
   address,
   unreadCount,
-  declareStatus,
   imageLink,
 }: chatItemType) => {
   const chatAddress = address?.split(' ').slice(1, 3).join(' ');
 
   return (
     <div className="flex items-center border-solid border-0 border-b border-slate-400 h-22 p-4 bg-[#ffffff]">
-      <img src={imageLink || base} className="w-16" />
+      <div className="w-16">
+        <Image
+          alt="상품이미지"
+          src={imageLink || base}
+          width={62}
+          height={62}
+          quality={15}
+          // fill
+          // sizes="(max-width: 672px) 3px, 5px"
+        />
+      </div>
       <div className="flex-1 flex-col px-4">
         <Badge recruitment={recruitment} />
         <p className={`${styles.title_ellipsis} text-s font-medium break-all`}>
