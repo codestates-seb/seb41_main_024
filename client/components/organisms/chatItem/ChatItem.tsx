@@ -27,16 +27,14 @@ const ChatItem = ({
       <img src={imageLink || base} className="w-16" />
       <div className="flex-1 flex-col px-4">
         <Badge recruitment={recruitment} />
-        <span
-          className={`${styles.title_ellipsis} text-s font-medium break-all`}
-        >
+        <p className={`${styles.title_ellipsis} text-s font-medium break-all`}>
           {title}
-        </span>
-        <span
+        </p>
+        <p
           className={`${styles.title_ellipsis} text-xs text-black font-medium opacity-50 break-all`}
         >
           {lastMessage}
-        </span>
+        </p>
       </div>
       <div className="flex flex-col items-end h-max">
         <SmallSpot address={chatAddress} />
