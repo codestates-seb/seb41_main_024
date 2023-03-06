@@ -76,6 +76,14 @@ public class BoardController {
                 new MultiResponseDto<>(mapper.boardsToBoardResponses(boardList), pageBoards), HttpStatus.OK);
     }
 
+    //게시물 정보 중 필요한 정보만 조회
+    @GetMapping("/simpleBoards")
+    public ResponseEntity getSimpleBoards() {
+        List<Board> boardList = boardService.findBoards();
+
+        return new ResponseEntity<>(mapper.boardsToSimpleBoardResponses(boardList), HttpStatus.OK);
+    }
+
     //게시글 검색 1번 제목, 2번 내용, 3번 작성자닉네임, 4번 위치정보
     @GetMapping("/search")
     public ResponseEntity search(@RequestParam(value = "type") String type,
