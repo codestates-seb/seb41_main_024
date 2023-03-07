@@ -190,6 +190,10 @@ public class BoardService {
                 Sort.by("createDate").descending()));
     }
 
+    public List<Board> findBoards() {
+        return (List<Board>) boardRepository.findAll();
+    }
+
     public Page<Board> findCompleteMySharing(int page, int size){
         Page<Board> boardList = boardRepository.findByBoardStatusAndMemberMemberId
                 (Board.BoardStatus.BOARD_COMPLETE, memberService.getLoginMember().getMemberId(), PageRequest.of(page, size,
