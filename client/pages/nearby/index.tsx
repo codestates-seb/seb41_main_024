@@ -241,7 +241,7 @@ const Index = ({
           />
         </div>
       </div>
-
+      
       {isLoading && (
         <CircleLoading message="쉐어링 목록을 불러오는 중입니다. 잠시만 기다려주세요" />
       )}

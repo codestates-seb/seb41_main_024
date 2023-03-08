@@ -12,19 +12,20 @@ interface getMapAndMarkerPropsType {
     SetStateAction<{ lat: number; lng: number; address: string }>
   >;
 }
-
-export const getMapAndMarker = async (
-  center: getMapAndMarkerPropsType['center'],
-  setTargetCoord: getMapAndMarkerPropsType['setTargetCoord']
-) => {
+const generateKakaoMap = (center: getMapAndMarkerPropsType['center']) => {
   let mapContainer =
       document.getElementById('map') || document.createElement('div'), // 지도를 표시할 div
     mapOption = {
       center: new kakao.maps.LatLng(center.lat, center.lng), // 지도의 중심좌표
-      level: 3, // 지도의 확대 레벨
+      level: 5, // 지도의 확대 레벨
     };
-
-  let map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+  return new kakao.maps.Map(mapContainer, mapOption);
+};
+export const getMapAndMarker = async (
+  center: getMapAndMarkerPropsType['center'],
+  setTargetCoord: getMapAndMarkerPropsType['setTargetCoord']
+) => {
+  let map = generateKakaoMap(center); // 지도를 생성합니다
 
   // 지도를 클릭한 위치에 표출할 마커입니다
   let marker = new kakao.maps.Marker({
@@ -66,15 +67,8 @@ export const exchangeCoordToAddress = async (
     }>
   >
 ) => {
-  let mapContainer =
-      document.getElementById('map') || document.createElement('div'), // 지도를 표시할 div
-    mapOption = {
-      center: new kakao.maps.LatLng(center.lat, center.lng), // 지도의 중심좌표
-      level: 5, // 지도의 확대 레벨
-    };
-
   // 지도를 생성합니다
-  let map = new kakao.maps.Map(mapContainer, mapOption);
+  let map = generateKakaoMap(center);
 
   // 주소-좌표 변환 객체를 생성합니다
   let geocoder = new kakao.maps.services.Geocoder();
@@ -145,49 +139,12 @@ export const searchMap = (searchAddress: string, setCenter: any) => {
   };
   geocoder.addressSearch(`${searchAddress}`, switchLocationToCoordinate);
 };
-export const setMarkerCluster = async (
-  coords: getMapAndMarkerPropsType['center'],
-  sharingLists: kakaoMapItemType[],
-  setMapCenter: getMapAndMarkerPropsType['setTargetCoord'],
-  setIsMapLoading: React.Dispatch<React.SetStateAction<boolean>>
-) => {
-  let mapContainer =
-    document.getElementById('map') || document.createElement('div');
-  const map = new kakao.maps.Map(mapContainer, {
-    // 지도를 표시할 div
-    center: new kakao.maps.LatLng(coords.lat, coords.lng), // 지도의 중심좌표
-    level: coords.mapLevel || 5, // 지도의 확대 레벨
-  });
-  let marker = new kakao.maps.Marker({ position: map.getCenter() }); // 클릭한 위치를 표시할 마커입니다
-  marker.setMap(map);
-  marker.setTitle('지도 중심');
-  // 마커 클러스터러를 생성합니다
-  const clusterer = new kakao.maps.MarkerClusterer({
-    map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
-    averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
-    minLevel: 5, // 클러스터 할 최소 지도 레벨
-  });
-  const zoomControl = new kakao.maps.ZoomControl();
-  map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
-  let markers = [];
-  let mapLevel: number;
-  kakao.maps.event.addListener(map, 'dragend', function () {
-    let latlng: any = map.getCenter();
-    // latlng가 any가 아닐 때 Ma와 La 필드가 latlng에 존재하지 않는다고 오류뜸.
-    const mapCenter = { lat: latlng.Ma, lng: latlng.La };
-    marker.setPosition(new kakao.maps.LatLng(mapCenter.lat, mapCenter.lng));
-    setDefaultCoordsAndAddress(mapCenter, (result, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        let detailAddr = !!result[0].address.address_name
-          ? result[0].address.address_name
-          : result[0].road_address.address_name;
-        setMapCenter((prev: any) => {
-          return { ...prev, ...mapCenter, address: detailAddr };
-        });
-      }
-    });
-  });
 
+const setCustomOverlay = (
+  sharingLists: kakaoMapItemType[],
+  markers: any[],
+  map: any
+) => {
   for (let i = 0; i < sharingLists?.length; i++) {
     const openAllOverlayButton = document.getElementById('openAllOverlay');
     const imageSrc =
@@ -247,6 +204,45 @@ export const setMarkerCluster = async (
       customOverlay.setZIndex(3);
     });
   }
+};
+export const setMarkerCluster = async (
+  coords: getMapAndMarkerPropsType['center'],
+  sharingLists: kakaoMapItemType[],
+  setMapCenter: getMapAndMarkerPropsType['setTargetCoord'],
+  setIsMapLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  const map = generateKakaoMap(coords);
+  let marker = new kakao.maps.Marker({ position: map.getCenter() }); // 클릭한 위치를 표시할 마커입니다
+  marker.setMap(map);
+  marker.setTitle('지도 중심');
+  // 마커 클러스터러를 생성합니다
+  const clusterer = new kakao.maps.MarkerClusterer({
+    map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+    averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+    minLevel: 5, // 클러스터 할 최소 지도 레벨
+  });
+  const zoomControl = new kakao.maps.ZoomControl();
+  map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+  //Kakao maps에서 제공하는 marker를 담을 배열
+  let markers: any[] = [];
+  let mapLevel: number;
+  kakao.maps.event.addListener(map, 'dragend', function () {
+    let latlng: any = map.getCenter();
+    // latlng가 any가 아닐 때 Ma와 La 필드가 latlng에 존재하지 않는다고 오류뜸.
+    const mapCenter = { lat: latlng.Ma, lng: latlng.La };
+    marker.setPosition(new kakao.maps.LatLng(mapCenter.lat, mapCenter.lng));
+    setDefaultCoordsAndAddress(mapCenter, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        let detailAddr = !!result[0].address.address_name
+          ? result[0].address.address_name
+          : result[0].road_address.address_name;
+        setMapCenter((prev: any) => {
+          return { ...prev, ...mapCenter, address: detailAddr };
+        });
+      }
+    });
+  });
+  setCustomOverlay(sharingLists, markers, map);
 
   clusterer.addMarkers(markers);
   setIsMapLoading(false);

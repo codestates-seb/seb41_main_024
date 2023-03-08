@@ -77,6 +77,20 @@ public class BoardDto {
         private String userImageLink;
     }
 
+    @NoArgsConstructor
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    public static class SimpleResponse{
+        private Long boardId;
+        private String title;
+        private String latitude;
+        private String longitude;
+        private String userImageLink;
+        private int maxNum;
+        private int curNum;
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor
