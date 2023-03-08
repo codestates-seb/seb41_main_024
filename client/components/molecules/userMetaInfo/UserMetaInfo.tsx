@@ -1,11 +1,10 @@
 import React from 'react';
-// import Button from '../../atoms/button/Button';
 import { productDataProps } from './userMetaInfoType';
-import Link from 'next/link';
 import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import ModalComponent from '../../organisms/modal/Modal';
+import Image from 'next/image';
 
 const UserMetaInfo = ({
   productData,
@@ -54,10 +53,14 @@ const UserMetaInfo = ({
           <Stack direction="row" alignItems="center" spacing={2}>
             <Stack>
               <div className="bg-orange-100 w-14 h-14 p-1.5 rounded-lg">
-                <img
+                <Image
+                  alt="유저 프로필"
                   src={
                     productData?.userImageLink || '/profile/default_profile.svg'
                   }
+                  quality={10}
+                  width={44}
+                  height={44}
                 />
               </div>
             </Stack>

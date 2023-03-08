@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-import Img from '../../components/atoms/image/Image';
 import DetailBottom from '../../components/molecules/detailBottom/DetailBottom';
 import PostMeta from '../../components/molecules/postMeta/PostMeta';
 import UserMetaInfo from '../../components/molecules/userMetaInfo/UserMetaInfo';
 import DetailPageTab from '../../components/organisms/tab/detailPageTab/DetailPageTab';
-import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import {
   deleteProductDetail,
@@ -18,7 +16,6 @@ import {
 import { getIsWriter } from '../../api/isWriter';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import Image from 'next/image';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -34,6 +31,10 @@ import useAdminRole from '../../hooks/common/useAdminRole';
 import { handleBlockUser } from '../../api/admin';
 import Head from 'next/head';
 import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
+
+import Image from 'next/image';
+
+import Share from '../../components/organisms/share/Share';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -190,15 +191,18 @@ export default function ProductDetail({ id, productData }: productDetailType) {
       setIsLoginAlertOpen(true);
     } else {
       goChatroom(id)
-      .then((res) => router.push(`/chatroom/${id}`))
-      .catch(() => {
-        setDeleteSnackbarOpen(true);
-        setGetherModalOpen(false);
-        setDeleteAlertOption({ severity: 'error', value: '강퇴당한 유저는 참여할 수 없습니다.' });
-        setTimeout(() => {
-          router.push('/nearby')
-        }, 1000)
-      })
+        .then((res) => router.push(`/chatroom/${id}`))
+        .catch(() => {
+          setDeleteSnackbarOpen(true);
+          setGetherModalOpen(false);
+          setDeleteAlertOption({
+            severity: 'error',
+            value: '강퇴당한 유저는 참여할 수 없습니다.',
+          });
+          setTimeout(() => {
+            router.push('/nearby');
+          }, 1000);
+        });
     }
   };
 
@@ -248,10 +252,12 @@ export default function ProductDetail({ id, productData }: productDetailType) {
         >
           <div className="relative pb-[70%]">
             <div className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-[59%] pb-[59%]">
-              <img
-                src={productData?.imageLink || '/imageBox/base-box.svg'}
+              <Image
                 alt="제품 이미지"
-                className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-full h-auto"
+                src={productData?.imageLink || '/imageBox/base-box.svg'}
+                quality={15}
+                fill
+                sizes="(max-width: 672px) 40vw, 60vw"
               />
               {isCompletedBoard && (
                 <StateBadge stateText={'모집 확정'} usedDetail={true} />
@@ -310,6 +316,8 @@ export default function ProductDetail({ id, productData }: productDetailType) {
             isLiked={isLiked}
             handleLike={handleLike}
           />
+          <Share />
+          <Divider variant="middle" sx={{ my: 4 }} />
           <DetailPageTab productData={productData} />
           <LoginAlert
             isLoginAlertOpen={isLoginAlertOpen}
