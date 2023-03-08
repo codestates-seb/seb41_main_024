@@ -1,8 +1,6 @@
 import React from 'react';
-import Img from '../../atoms/image/Image';
 import styles from './sharingListItem.module.css';
 import { ListItemPropsType } from './sharingListItemType';
-import Button from '../../atoms/button/Button';
 import Link from 'next/link';
 import Image from 'next/image';
 import base from '../../../public/imageBox/base-box.svg';
@@ -28,10 +26,23 @@ const SharingListItem = ({
   return (
     <div className={`flex flex-col ${styles.flex_container}`}>
       <Link href={`/nearby/${boardId}`} className="block relative pb-[100%]">
-        <img
-          className="absolute left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-full h-auto"
+        {/* <img
+          className="absolute aspect-square left-2/4 top-2/4 translate-x-[-50%] translate-y-[-50%] w-full h-auto"
+          loading="lazy"
+          decoding="async"
+
           src={src || base}
           alt={alt}
+        /> */}
+        <Image
+          fill
+          alt="상품이미지"
+          src={src || base}
+          quality="10"
+          sizes="(max-width: 390px) 40vw,
+              (max-width: 672px) 40vw,
+              40vw
+   "
         />
         {boardStatus === 'BOARD_COMPLETE' && (
           <StateBadge stateText="모집 확정" usedList={true} />
