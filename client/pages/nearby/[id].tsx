@@ -34,6 +34,8 @@ import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 
 import Image from 'next/image';
 
+import Share from '../../components/organisms/share/Share';
+
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
 
@@ -314,7 +316,8 @@ export default function ProductDetail({ id, productData }: productDetailType) {
             isLiked={isLiked}
             handleLike={handleLike}
           />
-
+          <Share />
+          <Divider variant="middle" sx={{ my: 4 }} />
           <DetailPageTab productData={productData} />
           <LoginAlert
             isLoginAlertOpen={isLoginAlertOpen}
