@@ -1,26 +1,13 @@
 import Input from '../../components/atoms/input/Input';
 import DropdownInput from '../../components/molecules/dropdownInput/DropdownInput';
-import NearByPageTab from '../../components/organisms/tab/nearByPageTab/NearByPageTab';
-import {
-  Button,
-  FormControl,
-  FormHelperText,
-  Popover,
-  Typography,
-} from '@mui/material';
-import NoContent from '../../components/molecules/noContent/NoContent';
+import { FormControl, Popover, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { exchangeCoordToAddress, searchMap } from '../../api/kakaoMap';
 import { getAddressBooks, getCurrentLocation } from '../../api/location';
 import FormButton from '../../components/molecules/formbutton/FormButton';
 import useInput from '../../hooks/addNewHooks/useInput';
 import { useQuery } from '@tanstack/react-query';
-import {
-  getPostsInSpecifiedLocation,
-  searchPostsByTitle,
-} from '../../api/post';
 import { useRouter } from 'next/router';
-import useSearch from '../../hooks/search/useSearch';
 import AddressBookList from '../../components/organisms/addressBookList/AddressBookList';
 import Cookies from 'js-cookie';
 import { locationDataType } from '../../components/container/addressBook/AddressBook';
