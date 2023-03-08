@@ -1,5 +1,4 @@
 import ChatItem from '../../components/organisms/chatItem/ChatItem';
-import ProductImg from '../../public/chatItem/productImg.svg';
 import Link from 'next/link';
 
 import { useQuery } from '@tanstack/react-query';
@@ -49,14 +48,11 @@ const ChatList = () => {
               <Link href={`/chatroom/${chatItem.roomId}`}>
                 <ChatItem
                   key={chatItem.roomId}
-                  thumbnail={ProductImg}
                   recruitment={chatItem.recruitment}
                   title={chatItem.roomName}
-                  price={chatItem.price}
                   lastMessage={chatItem.lastMessage}
                   address={chatItem.address}
                   unreadCount={chatItem.unreadCount}
-                  declareStatus={chatItem.declareStatus}
                   imageLink={chatItem.imageLink}
                 />
               </Link>

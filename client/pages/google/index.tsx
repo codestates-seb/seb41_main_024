@@ -1,5 +1,3 @@
-// import Button from '../../components/atoms/button/Button';
-// import TextField from '../../components/molecules/passwordTextField/TextField';
 import Input from '../../components/atoms/input/Input';
 import Label from '../../components/atoms/label/Label';
 import { useEffect, useState } from 'react';
