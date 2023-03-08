@@ -6,7 +6,7 @@ import { imageType } from './imageType';
 
 const Img = ({ src, alt }: imageType) => {
   return (
-    <div className={`relative ${styles.imgContainer}`}>
+    <div className="relative pb-[70%] truncate h-auto">
       <Image src={src} alt={alt} fill />
     </div>
   );
