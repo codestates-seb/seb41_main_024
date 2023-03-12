@@ -2,13 +2,17 @@ import DropdownInput from './DropdownInput';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 export default {
   //storybook에서 분류할 폴더 Input 폴더 안에 Dropdown 컴포넌트가 만들어진다.
-  title: 'Input/Dropdown',
+  title: 'molecules/Input/Dropdown',
   //storybook에서 렌더링할 컴포넌트
   component: DropdownInput,
   //컴포넌트 props (렌더링하고자 하는 컴포넌트가 받는 props를 여기다 적으면 된다.)
   argTypes: {
     title: { control: 'text' },
     textColor: { control: 'text' },
+    dropDownOptions: [
+      { label: 'text', value: 'text' },
+      { label: 'text', value: 'text' },
+    ],
   },
 } as ComponentMeta<typeof DropdownInput>;
 
@@ -20,8 +24,19 @@ const Template: ComponentStory<typeof DropdownInput> = (args) => (
 );
 //Template.bind({})메서드는 정해진 문법이다. Template은 그냥 변수라서 다른 이름을 지정해도 된다.
 export const Dropdown = Template.bind({});
+Dropdown.args = {
+  label: '카테고리',
+  dropDownOptions: [
+    { label: '상품 쉐어링', value: '상품 쉐어링' },
+    { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
+  ],
+};
 //이렇게 설정하면 해당 props를 전달받는 컴포넌트를 생성할 수 있다.
 export const test = Template.bind({});
 test.args = {
   label: 'Button',
+  dropDownOptions: [
+    { label: '상품 쉐어링', value: '상품 쉐어링' },
+    { label: '배달음식 쉐어링', value: '배달음식 쉐어링' },
+  ],
 };
