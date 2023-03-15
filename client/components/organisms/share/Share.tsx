@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, AlertColor, Button, Snackbar } from '@mui/material';
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
@@ -34,10 +34,10 @@ const Share = () => {
   console.log(router);
 
   const [open, setOpen] = useState(false);
-  const [alertOption, setAlertOption] = useState<{
-    severity: AlertColor;
-    value: string;
-  }>({ severity: 'success', value: 'URL이 복사되었습니다' });
+  // const [alertOption, setAlertOption] = useState<{
+  //   severity: AlertColor;
+  //   value: string;
+  // }>({ severity: 'success', value: 'URL이 복사되었습니다' });
 
   // kakao SDK import하기
   const status = useScript('https://developers.kakao.com/sdk/js/kakao.js');
@@ -71,7 +71,6 @@ const Share = () => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
 
