@@ -1,5 +1,5 @@
-import React from 'react';
-import { Button } from '@mui/material';
+import React, { useState } from 'react';
+import { Alert, AlertColor, Button, Snackbar } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
@@ -33,6 +33,12 @@ const Share = () => {
 
   console.log(router);
 
+  const [open, setOpen] = useState(false);
+  const [alertOption, setAlertOption] = useState<{
+    severity: AlertColor;
+    value: string;
+  }>({ severity: 'success', value: 'URL이 복사되었습니다' });
+
   // kakao SDK import하기
   const status = useScript('https://developers.kakao.com/sdk/js/kakao.js');
 
@@ -52,6 +58,21 @@ const Share = () => {
     window.Kakao.Link.sendScrap({
       requestUrl: currentUrl,
     });
+  };
+
+  const handleCopyAlert = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -74,7 +95,10 @@ const Share = () => {
             <TwitterIcon size={48} round={true} borderRadius={24}></TwitterIcon>
           </TwitterShareButton>
           <CopyToClipboard text={currentUrl}>
-            <button className="flex justify-center items-center w-12 h-12 rounded-full text-lg text-white bg-[#f48b3a] hover:bg-[#adaba9]">
+            <button
+              onClick={handleCopyAlert}
+              className="flex justify-center items-center w-12 h-12 rounded-full text-lg text-white bg-[#f48b3a] hover:bg-[#adaba9]"
+            >
               URL
             </button>
           </CopyToClipboard>
@@ -89,6 +113,15 @@ const Share = () => {
             <LineIcon size={48} round={true} borderRadius={24}></LineIcon>
           </LineShareButton>
         </Stack>
+        <Snackbar
+          open={open}
+          autoHideDuration={2000}
+          onClose={handleClose}
+          className="bottom-[25%]"
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert severity="success">URL이 복사되었습니다!</Alert>
+        </Snackbar>
       </Box>
     </div>
   );

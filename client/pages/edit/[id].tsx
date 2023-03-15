@@ -81,6 +81,7 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
   const [open, setOpen] = useState(false);
+
   const [alertOption, setAlertOption] = useState<{
     severity: AlertColor;
     value: string;
