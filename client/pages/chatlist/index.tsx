@@ -23,8 +23,8 @@ const ChatList = () => {
     ['mySharing'],
     getMySharing,
     {
-      staleTime: 1000,
       cacheTime: 6000000,
+      refetchInterval: 3000,
     }
   );
   const chatListData = data?.data.data;
