@@ -1,34 +1,45 @@
 import Img from './Image';
+import styles from './image.module.css';
 
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
+
+import { imageType } from './imageType';
+
 export default {
-  //storybook에서 분류할 폴더 Input 폴더 안에 Dropdown 컴포넌트가 만들어진다.
-  title: 'Images/sharingList',
-  //storybook에서 렌더링할 컴포넌트
+  title: 'Image',
   component: Img,
-  //컴포넌트 props (렌더링하고자 하는 컴포넌트가 받는 props를 여기다 적으면 된다.)
-  argTypes: {
-    src: { control: 'text' },
-    alt: { conrol: 'text' },
-  },
-} as ComponentMeta<typeof Img>;
+} as Meta;
 
-const Template: ComponentStory<typeof Img> = (args) => <Img {...args} />;
+interface TemplateProps extends imageType {
+  className: string;
+}
+
+const Template: Story<TemplateProps> = ({
+  className,
+  ...args
+}: TemplateProps) => (
+  <div className={className}>
+    <Img {...args} />
+  </div>
+);
 
 export const Heart = Template.bind({});
 Heart.args = {
+  className: styles.imgContainer,
   src: '/sharingList/heart.svg',
   alt: 'heart',
 };
 
 export const Pepsi = Template.bind({});
 Pepsi.args = {
+  className: styles.imgContainer,
   src: '/sharingList/pepsi.svg',
   alt: 'pepsi',
 };
 
-export const FavoriteBorder = Template.bind({});
-FavoriteBorder.args = {
+export const Favorite = Template.bind({});
+Favorite.args = {
+  className: styles.imgContainer,
   src: '/sharingList/favorite_border.svg',
-  alt: 'haertborder',
+  alt: 'favorite',
 };
