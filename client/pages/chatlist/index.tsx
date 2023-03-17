@@ -15,14 +15,20 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Head from 'next/head';
 import LoginChecker from '../../components/container/loginChecker/LoginChecker';
 
+import CircleLoading from '../../components/organisms/circleLoading/CircleLoading';
+import Loading from '../../components/organisms/loading/Loading';
+
 const ChatList = () => {
-  const { data, refetch } = useQuery(['mySharing'], getMySharing);
+  const { data, isError, error, isLoading } = useQuery(
+    ['mySharing'],
+    getMySharing,
+    {
+      staleTime: 1000,
+      cacheTime: 6000000,
+    }
+  );
   const chatListData = data?.data.data;
   const router = useRouter();
-
-  useEffect(() => {
-    refetch();
-  }, []);
 
   const [isNoChatListAlertOpen, setIsNoChatListAlertOpen] = useState(true);
   const handleNoChatListAlertClose = () => {
@@ -36,6 +42,7 @@ const ChatList = () => {
         <Head>
           <title>채팅 목록</title>
         </Head>
+        {isLoading && <CircleLoading message="잠시만 기다려 주세요." />}
         {chatListData?.length === 0 && (
           <NoChatListAlert
             isNoChatListAlertOpen={isNoChatListAlertOpen}
