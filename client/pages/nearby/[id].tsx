@@ -33,8 +33,8 @@ import Head from 'next/head';
 import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 
 import Image from 'next/image';
-
 import Share from '../../components/organisms/share/Share';
+import { useQuery } from '@tanstack/react-query';
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
@@ -59,6 +59,11 @@ interface productDetailType {
 }
 
 export default function ProductDetail({ id, productData }: productDetailType) {
+  const { data } = useQuery(['productDetail'], () => getProductDetail(id), {
+    initialData: productData,
+    cacheTime: 6000000,
+  });
+
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
 
   const handleClose = () => {
