@@ -124,7 +124,7 @@
 <summary><strong>주소록 등록, 나의 쉐어링, 찜</strong></summary>
 <br>
 <br>
-주소롱 등록
+주소록 등록
 <br>
 <img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/adress_post.gif" />
 <br>
@@ -146,6 +146,21 @@
 채팅리스트, 채팅방
 <br>
 <img width="100%" src="https://github.com/codestates-seb/seb41_main_024/blob/readme/readmeImage/appUserFlow/chatting.gif" />
+<br>
+<br>
+유저 강퇴 (방장일 시)
+<br>
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/userBan.gif" />
+<br>
+<br>
+강퇴당한 유저
+<br>
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/userBanned.gif" />
+<br>
+<br>
+강퇴당한 유저 해당 게시물 입장 시도시
+<br>
+<img width="100%" src="https://raw.githubusercontent.com/codestates-seb/seb41_main_024/readme/readmeImage/appUserFlow/afterBan.gif" />
 
 </details>
 
