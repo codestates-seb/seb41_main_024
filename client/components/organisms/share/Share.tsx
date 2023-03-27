@@ -17,7 +17,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useScript } from '../../../hooks/useScript';
 import { useEffect } from 'react';
 
-import kakaoShare from '../../../public/share/kakaoShare.png';
+import kakaoShare from '../../../public/share/kakao.png';
 
 import Image from 'next/image';
 
@@ -82,7 +82,7 @@ const Share = () => {
             <Image
               alt="kakao"
               src={kakaoShare}
-              className="w-12 h-12 bg-[#200d04] rounded-full"
+              className="w-12 h-12 rounded-full"
             ></Image>
           </a>
           <LineShareButton url={currentUrl}>

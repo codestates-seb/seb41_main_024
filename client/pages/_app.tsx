@@ -29,11 +29,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const renderWithLayout =
     Component.getLayout ||
     function (page: ReactElement) {
-      return (
-        <DefaultLayout>
-          <main className={notoSansKR.className}>{page}</main>
-        </DefaultLayout>
-      );
+      return <DefaultLayout>{page}</DefaultLayout>;
     };
 
   const queryClient = new QueryClient();
@@ -46,7 +42,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
           <ReactQueryDevtools initialIsOpen={false} />
-          {renderWithLayout(<Component {...pageProps} />)}
+          {renderWithLayout(
+            <main className={notoSansKR.className}>
+              <Component {...pageProps} />
+            </main>
+          )}
         </Hydrate>
       </QueryClientProvider>
     </>
