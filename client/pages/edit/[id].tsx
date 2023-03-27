@@ -81,6 +81,7 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
   const [locationError, setLocationError] = useState('');
   const [searchAddress, setSearchAddress] = useState('');
   const [open, setOpen] = useState(false);
+
   const [alertOption, setAlertOption] = useState<{
     severity: AlertColor;
     value: string;
@@ -99,7 +100,11 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
       },
 
       onError: (error) => {
-        alert('게시물 수정에 실패했습니다. 잠시 후 다시 시도해주세요');
+        setOpen(true);
+        setAlertOption({
+          severity: 'error',
+          value: '게시물 수정에 실패했습니다. 잠시 후 다시 시도해주세요',
+        });
       },
     }
   );
