@@ -1,16 +1,7 @@
 import axios from 'axios';
 import { setDefaultCoordsAndAddress } from './kakaoMap';
 const kakao = typeof window !== 'undefined' ? (window as any).kakao : null;
-interface getCurrentLocationPropsType {
-  setLocation: React.Dispatch<
-    React.SetStateAction<{
-      lat: number;
-      lng: number;
-      address: string;
-    }>
-  >;
-  setLocationError: React.Dispatch<React.SetStateAction<string>>;
-}
+
 const REQUEST_URL = 'https://ngether.site';
 export const getCurrentLocation = (setLocation: any, setLocationError: any) => {
   const geoLocationOptions = { enableHighAccuracy: true };

@@ -1,13 +1,12 @@
-import Input from '../components/atoms/input/Input';
-import Label from '../components/atoms/label/Label';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import Button from '@mui/material/Button';
 import MainSlogan from '../components/molecules/slogan/mainSlogan/MainSlogan';
 import LayoutWithFooter from '../components/container/layoutWithFooter/LayoutWithFooter';
 import { NextPageWithLayout } from '../components/container/defalutLayout/defaultLayoutType';
 import Link from 'next/link';
 import Head from 'next/head';
+import { useQuery } from '@tanstack/react-query';
+import { getAllSharingPosts } from '../api/post';
 
 const MainPage: NextPageWithLayout = () => {
   const [nearBy, setNearBy] = useState('');
@@ -16,6 +15,13 @@ const MainPage: NextPageWithLayout = () => {
     const { name, value } = event.target;
     setNearBy(value);
   };
+
+  useQuery({
+    queryKey: ['sharingListInMap'],
+    queryFn: getAllSharingPosts,
+    staleTime: 60 * 60 * 1000,
+    cacheTime: 60 * 60 * 1000,
+  });
 
   return (
     <div className="flex flex-col flex-grow my-28 ani_fadeIn">
@@ -46,9 +52,6 @@ const MainPage: NextPageWithLayout = () => {
           </Link>
         </div>
       </div>
-      {/* <div className="fixed w-[100%] bottom-[70px] left-0">
-        <Footer />
-      </div> */}
     </div>
   );
 };

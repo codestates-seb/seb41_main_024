@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
   font-family: 'Noto Sans Korean';
   font-weight: 100;
   font-style: normal;
@@ -59,7 +59,7 @@
   src: url('/fonts/NotoSans-Bold.otf') format('opentype'),
     url('/fonts/NotoSans-Bold.woff') format('woff'),
     url('/fonts/NotoSans-Bold.woff2') format('woff2');
-}
+} */
 
 @tailwind base;
 @tailwind components;
