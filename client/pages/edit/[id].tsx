@@ -29,6 +29,7 @@ export async function getServerSideProps(context: { params: { id: string } }) {
   const { id } = context.params;
   const { data } = await getProductDetail(id);
 
+  console.log(context);
   return {
     props: {
       previousData: data,

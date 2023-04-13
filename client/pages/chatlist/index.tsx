@@ -20,10 +20,9 @@ import Loading from '../../components/organisms/loading/Loading';
 
 const ChatList = () => {
   const { data, isError, error, isLoading } = useQuery(
-    ['mySharing'],
+    ['mySharings'],
     getMySharing,
     {
-      cacheTime: 6000000,
       refetchInterval: 3000,
     }
   );
