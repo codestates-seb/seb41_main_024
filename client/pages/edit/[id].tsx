@@ -27,7 +27,7 @@ import Head from 'next/head';
 
 export async function getServerSideProps(context: { params: { id: string } }) {
   const { id } = context.params;
-  const { data } = await getProductDetail(id);
+  const data = await getProductDetail(id);
 
   console.log(context);
   return {
