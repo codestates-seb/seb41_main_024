@@ -39,13 +39,18 @@ import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 export async function getServerSideProps(context: any) {
   const queryClient = new QueryClient();
 
+  const { id } = context.params;
+
   await queryClient.prefetchQuery(['productDetail'], () =>
     getProductDetail(id)
   );
 
-  const { id } = context.params;
-
-  return { props: { id, dehydratedState: dehydrate(queryClient) } };
+  return {
+    props: {
+      id,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 }
 
 interface productDetailType {
@@ -55,7 +60,7 @@ interface productDetailType {
 export default function ProductDetail({ id }: productDetailType) {
   const { data } = useQuery(['productDetail'], () => getProductDetail(id));
 
-  const productData = data?.data;
+  const productData = data;
 
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
 
