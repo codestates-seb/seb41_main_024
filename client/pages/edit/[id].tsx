@@ -188,24 +188,27 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
       !e.target.value.includes('https')
     )
       return;
-    return axios({
+
+    axios({
       method: 'get',
       url: e.target.value,
     }).then(({ data, status }) => {
       if (status !== 200) {
         alert('이미지 정보를 불러오는데 실패했습니다.');
       }
+
       const $ = cheerio.load(data);
+
       $('meta').each((_, el) => {
-        const key = $(el).attr('property')?.split(':')[1];
-        if (key) {
-          const value = $(el).attr('content');
-          const checkUrl = value?.includes('https');
-          if (key === 'image' && checkUrl) {
-            if (value && value.length >= 2000) {
-              return;
-            }
-            setImageLink(value);
+        const isMetaImage = $(el).attr('property') === 'og:image'; // "image"
+        if (isMetaImage) {
+          const imgUrl = $(el).attr('content');
+
+          if (imgUrl && imgUrl?.length >= 2000) {
+            console.log('https 혹은 2000자 이상의 url');
+            return;
+          } else {
+            setImageLink(imgUrl);
           }
         }
       });
@@ -302,7 +305,7 @@ const EditPage = ({ previousData, id }: previousDataProps) => {
               value={productsLink}
               onChange={onChange}
               onBlur={getLinkMetaData}
-              helperText="쿠팡 상품은 이미지 자동 업로드 지원이 되지 않습니다."
+              helperText="11번가, 이마트, 홈플러스 사이트에서 이미지 자동 업로드가 지원됩니다."
             />
 
             <FormControl fullWidth>
