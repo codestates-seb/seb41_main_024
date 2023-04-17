@@ -102,7 +102,6 @@ export default function BottomNav(): JSX.Element {
   };
 
   useEffect(() => {
-    console.log('rerendering');
     router.prefetch('/nearby');
     router.prefetch('/addnew');
     router.prefetch('/mypage');

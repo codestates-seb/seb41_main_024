@@ -4,13 +4,15 @@ import Cookies from 'js-cookie';
 const REQUEST_URL = 'https://ngether.site';
 
 // 디테일 페이지
-export function getProductDetail(id: string) {
-  return axios.get(`${REQUEST_URL}/api/boards/${id}`, {
+export async function getProductDetail(id: string) {
+  const res = await axios.get(`${REQUEST_URL}/api/boards/${id}`, {
     headers: {
       Authorization: Cookies.get('access_token'),
       Refresh: Cookies.get('refresh_token'),
     },
   });
+
+  return res.data;
 }
 
 // 수정하기

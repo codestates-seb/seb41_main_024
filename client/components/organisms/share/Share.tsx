@@ -31,7 +31,7 @@ const Share = () => {
   const router = useRouter();
   const currentUrl = `https://ngether.xyz${router.asPath}`;
 
-  console.log(router);
+  // console.log(router);
 
   const [open, setOpen] = useState(false);
   // const [alertOption, setAlertOption] = useState<{

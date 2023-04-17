@@ -34,35 +34,33 @@ import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 
 import Image from 'next/image';
 import Share from '../../components/organisms/share/Share';
-import { useQuery } from '@tanstack/react-query';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 
 export async function getServerSideProps(context: any) {
+  const queryClient = new QueryClient();
+
   const { id } = context.params;
 
-  try {
-    const res = await getProductDetail(id);
+  await queryClient.prefetchQuery(['productDetail'], () =>
+    getProductDetail(id)
+  );
 
-    if (res.status === 200) {
-      const productData = res.data;
-      return { props: { id, productData } };
-    }
-    return { props: { id } };
-  } catch (error) {
-    console.log(error);
-    return { props: { id } };
-  }
+  return {
+    props: {
+      id,
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 }
 
 interface productDetailType {
   id: string;
-  productData: any;
 }
 
-export default function ProductDetail({ id, productData }: productDetailType) {
-  const { data } = useQuery(['productDetail'], () => getProductDetail(id), {
-    initialData: productData,
-    cacheTime: 6000000,
-  });
+export default function ProductDetail({ id }: productDetailType) {
+  const { data } = useQuery(['productDetail'], () => getProductDetail(id));
+
+  const productData = data;
 
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
 
@@ -88,8 +86,6 @@ export default function ProductDetail({ id, productData }: productDetailType) {
     value: string;
   }>({ severity: 'warning', value: '' });
   const router = useRouter();
-
-  // const productData = data?.data;
 
   const isOpenBoard =
     productData?.boardStatus &&
@@ -248,7 +244,7 @@ export default function ProductDetail({ id, productData }: productDetailType) {
       <Head>
         <title>공유 상세 페이지</title>
       </Head>
-      {!productData && <NoPage />}
+      {/* {!productData && <NoPage />} */}
       {productData && (
         <Box
           sx={{
