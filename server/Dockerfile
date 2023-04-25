@@ -5,5 +5,5 @@ ENV JWT_SECRET_KEY="JWT_SECRET_KEY" \
     G_CLIENT_SECRET="G_CLIENT_SECRET"\
     G_MAIL="G_MAIL"\
     G_PASSWORD="G_PASSWORD"
-COPY ${JAR_FILE} app.jar
+COPY ${JAR_FILE} /app/
 ENTRYPOINT ["java","-jar","/app.jar"]
