@@ -62,6 +62,7 @@ jobs:
           cd server
           sudo docker stop $(docker ps -q --filter ancestor=choijihyeon/ngether)
           sudo docker rm $(docker ps -a -q --filter ancestor=choijihyeon/ngether)
+          sudo docker rmi choijihyeon/ngether
           sudo docker pull choijihyeon/ngether
           sudo docker run -it -d \ -p 443:443 \
           -e JWT_SECRET_KEY=$JWT_SECRET_KEY \
