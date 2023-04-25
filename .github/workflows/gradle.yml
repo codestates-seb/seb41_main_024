@@ -59,6 +59,7 @@ jobs:
         port: ${{ secrets.EC2_SSH_PORT }}
         timeout: 60s
         script: |
+          cd server
           sudo docker stop $(docker ps -q --filter ancestor=choijihyeon/ngether)
           sudo docker rm $(docker ps -a -q --filter ancestor=choijihyeon/ngether)
           sudo docker pull choijihyeon/ngether
