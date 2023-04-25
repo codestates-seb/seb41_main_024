@@ -64,7 +64,7 @@ jobs:
           sudo docker rm $(docker ps -a -q --filter ancestor=choijihyeon/ngether)
           sudo docker pull choijihyeon/ngether
           sudo docker run -it -d \
-            -p 8080:8080 \
+            -p 80:8080 \
             choijihyeon/ngether
     
     # REMOVE Github IP FROM security group (9)
