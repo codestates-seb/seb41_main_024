@@ -61,7 +61,7 @@ jobs:
         script: |
           sudo docker stop $(docker ps -q --filter ancestor=choijihyeon/ngether)
           sudo docker rm $(docker ps -a -q --filter ancestor=choijihyeon/ngether)
-          sudo docker pull choijihyeon/diary
+          sudo docker pull choijihyeon/ngether
           sudo docker run -it -d \
             -p 8080:8080 \
             choijihyeon/ngether
