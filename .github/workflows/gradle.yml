@@ -18,7 +18,7 @@ jobs:
     
    # Docker 이미지 Build (2)
     - name: docker image build
-      run: docker build -t choijihyeon/ngether .
+      run: cd server && docker build -t choijihyeon/ngether .
     
     # DockerHub Login (3)
     - name: Docker Hub 로그인 # (3)
