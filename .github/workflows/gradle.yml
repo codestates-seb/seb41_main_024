@@ -18,7 +18,8 @@ jobs:
     
    # Docker 이미지 Build (2)
     - name: docker image build
-      run: cd server && docker build -t choijihyeon/ngether .
+      run: cd server && docker build --build-arg JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} --build-arg G_CLIENT_ID=${{ secrets.G_CLIENT_ID }} --build-arg G_CLIENT_SECRET=${{ secrets.G_CLIENT_SECRET }} --build-arg G_MAIL=${{ secrets.G_MAIL }} --build-arg G_PASSWORD=${{ secrets.G_PASSWORD }} -t choijihyeon/ngether .
+
     
     # DockerHub Login (3)
     - name: Docker Hub 로그인 # (3)
@@ -64,7 +65,7 @@ jobs:
           sudo docker rm $(docker ps -a -q --filter ancestor=choijihyeon/ngether)
           sudo docker rmi choijihyeon/ngether
           sudo docker pull choijihyeon/ngether
-          sudo docker run -it -d -p 8080:8080 -e JWT_SECRET_KEY=$JWT_SECRET_KEY -e G_CLIENT_ID=$G_CLIENT_ID -e G_CLIENT_SECRET=$G_CLIENT_SECRET -e G_MAIL=$G_MAIL -e G_PASSWORD=$G_PASSWORD choijihyeon/ngether
+          sudo docker run -it -d -p 8080:8080 choijihyeon/ngether
 
          
     
