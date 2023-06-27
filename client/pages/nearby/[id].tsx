@@ -35,11 +35,12 @@ import { Alert, AlertColor, Box, Snackbar } from '@mui/material';
 import Image from 'next/image';
 import Share from '../../components/organisms/share/Share';
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import { GetServerSidePropsContext } from 'next';
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const queryClient = new QueryClient();
 
-  const { id } = context.params;
+  const id = context.params?.id as string;
 
   await queryClient.prefetchQuery(['productDetail'], () =>
     getProductDetail(id)
@@ -59,10 +60,9 @@ interface productDetailType {
 
 export default function ProductDetail({ id }: productDetailType) {
   const { data } = useQuery(['productDetail'], () => getProductDetail(id));
-
-  console.log(data);
   const productData = data;
 
+  // 권한 없을 시 로그인 페이지 이동 알람
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);
 
   const handleClose = () => {
@@ -216,7 +216,7 @@ export default function ProductDetail({ id }: productDetailType) {
       router.push(`/nearby/${id}`);
     });
   };
-  // 어드민일시 유저 정지
+  // 어드민일 시 유저 정지
   const handleBlockUserByNickName = () => {
     const nickName = productData?.nickname;
     handleBlockUser(nickName, Number(localStorage.getItem('reportId')));
