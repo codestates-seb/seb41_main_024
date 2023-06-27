@@ -60,6 +60,7 @@ interface productDetailType {
 export default function ProductDetail({ id }: productDetailType) {
   const { data } = useQuery(['productDetail'], () => getProductDetail(id));
 
+  console.log(data);
   const productData = data;
 
   const [isLoginAlertOpen, setIsLoginAlertOpen] = useState(false);

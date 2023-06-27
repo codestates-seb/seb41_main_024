@@ -39,36 +39,28 @@ const GoogleLoginPage = () => {
   const [nickNamePreChecked, setNickNamePreChecked] = useState(false);
   const [phoneNumberPreChecked, setPhoneNumberPreChecked] = useState(false);
 
-  type NickNamePreCheckMessageType =
+  type PreCheckMessageType =
     | 'too short'
     | 'wrong form'
     | 'check me'
     | 'pre checked';
+
   const [nickNamePreCheckMessage, setNickNamePreCheckMessage] =
-    useState<NickNamePreCheckMessageType>('check me');
+    useState<PreCheckMessageType>('check me');
 
-  type PhoneNumberPreCheckMessageType =
-    | 'too short'
-    | 'wrong form'
-    | 'check me'
-    | 'pre checked';
   const [phoneNumberPreCheckMessage, setPhoneNumberPreCheckMessage] =
-    useState<PhoneNumberPreCheckMessageType>('check me');
+    useState<PreCheckMessageType>('check me');
 
-  type NickNameDuplicationCheckMessageType = 'failed' | 'passed' | 'check me';
+  type DuplicationCheckMessageType = 'failed' | 'passed' | 'check me';
   const [nickNameDuplicationCheckMessage, setNickNameDuplicationCheckMessage] =
-    useState<NickNameDuplicationCheckMessageType>('check me');
+    useState<DuplicationCheckMessageType>('check me');
 
-  type PhoneNumberDuplicationCheckMessageType =
-    | 'failed'
-    | 'passed'
-    | 'check me';
   const [
     phoneNumberDuplicationCheckMessage,
     setPhoneNumberDuplicationCheckMessage,
-  ] = useState<PhoneNumberDuplicationCheckMessageType>('check me');
+  ] = useState<DuplicationCheckMessageType>('check me');
 
-  const access_token: any = `Bearer ${router.query.access_token}`;
+  const access_token: string = `Bearer ${router.query.access_token}`;
   const refresh_token: any = router.query.refresh_token;
   Cookies.set('access_token', access_token, { expires: 0.079 });
   Cookies.set('refresh_token', refresh_token, { expires: 20 });
@@ -94,7 +86,7 @@ const GoogleLoginPage = () => {
   const { nickName, phoneNumber } = form;
 
   // 프로필 선택
-  const handleClickRandomProfile = async () => {
+  const handleClickRandomProfile = () => {
     setProfileUrl(createProfileRandomUrl(15));
   };
 
